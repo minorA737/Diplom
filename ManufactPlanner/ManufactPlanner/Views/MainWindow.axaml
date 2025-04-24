@@ -1,20 +1,178 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:ManufactPlanner.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="700"
         x:Class="ManufactPlanner.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
+        xmlns:vm="using:ManufactPlanner.ViewModels"
         Icon="/Assets/avalonia-logo.ico"
-        Title="ManufactPlanner">
+        Title="ManufactPlanner"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+	<Window.Styles>
+		<!-- Стили для элементов интерфейса -->
+		<Style Selector="Button.navButton">
+			<Setter Property="Height" Value="40"/>
+			<Setter Property="Width" Value="180"/>
+			<Setter Property="HorizontalAlignment" Value="Left"/>
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="Opacity" Value="0.9"/>
+			<Setter Property="Margin" Value="10,5"/>
+			<Setter Property="Padding" Value="10,0"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="HorizontalContentAlignment" Value="Left"/>
+		</Style>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+		<Style Selector="Button.navButton:pointerover">
+			<Setter Property="Background" Value="#008999"/>
+			<Setter Property="Opacity" Value="1"/>
+		</Style>
 
+		<Style Selector="Button.navButton[Tag=selected]">
+			<Setter Property="Background" Value="#008999"/>
+			<Setter Property="Opacity" Value="1"/>
+		</Style>
+	</Window.Styles>
+
+	<Grid>
+		<!-- Основной фон -->
+		<Border Background="#F8F9FA"/>
+
+		<!-- Верхняя панель -->
+		<Border Height="60" VerticalAlignment="Top" Background="White" BoxShadow="0 2 3 #10000000">
+			<Grid>
+				<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0">
+					<Ellipse Width="40" Height="40" Fill="#00ACC1"/>
+					<TextBlock Text="ManufactPlanner" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+				</StackPanel>
+
+				<!-- Поиск -->
+				<Border Width="300" Height="30" CornerRadius="15" Background="#F1F3F4"
+                        BorderBrush="#E0E0E0" BorderThickness="1" HorizontalAlignment="Center">
+					<TextBox Watermark="Поиск..." BorderThickness="0" Background="Transparent"
+                             VerticalAlignment="Center" Padding="15,0,0,0"/>
+				</Border>
+
+				<!-- Профиль и уведомления -->
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0">
+					<!-- Уведомления -->
+					<Border Width="30" Height="30" CornerRadius="15" Background="#F8F9FA"
+                            BorderBrush="#E0E0E0" BorderThickness="1" Margin="0,0,20,0">
+						<Grid>
+							<Ellipse Width="10" Height="10" Fill="#FFB74D" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+							<Border Width="12" Height="12" CornerRadius="6" Background="#FF7043"
+                                    VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-2,-2,0"
+                                    IsVisible="{Binding UnreadNotificationsCount}">
+								<TextBlock Text="{Binding UnreadNotificationsCount}" FontSize="9" Foreground="White"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							</Border>
+						</Grid>
+					</Border>
+
+					<!-- Профиль -->
+					<Border Width="40" Height="40" CornerRadius="20" Background="#9575CD" Opacity="0.7">
+						<TextBlock Text="АП" FontSize="14" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Border>
+				</StackPanel>
+			</Grid>
+		</Border>
+
+		<!-- Боковая панель навигации -->
+		<Border Width="{Binding IsSidebarCollapsed}"
+                Background="{DynamicResource SidebarGradient}"
+                VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="0,60,0,0">
+			<StackPanel Margin="0,20,0,0">
+				<!-- Дашборд -->
+				<Button Classes="navButton" Command="{Binding NavigateToDashboard}"
+                        Tag="{Binding CurrentMenuItem}">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="🏠" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+						<TextBlock Text="Дашборд" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
+					</StackPanel>
+				</Button>
+
+				<!-- Заказы -->
+				<Button Classes="navButton" Command="{Binding NavigateToOrders}"
+                        Tag="{Binding CurrentMenuItem}">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="📋" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+						<TextBlock Text="Заказы" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
+					</StackPanel>
+				</Button>
+
+				<!-- Задачи -->
+				<Button Classes="navButton" Command="{Binding NavigateToTasks}"
+                        Tag="{Binding CurrentMenuItem}">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="✓" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+						<TextBlock Text="Задачи" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
+					</StackPanel>
+				</Button>
+
+				<!-- Календарь -->
+				<Button Classes="navButton" Command="{Binding NavigateToCalendar}"
+                        Tag="{Binding CurrentMenuItem}">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="📅" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+						<TextBlock Text="Календарь" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
+					</StackPanel>
+				</Button>
+
+				<!-- Документация -->
+				<Button Classes="navButton" Command="{Binding NavigateToDocumentation}"
+                        Tag="{Binding CurrentMenuItem}, ConverterParameter='documentation'}">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="📄" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+						<TextBlock Text="Документация" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
+					</StackPanel>
+				</Button>
+
+				<!-- Производство -->
+				<Button Classes="navButton" Command="{Binding NavigateToProduction}"
+                        Tag="{Binding CurrentMenuItem}, ConverterParameter='production'}">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="🏭" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+						<TextBlock Text="Производство" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
+					</StackPanel>
+				</Button>
+
+				<!-- Аналитика -->
+				<Button Classes="navButton" Command="{Binding NavigateToAnalytics}"
+                        Tag="{Binding CurrentMenuItem}">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="📊" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+						<TextBlock Text="Аналитика" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
+					</StackPanel>
+				</Button>
+
+				<!-- Настройки -->
+				<Button Classes="navButton" Command="{Binding NavigateToSettings}"
+                        Tag="{Binding CurrentMenuItem}">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="⚙️" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+						<TextBlock Text="Настройки" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
+					</StackPanel>
+				</Button>
+			</StackPanel>
+		</Border>
+
+		<!-- Кнопка сворачивания/разворачивания боковой панели -->
+		<Button Width="24" Height="24"
+                HorizontalAlignment="Left" VerticalAlignment="Top"
+                Margin="{Binding IsSidebarCollapsed}"
+                Background="Transparent" BorderThickness="0"
+                Command="{Binding ToggleSidebar}"
+                ZIndex="2">
+			<TextBlock Text="{Binding IsSidebarCollapsed}"
+                     FontSize="12" Foreground="White"/>
+		</Button>
+
+		<!-- Основная область контента -->
+		<ContentPresenter Content="{Binding CurrentView}"
+                          Margin="{Binding IsSidebarCollapsed}"/>
+	</Grid>
 </Window>

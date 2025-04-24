@@ -171,3 +171,4 @@ D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Debug\net8.0\refint\Avalo
 D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Debug\net8.0\Manufact.8422A114.Up2Date
 D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Debug\net8.0\ManufactPlanner.genruntimeconfig.cache
 D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Debug\net8.0\ref\ManufactPlanner.dll
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Debug\net8.0\ManufactPlanner.sourcelink.json
