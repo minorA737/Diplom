@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="using:ManufactPlanner.Converters"
         mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="700"
         x:Class="ManufactPlanner.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -11,6 +12,13 @@
         TransparencyLevelHint="AcrylicBlur"
         Background="Transparent"
         WindowStartupLocation="CenterScreen">
+
+	<Window.Resources>
+		<converters:BoolToValueConverter x:Key="BoolToValue"/>
+		<converters:IsGreaterThanConverter x:Key="IsGreaterThan"/>
+		<converters:StringEqualsValueConverter x:Key="StringEqualsValue"/>
+		<converters:MarginConverter x:Key="MarginConverter"/>
+	</Window.Resources>
 
 	<Window.Styles>
 		<!-- Стили для элементов интерфейса -->
@@ -61,14 +69,14 @@
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0">
 					<!-- Уведомления -->
 					<Border Width="30" Height="30" CornerRadius="15" Background="#F8F9FA"
-                            BorderBrush="#E0E0E0" BorderThickness="1" Margin="0,0,20,0">
+						BorderBrush="#E0E0E0" BorderThickness="1" Margin="0,0,20,0">
 						<Grid>
 							<Ellipse Width="10" Height="10" Fill="#FFB74D" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 							<Border Width="12" Height="12" CornerRadius="6" Background="#FF7043"
-                                    VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-2,-2,0"
-                                    IsVisible="{Binding UnreadNotificationsCount}">
+									VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-2,-2,0"
+									IsVisible="{Binding UnreadNotificationsCount, Converter={StaticResource IsGreaterThan}, ConverterParameter='0'}">
 								<TextBlock Text="{Binding UnreadNotificationsCount}" FontSize="9" Foreground="White"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+											HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</Border>
 						</Grid>
 					</Border>
@@ -77,18 +85,21 @@
 					<Border Width="40" Height="40" CornerRadius="20" Background="#9575CD" Opacity="0.7">
 						<TextBlock Text="АП" FontSize="14" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 					</Border>
+					<Button Margin="10,0,0,0" Background="Transparent" Command="{Binding Logout}">
+						<TextBlock Text="Выход" Foreground="#333" VerticalAlignment="Center"/>
+					</Button>
 				</StackPanel>
 			</Grid>
 		</Border>
 
 		<!-- Боковая панель навигации -->
-		<Border Width="{Binding IsSidebarCollapsed}"
-                Background="{DynamicResource SidebarGradient}"
-                VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="0,60,0,0">
+		<Border Width="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToValue}, ConverterParameter='60,200'}"
+				Background="{DynamicResource SidebarGradient}"
+				VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="0,60,0,0">
 			<StackPanel Margin="0,20,0,0">
 				<!-- Дашборд -->
 				<Button Classes="navButton" Command="{Binding NavigateToDashboard}"
-                        Tag="{Binding CurrentMenuItem}">
+						Tag="{Binding CurrentMenuItem, Converter={StaticResource StringEqualsValue}, ConverterParameter='dashboard'}">
 					<StackPanel Orientation="Horizontal">
 						<TextBlock Text="🏠" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
 						<TextBlock Text="Дашборд" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
@@ -97,7 +108,7 @@
 
 				<!-- Заказы -->
 				<Button Classes="navButton" Command="{Binding NavigateToOrders}"
-                        Tag="{Binding CurrentMenuItem}">
+						Tag="{Binding CurrentMenuItem, Converter={StaticResource StringEqualsValue}, ConverterParameter='orders'}">
 					<StackPanel Orientation="Horizontal">
 						<TextBlock Text="📋" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
 						<TextBlock Text="Заказы" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
@@ -106,7 +117,7 @@
 
 				<!-- Задачи -->
 				<Button Classes="navButton" Command="{Binding NavigateToTasks}"
-                        Tag="{Binding CurrentMenuItem}">
+						Tag="{Binding CurrentMenuItem, Converter={StaticResource StringEqualsValue}, ConverterParameter='tasks'}">
 					<StackPanel Orientation="Horizontal">
 						<TextBlock Text="✓" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
 						<TextBlock Text="Задачи" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
@@ -115,7 +126,7 @@
 
 				<!-- Календарь -->
 				<Button Classes="navButton" Command="{Binding NavigateToCalendar}"
-                        Tag="{Binding CurrentMenuItem}">
+						Tag="{Binding CurrentMenuItem, Converter={StaticResource StringEqualsValue}, ConverterParameter='calendar'}">
 					<StackPanel Orientation="Horizontal">
 						<TextBlock Text="📅" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
 						<TextBlock Text="Календарь" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
@@ -124,7 +135,7 @@
 
 				<!-- Документация -->
 				<Button Classes="navButton" Command="{Binding NavigateToDocumentation}"
-                        Tag="{Binding CurrentMenuItem}, ConverterParameter='documentation'}">
+						Tag="{Binding CurrentMenuItem, Converter={StaticResource StringEqualsValue}, ConverterParameter='documentation'}">
 					<StackPanel Orientation="Horizontal">
 						<TextBlock Text="📄" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
 						<TextBlock Text="Документация" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
@@ -133,7 +144,7 @@
 
 				<!-- Производство -->
 				<Button Classes="navButton" Command="{Binding NavigateToProduction}"
-                        Tag="{Binding CurrentMenuItem}, ConverterParameter='production'}">
+						Tag="{Binding CurrentMenuItem, Converter={StaticResource StringEqualsValue}, ConverterParameter='production'}">
 					<StackPanel Orientation="Horizontal">
 						<TextBlock Text="🏭" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
 						<TextBlock Text="Производство" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
@@ -142,7 +153,7 @@
 
 				<!-- Аналитика -->
 				<Button Classes="navButton" Command="{Binding NavigateToAnalytics}"
-                        Tag="{Binding CurrentMenuItem}">
+						Tag="{Binding CurrentMenuItem, Converter={StaticResource StringEqualsValue}, ConverterParameter='analytics'}">
 					<StackPanel Orientation="Horizontal">
 						<TextBlock Text="📊" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
 						<TextBlock Text="Аналитика" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
@@ -151,7 +162,7 @@
 
 				<!-- Настройки -->
 				<Button Classes="navButton" Command="{Binding NavigateToSettings}"
-                        Tag="{Binding CurrentMenuItem}">
+						Tag="{Binding CurrentMenuItem, Converter={StaticResource StringEqualsValue}, ConverterParameter='settings'}">
 					<StackPanel Orientation="Horizontal">
 						<TextBlock Text="⚙️" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
 						<TextBlock Text="Настройки" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
@@ -162,17 +173,18 @@
 
 		<!-- Кнопка сворачивания/разворачивания боковой панели -->
 		<Button Width="24" Height="24"
-                HorizontalAlignment="Left" VerticalAlignment="Top"
-                Margin="{Binding IsSidebarCollapsed}"
-                Background="Transparent" BorderThickness="0"
-                Command="{Binding ToggleSidebar}"
-                ZIndex="2">
-			<TextBlock Text="{Binding IsSidebarCollapsed}"
-                     FontSize="12" Foreground="White"/>
+				HorizontalAlignment="Left" VerticalAlignment="Top"
+				Margin="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToValue}, ConverterParameter='36,180'}"
+				Background="Transparent" BorderThickness="0"
+				Command="{Binding ToggleSidebar}"
+				ZIndex="2">
+			<TextBlock Text="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToValue}, ConverterParameter='❯,❮'}"
+						FontSize="12" Foreground="White"/>
 		</Button>
 
 		<!-- Основная область контента -->
 		<ContentPresenter Content="{Binding CurrentView}"
-                          Margin="{Binding IsSidebarCollapsed}"/>
+                  Margin="{Binding IsSidebarCollapsed, Converter={StaticResource MarginConverter}}"/>
+		
 	</Grid>
 </Window>

@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using ManufactPlanner.Models;
+using ManufactPlanner.Views;
 using ReactiveUI;
 using System;
 
@@ -61,10 +62,10 @@ namespace ManufactPlanner.ViewModels
             // Инициализация базы данных
             DbContext = new PostgresContext();
 
-            // По умолчанию отображаем страницу авторизации
-            //CurrentView = new Views.Auth.AuthPage(this, DbContext);
+            // Во время разработки начнем с дашборда для удобства
+            NavigateToDashboard();
 
-            // Заглушка данных пользователя (в реальном приложении будет загружаться после авторизации)
+            // Заглушка данных пользователя
             CurrentUserName = "Администратор";
             UnreadNotificationsCount = 3;
         }
@@ -73,7 +74,7 @@ namespace ManufactPlanner.ViewModels
         public void NavigateToDashboard()
         {
             CurrentMenuItem = "dashboard";
-            //CurrentView = new Views.Dashboard.DashboardPage(this, DbContext);
+            CurrentView = new Views.DashboardPage(this, DbContext);
         }
 
         public void NavigateToOrders()
@@ -85,44 +86,49 @@ namespace ManufactPlanner.ViewModels
         public void NavigateToTasks()
         {
             CurrentMenuItem = "tasks";
-            //CurrentView = new Views.Tasks.TasksPage(this, DbContext);
+            CurrentView = new Views.TasksPage(this, DbContext);
         }
 
         public void NavigateToCalendar()
         {
             CurrentMenuItem = "calendar";
             //CurrentView = new Views.Tasks.CalendarPage(this, DbContext);
+            CurrentView = new Views.CalendarPage();
         }
 
         public void NavigateToDocumentation()
         {
             CurrentMenuItem = "documentation";
             //CurrentView = new Views.Documentation.DocumentationPage(this, DbContext);
+            CurrentView = new Views.DocumentationPage();
         }
 
         public void NavigateToProduction()
         {
             CurrentMenuItem = "production";
             //CurrentView = new Views.Production.ProductionPage(this, DbContext);
+            CurrentView = new Views.ProductionPage();
         }
 
         public void NavigateToAnalytics()
         {
             CurrentMenuItem = "analytics";
             //CurrentView = new Views.Analytics.AnalyticsPage(this, DbContext);
+            CurrentView = new Views.AnalyticsPage();
         }
 
         public void NavigateToSettings()
         {
             CurrentMenuItem = "settings";
             //CurrentView = new Views.Settings.SettingsPage(this, DbContext);
+            CurrentView = new Views.SettingsPage();
         }
 
         // Метод для отображения подробной информации о задаче
         public void NavigateToTaskDetails(int taskId)
         {
             CurrentMenuItem = "tasks";
-            //CurrentView = new Views.Tasks.TaskDetailsPage(this, DbContext, taskId);
+            CurrentView = new Views.TaskDetailsPage(this, DbContext, taskId);
         }
 
         // Метод для отображения подробной информации о заказе
@@ -130,12 +136,24 @@ namespace ManufactPlanner.ViewModels
         {
             CurrentMenuItem = "orders";
             //CurrentView = new Views.Orders.OrderDetailsPage(this, DbContext, orderId);
+            CurrentView = new Views.OrderDetailsPage();
         }
 
         // Метод для переключения состояния боковой панели
         public void ToggleSidebar()
         {
             IsSidebarCollapsed = !IsSidebarCollapsed;
+        }
+
+        public void Logout()
+        {
+            //// Очищаем данные пользователя
+            //CurrentUserName = string.Empty;
+            //UnreadNotificationsCount = 0;
+
+            //// Создаем новую страницу авторизации
+            //var authViewModel = new AuthViewModel(this, DbContext);
+            //CurrentView = new AuthPage(authViewModel);
         }
     }
 }

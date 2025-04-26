@@ -2,7 +2,266 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="ManufactPlanner.Views.TasksPage">
-  Welcome to Avalonia!
+             mc:Ignorable="d" d:DesignWidth="760" d:DesignHeight="640"
+             x:Class="ManufactPlanner.Views.TasksPage"
+             x:DataType="vm:TasksViewModel"
+             xmlns:vm="using:ManufactPlanner.ViewModels">
+
+	<Grid RowDefinitions="Auto,Auto,*,Auto">
+		<!-- Заголовок страницы -->
+		<Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="20,20,20,0">
+			<TextBlock Grid.Column="0" Text="Задачи" FontSize="20" FontWeight="SemiBold" Foreground="#333333"/>
+
+			<!-- Переключатель режимов отображения -->
+			<Border Grid.Column="2" Width="230" Height="36" Background="#F1F3F4" CornerRadius="18">
+				<Grid>
+					<Border Width="76" Height="36" CornerRadius="18" Background="#00ACC1" HorizontalAlignment="Left"/>
+					<Grid ColumnDefinitions="76,77,77">
+						<TextBlock Grid.Column="0" Text="Таблица" FontSize="12" Foreground="White"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Grid.Column="1" Text="Канбан" FontSize="12" Foreground="#666666"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Grid.Column="2" Text="Календарь" FontSize="12" Foreground="#666666"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Grid>
+				</Grid>
+			</Border>
+		</Grid>
+
+		<!-- Панель фильтров -->
+		<Border Grid.Row="1" Height="50" Background="White" CornerRadius="8" Margin="20,20,20,0"
+                BoxShadow="0 2 3 #10000000">
+			<Grid ColumnDefinitions="Auto,Auto,Auto,Auto,*,Auto" VerticalAlignment="Center" Margin="20,0">
+				<!-- Фильтр статуса -->
+				<Border Grid.Column="0" Width="120" Height="26" Background="#F1F3F4" BorderBrush="#E0E0E0"
+                        BorderThickness="1" CornerRadius="13" Margin="0,0,20,0">
+					<Grid Margin="0,0,10,0">
+						<TextBlock Text="Статус" FontSize="12" Foreground="#333333" VerticalAlignment="Center" Margin="10,0,0,0"/>
+						<TextBlock Text="▼" FontSize="12" Foreground="#9E9E9E" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+					</Grid>
+				</Border>
+
+				<!-- Фильтр приоритета -->
+				<Border Grid.Column="1" Width="120" Height="26" Background="#F1F3F4" BorderBrush="#E0E0E0"
+                        BorderThickness="1" CornerRadius="13" Margin="0,0,20,0">
+					<Grid Margin="0,0,10,0">
+						<TextBlock Text="Приоритет" FontSize="12" Foreground="#333333" VerticalAlignment="Center" Margin="10,0,0,0"/>
+						<TextBlock Text="▼" FontSize="12" Foreground="#9E9E9E" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+					</Grid>
+				</Border>
+
+				<!-- Фильтр исполнителя -->
+				<Border Grid.Column="2" Width="120" Height="26" Background="#F1F3F4" BorderBrush="#E0E0E0"
+                        BorderThickness="1" CornerRadius="13" Margin="0,0,20,0">
+					<Grid Margin="0,0,10,0">
+						<TextBlock Text="Исполнитель" FontSize="12" Foreground="#333333" VerticalAlignment="Center" Margin="10,0,0,0"/>
+						<TextBlock Text="▼" FontSize="12" Foreground="#9E9E9E" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+					</Grid>
+				</Border>
+
+				<!-- Фильтр сроков -->
+				<Border Grid.Column="3" Width="120" Height="26" Background="#F1F3F4" BorderBrush="#E0E0E0"
+                        BorderThickness="1" CornerRadius="13">
+					<Grid Margin="0,0,10,0">
+						<TextBlock Text="Сроки" FontSize="12" Foreground="#333333" VerticalAlignment="Center" Margin="10,0,0,0"/>
+						<TextBlock Text="▼" FontSize="12" Foreground="#9E9E9E" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+					</Grid>
+				</Border>
+
+				<!-- Кнопка создания задачи -->
+				<Border Grid.Column="5" Width="140" Height="26" Background="#00ACC1" CornerRadius="13">
+					<TextBlock Text="+ Создать задачу" FontSize="12" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+				</Border>
+			</Grid>
+		</Border>
+
+		<!-- Таблица задач -->
+		<Border Grid.Row="2" Background="White" CornerRadius="8" Margin="20,20,20,0"
+                BoxShadow="0 2 3 #10000000">
+			<!-- Заголовки таблицы -->
+			<Grid RowDefinitions="40,*">
+				<Grid Grid.Row="0" ColumnDefinitions="60,200,130,130,80,60,40" Background="#F8F9FA">
+					<TextBlock Grid.Column="0" Text="ID" FontSize="12" Foreground="#666666" FontWeight="Medium"
+                               VerticalAlignment="Center" Margin="25,0,0,0"/>
+					<TextBlock Grid.Column="1" Text="Название" FontSize="12" Foreground="#666666" FontWeight="Medium"
+                               VerticalAlignment="Center" Margin="20,0,0,0"/>
+					<TextBlock Grid.Column="2" Text="Заказ/Позиция" FontSize="12" Foreground="#666666" FontWeight="Medium"
+                               VerticalAlignment="Center" Margin="20,0,0,0"/>
+					<TextBlock Grid.Column="3" Text="Исполнитель" FontSize="12" Foreground="#666666" FontWeight="Medium"
+                               VerticalAlignment="Center" Margin="20,0,0,0"/>
+					<TextBlock Grid.Column="4" Text="Срок" FontSize="12" Foreground="#666666" FontWeight="Medium"
+                               VerticalAlignment="Center" Margin="20,0,0,0"/>
+					<TextBlock Grid.Column="5" Text="Статус" FontSize="12" Foreground="#666666" FontWeight="Medium"
+                               VerticalAlignment="Center" Margin="20,0,0,0"/>
+					<TextBlock Grid.Column="6" Text="Дейст." FontSize="12" Foreground="#666666" FontWeight="Medium"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+				</Grid>
+
+				<Rectangle Grid.Row="0" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom"/>
+
+				<!-- Строки таблицы -->
+				<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+					<StackPanel>
+						<!-- Задача 1 -->
+						<Grid Height="60" ColumnDefinitions="60,200,130,130,80,60,40">
+							<TextBlock Grid.Column="0" Text="T-123" FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="25,0,0,0"/>
+							<TextBlock Grid.Column="1" Text="Разработка схемы электрической" FontSize="13" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="2" Text="ОП-136-24 поз. 1" FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="3" Text="Вяткин А.И." FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="4" Text="07.04.2025" FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<Border Grid.Column="5" Width="60" Height="20" Background="#4CAF9D" Opacity="0.2"
+                                    CornerRadius="10" VerticalAlignment="Center">
+								<TextBlock Text="Готово" FontSize="11" Foreground="#4CAF9D" HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+							</Border>
+							<Ellipse Grid.Column="6" Width="24" Height="24" Fill="#F1F3F4" VerticalAlignment="Center"
+                                     HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="6" Text="⋮" FontSize="12" Foreground="#666666" VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"/>
+						</Grid>
+						<Rectangle Height="1" Fill="#E0E0E0"/>
+
+						<!-- Задача 2 -->
+						<Grid Height="60" ColumnDefinitions="60,200,130,130,80,60,40" Background="#F9FAFB">
+							<TextBlock Grid.Column="0" Text="T-128" FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="25,0,0,0"/>
+							<TextBlock Grid.Column="1" Text="Отладка монтажной схемы" FontSize="13" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="2" Text="ОП-168-24 поз. 1.14" FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="3" Text="Еретин Д.К." FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="4" Text="18.04.2025" FontSize="12" Foreground="#FF7043"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<Border Grid.Column="5" Width="60" Height="20" Background="#FFB74D" Opacity="0.2"
+                                    CornerRadius="10" VerticalAlignment="Center">
+								<TextBlock Text="В работе" FontSize="11" Foreground="#FFB74D" HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+							</Border>
+							<Ellipse Grid.Column="6" Width="24" Height="24" Fill="#F1F3F4" VerticalAlignment="Center"
+                                     HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="6" Text="⋮" FontSize="12" Foreground="#666666" VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"/>
+						</Grid>
+						<Rectangle Height="1" Fill="#E0E0E0"/>
+
+						<!-- Задача 3 -->
+						<Grid Height="60" ColumnDefinitions="60,200,130,130,80,60,40">
+							<TextBlock Grid.Column="0" Text="T-145" FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="25,0,0,0"/>
+							<TextBlock Grid.Column="1" Text="Проектирование корпуса" FontSize="13" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="2" Text="ОП-113-24 поз. 18" FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="3" Text="Турушев С.М." FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="4" Text="24.04.2025" FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<Border Grid.Column="5" Width="60" Height="20" Background="#9575CD" Opacity="0.2"
+                                    CornerRadius="10" VerticalAlignment="Center">
+								<TextBlock Text="Ожидание" FontSize="11" Foreground="#9575CD" HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+							</Border>
+							<Ellipse Grid.Column="6" Width="24" Height="24" Fill="#F1F3F4" VerticalAlignment="Center"
+                                     HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="6" Text="⋮" FontSize="12" Foreground="#666666" VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"/>
+						</Grid>
+						<Rectangle Height="1" Fill="#E0E0E0"/>
+
+						<!-- Задача 4 -->
+						<Grid Height="60" ColumnDefinitions="60,200,130,130,80,60,40" Background="#F9FAFB">
+							<TextBlock Grid.Column="0" Text="T-152" FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="25,0,0,0"/>
+							<TextBlock Grid.Column="1" Text="Подготовка технического задания" FontSize="13" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="2" Text="ОП-169-24 поз. 1" FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="3" Text="Киреев Б.В." FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="4" Text="30.04.2025" FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<Border Grid.Column="5" Width="60" Height="20" Background="#00ACC1" Opacity="0.2"
+                                    CornerRadius="10" VerticalAlignment="Center">
+								<TextBlock Text="В очереди" FontSize="11" Foreground="#00ACC1" HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+							</Border>
+							<Ellipse Grid.Column="6" Width="24" Height="24" Fill="#F1F3F4" VerticalAlignment="Center"
+                                     HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="6" Text="⋮" FontSize="12" Foreground="#666666" VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"/>
+						</Grid>
+						<Rectangle Height="1" Fill="#E0E0E0"/>
+
+						<!-- Задача 5 -->
+						<Grid Height="60" ColumnDefinitions="60,200,130,130,80,60,40">
+							<TextBlock Grid.Column="0" Text="T-161" FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="25,0,0,0"/>
+							<TextBlock Grid.Column="1" Text="Разработка программного обеспечения" FontSize="13" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="2" Text="ОП-145-24 поз. 1.10" FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="3" Text="Шулепов И.Л." FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="4" Text="12.05.2025" FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<Border Grid.Column="5" Width="60" Height="20" Background="#FFB74D" Opacity="0.2"
+                                    CornerRadius="10" VerticalAlignment="Center">
+								<TextBlock Text="В работе" FontSize="11" Foreground="#FFB74D" HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+							</Border>
+							<Ellipse Grid.Column="6" Width="24" Height="24" Fill="#F1F3F4" VerticalAlignment="Center"
+                                     HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="6" Text="⋮" FontSize="12" Foreground="#666666" VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"/>
+						</Grid>
+						<Rectangle Height="1" Fill="#E0E0E0"/>
+
+						<!-- Задача 6 -->
+						<Grid Height="60" ColumnDefinitions="60,200,130,130,80,60,40" Background="#F9FAFB">
+							<TextBlock Grid.Column="0" Text="T-168" FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="25,0,0,0"/>
+							<TextBlock Grid.Column="1" Text="Тестирование прототипа" FontSize="13" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="2" Text="ОП-141-24 поз. 1" FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="3" Text="Нестеров Р.С." FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<TextBlock Grid.Column="4" Text="20.05.2025" FontSize="12" Foreground="#333333"
+                                       VerticalAlignment="Center" Margin="20,0,0,0"/>
+							<Border Grid.Column="5" Width="60" Height="20" Background="#00ACC1" Opacity="0.2"
+                                    CornerRadius="10" VerticalAlignment="Center">
+								<TextBlock Text="В очереди" FontSize="11" Foreground="#00ACC1" HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+							</Border>
+							<Ellipse Grid.Column="6" Width="24" Height="24" Fill="#F1F3F4" VerticalAlignment="Center"
+                                     HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="6" Text="⋮" FontSize="12" Foreground="#666666" VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"/>
+						</Grid>
+					</StackPanel>
+				</ScrollViewer>
+			</Grid>
+		</Border>
+
+		<!-- Пагинация -->
+		<StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,20">
+			<TextBlock Text="◀ Пред." FontSize="13" Foreground="#666666" VerticalAlignment="Center"/>
+
+			<Border Width="30" Height="30" Background="#00ACC1" CornerRadius="15" Margin="20,0,5,0">
+				<TextBlock Text="1" FontSize="13" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			</Border>
+
+			<TextBlock Text="2" FontSize="13" Foreground="#666666" VerticalAlignment="Center" Margin="10,0"/>
+			<TextBlock Text="3" FontSize="13" Foreground="#666666" VerticalAlignment="Center" Margin="10,0"/>
+			<TextBlock Text="..." FontSize="13" Foreground="#666666" VerticalAlignment="Center" Margin="10,0"/>
+
+			<TextBlock Text="След. ▶" FontSize="13" Foreground="#666666" VerticalAlignment="Center" Margin="20,0,0,0"/>
+		</StackPanel>
+	</Grid>
 </UserControl>

@@ -2,7 +2,200 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="ManufactPlanner.Views.DashboardPage">
-  Welcome to Avalonia!
+             mc:Ignorable="d" d:DesignWidth="760" d:DesignHeight="640"
+             x:Class="ManufactPlanner.Views.DashboardPage"
+             x:DataType="vm:DashboardViewModel"
+             xmlns:vm="using:ManufactPlanner.ViewModels">
+
+	<Grid RowDefinitions="Auto,Auto,*">
+		<!-- Заголовок страницы -->
+		<TextBlock Grid.Row="0" Text="Дашборд" FontSize="20" FontWeight="SemiBold" Foreground="#333333" Margin="20,20,0,0"/>
+
+		<!-- Карточки статистики -->
+		<Grid Grid.Row="1" Margin="20,20,20,0" ColumnDefinitions="*,*,*" RowDefinitions="Auto">
+			<!-- Карточка 1: Активные задачи -->
+			<Border Grid.Column="0" Height="120" Background="White" CornerRadius="8" Margin="0,0,10,0"
+                    BoxShadow="0 2 3 #10000000">
+				<Grid Margin="20,0">
+					<StackPanel VerticalAlignment="Center">
+						<TextBlock Text="Активные задачи" FontSize="14" Foreground="#9E9E9E"/>
+						<TextBlock Text="{Binding ActiveTasksCount}" FontSize="30" FontWeight="Medium" Foreground="#333333" Margin="0,10,0,0"/>
+						<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10">
+							<Border Width="70" Height="24" Background="#4CAF9D" Opacity="0.2" CornerRadius="12">
+								<TextBlock Text="+12%" FontSize="12" Foreground="#4CAF9D" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							</Border>
+						</StackPanel>
+					</StackPanel>
+				</Grid>
+			</Border>
+
+			<!-- Карточка 2: Активных заказов -->
+			<Border Grid.Column="1" Height="120" Background="White" CornerRadius="8" Margin="10,0"
+                    BoxShadow="0 2 3 #10000000">
+				<Grid Margin="20,0">
+					<StackPanel VerticalAlignment="Center">
+						<TextBlock Text="Активных заказов" FontSize="14" Foreground="#9E9E9E"/>
+						<TextBlock Text="{Binding ActiveOrdersCount}" FontSize="30" FontWeight="Medium" Foreground="#333333" Margin="0,10,0,0"/>
+						<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10">
+							<Border Width="70" Height="24" Background="#FF7043" Opacity="0.2" CornerRadius="12">
+								<TextBlock Text="-3%" FontSize="12" Foreground="#FF7043" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							</Border>
+						</StackPanel>
+					</StackPanel>
+				</Grid>
+			</Border>
+
+			<!-- Карточка 3: Дедлайнов сегодня -->
+			<Border Grid.Column="2" Height="120" Background="White" CornerRadius="8" Margin="10,0,0,0"
+                    BoxShadow="0 2 3 #10000000">
+				<Grid Margin="20,0">
+					<StackPanel VerticalAlignment="Center">
+						<TextBlock Text="Дедлайнов сегодня" FontSize="14" Foreground="#9E9E9E"/>
+						<TextBlock Text="{Binding DeadlinesTodayCount}" FontSize="30" FontWeight="Medium" Foreground="#333333" Margin="0,10,0,0"/>
+						<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10">
+							<Border Width="70" Height="24" Background="#FFB74D" Opacity="0.2" CornerRadius="12">
+								<TextBlock Text="Срочно" FontSize="12" Foreground="#FFB74D" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							</Border>
+						</StackPanel>
+					</StackPanel>
+				</Grid>
+			</Border>
+		</Grid>
+
+		<!-- Нижняя часть: задачи и календарь -->
+		<Grid Grid.Row="2" Margin="20,20,20,20" ColumnDefinitions="3*,1*" RowDefinitions="Auto,*,Auto">
+			<!-- Заголовок раздела задач -->
+			<TextBlock Grid.Row="0" Grid.Column="0" Text="Недавние задачи" FontSize="16" FontWeight="Medium" Foreground="#333333" Margin="20,0,0,10"/>
+
+			<!-- Список задач -->
+			<Border Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Background="White" CornerRadius="8" Margin="0,0,15,0"
+                    BoxShadow="0 2 3 #10000000">
+				<StackPanel>
+					<Rectangle Height="1" Fill="#E0E0E0" Margin="20,40,20,0"/>
+
+					<!-- Задача 1 -->
+					<Border Height="60" Background="#F9FAFB" Margin="20,10,20,0" CornerRadius="4">
+						<Grid Margin="10,0">
+							<StackPanel VerticalAlignment="Center">
+								<TextBlock Text="Разработка схемы электрической" FontSize="14" Foreground="#333333"/>
+								<TextBlock Text="ОП-136-24 поз. 1" FontSize="12" Foreground="#9E9E9E"/>
+							</StackPanel>
+							<Ellipse Width="20" Height="20" Fill="#4CAF9D" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+						</Grid>
+					</Border>
+
+					<!-- Задача 2 -->
+					<Border Height="60" Background="#F9FAFB" Margin="20,10,20,0" CornerRadius="4">
+						<Grid Margin="10,0">
+							<StackPanel VerticalAlignment="Center">
+								<TextBlock Text="Отладка монтажной схемы" FontSize="14" Foreground="#333333"/>
+								<TextBlock Text="ОП-168-24 поз. 1.14" FontSize="12" Foreground="#9E9E9E"/>
+							</StackPanel>
+							<Ellipse Width="20" Height="20" Fill="#FFB74D" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+						</Grid>
+					</Border>
+
+					<!-- Задача 3 -->
+					<Border Height="60" Background="#F9FAFB" Margin="20,10,20,0" CornerRadius="4">
+						<Grid Margin="10,0">
+							<StackPanel VerticalAlignment="Center">
+								<TextBlock Text="Проектирование корпуса" FontSize="14" Foreground="#333333"/>
+								<TextBlock Text="ОП-113-24 поз. 18" FontSize="12" Foreground="#9E9E9E"/>
+							</StackPanel>
+							<Ellipse Width="20" Height="20" Fill="#FF7043" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+						</Grid>
+					</Border>
+
+					<!-- Задача 4 -->
+					<Border Height="60" Background="#F9FAFB" Margin="20,10,20,0" CornerRadius="4">
+						<Grid Margin="10,0">
+							<StackPanel VerticalAlignment="Center">
+								<TextBlock Text="Подготовка технического задания" FontSize="14" Foreground="#333333"/>
+								<TextBlock Text="ОП-169-24 поз. 1" FontSize="12" Foreground="#9E9E9E"/>
+							</StackPanel>
+							<Ellipse Width="20" Height="20" Fill="#9575CD" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+						</Grid>
+					</Border>
+				</StackPanel>
+			</Border>
+
+			<!-- Календарь и график справа -->
+			<StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="3">
+				<!-- Календарь -->
+				<Border Background="White" CornerRadius="8" Margin="0,0,0,15" BoxShadow="0 2 3 #10000000">
+					<StackPanel Margin="20,20,20,20">
+						<TextBlock Text="Календарь" FontSize="16" FontWeight="Medium" Foreground="#333333" Margin="0,0,0,10"/>
+						<TextBlock Text="Апрель 2025" FontSize="14" FontWeight="Medium" HorizontalAlignment="Center" Margin="0,10,0,10"/>
+
+						<!-- Дни недели -->
+						<Grid ColumnDefinitions="*,*,*,*,*,*,*">
+							<TextBlock Grid.Column="0" Text="Пн" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="1" Text="Вт" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="2" Text="Ср" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="3" Text="Чт" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="4" Text="Пт" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="5" Text="Сб" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="6" Text="Вс" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
+						</Grid>
+
+						<!-- Числа (первая неделя) -->
+						<Grid ColumnDefinitions="*,*,*,*,*,*,*" Margin="0,10,0,0">
+							<TextBlock Grid.Column="0" Text="31" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="1" Text="1" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="2" Text="2" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="3" Text="3" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="4" Text="4" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="5" Text="5" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="6" Text="6" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
+						</Grid>
+
+						<!-- Числа (вторая неделя) -->
+						<Grid ColumnDefinitions="*,*,*,*,*,*,*" Margin="0,10,0,0">
+							<TextBlock Grid.Column="0" Text="7" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="1" Text="8" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="2" Text="9" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
+
+							<!-- Текущий день -->
+							<Border Grid.Column="3" Width="24" Height="24" CornerRadius="12" Background="#00ACC1" Opacity="0.2">
+								<TextBlock Text="10" FontSize="12" Foreground="#00ACC1" FontWeight="Medium"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							</Border>
+
+							<TextBlock Grid.Column="4" Text="11" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="5" Text="12" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="6" Text="13" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
+						</Grid>
+					</StackPanel>
+				</Border>
+
+				<!-- График выполнения задач -->
+				<Border Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+					<StackPanel Margin="20,20,20,20">
+						<TextBlock Text="Выполнение задач" FontSize="16" FontWeight="Medium" Foreground="#333333" Margin="0,0,0,10"/>
+
+						<!-- Фон графика -->
+						<Border Width="190" Height="130" Background="#F8F9FA" CornerRadius="4" Margin="0,10,0,0">
+							<!-- Оси графика -->
+							<Grid>
+								<Line StartPoint="0,130" EndPoint="190,130" Stroke="#E0E0E0" StrokeThickness="1"/>
+								<Line StartPoint="0,0" EndPoint="0,130" Stroke="#E0E0E0" StrokeThickness="1"/>
+
+								<!-- Данные графика (линия) -->
+								<Polyline Points="0,60 30,70 60,50 90,40 120,10 150,20 180,0"
+                                          Stroke="#00ACC1" StrokeThickness="2" Fill="Transparent"/>
+
+								<!-- Точки данных -->
+								<Ellipse Width="6" Height="6" Fill="#00ACC1" Margin="30,70,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+								<Ellipse Width="6" Height="6" Fill="#00ACC1" Margin="60,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+								<Ellipse Width="6" Height="6" Fill="#00ACC1" Margin="90,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+								<Ellipse Width="6" Height="6" Fill="#00ACC1" Margin="120,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+								<Ellipse Width="6" Height="6" Fill="#00ACC1" Margin="150,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+								<Ellipse Width="6" Height="6" Fill="#00ACC1" Margin="180,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+							</Grid>
+						</Border>
+					</StackPanel>
+				</Border>
+			</StackPanel>
+		</Grid>
+	</Grid>
 </UserControl>

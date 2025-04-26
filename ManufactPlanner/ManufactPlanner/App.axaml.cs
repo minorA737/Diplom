@@ -6,6 +6,15 @@ using Avalonia.Media;
 using ManufactPlanner.ViewModels;
 using ManufactPlanner.Views;
 
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Data.Core.Plugins;
+using Avalonia.Markup.Xaml;
+using Avalonia.Media;
+using ManufactPlanner.ViewModels;
+using ManufactPlanner.Views;
+using System;
+
 namespace ManufactPlanner
 {
     public partial class App : Application
@@ -17,10 +26,13 @@ namespace ManufactPlanner
 
         public override void OnFrameworkInitializationCompleted()
         {
+            // Удаляем DataAnnotations validator для улучшения производительности
+            BindingPlugins.DataValidators.RemoveAt(0);
+
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 // Добавляем ресурсы для навигационной панели и других элементов
-                if (Application.Current != null)
+                if (Current != null)
                 {
                     var resources = new ResourceDictionary();
                     var sidebarGradient = new LinearGradientBrush
@@ -41,7 +53,7 @@ namespace ManufactPlanner
                     resources.Add("ErrorColor", Color.Parse("#FF7043"));
                     resources.Add("BackgroundColor", Color.Parse("#F8F9FA"));
 
-                    Application.Current.Resources.MergedDictionaries.Add(resources);
+                    Current.Resources.MergedDictionaries.Add(resources);
                 }
 
                 desktop.MainWindow = new MainWindow
@@ -52,6 +64,5 @@ namespace ManufactPlanner
 
             base.OnFrameworkInitializationCompleted();
         }
-
     }
 }
