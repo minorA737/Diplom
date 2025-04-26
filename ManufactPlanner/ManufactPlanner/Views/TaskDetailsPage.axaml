@@ -5,163 +5,142 @@
              mc:Ignorable="d" d:DesignWidth="760" d:DesignHeight="640"
              x:Class="ManufactPlanner.Views.TaskDetailsPage"
              x:DataType="vm:TaskDetailsViewModel"
-             xmlns:vm="using:ManufactPlanner.ViewModels">
+             xmlns:vm="using:ManufactPlanner.ViewModels"
+			 xmlns:converters="using:ManufactPlanner.Converters">
+	<UserControl.Resources>
+		<converters:BoolToValueConverter x:Key="BoolToValue"/>
+		<converters:IsGreaterThanConverter x:Key="IsGreaterThan"/>
+		<converters:StringEqualsValueConverter x:Key="StringEqualsValue"/>
+		<converters:MarginConverter x:Key="MarginConverter"/>
+	</UserControl.Resources>
 
-	<Grid RowDefinitions="Auto,Auto,Auto,*">
-		<!-- Хлебные крошки -->
-		<StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20,20,20,0">
-			<TextBlock Text="Задачи" FontSize="13" Foreground="#666666" VerticalAlignment="Center"/>
-			<TextBlock Text=" > " FontSize="13" Foreground="#666666" VerticalAlignment="Center"/>
-			<TextBlock Text="{Binding Task.Name}" FontSize="13" Foreground="#333333" FontWeight="Medium" VerticalAlignment="Center"/>
+	<Grid RowDefinitions="Auto,Auto,*">
+		<!-- Навигационная цепочка -->
+		<StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20,20,20,0" Spacing="5">
+			<Button Content="Задачи" Background="Transparent" BorderThickness="0" Foreground="#666" Command="{Binding NavigateToTasksCommand}"/>
+			<TextBlock Text=">" Foreground="#666" VerticalAlignment="Center"/>
+			<TextBlock Text="{Binding TaskName}" Foreground="#333" FontWeight="Medium" VerticalAlignment="Center"/>
 		</StackPanel>
 
-		<!-- Карточка с основной информацией о задаче -->
-		<Border Grid.Row="1" Height="170" Background="White" CornerRadius="8" Margin="20,10,20,0"
-                BoxShadow="0 2 3 #10000000">
-			<Grid RowDefinitions="Auto,Auto,Auto" Margin="20">
-				<!-- Заголовок задачи -->
-				<TextBlock Grid.Row="0" Text="{Binding Task.Name}" FontSize="20" FontWeight="SemiBold" Foreground="#333333"/>
-
-				<!-- Информация о задаче -->
-				<StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,5,0,0">
-					<TextBlock Text="{Binding Task.TaskNumber, StringFormat='Задача #{0}'}" FontSize="13" Foreground="#666666"/>
-					<TextBlock Text=" • " FontSize="13" Foreground="#666666"/>
-					<TextBlock Text="{Binding Task.CreatedAt, StringFormat='Создана {0:dd.MM.yyyy}'}" FontSize="13" Foreground="#666666"/>
-				</StackPanel>
-
-				<!-- Статус, приоритет и срок -->
-				<StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,20,0,0">
-					<!-- Статус -->
-					<Border Width="100" Height="25" Background="#FFB74D" Opacity="0.2" CornerRadius="12.5">
-						<TextBlock Text="В работе" FontSize="12" Foreground="#FFB74D" FontWeight="Medium"
-                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-					</Border>
-
-					<!-- Приоритет -->
-					<Border Width="120" Height="25" Background="#FF7043" Opacity="0.2" CornerRadius="12.5" Margin="10,0,0,0">
-						<TextBlock Text="Приоритет: Высокий" FontSize="12" Foreground="#FF7043" FontWeight="Medium"
-                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-					</Border>
-
-					<!-- Срок -->
-					<Border Width="115" Height="25" Background="#9575CD" Opacity="0.2" CornerRadius="12.5" Margin="10,0,0,0">
-						<TextBlock Text="Срок: 18.04.2025" FontSize="12" Foreground="#9575CD" FontWeight="Medium"
-                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-					</Border>
-
-					<!-- Кнопки действий -->
-					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="70,0,0,0">
-						<Button Content="Редактировать" Width="120" Height="32" Background="#00ACC1" Foreground="White"
-                                CornerRadius="16" VerticalAlignment="Center"/>
-						<Button Content="Действия ▼" Width="110" Height="32" Background="White" Foreground="#666666"
-                                BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="16" Margin="10,0,0,0" VerticalAlignment="Center"/>
+		<!-- Информация о задаче -->
+		<Border Grid.Row="1" Margin="20,15,20,0" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+			<Grid Margin="20">
+				<!-- Заголовок и кнопки действий -->
+				<Grid ColumnDefinitions="*,Auto">
+					<StackPanel>
+						<TextBlock Text="{Binding TaskName}" FontSize="20" FontWeight="SemiBold" Foreground="#333"/>
+						<StackPanel Orientation="Horizontal" Spacing="10" Margin="0,5,0,0">
+							<TextBlock Text="{Binding TaskId}" FontSize="13" Foreground="#666"/>
+							<TextBlock Text="•" FontSize="13" Foreground="#666"/>
+							<TextBlock Text="{Binding CreatedDate}" FontSize="13" Foreground="#666"/>
+						</StackPanel>
 					</StackPanel>
+
+					<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+						<Button Width="120" Height="32" CornerRadius="16" Background="#00ACC1" Command="{Binding EditTaskCommand}">
+							<TextBlock Text="Редактировать" FontSize="12" Foreground="White"/>
+						</Button>
+						<Button Width="110" Height="32" CornerRadius="16" Background="White" BorderBrush="#E0E0E0" BorderThickness="1">
+							<TextBlock Text="Действия ▼" FontSize="12" Foreground="#666"/>
+						</Button>
+					</StackPanel>
+				</Grid>
+
+				<!-- Статусы задачи -->
+				<StackPanel Orientation="Horizontal" Spacing="10" Margin="0,60,0,0">
+					<Border Width="100" Height="25" CornerRadius="12.5" Background="{Binding StatusColor}" Opacity="0.2">
+						<TextBlock Text="{Binding Status}" FontSize="12" Foreground="{Binding StatusColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Border>
+
+					<Border Width="120" Height="25" CornerRadius="12.5" Background="{Binding PriorityColor}" Opacity="0.2">
+						<TextBlock Text="{Binding Priority}" FontSize="12" Foreground="{Binding PriorityColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Border>
+
+					<Border Width="115" Height="25" CornerRadius="12.5" Background="#9575CD" Opacity="0.2">
+						<TextBlock Text="{Binding Deadline}" FontSize="12" Foreground="#9575CD" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Border>
 				</StackPanel>
 			</Grid>
 		</Border>
 
-		<!-- Вкладки -->
-		<Grid Grid.Row="2" ColumnDefinitions="Auto,Auto,Auto,Auto,*" Margin="20,30,20,0">
-			<TextBlock Grid.Column="0" Text="Описание" FontSize="14" Foreground="#00ACC1" FontWeight="Medium"/>
-			<Rectangle Grid.Column="0" Width="50" Height="2" Fill="#00ACC1" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+		<!-- Вкладки и основное содержимое -->
+		<Grid Grid.Row="2" Margin="20,20,20,20" ColumnDefinitions="3*,1*" RowDefinitions="Auto,*">
+			<!-- Вкладки -->
+			<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Background="White">
+				<Border BorderThickness="0,0,0,2" BorderBrush="#00ACC1">
+					<TextBlock Text="Описание" FontSize="14" Foreground="#00ACC1" FontWeight="Medium" Margin="20,10"/>
+				</Border>
+				<TextBlock Text="Комментарии" FontSize="14" Foreground="#666" Margin="20,10"/>
+				<TextBlock Text="Вложения" FontSize="14" Foreground="#666" Margin="20,10"/>
+				<TextBlock Text="История" FontSize="14" Foreground="#666" Margin="20,10"/>
+			</StackPanel>
 
-			<TextBlock Grid.Column="1" Text="Комментарии" FontSize="14" Foreground="#666666" Margin="30,0,0,0"/>
-			<TextBlock Grid.Column="2" Text="Вложения" FontSize="14" Foreground="#666666" Margin="30,0,0,0"/>
-			<TextBlock Grid.Column="3" Text="История" FontSize="14" Foreground="#666666" Margin="30,0,0,0"/>
-		</Grid>
-		<Rectangle Grid.Row="2" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom" Margin="20,10,20,0"/>
+			<!-- Содержимое вкладки Описание -->
+			<Border Grid.Row="1" Grid.Column="0" Background="White" CornerRadius="0,0,8,8" BoxShadow="0 2 3 #10000000">
+				<StackPanel Margin="20">
+					<TextBlock Text="Описание" FontSize="16" FontWeight="Medium" Foreground="#333"/>
+					<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,15"/>
+					<TextBlock Text="{Binding Description}" FontSize="14" Foreground="#333" TextWrapping="Wrap"/>
 
-		<!-- Содержимое вкладки -->
-		<Grid Grid.Row="3" ColumnDefinitions="3*,1*" Margin="20,20,20,20">
-			<!-- Левая панель: информация о задаче -->
-			<Border Grid.Column="0" Background="White" CornerRadius="8" Margin="0,0,15,0"
-                    BoxShadow="0 2 3 #10000000">
-				<Grid RowDefinitions="Auto,*,Auto,*" Margin="20,30,20,20">
-					<!-- Заголовок описания -->
-					<TextBlock Grid.Row="0" Text="Описание" FontSize="16" FontWeight="Medium" Foreground="#333333"/>
-					<Rectangle Grid.Row="0" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom" Margin="0,15,0,0"/>
+					<TextBlock Text="Детали задачи" FontSize="16" FontWeight="Medium" Foreground="#333" Margin="0,30,0,0"/>
+					<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,15"/>
 
-					<!-- Описание задачи -->
-					<TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,20,0,0" Foreground="#333333">
-						Необходимо выполнить отладку и тестирование монтажной схемы для учебного стенда "Электрические станции и подстанции" (заказ ОП-168-24 поз. 1.14).
-						<LineBreak/><LineBreak/>
-						Проверить работоспособность всех компонентов и соответствие монтажной схемы принципиальной электрической схеме. Выявить и устранить возможные несоответствия и проблемы.
-						<LineBreak/><LineBreak/>
-						После завершения отладки подготовить отчет о проведенных работах и внесенных изменениях.
-					</TextBlock>
+					<Grid ColumnDefinitions="90,*" RowDefinitions="Auto,Auto,Auto,Auto" Margin="0,0,0,20">
+						<TextBlock Grid.Row="0" Grid.Column="0" Text="Исполнитель:" FontSize="13" Foreground="#666" Margin="0,0,0,10"/>
+						<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Assignee}" FontSize="13" Foreground="#333" Margin="0,0,0,10"/>
 
-					<!-- Заголовок деталей задачи -->
-					<TextBlock Grid.Row="2" Text="Детали задачи" FontSize="16" FontWeight="Medium" Foreground="#333333" Margin="0,20,0,0"/>
-					<Rectangle Grid.Row="2" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom" Margin="0,15,0,0"/>
+						<TextBlock Grid.Row="1" Grid.Column="0" Text="Заказ/Позиция:" FontSize="13" Foreground="#666" Margin="0,0,0,10"/>
+						<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding OrderPosition}" FontSize="13" Foreground="#333" Margin="0,0,0,10"/>
 
-					<!-- Детали задачи -->
-					<Grid Grid.Row="3" RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" Margin="0,20,0,0">
-						<TextBlock Grid.Row="0" Grid.Column="0" Text="Исполнитель:" FontSize="13" Foreground="#666666"/>
-						<TextBlock Grid.Row="0" Grid.Column="1" Text="Еретин Д.К." FontSize="13" Foreground="#333333" Margin="10,0,0,0"/>
+						<TextBlock Grid.Row="2" Grid.Column="0" Text="Статус этапа:" FontSize="13" Foreground="#666" Margin="0,0,0,10"/>
+						<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding StageStatus}" FontSize="13" Foreground="#333" Margin="0,0,0,10"/>
 
-						<TextBlock Grid.Row="1" Grid.Column="0" Text="Заказ/Позиция:" FontSize="13" Foreground="#666666" Margin="0,10,0,0"/>
-						<TextBlock Grid.Row="1" Grid.Column="1" Text="ОП-168-24 поз. 1.14" FontSize="13" Foreground="#333333" Margin="10,10,0,0"/>
+						<TextBlock Grid.Row="3" Grid.Column="0" Text="Примечания:" FontSize="13" Foreground="#666" Margin="0,0,0,10"/>
+						<TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Notes}" FontSize="13" Foreground="#333" Margin="0,0,0,10" TextWrapping="Wrap"/>
 					</Grid>
-				</Grid>
+				</StackPanel>
 			</Border>
 
-			<!-- Правая панель: информация о заказе и связанные задачи -->
-			<StackPanel Grid.Column="1" Spacing="15">
+			<!-- Боковая информация -->
+			<StackPanel Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Spacing="15" Margin="15,0,0,0">
 				<!-- Информация о заказе -->
 				<Border Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
-					<Grid RowDefinitions="Auto,Auto,Auto,Auto" Margin="20,20,20,20">
-						<TextBlock Grid.Row="0" Text="Информация о заказе" FontSize="16" FontWeight="Medium" Foreground="#333333"/>
-						<Rectangle Grid.Row="0" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom" Margin="0,15,0,0"/>
+					<StackPanel Margin="15">
+						<TextBlock Text="Информация о заказе" FontSize="16" FontWeight="Medium" Foreground="#333"/>
+						<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,15"/>
 
-						<Grid Grid.Row="1" ColumnDefinitions="Auto,*" Margin="0,15,0,0">
-							<TextBlock Grid.Column="0" Text="Заказчик:" FontSize="13" Foreground="#666666"/>
-							<TextBlock Grid.Column="1" Text="ГГПК" FontSize="13" Foreground="#333333" Margin="10,0,0,0"/>
-						</Grid>
+						<Grid ColumnDefinitions="70,*" RowDefinitions="Auto,Auto,Auto" Margin="10">
+							<TextBlock Grid.Row="0" Grid.Column="0" Text="Заказчик:" FontSize="13" Foreground="#666"/>
+							<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Customer}" FontSize="13" Foreground="#333"/>
 
-						<Grid Grid.Row="2" ColumnDefinitions="Auto,*" Margin="0,10,0,0">
-							<TextBlock Grid.Column="0" Text="Срок поставки:" FontSize="13" Foreground="#666666"/>
-							<TextBlock Grid.Column="1" Text="17.02.2024" FontSize="13" Foreground="#333333" Margin="10,0,0,0"/>
-						</Grid>
+							<TextBlock Grid.Row="1" Grid.Column="0" Text="Срок:" FontSize="13" Foreground="#666"/>
+							<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding OrderDeadline}" FontSize="13" Foreground="#333"/>
 
-						<Grid Grid.Row="3" ColumnDefinitions="Auto,*" Margin="0,10,0,0">
-							<TextBlock Grid.Column="0" Text="Статус заказа:" FontSize="13" Foreground="#666666"/>
-							<TextBlock Grid.Column="1" Text="Активен" FontSize="13" Foreground="#333333" Margin="10,0,0,0"/>
+							<TextBlock Grid.Row="2" Grid.Column="0" Text="Статус:" FontSize="13" Foreground="#666"/>
+							<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding OrderStatus}" FontSize="13" Foreground="#333"/>
 						</Grid>
-					</Grid>
+					</StackPanel>
 				</Border>
 
 				<!-- Связанные задачи -->
-				<Border Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000" Height="170">
-					<Grid RowDefinitions="Auto,*" Margin="20,20,20,20">
-						<TextBlock Grid.Row="0" Text="Связанные задачи" FontSize="16" FontWeight="Medium" Foreground="#333333"/>
-						<Rectangle Grid.Row="0" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom" Margin="0,15,0,0"/>
+				<Border Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+					<StackPanel Margin="15">
+						<TextBlock Text="Связанные задачи" FontSize="16" FontWeight="Medium" Foreground="#333"/>
+						<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,15"/>
 
-						<StackPanel Grid.Row="1" Margin="0,15,0,0" Spacing="20">
-							<!-- Связанная задача 1 -->
-							<Grid RowDefinitions="Auto,Auto">
-								<TextBlock Grid.Row="0" Text="T-115: Разработка монтажной схемы" FontSize="13" Foreground="#333333"/>
-								<Border Grid.Row="1" Width="55" Height="16" Background="#4CAF9D" Opacity="0.2" CornerRadius="8" Margin="0,4,0,0">
-									<TextBlock Text="Готово" FontSize="10" Foreground="#4CAF9D" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-								</Border>
-							</Grid>
-
-							<!-- Связанная задача 2 -->
-							<Grid RowDefinitions="Auto,Auto">
-								<TextBlock Grid.Row="0" Text="T-142: Тестирование компонентов" FontSize="13" Foreground="#333333"/>
-								<Border Grid.Row="1" Width="55" Height="16" Background="#FFB74D" Opacity="0.2" CornerRadius="8" Margin="0,4,0,0">
-									<TextBlock Text="В работе" FontSize="10" Foreground="#FFB74D" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-								</Border>
-							</Grid>
-
-							<!-- Связанная задача 3 -->
-							<Grid RowDefinitions="Auto,Auto">
-								<TextBlock Grid.Row="0" Text="T-175: Подготовка документации" FontSize="13" Foreground="#333333"/>
-								<Border Grid.Row="1" Width="65" Height="16" Background="#00ACC1" Opacity="0.2" CornerRadius="8" Margin="0,4,0,0">
-									<TextBlock Text="В очереди" FontSize="10" Foreground="#00ACC1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-								</Border>
-							</Grid>
-						</StackPanel>
-					</Grid>
+						<ItemsControl ItemsSource="{Binding RelatedTasks}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<StackPanel Margin="0,0,0,15">
+										<TextBlock Text="{Binding Name}" FontSize="13" Foreground="#333"/>
+										<Border Width="55" Height="16" CornerRadius="8" Background="{Binding StatusColor}" Opacity="0.2" HorizontalAlignment="Left" Margin="0,5,0,0">
+											<TextBlock Text="{Binding Status}" FontSize="10" Foreground="{Binding StatusColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+										</Border>
+									</StackPanel>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
 				</Border>
 			</StackPanel>
 		</Grid>

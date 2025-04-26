@@ -2,7 +2,90 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="ManufactPlanner.Views.DocumentationPage">
-  Welcome to Avalonia!
+             mc:Ignorable="d" d:DesignWidth="760" d:DesignHeight="640"
+             x:Class="ManufactPlanner.Views.DocumentationPage"
+             x:DataType="vm:DocumentationViewModel"
+             xmlns:vm="using:ManufactPlanner.ViewModels"
+			 xmlns:converters="using:ManufactPlanner.Converters">
+	<UserControl.Resources>
+		<converters:BoolToValueConverter x:Key="BoolToValue"/>
+		<converters:IsGreaterThanConverter x:Key="IsGreaterThan"/>
+		<converters:StringEqualsValueConverter x:Key="StringEqualsValue"/>
+		<converters:MarginConverter x:Key="MarginConverter"/>
+	</UserControl.Resources>
+
+	<Grid RowDefinitions="Auto,*">
+		<!-- Заголовок страницы и кнопки действий -->
+		<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="20,20,20,0">
+			<TextBlock Text="Документация" FontSize="20" FontWeight="SemiBold" Foreground="#333333"/>
+
+			<!-- Кнопки действий -->
+			<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+				<ComboBox Width="150" SelectedIndex="0">
+					<ComboBoxItem>Все типы</ComboBoxItem>
+					<ComboBoxItem>Техническое задание</ComboBoxItem>
+					<ComboBoxItem>Спецификация</ComboBoxItem>
+					<ComboBoxItem>Руководство</ComboBoxItem>
+				</ComboBox>
+
+				<Button Width="140" Height="36" CornerRadius="18" Background="#00ACC1">
+					<TextBlock Text="+ Добавить документ" FontSize="12" Foreground="White"/>
+				</Button>
+			</StackPanel>
+		</Grid>
+
+		<!-- Список документов -->
+		<Border Grid.Row="1" Margin="20,20,20,20" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+			<Grid RowDefinitions="Auto,*">
+				<!-- Заголовок таблицы -->
+				<Grid Grid.Row="0" Background="#F8F9FA" Height="40" ColumnDefinitions="*,150,150,120,100,Auto">
+					<TextBlock Grid.Column="0" Text="Название документа" FontSize="12" Foreground="#666" FontWeight="Medium" Margin="20,0,0,0" VerticalAlignment="Center"/>
+					<TextBlock Grid.Column="1" Text="Тип" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
+					<TextBlock Grid.Column="2" Text="Заказ" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
+					<TextBlock Grid.Column="3" Text="Дата создания" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
+					<TextBlock Grid.Column="4" Text="Автор" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
+					<TextBlock Grid.Column="5" Text="▾" FontSize="12" Foreground="#666" FontWeight="Medium" Margin="5,0" VerticalAlignment="Center"/>
+				</Grid>
+
+				<!-- Линия разделителя -->
+				<Rectangle Grid.Row="0" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom" IsHitTestVisible="False"/>
+
+				<!-- Список документов -->
+				<ScrollViewer Grid.Row="1">
+					<ItemsControl ItemsSource="{Binding Documents}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Grid Height="60" ColumnDefinitions="*,150,150,120,100,Auto" Background="{Binding IsAlternate, Converter={StaticResource BoolToValue}, ConverterParameter='White,#F9FAFB'}">
+									<StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="20,0,0,0">
+										<TextBlock Text="{Binding Name}" FontSize="13" Foreground="#333" TextWrapping="Wrap"/>
+										<TextBlock Text="{Binding Description}" FontSize="11" Foreground="#666" TextWrapping="Wrap"/>
+									</StackPanel>
+
+									<TextBlock Grid.Column="1" Text="{Binding Type}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
+									<TextBlock Grid.Column="2" Text="{Binding OrderNumber}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
+									<TextBlock Grid.Column="3" Text="{Binding CreatedDate}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
+									<TextBlock Grid.Column="4" Text="{Binding Author}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
+
+									<!-- Меню действий -->
+									<StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="10" Margin="5,0" VerticalAlignment="Center">
+										<!-- Command="{Binding $parent[ItemsControl].DataContext.DownloadCommand}" CommandParameter="{Binding Id}" -->
+										<Button Width="24" Height="24" CornerRadius="12" Background="#F1F3F4" >
+											<TextBlock Text="↓" FontSize="12" Foreground="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+										</Button>
+										<!-- Command="{Binding $parent[ItemsControl].DataContext.ViewCommand}" CommandParameter="{Binding Id}" -->
+										<Button Width="24" Height="24" CornerRadius="12" Background="#F1F3F4" >
+											<TextBlock Text="👁" FontSize="12" Foreground="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+										</Button>
+									</StackPanel>
+
+									<!-- Линия разделителя -->
+									<Rectangle Grid.ColumnSpan="6" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom"/>
+								</Grid>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
+			</Grid>
+		</Border>
+	</Grid>
 </UserControl>

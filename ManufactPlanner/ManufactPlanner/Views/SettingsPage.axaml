@@ -2,7 +2,130 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="ManufactPlanner.Views.SettingsPage">
-  Welcome to Avalonia!
+             mc:Ignorable="d" d:DesignWidth="760" d:DesignHeight="640"
+             x:Class="ManufactPlanner.Views.SettingsPage"
+             x:DataType="vm:SettingsViewModel"
+             xmlns:vm="using:ManufactPlanner.ViewModels"
+			 xmlns:converters="using:ManufactPlanner.Converters">
+	<UserControl.Resources>
+		<converters:BoolToValueConverter x:Key="BoolToValue"/>
+		<converters:IsGreaterThanConverter x:Key="IsGreaterThan"/>
+		<converters:StringEqualsValueConverter x:Key="StringEqualsValue"/>
+		<converters:MarginConverter x:Key="MarginConverter"/>
+	</UserControl.Resources>
+
+	<Grid RowDefinitions="Auto,*">
+		<!-- Заголовок страницы -->
+		<TextBlock Grid.Row="0" Text="Настройки" FontSize="20" FontWeight="SemiBold" Foreground="#333333" Margin="20,20,0,0"/>
+
+		<!-- Основное содержимое - категории настроек -->
+		<ScrollViewer Grid.Row="1" Margin="20,20,20,20">
+			<StackPanel Spacing="20">
+				<!-- Категория: Профиль пользователя -->
+				<Border Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+					<StackPanel Margin="20">
+						<TextBlock Text="Профиль пользователя" FontSize="16" FontWeight="Medium" Foreground="#333"/>
+						<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,20"/>
+
+						<Grid ColumnDefinitions="150,*" RowDefinitions="Auto,Auto,Auto,Auto" Margin="0,0,0,10">
+							<TextBlock Grid.Row="0" Grid.Column="0" Text="Имя пользователя:" FontSize="13" Foreground="#666" VerticalAlignment="Center"/>
+							<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Username}" Width="250" Height="36" HorizontalAlignment="Left"/>
+
+							<TextBlock Grid.Row="1" Grid.Column="0" Text="Имя:" FontSize="13" Foreground="#666" VerticalAlignment="Center" Margin="0,15,0,0"/>
+							<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding FirstName}" Width="250" Height="36" HorizontalAlignment="Left" Margin="0,15,0,0"/>
+
+							<TextBlock Grid.Row="2" Grid.Column="0" Text="Фамилия:" FontSize="13" Foreground="#666" VerticalAlignment="Center" Margin="0,15,0,0"/>
+							<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding LastName}" Width="250" Height="36" HorizontalAlignment="Left" Margin="0,15,0,0"/>
+
+							<TextBlock Grid.Row="3" Grid.Column="0" Text="Email:" FontSize="13" Foreground="#666" VerticalAlignment="Center" Margin="0,15,0,0"/>
+							<TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Email}" Width="250" Height="36" HorizontalAlignment="Left" Margin="0,15,0,0"/>
+						</Grid>
+
+						<Button Content="Сохранить изменения" Width="200" Height="36" Background="#00ACC1" Foreground="White" HorizontalAlignment="Left" CornerRadius="18" Command="{Binding SaveProfileCommand}"/>
+					</StackPanel>
+				</Border>
+
+				<!-- Категория: Изменение пароля -->
+				<Border Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+					<StackPanel Margin="20">
+						<TextBlock Text="Изменение пароля" FontSize="16" FontWeight="Medium" Foreground="#333"/>
+						<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,20"/>
+
+						<Grid ColumnDefinitions="150,*" RowDefinitions="Auto,Auto,Auto" Margin="0,0,0,10">
+							<TextBlock Grid.Row="0" Grid.Column="0" Text="Текущий пароль:" FontSize="13" Foreground="#666" VerticalAlignment="Center"/>
+							<TextBox Grid.Row="0" Grid.Column="1" PasswordChar="•" Text="{Binding CurrentPassword}" Width="250" Height="36" HorizontalAlignment="Left"/>
+
+							<TextBlock Grid.Row="1" Grid.Column="0" Text="Новый пароль:" FontSize="13" Foreground="#666" VerticalAlignment="Center" Margin="0,15,0,0"/>
+							<TextBox Grid.Row="1" Grid.Column="1" PasswordChar="•" Text="{Binding NewPassword}" Width="250" Height="36" HorizontalAlignment="Left" Margin="0,15,0,0"/>
+
+							<TextBlock Grid.Row="2" Grid.Column="0" Text="Подтверждение:" FontSize="13" Foreground="#666" VerticalAlignment="Center" Margin="0,15,0,0"/>
+							<TextBox Grid.Row="2" Grid.Column="1" PasswordChar="•" Text="{Binding ConfirmPassword}" Width="250" Height="36" HorizontalAlignment="Left" Margin="0,15,0,0"/>
+						</Grid>
+
+						<Button Content="Изменить пароль" Width="200" Height="36" Background="#00ACC1" Foreground="White" HorizontalAlignment="Left" CornerRadius="18" Command="{Binding ChangePasswordCommand}"/>
+					</StackPanel>
+				</Border>
+
+				<!-- Категория: Настройки уведомлений -->
+				<Border Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+					<StackPanel Margin="20">
+						<TextBlock Text="Настройки уведомлений" FontSize="16" FontWeight="Medium" Foreground="#333"/>
+						<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,20"/>
+
+						<StackPanel Spacing="15">
+							<CheckBox Content="Уведомления о новых задачах" IsChecked="{Binding NotifyNewTasks}"/>
+							<CheckBox Content="Уведомления об изменении статуса задач" IsChecked="{Binding NotifyTaskStatusChanges}"/>
+							<CheckBox Content="Уведомления о комментариях" IsChecked="{Binding NotifyComments}"/>
+							<CheckBox Content="Уведомления о приближающихся дедлайнах" IsChecked="{Binding NotifyDeadlines}"/>
+							<CheckBox Content="Уведомления по электронной почте" IsChecked="{Binding NotifyEmail}"/>
+							<CheckBox Content="Уведомления на рабочем столе" IsChecked="{Binding NotifyDesktop}"/>
+						</StackPanel>
+
+						<Button Content="Сохранить настройки" Width="200" Height="36" Background="#00ACC1" Foreground="White" HorizontalAlignment="Left" CornerRadius="18" Margin="0,15,0,0" Command="{Binding SaveNotificationSettingsCommand}"/>
+					</StackPanel>
+				</Border>
+
+				<!-- Категория: Интерфейс -->
+				<Border Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+					<StackPanel Margin="20">
+						<TextBlock Text="Настройки интерфейса" FontSize="16" FontWeight="Medium" Foreground="#333"/>
+						<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,20"/>
+
+						<Grid ColumnDefinitions="150,*" RowDefinitions="Auto,Auto" Margin="0,0,0,10">
+							<TextBlock Grid.Row="0" Grid.Column="0" Text="Язык интерфейса:" FontSize="13" Foreground="#666" VerticalAlignment="Center"/>
+							<ComboBox Grid.Row="0" Grid.Column="1" Width="250" HorizontalAlignment="Left" SelectedIndex="{Binding SelectedLanguage}">
+								<ComboBoxItem>Русский</ComboBoxItem>
+								<ComboBoxItem>English</ComboBoxItem>
+							</ComboBox>
+
+							<TextBlock Grid.Row="1" Grid.Column="0" Text="Тема:" FontSize="13" Foreground="#666" VerticalAlignment="Center" Margin="0,15,0,0"/>
+							<StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0,15,0,0" Spacing="15">
+								<RadioButton Content="Светлая" IsChecked="{Binding IsLightTheme}" GroupName="Theme"/>
+								<RadioButton Content="Тёмная" IsChecked="{Binding !IsLightTheme}" GroupName="Theme"/>
+							</StackPanel>
+						</Grid>
+
+						<Button Content="Применить" Width="200" Height="36" Background="#00ACC1" Foreground="White" HorizontalAlignment="Left" CornerRadius="18" Command="{Binding ApplyInterfaceSettingsCommand}"/>
+					</StackPanel>
+				</Border>
+
+				<!-- Категория: О программе -->
+				<Border Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+					<StackPanel Margin="20">
+						<TextBlock Text="О программе" FontSize="16" FontWeight="Medium" Foreground="#333"/>
+						<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,20"/>
+
+						<StackPanel Spacing="10">
+							<TextBlock Text="ManufactPlanner: Система автоматизации планирования разработки изделий" FontSize="14" Foreground="#333"/>
+							<TextBlock Text="Версия: 1.0.0 (сборка от 26.04.2025)" FontSize="13" Foreground="#666"/>
+							<TextBlock Text="© 2025 Все права защищены" FontSize="13" Foreground="#666"/>
+
+							<TextBlock Text="Разработано в рамках дипломного проекта" FontSize="13" Foreground="#666" Margin="0,15,0,0"/>
+							<TextBlock Text="Используемые технологии: Avalonia UI, .NET 8, PostgreSQL" FontSize="13" Foreground="#666"/>
+						</StackPanel>
+					</StackPanel>
+				</Border>
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
 </UserControl>

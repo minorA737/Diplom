@@ -3,6 +3,7 @@ using System.Windows.Input;
 using ManufactPlanner.Models;
 using ReactiveUI;
 using System.Reactive;
+using System.Collections.ObjectModel;
 
 namespace ManufactPlanner.ViewModels
 {
@@ -10,147 +11,185 @@ namespace ManufactPlanner.ViewModels
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
         private readonly PostgresContext _dbContext;
-        private readonly int _taskId;
 
-        // Модель представления для задачи
-        public class TaskViewModel
+        private string _taskId = "T-128";
+        private string _taskName = "Отладка монтажной схемы";
+        private string _createdDate = "Создана 05.04.2025";
+        private string _status = "В работе";
+        private string _statusColor = "#FFB74D";
+        private string _priority = "Приоритет: Высокий";
+        private string _priorityColor = "#FF7043";
+        private string _deadline = "Срок: 18.04.2025";
+        private string _description = "Необходимо выполнить отладку и тестирование монтажной схемы для учебного стенда \"Электрические станции и подстанции\" (заказ ОП-168-24 поз. 1.14).\n\nПроверить работоспособность всех компонентов и соответствие монтажной схемы принципиальной электрической схеме. Выявить и устранить возможные несоответствия и проблемы.\n\nПосле завершения отладки подготовить отчет о проведенных работах и внесенных изменениях.";
+        private string _assignee = "Еретин Д.К.";
+        private string _orderPosition = "ОП-168-24 поз. 1.14";
+        private string _stageStatus = "Тестирование";
+        private string _notes = "Необходимо согласовать изменения с конструкторским отделом.";
+        private string _customer = "ГГПК";
+        private string _orderDeadline = "17.02.2024";
+        private string _orderStatus = "Активен";
+
+        private ObservableCollection<RelatedTaskViewModel> _relatedTasks;
+
+        public string TaskId
         {
-            public int Id { get; set; }
-            public string TaskNumber { get; set; }
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public DateTime CreatedAt { get; set; }
-            public string Status { get; set; }
-            public string Priority { get; set; }
-            public DateTime Deadline { get; set; }
-            public string AssigneeName { get; set; }
-            public string OrderPositionInfo { get; set; }
+            get => _taskId;
+            set => this.RaiseAndSetIfChanged(ref _taskId, value);
         }
 
-        // Модель представления заказа
-        public class OrderViewModel
+        public string TaskName
         {
-            public int Id { get; set; }
-            public string OrderNumber { get; set; }
-            public string CustomerName { get; set; }
-            public DateTime DeliveryDeadline { get; set; }
-            public string Status { get; set; }
+            get => _taskName;
+            set => this.RaiseAndSetIfChanged(ref _taskName, value);
         }
 
-        // Модель представления связанной задачи
-        public class RelatedTaskViewModel
+        public string CreatedDate
         {
-            public int Id { get; set; }
-            public string TaskNumber { get; set; }
-            public string Name { get; set; }
-            public string Status { get; set; }
+            get => _createdDate;
+            set => this.RaiseAndSetIfChanged(ref _createdDate, value);
         }
 
-        private TaskViewModel _task;
-        private OrderViewModel _order;
-        private RelatedTaskViewModel[] _relatedTasks;
-
-        public TaskViewModel Task
+        public string Status
         {
-            get => _task;
-            set => this.RaiseAndSetIfChanged(ref _task, value);
+            get => _status;
+            set => this.RaiseAndSetIfChanged(ref _status, value);
         }
 
-        public OrderViewModel Order
+        public string StatusColor
         {
-            get => _order;
-            set => this.RaiseAndSetIfChanged(ref _order, value);
+            get => _statusColor;
+            set => this.RaiseAndSetIfChanged(ref _statusColor, value);
         }
 
-        public RelatedTaskViewModel[] RelatedTasks
+        public string Priority
+        {
+            get => _priority;
+            set => this.RaiseAndSetIfChanged(ref _priority, value);
+        }
+
+        public string PriorityColor
+        {
+            get => _priorityColor;
+            set => this.RaiseAndSetIfChanged(ref _priorityColor, value);
+        }
+
+        public string Deadline
+        {
+            get => _deadline;
+            set => this.RaiseAndSetIfChanged(ref _deadline, value);
+        }
+
+        public string Description
+        {
+            get => _description;
+            set => this.RaiseAndSetIfChanged(ref _description, value);
+        }
+
+        public string Assignee
+        {
+            get => _assignee;
+            set => this.RaiseAndSetIfChanged(ref _assignee, value);
+        }
+
+        public string OrderPosition
+        {
+            get => _orderPosition;
+            set => this.RaiseAndSetIfChanged(ref _orderPosition, value);
+        }
+
+        public string StageStatus
+        {
+            get => _stageStatus;
+            set => this.RaiseAndSetIfChanged(ref _stageStatus, value);
+        }
+
+        public string Notes
+        {
+            get => _notes;
+            set => this.RaiseAndSetIfChanged(ref _notes, value);
+        }
+
+        public string Customer
+        {
+            get => _customer;
+            set => this.RaiseAndSetIfChanged(ref _customer, value);
+        }
+
+        public string OrderDeadline
+        {
+            get => _orderDeadline;
+            set => this.RaiseAndSetIfChanged(ref _orderDeadline, value);
+        }
+
+        public string OrderStatus
+        {
+            get => _orderStatus;
+            set => this.RaiseAndSetIfChanged(ref _orderStatus, value);
+        }
+
+        public ObservableCollection<RelatedTaskViewModel> RelatedTasks
         {
             get => _relatedTasks;
             set => this.RaiseAndSetIfChanged(ref _relatedTasks, value);
         }
 
-        // Команда для редактирования задачи
+        public ICommand NavigateToTasksCommand { get; }
         public ICommand EditTaskCommand { get; }
-
-        // Команда для изменения статуса задачи
-        public ICommand ChangeStatusCommand { get; }
 
         public TaskDetailsViewModel(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext, int taskId)
         {
             _mainWindowViewModel = mainWindowViewModel;
             _dbContext = dbContext;
-            _taskId = taskId;
 
-            EditTaskCommand = ReactiveCommand.Create(() => {
-                // Логика для открытия окна редактирования задачи
-            });
+            NavigateToTasksCommand = ReactiveCommand.Create(NavigateToTasks);
+            EditTaskCommand = ReactiveCommand.Create(EditTask);
 
-            ChangeStatusCommand = ReactiveCommand.Create<string>(status => {
-                // Логика для изменения статуса задачи
-                // Например: Task.Status = status;
-                // Сохранение в БД
-            });
-
-            // Загрузка данных задачи
-            LoadTaskDetails();
+            LoadTaskDetails(taskId);
         }
 
-        private void LoadTaskDetails()
+        public TaskDetailsViewModel()
         {
-            // В реальном приложении здесь будет загрузка данных из БД
-            // Например:
-            // var taskEntity = _dbContext.Tasks
-            //     .Include(t => t.OrderPosition)
-            //     .Include(t => t.OrderPosition.Order)
-            //     .Include(t => t.Assignee)
-            //     .FirstOrDefault(t => t.Id == _taskId);
+            // Конструктор для дизайнера
+            NavigateToTasksCommand = ReactiveCommand.Create(NavigateToTasks);
+            EditTaskCommand = ReactiveCommand.Create(EditTask);
 
-            // if (taskEntity != null)
-            // {
-            //     Task = new TaskViewModel
-            //     {
-            //         Id = taskEntity.Id,
-            //         TaskNumber = $"T-{taskEntity.Id}",
-            //         Name = taskEntity.Name,
-            //         Description = taskEntity.Description,
-            //         CreatedAt = taskEntity.CreatedAt,
-            //         Status = taskEntity.Status,
-            //         Priority = taskEntity.Priority == 1 ? "Высокий" : (taskEntity.Priority == 2 ? "Средний" : "Низкий"),
-            //         Deadline = taskEntity.EndDate,
-            //         AssigneeName = taskEntity.Assignee.FirstName + " " + taskEntity.Assignee.LastName,
-            //         OrderPositionInfo = $"{taskEntity.OrderPosition.Order.OrderNumber} поз. {taskEntity.OrderPosition.PositionNumber}"
-            //     };
-            // }
+            LoadTestData();
+        }
 
-            // Тестовые данные для примера
-            Task = new TaskViewModel
+        private void LoadTaskDetails(int taskId)
+        {
+            // В реальном приложении здесь будет загрузка данных о задаче из БД
+            // Для примера используем тестовые данные
+            LoadTestData();
+        }
+
+        private void LoadTestData()
+        {
+            // Пример связанных задач
+            RelatedTasks = new ObservableCollection<RelatedTaskViewModel>
             {
-                Id = _taskId,
-                TaskNumber = $"T-{_taskId}",
-                Name = "Отладка монтажной схемы",
-                Description = "Необходимо выполнить отладку и тестирование монтажной схемы для учебного стенда \"Электрические станции и подстанции\" (заказ ОП-168-24 поз. 1.14).",
-                CreatedAt = DateTime.Now.AddDays(-5),
-                Status = "В работе",
-                Priority = "Высокий",
-                Deadline = DateTime.Now.AddDays(8),
-                AssigneeName = "Еретин Д.К.",
-                OrderPositionInfo = "ОП-168-24 поз. 1.14"
-            };
-
-            Order = new OrderViewModel
-            {
-                Id = 168,
-                OrderNumber = "ОП-168/24",
-                CustomerName = "ГГПК",
-                DeliveryDeadline = DateTime.Parse("17.02.2024"),
-                Status = "Активен"
-            };
-
-            RelatedTasks = new RelatedTaskViewModel[]
-            {
-                new RelatedTaskViewModel { Id = 115, TaskNumber = "T-115", Name = "Разработка монтажной схемы", Status = "Готово" },
-                new RelatedTaskViewModel { Id = 142, TaskNumber = "T-142", Name = "Тестирование компонентов", Status = "В работе" },
-                new RelatedTaskViewModel { Id = 175, TaskNumber = "T-175", Name = "Подготовка документации", Status = "В очереди" }
+                new RelatedTaskViewModel { Id = 1, Name = "T-115: Разработка монтажной схемы", Status = "Готово", StatusColor = "#4CAF9D" },
+                new RelatedTaskViewModel { Id = 2, Name = "T-142: Тестирование компонентов", Status = "В работе", StatusColor = "#FFB74D" },
+                new RelatedTaskViewModel { Id = 3, Name = "T-175: Подготовка документации", Status = "В очереди", StatusColor = "#00ACC1" }
             };
         }
+
+        private void NavigateToTasks()
+        {
+            _mainWindowViewModel.NavigateToTasks();
+        }
+
+        private void EditTask()
+        {
+            // Логика редактирования задачи
+        }
+    }
+
+    public class RelatedTaskViewModel : ViewModelBase
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Status { get; set; }
+        public string StatusColor { get; set; }
     }
 }

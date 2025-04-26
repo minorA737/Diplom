@@ -80,7 +80,7 @@ namespace ManufactPlanner.ViewModels
         public void NavigateToOrders()
         {
             CurrentMenuItem = "orders";
-            //CurrentView = new Views.Orders.OrdersPage(this, DbContext);
+            CurrentView = new Views.OrdersPage(this, DbContext);
         }
 
         public void NavigateToTasks()
@@ -93,35 +93,35 @@ namespace ManufactPlanner.ViewModels
         {
             CurrentMenuItem = "calendar";
             //CurrentView = new Views.Tasks.CalendarPage(this, DbContext);
-            CurrentView = new Views.CalendarPage();
+            CurrentView = new Views.CalendarPage(this, DbContext);
         }
 
         public void NavigateToDocumentation()
         {
             CurrentMenuItem = "documentation";
             //CurrentView = new Views.Documentation.DocumentationPage(this, DbContext);
-            CurrentView = new Views.DocumentationPage();
+            CurrentView = new Views.DocumentationPage(this, DbContext);
         }
 
         public void NavigateToProduction()
         {
             CurrentMenuItem = "production";
             //CurrentView = new Views.Production.ProductionPage(this, DbContext);
-            CurrentView = new Views.ProductionPage();
+            CurrentView = new Views.ProductionPage(this, DbContext);
         }
 
         public void NavigateToAnalytics()
         {
             CurrentMenuItem = "analytics";
             //CurrentView = new Views.Analytics.AnalyticsPage(this, DbContext);
-            CurrentView = new Views.AnalyticsPage();
+            CurrentView = new Views.AnalyticsPage(this, DbContext);
         }
 
         public void NavigateToSettings()
         {
             CurrentMenuItem = "settings";
             //CurrentView = new Views.Settings.SettingsPage(this, DbContext);
-            CurrentView = new Views.SettingsPage();
+            CurrentView = new Views.SettingsPage(this, DbContext);
         }
 
         // Метод для отображения подробной информации о задаче
@@ -136,7 +136,7 @@ namespace ManufactPlanner.ViewModels
         {
             CurrentMenuItem = "orders";
             //CurrentView = new Views.Orders.OrderDetailsPage(this, DbContext, orderId);
-            CurrentView = new Views.OrderDetailsPage();
+            CurrentView = new Views.OrderDetailsPage(this, DbContext, orderId);
         }
 
         // Метод для переключения состояния боковой панели
@@ -145,6 +145,11 @@ namespace ManufactPlanner.ViewModels
             IsSidebarCollapsed = !IsSidebarCollapsed;
         }
 
+        public void NavigateToUserProfile()
+        {
+            CurrentMenuItem = "profile";  // Можно добавить новый пункт меню или использовать существующий
+            CurrentView = new Views.UsersPage(this, DbContext);
+        }
         public void Logout()
         {
             //// Очищаем данные пользователя

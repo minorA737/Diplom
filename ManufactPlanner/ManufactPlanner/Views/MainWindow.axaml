@@ -18,6 +18,7 @@
 		<converters:IsGreaterThanConverter x:Key="IsGreaterThan"/>
 		<converters:StringEqualsValueConverter x:Key="StringEqualsValue"/>
 		<converters:MarginConverter x:Key="MarginConverter"/>
+		<converters:PercentToWidthConverter x:Key="PercentToWidthConverter"/>
 	</Window.Resources>
 
 	<Window.Styles>

@@ -2,7 +2,218 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="ManufactPlanner.Views.CalendarPage">
-  Welcome to Avalonia!
+             mc:Ignorable="d" d:DesignWidth="760" d:DesignHeight="640"
+             x:Class="ManufactPlanner.Views.CalendarPage"
+             x:DataType="vm:CalendarViewModel"
+             xmlns:vm="using:ManufactPlanner.ViewModels"
+			 xmlns:converters="using:ManufactPlanner.Converters">
+	<UserControl.Resources>
+		<converters:BoolToValueConverter x:Key="BoolToValue"/>
+		<converters:IsGreaterThanConverter x:Key="IsGreaterThan"/>
+		<converters:StringEqualsValueConverter x:Key="StringEqualsValue"/>
+		<converters:MarginConverter x:Key="MarginConverter"/>
+	</UserControl.Resources>
+
+	<Grid RowDefinitions="Auto,*">
+		<!-- Заголовок и управление календарем -->
+		<Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="20,20,20,0">
+			<TextBlock Grid.Column="0" Text="Календарь" FontSize="20" FontWeight="SemiBold" Foreground="#333333"/>
+
+			<!-- Переключение режимов отображения -->
+			<Border Grid.Column="1" Width="200" Height="36" CornerRadius="18" Background="#F1F3F4"
+                    HorizontalAlignment="Center" VerticalAlignment="Center">
+				<Grid ColumnDefinitions="*,*,*">
+					<Border Grid.Column="0" Width="66" Height="36" CornerRadius="18" Background="#00ACC1">
+						<TextBlock Text="Неделя" FontSize="12" Foreground="White"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Border>
+					<TextBlock Grid.Column="1" Text="Месяц" FontSize="12" Foreground="#666"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					<TextBlock Grid.Column="2" Text="Год" FontSize="12" Foreground="#666"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+				</Grid>
+			</Border>
+
+			<!-- Навигация по датам -->
+			<Border Grid.Column="2" Width="120" Height="36" CornerRadius="4" Background="White"
+                    BorderBrush="#E0E0E0" BorderThickness="1" VerticalAlignment="Center">
+				<Grid ColumnDefinitions="Auto,*,Auto">
+					<Button Grid.Column="0" Width="24" Height="36" Background="Transparent"
+                            Command="{Binding PreviousWeekCommand}">
+						<TextBlock Text="◀" FontSize="13" Foreground="#333" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Button>
+					<TextBlock Grid.Column="1" Text="{Binding CurrentPeriod}" FontSize="13" Foreground="#333"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					<Button Grid.Column="2" Width="24" Height="36" Background="Transparent"
+                            Command="{Binding NextWeekCommand}">
+						<TextBlock Text="▶" FontSize="13" Foreground="#333" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Button>
+				</Grid>
+			</Border>
+		</Grid>
+
+		<!-- Основное содержимое календаря -->
+		<Border Grid.Row="1" Margin="20,20,20,20" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+			<Grid RowDefinitions="Auto,*">
+				<!-- Шапка календаря с днями недели -->
+				<Grid Grid.Row="0" Height="60" Background="#F8F9FA" ColumnDefinitions="50,*,*,*,*,*,*,*">
+					<TextBlock Grid.Column="0" Text="" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+					<!-- Дни недели -->
+					<StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+						<TextBlock Text="Пн" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+						<TextBlock Text="{Binding WeekDays[0]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+					</StackPanel>
+
+					<StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+						<TextBlock Text="Вт" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+						<TextBlock Text="{Binding WeekDays[1]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+					</StackPanel>
+
+					<StackPanel Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center">
+						<TextBlock Text="Ср" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+						<TextBlock Text="{Binding WeekDays[2]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+					</StackPanel>
+
+					<StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                Background="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1 0.1,Transparent'}">
+						<TextBlock Text="Чт" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+						<TextBlock Text="{Binding WeekDays[3]}" FontSize="14"
+                                   Foreground="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1,#333'}"
+                                   FontWeight="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='Bold,Normal'}"
+                                   HorizontalAlignment="Center"/>
+					</StackPanel>
+
+					<StackPanel Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center">
+						<TextBlock Text="Пт" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+						<TextBlock Text="{Binding WeekDays[4]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+					</StackPanel>
+
+					<StackPanel Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center">
+						<TextBlock Text="Сб" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+						<TextBlock Text="{Binding WeekDays[5]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+					</StackPanel>
+
+					<StackPanel Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center">
+						<TextBlock Text="Вс" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+						<TextBlock Text="{Binding WeekDays[6]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+					</StackPanel>
+				</Grid>
+
+				<!-- Основная сетка календаря -->
+				<Grid Grid.Row="1" ColumnDefinitions="50,*,*,*,*,*,*,*">
+					<!-- Колонка времени -->
+					<StackPanel Grid.Column="0" Background="#F8F9FA">
+						<TextBlock Text="08:00" FontSize="12" Foreground="#666" Margin="0,10" HorizontalAlignment="Center"/>
+						<TextBlock Text="09:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+						<TextBlock Text="10:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+						<TextBlock Text="11:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+						<TextBlock Text="12:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+						<TextBlock Text="13:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+						<TextBlock Text="14:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+						<TextBlock Text="15:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+						<TextBlock Text="16:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+						<TextBlock Text="17:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+						<TextBlock Text="18:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+					</StackPanel>
+
+					<!-- Сетка дней - вертикальные линии -->
+					<Border Grid.Column="1" BorderBrush="#E0E0E0" BorderThickness="1,0,1,0">
+						<ItemsControl ItemsSource="{Binding MondayEvents}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Height="{Binding Duration}" Width="45" Background="{Binding Color}" Opacity="0.8"
+                                            CornerRadius="4" Margin="0,0,0,0" VerticalAlignment="Top">
+										<StackPanel VerticalAlignment="Center">
+											<TextBlock Text="{Binding Title}" FontSize="10" Foreground="White" HorizontalAlignment="Center"/>
+											<TextBlock Text="{Binding Time}" FontSize="8" Foreground="White" HorizontalAlignment="Center"/>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</Border>
+
+					<Border Grid.Column="2" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+						<ItemsControl ItemsSource="{Binding TuesdayEvents}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Height="{Binding Duration}" Width="45" Background="{Binding Color}" Opacity="0.8"
+                                            CornerRadius="4" Margin="0,0,0,0" VerticalAlignment="Top">
+										<StackPanel VerticalAlignment="Center">
+											<TextBlock Text="{Binding Title}" FontSize="10" Foreground="White" HorizontalAlignment="Center"/>
+											<TextBlock Text="{Binding Time}" FontSize="8" Foreground="White" HorizontalAlignment="Center"/>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</Border>
+
+					<Border Grid.Column="3" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+						<ItemsControl ItemsSource="{Binding WednesdayEvents}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Height="{Binding Duration}" Width="45" Background="{Binding Color}" Opacity="0.8"
+                                            CornerRadius="4" Margin="0,0,0,0" VerticalAlignment="Top">
+										<StackPanel VerticalAlignment="Center">
+											<TextBlock Text="{Binding Title}" FontSize="10" Foreground="White" HorizontalAlignment="Center"/>
+											<TextBlock Text="{Binding Time}" FontSize="8" Foreground="White" HorizontalAlignment="Center"/>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</Border>
+
+					<Border Grid.Column="4" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0" Background="#00ACC1" Opacity="0.05">
+						<ItemsControl ItemsSource="{Binding ThursdayEvents}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Height="{Binding Duration}" Width="45" Background="{Binding Color}" Opacity="0.8"
+                                            CornerRadius="4" Margin="0,0,0,0" VerticalAlignment="Top">
+										<StackPanel VerticalAlignment="Center">
+											<TextBlock Text="{Binding Title}" FontSize="10" Foreground="White" HorizontalAlignment="Center"/>
+											<TextBlock Text="{Binding Time}" FontSize="8" Foreground="White" HorizontalAlignment="Center"/>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</Border>
+
+					<Border Grid.Column="5" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+						<ItemsControl ItemsSource="{Binding FridayEvents}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Height="{Binding Duration}" Width="45" Background="{Binding Color}" Opacity="0.8"
+                                            CornerRadius="4" Margin="0,0,0,0" VerticalAlignment="Top">
+										<StackPanel VerticalAlignment="Center">
+											<TextBlock Text="{Binding Title}" FontSize="10" Foreground="White" HorizontalAlignment="Center"/>
+											<TextBlock Text="{Binding Time}" FontSize="8" Foreground="White" HorizontalAlignment="Center"/>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</Border>
+
+					<Border Grid.Column="6" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0"></Border>
+					<Border Grid.Column="7" BorderBrush="#E0E0E0" BorderThickness="0,0,0,0"></Border>
+
+					<!-- Текущее время -->
+					<Line Grid.ColumnSpan="8" StartPoint="50,210" EndPoint="770,210" Stroke="#00ACC1" StrokeThickness="2" StrokeDashArray="4,2"/>
+					<Ellipse Grid.Column="0" Width="8" Height="8" Fill="#00ACC1" Margin="46,206"/>
+
+					<!-- Кнопка добавления события -->
+					<Button Grid.Column="7" Width="40" Height="40" CornerRadius="20" Background="#00ACC1"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,20,20"
+                            Command="{Binding CreateEventCommand}">
+						<TextBlock Text="+" FontSize="24" Foreground="White" FontWeight="Bold"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Button>
+				</Grid>
+			</Grid>
+		</Border>
+	</Grid>
 </UserControl>
