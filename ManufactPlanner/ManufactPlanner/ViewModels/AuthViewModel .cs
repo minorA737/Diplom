@@ -4,6 +4,8 @@ using System.Reactive;
 using Avalonia.Controls;
 using ReactiveUI;
 using ManufactPlanner.Models;
+using ManufactPlanner.Services;
+using System.Threading.Tasks;
 
 namespace ManufactPlanner.ViewModels
 {
@@ -11,12 +13,15 @@ namespace ManufactPlanner.ViewModels
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
         private readonly PostgresContext _dbContext;
+        private readonly UserCredentialService _credentialService;
+
         private string _username = string.Empty;
         private string _password = string.Empty;
         private bool _rememberMe = false;
         private string _errorMessage = string.Empty;
         private bool _hasError = false;
         private bool _isLoading = false;
+        private bool _isAutoLogin = false;
 
         public string Username
         {
@@ -75,10 +80,38 @@ namespace ManufactPlanner.ViewModels
         {
             _mainWindowViewModel = mainWindowViewModel;
             _dbContext = dbContext;
+            _credentialService = new UserCredentialService();
+
             LoginCommand = ReactiveCommand.Create(Login);
+
+            // Загружаем сохраненные учетные данные при создании ViewModel
+            LoadSavedCredentialsAsync();
         }
 
-        private void Login()
+        private async void LoadSavedCredentialsAsync()
+        {
+            try
+            {
+                var savedCredentials = await _credentialService.LoadCredentialsAsync();
+                if (savedCredentials != null)
+                {
+                    Username = savedCredentials.Username;
+                    Password = savedCredentials.Password;
+                    RememberMe = true;
+                    _isAutoLogin = true;
+
+                    // Автоматически выполняем вход, если есть сохраненные данные
+                    await System.Threading.Tasks.Task.Delay(500); // Небольшая задержка для корректного отображения UI
+                    Login();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при загрузке учетных данных: {ex.Message}");
+            }
+        }
+
+        private async void Login()
         {
             // Проверяем, что поля не пустые
             if (string.IsNullOrEmpty(Username))
@@ -108,6 +141,12 @@ namespace ManufactPlanner.ViewModels
                     if (user.IsActive.HasValue && !user.IsActive.Value)
                     {
                         ErrorMessage = "Учетная запись деактивирована. Обратитесь к администратору.";
+                        if (_isAutoLogin)
+                        {
+                            // Если это автоматический вход, то удаляем сохраненные данные
+                            _credentialService.ClearCredentials();
+                            _isAutoLogin = false;
+                        }
                         return;
                     }
 
@@ -118,18 +157,37 @@ namespace ManufactPlanner.ViewModels
                     // Устанавливаем имя пользователя в главном ViewModel
                     _mainWindowViewModel.CurrentUserName = $"{user.FirstName} {user.LastName}";
                     _mainWindowViewModel.DbContext = _dbContext;
+                    _mainWindowViewModel.CurrentUserId = user.Id ; // Сохраняем ID текущего пользователя
 
                     // Загружаем количество непрочитанных уведомлений
                     var unreadNotifications = _dbContext.Notifications
                         .Count(n => n.UserId == user.Id && n.IsRead != true);
 
                     _mainWindowViewModel.UnreadNotificationsCount = unreadNotifications;
-                   
+
+                    // Если пользователь хочет сохранить данные для входа
+                    if (RememberMe)
+                    {
+                        await _credentialService.SaveCredentialsAsync(Username, Password);
+                    }
+                    else if (!RememberMe && !_isAutoLogin)
+                    {
+                        // Если пользователь не хочет сохранять данные и это не автоматический вход,
+                        // то удаляем сохраненные ранее данные
+                        _credentialService.ClearCredentials();
+                    }
+
                     _mainWindowViewModel.NavigateToDashboard();
                 }
                 else
                 {
                     ErrorMessage = "Неверное имя пользователя или пароль";
+                    if (_isAutoLogin)
+                    {
+                        // Если это автоматический вход и данные не верны, удаляем сохраненные данные
+                        _credentialService.ClearCredentials();
+                        _isAutoLogin = false;
+                    }
                 }
             }
             catch (Exception ex)

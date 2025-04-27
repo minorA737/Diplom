@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using ManufactPlanner.Models;
+using ManufactPlanner.Services;
 using ManufactPlanner.Views;
 using ReactiveUI;
 using System;
@@ -12,6 +13,8 @@ namespace ManufactPlanner.ViewModels
         private PostgresContext _dbContext;
         private bool _isSidebarCollapsed;
         private string _currentUserName;
+        private Guid _currentUserId;
+        
         private int _unreadNotificationsCount;
 
         private bool _isAuthenticated = false;
@@ -46,6 +49,12 @@ namespace ManufactPlanner.ViewModels
         {
             get => _currentUserName;
             set => this.RaiseAndSetIfChanged(ref _currentUserName, value);
+        }
+        // Id текущего пользователя для отображения в шапке
+        public Guid CurrentUserId
+        {
+            get => _currentUserId;
+            set => this.RaiseAndSetIfChanged(ref _currentUserId, value);
         }
 
         // Количество непрочитанных уведомлений
@@ -169,12 +178,18 @@ namespace ManufactPlanner.ViewModels
             CurrentView = new Views.UsersPage(this, DbContext);
         }
 
+        // Модифицируем метод Logout для очистки сохраненных данных
         public void Logout()
         {
             // Очищаем данные пользователя
             CurrentUserName = string.Empty;
             UnreadNotificationsCount = 0;
+            CurrentUserId = Guid.Empty;
             IsAuthenticated = false; // Сбрасываем флаг авторизации
+
+            // Удаляем сохраненные учетные данные
+            var credentialService = new UserCredentialService();
+            credentialService.ClearCredentials();
 
             // Переходим обратно на страницу авторизации
             CurrentView = new AuthPage(this, DbContext);
