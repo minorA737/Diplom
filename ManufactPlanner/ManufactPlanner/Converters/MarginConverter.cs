@@ -11,13 +11,13 @@ namespace ManufactPlanner.Converters
         {
             if (value is bool isSidebarCollapsed)
             {
-                if (isSidebarCollapsed)
-                    return new Thickness(60, 60, 0, 0); // Когда боковая панель свернута
-                else
-                    return new Thickness(200, 60, 0, 0); // Когда боковая панель развернута
+                var margin = isSidebarCollapsed
+                    ? new Thickness(60, 60, 0, 0)
+                    : new Thickness(200, 60, 0, 0);
+                Console.WriteLine($"MarginConverter вернул: {margin}");
+                return margin;
             }
-
-            return new Thickness(200, 60, 0, 0); // По умолчанию
+            return new Thickness(200, 60, 0, 0);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

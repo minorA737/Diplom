@@ -14,11 +14,17 @@ namespace ManufactPlanner.ViewModels
         private string _currentUserName;
         private int _unreadNotificationsCount;
 
+        private bool _isAuthenticated = false;
+
         // Текущее отображаемое представление
         public UserControl CurrentView
         {
             get => _currentView;
-            set => this.RaiseAndSetIfChanged(ref _currentView, value);
+            set
+            {
+                Console.WriteLine($"CurrentView изменено на: {value?.GetType().Name}");
+                this.RaiseAndSetIfChanged(ref _currentView, value);
+            }
         }
 
         // Контекст базы данных PostgreSQL
@@ -57,24 +63,36 @@ namespace ManufactPlanner.ViewModels
             set => this.RaiseAndSetIfChanged(ref _currentMenuItem, value);
         }
 
+        public bool IsAuthenticated
+        {
+            get => _isAuthenticated;
+            set 
+            { 
+                Console.WriteLine($"IsAuthenticated изменено на: {value}");
+                this.RaiseAndSetIfChanged(ref _isAuthenticated, value);
+            }
+        }
         public MainWindowViewModel()
         {
             // Инициализация базы данных
             DbContext = new PostgresContext();
 
-            // Во время разработки начнем с дашборда для удобства
-            NavigateToDashboard();
+            // Начинаем с неаутентифицированного состояния
+            IsAuthenticated = false;
 
-            // Заглушка данных пользователя
-            CurrentUserName = "Администратор";
-            UnreadNotificationsCount = 3;
+            // Заглушка данных пользователя (будет видна только после авторизации)
+            CurrentUserName = string.Empty;
+            UnreadNotificationsCount = 0;
         }
 
         // Навигационные методы для различных страниц
         public void NavigateToDashboard()
         {
             CurrentMenuItem = "dashboard";
-            CurrentView = new Views.DashboardPage(this, DbContext);
+            var dashboardPage = new Views.DashboardPage(this, DbContext);
+            Console.WriteLine($"Создана страница дашборда: {dashboardPage != null}");
+            CurrentView = dashboardPage;
+            IsAuthenticated = true;
         }
 
         public void NavigateToOrders()
@@ -150,15 +168,16 @@ namespace ManufactPlanner.ViewModels
             CurrentMenuItem = "profile";  // Можно добавить новый пункт меню или использовать существующий
             CurrentView = new Views.UsersPage(this, DbContext);
         }
+
         public void Logout()
         {
-            //// Очищаем данные пользователя
-            //CurrentUserName = string.Empty;
-            //UnreadNotificationsCount = 0;
+            // Очищаем данные пользователя
+            CurrentUserName = string.Empty;
+            UnreadNotificationsCount = 0;
+            IsAuthenticated = false; // Сбрасываем флаг авторизации
 
-            //// Создаем новую страницу авторизации
-            //var authViewModel = new AuthViewModel(this, DbContext);
-            //CurrentView = new AuthPage(authViewModel);
+            // Переходим обратно на страницу авторизации
+            CurrentView = new AuthPage(this, DbContext);
         }
     }
 }

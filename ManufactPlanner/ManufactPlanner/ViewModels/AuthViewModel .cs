@@ -117,14 +117,14 @@ namespace ManufactPlanner.ViewModels
 
                     // Устанавливаем имя пользователя в главном ViewModel
                     _mainWindowViewModel.CurrentUserName = $"{user.FirstName} {user.LastName}";
+                    _mainWindowViewModel.DbContext = _dbContext;
 
                     // Загружаем количество непрочитанных уведомлений
                     var unreadNotifications = _dbContext.Notifications
-                        .Count(n => n.UserId == user.Id && n.IsRead != true); // изменено тут
+                        .Count(n => n.UserId == user.Id && n.IsRead != true);
 
                     _mainWindowViewModel.UnreadNotificationsCount = unreadNotifications;
-
-                    // Переходим на дашборд
+                   
                     _mainWindowViewModel.NavigateToDashboard();
                 }
                 else

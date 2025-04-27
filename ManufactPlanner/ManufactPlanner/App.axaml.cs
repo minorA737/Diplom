@@ -5,15 +5,8 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using ManufactPlanner.ViewModels;
 using ManufactPlanner.Views;
-
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
-using Avalonia.Markup.Xaml;
-using Avalonia.Media;
-using ManufactPlanner.ViewModels;
-using ManufactPlanner.Views;
-using System;
+using ManufactPlanner.Models;
 
 namespace ManufactPlanner
 {
@@ -40,7 +33,6 @@ namespace ManufactPlanner
                         StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
                         EndPoint = new RelativePoint(0, 1, RelativeUnit.Relative)
                     };
-
                     sidebarGradient.GradientStops.Add(new GradientStop { Color = Color.Parse("#00ACC1"), Offset = 0 });
                     sidebarGradient.GradientStops.Add(new GradientStop { Color = Color.Parse("#008999"), Offset = 1 });
                     resources.Add("SidebarGradient", sidebarGradient);
@@ -52,14 +44,25 @@ namespace ManufactPlanner
                     resources.Add("WarningColor", Color.Parse("#FFB74D"));
                     resources.Add("ErrorColor", Color.Parse("#FF7043"));
                     resources.Add("BackgroundColor", Color.Parse("#F8F9FA"));
-
                     Current.Resources.MergedDictionaries.Add(resources);
                 }
 
-                desktop.MainWindow = new MainWindow
+                // Создаем экземпляр DbContext
+                var dbContext = new PostgresContext();
+
+                // Создаем MainWindow с AuthPage в качестве начального контента
+                var mainViewModel = new MainWindowViewModel();
+
+                // Создаем главное окно и устанавливаем DataContext
+                var mainWindow = new MainWindow
                 {
-                    DataContext = new MainWindowViewModel(),
+                    DataContext = mainViewModel
                 };
+
+                // Устанавливаем AuthPage как начальное представление
+                mainViewModel.CurrentView = new AuthPage(mainViewModel, dbContext);
+
+                desktop.MainWindow = mainWindow;
             }
 
             base.OnFrameworkInitializationCompleted();
