@@ -8,12 +8,12 @@ namespace ManufactPlanner.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool boolValue && parameter is string paramString && paramString.Contains(','))
+            if (value is bool boolValue && parameter is string parameterString)
             {
-                var parts = paramString.Split(',');
-                return boolValue ? parts[0] : parts[1];
+                var values = parameterString.Split(',');
+                return boolValue ? values[0] : values.Length > 1 ? values[1] : values[0];
             }
-            return value?.ToString() ?? string.Empty;
+            return value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -21,21 +21,56 @@ namespace ManufactPlanner.Converters
             throw new NotImplementedException();
         }
     }
-
-    public class IsGreaterThanConverter : IValueConverter
+    public class BoolToValueConverter2 : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is int intValue && parameter is string paramString && int.TryParse(paramString, out int threshold))
+            if (value == null || parameter == null)
+                return null;
+
+            bool boolValue;
+            if (value is bool b)
             {
-                return intValue > threshold;
+                boolValue = b;
             }
-            return false;
+            else if (bool.TryParse(value.ToString(), out bool parsedBool))
+            {
+                boolValue = parsedBool;
+            }
+            else
+            {
+                return null;
+            }
+
+            string paramStr = parameter.ToString();
+            string[] parts = paramStr.Split(',');
+
+            if (parts.Length != 2)
+                return null;
+
+            // Получаем значения для true и false
+            string trueValue = parts[0].Trim();
+            string falseValue = parts[1].Trim();
+
+            // Возвращаем соответствующее значение
+            return boolValue ? trueValue : falseValue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            if (value == null || parameter == null)
+                return null;
+
+            string valueStr = value.ToString();
+            string paramStr = parameter.ToString();
+            string[] parts = paramStr.Split(',');
+
+            if (parts.Length != 2)
+                return null;
+
+            string trueValue = parts[0].Trim();
+
+            return valueStr.Equals(trueValue);
         }
     }
 }

@@ -9,12 +9,24 @@
              x:DataType="vm:DashboardViewModel">
 
 	<UserControl.Resources>
+		<converters:BoolToValueConverter x:Key="BoolToValue"/>
+		<converters:StatusToBrushConverter x:Key="StatusToBrushConverter"/>
+		<converters:PercentToWidthConverter x:Key="PercentToWidthConverter"/>
 		<converters:SubtractHalfPointConverter x:Key="SubtractHalfPoint"/>
 	</UserControl.Resources>
 
 	<Grid RowDefinitions="Auto,Auto,*">
-		<!-- Заголовок страницы -->
-		<TextBlock Grid.Row="0" Text="Дашборд" FontSize="20" FontWeight="SemiBold" Foreground="#333333" Margin="20,20,0,0"/>
+		<!-- Заголовок страницы с информацией о пользователе -->
+		<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="20,20,20,0">
+			<StackPanel>
+				<TextBlock Text="Дашборд" FontSize="20" FontWeight="SemiBold" Foreground="#333333"/>
+				<TextBlock Text="{Binding UserName}" FontSize="12" Foreground="#666" Margin="0,5,0,0"/>
+				<TextBlock Text="{Binding UserRole}" FontSize="12" Foreground="#9E9E9E" Margin="0,2,0,0"/>
+			</StackPanel>
+
+			<Button Grid.Column="1" Content="Обновить" Command="{Binding RefreshDataCommand}"
+					Background="#00ACC1" Foreground="White" CornerRadius="4" Padding="12,6"/>
+		</Grid>
 
 		<!-- Карточки статистики -->
 		<Grid Grid.Row="1" Margin="20,20,20,0" ColumnDefinitions="*,*,*" RowDefinitions="Auto">
@@ -70,26 +82,46 @@
 		<!-- Нижняя часть: задачи и календарь -->
 		<Grid Grid.Row="2" Margin="20,20,20,20" ColumnDefinitions="3*,1*" RowDefinitions="Auto,*,Auto">
 			<!-- Заголовок раздела задач -->
-			<TextBlock Grid.Row="0" Grid.Column="0" Text="Недавние задачи" FontSize="16" FontWeight="Medium" Foreground="#333333" Margin="20,0,0,10"/>
+			<Grid Grid.Row="0" Grid.Column="0" ColumnDefinitions="*,Auto">
+				<TextBlock Text="Недавние задачи" FontSize="16" FontWeight="Medium" Foreground="#333333" Margin="20,0,0,10"/>
+				<Button Grid.Column="1" Command="{Binding ViewCalendarCommand}"
+						Content="Все задачи →" Foreground="#00ACC1" Background="Transparent"/>
+			</Grid>
 
 			<!-- Список задач -->
 			<Border Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Background="White" CornerRadius="8" Margin="0,0,15,0"
                     BoxShadow="0 2 3 #10000000">
-				<ListBox ItemsSource="{Binding RecentTasks}" Background="Transparent" BorderThickness="0">
-					<ListBox.ItemTemplate>
-						<DataTemplate>
-							<Border Height="60" Background="#F9FAFB" Margin="20,10,20,0" CornerRadius="4">
-								<Grid Margin="10,0">
-									<StackPanel VerticalAlignment="Center">
-										<TextBlock Text="{Binding Name}" FontSize="14" Foreground="#333333"/>
-										
-									</StackPanel>
-									
-								</Grid>
-							</Border>
-						</DataTemplate>
-					</ListBox.ItemTemplate>
-				</ListBox>
+				<StackPanel>
+					<Rectangle Height="1" Fill="#E0E0E0" Margin="20,40,20,0"/>
+
+					<ItemsControl ItemsSource="{Binding RecentTasks}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Border Height="60" Background="#F9FAFB" Margin="20,10,20,0" CornerRadius="4">
+									<Grid Margin="10,0" ColumnDefinitions="*,Auto">
+										<StackPanel VerticalAlignment="Center">
+											<TextBlock Text="{Binding Name}" FontSize="14" Foreground="#333333"/>
+											<TextBlock Text="{Binding Description}" FontSize="12" Foreground="#9E9E9E"/>
+										</StackPanel>
+
+										<Border Grid.Column="1" Height="24" CornerRadius="12"
+												Background="{Binding Status, Converter={StaticResource StatusToBrushConverter}}" Opacity="0.2"
+												VerticalAlignment="Center" HorizontalAlignment="Right" Padding="10,0">
+											<TextBlock Text="{Binding Status}" FontSize="12"
+													   Foreground="{Binding Status, Converter={StaticResource StatusToBrushConverter}}"
+													   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+										</Border>
+									</Grid>
+								</Border>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+
+					<!-- Когда нет задач -->
+					<TextBlock Text="Нет активных задач" FontSize="14" Foreground="#9E9E9E"
+							   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,40,0,0"
+							   IsVisible="{Binding !RecentTasks.Count}"/>
+				</StackPanel>
 			</Border>
 
 			<!-- Календарь и график справа -->
@@ -97,7 +129,11 @@
 				<!-- Календарь -->
 				<Border Background="White" CornerRadius="8" Margin="0,0,0,15" BoxShadow="0 2 3 #10000000">
 					<StackPanel Margin="20,20,20,20">
-						<TextBlock Text="Календарь" FontSize="16" FontWeight="Medium" Foreground="#333333" Margin="0,0,0,10"/>
+						<Grid ColumnDefinitions="*,Auto">
+							<TextBlock Text="Календарь" FontSize="16" FontWeight="Medium" Foreground="#333333" Margin="0,0,0,10"/>
+							<Button Grid.Column="1" Command="{Binding ViewCalendarCommand}"
+									Content="→" Foreground="#00ACC1" Background="Transparent" Padding="0"/>
+						</Grid>
 						<TextBlock Text="{Binding CurrentMonthYear}" FontSize="14" FontWeight="Medium" HorizontalAlignment="Center" Margin="0,10,0,10"/>
 
 						<!-- Дни недели -->
@@ -111,33 +147,31 @@
 							<TextBlock Grid.Column="6" Text="Вс" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
 						</Grid>
 
-						<!-- Числа (пример для первой недели) -->
-						<Grid ColumnDefinitions="*,*,*,*,*,*,*" Margin="0,10,0,0">
-							<TextBlock Grid.Column="0" Text="31" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="1" Text="1" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="2" Text="2" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="3" Text="3" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="4" Text="4" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="5" Text="5" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="6" Text="6" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
-						</Grid>
-
-						<!-- Числа (вторая неделя) -->
-						<Grid ColumnDefinitions="*,*,*,*,*,*,*" Margin="0,10,0,0">
-							<TextBlock Grid.Column="0" Text="7" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="1" Text="8" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="2" Text="9" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
-
-							<!-- Текущий день -->
-							<Border Grid.Column="3" Width="24" Height="24" CornerRadius="12" Background="#00ACC1" Opacity="0.2">
-								<TextBlock Text="{Binding CurrentDay}" FontSize="12" Foreground="#00ACC1" FontWeight="Medium"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
-							</Border>
-
-							<TextBlock Grid.Column="4" Text="11" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="5" Text="12" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="6" Text="13" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
-						</Grid>
+						<!-- Вместо двух жестко закодированных недель используем ItemsControl для динамической генерации дней календаря -->
+						<ItemsControl ItemsSource="{Binding CalendarItems}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<UniformGrid Columns="7" Rows="6" Margin="0,10,0,0"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Width="24" Height="24" CornerRadius="12"
+											Background="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1 0.2,Transparent'}"
+											Margin="2">
+										<Grid>
+											<TextBlock Text="{Binding Day}" FontSize="12"
+													  Foreground="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1,#333'}"
+													  FontWeight="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='Bold,Normal'}"
+													  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+											<!-- Индикатор событий -->
+											<Ellipse Width="4" Height="4" Fill="#00ACC1" VerticalAlignment="Bottom" Margin="0,0,0,2"
+													 IsVisible="{Binding HasEvents}"/>
+										</Grid>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
 					</StackPanel>
 				</Border>
 
@@ -149,15 +183,27 @@
 						<!-- Фон графика -->
 						<Border Width="190" Height="130" Background="#F8F9FA" CornerRadius="4" Margin="0,10,0,0">
 							<Grid>
+								<!-- Оси координат и сетка -->
 								<Line StartPoint="0,130" EndPoint="190,130" Stroke="#E0E0E0" StrokeThickness="1"/>
 								<Line StartPoint="0,0" EndPoint="0,130" Stroke="#E0E0E0" StrokeThickness="1"/>
+
+								<!-- Горизонтальные линии сетки -->
+								<Line StartPoint="0,32.5" EndPoint="190,32.5" Stroke="#E0E0E0" StrokeThickness="0.5"/>
+								<Line StartPoint="0,65" EndPoint="190,65" Stroke="#E0E0E0" StrokeThickness="0.5"/>
+								<Line StartPoint="0,97.5" EndPoint="190,97.5" Stroke="#E0E0E0" StrokeThickness="0.5"/>
+
+								<!-- Вертикальные линии сетки -->
+								<Line StartPoint="38,0" EndPoint="38,130" Stroke="#E0E0E0" StrokeThickness="0.5"/>
+								<Line StartPoint="76,0" EndPoint="76,130" Stroke="#E0E0E0" StrokeThickness="0.5"/>
+								<Line StartPoint="114,0" EndPoint="114,130" Stroke="#E0E0E0" StrokeThickness="0.5"/>
+								<Line StartPoint="152,0" EndPoint="152,130" Stroke="#E0E0E0" StrokeThickness="0.5"/>
 
 								<!-- Данные графика (линия) -->
 								<Polyline Points="{Binding TaskCompletionGraphPointsString}"
                                           Stroke="#00ACC1" StrokeThickness="2" Fill="Transparent"/>
 
 								<!-- Точки данных -->
-								<ItemsControl>
+								<ItemsControl ItemsSource="{Binding TaskCompletionGraphPoints}">
 									<ItemsControl.ItemsPanel>
 										<ItemsPanelTemplate>
 											<Canvas/>
@@ -166,12 +212,58 @@
 									<ItemsControl.ItemTemplate>
 										<DataTemplate>
 											<Ellipse Width="6" Height="6" Fill="#00ACC1"
-                                                    />
+												Canvas.Left="{Binding X, Converter={StaticResource SubtractHalfPoint}, ConverterParameter=3}"
+												Canvas.Top="{Binding Y, Converter={StaticResource SubtractHalfPoint}, ConverterParameter=3}"/>
 										</DataTemplate>
 									</ItemsControl.ItemTemplate>
 								</ItemsControl>
+
+								<!-- Подписи осей -->
+								<TextBlock Text="0" FontSize="8" Foreground="#9E9E9E"
+										   Canvas.Left="2" Canvas.Bottom="2" Margin="2,0,0,2"/>
+								<TextBlock Text="6 мес" FontSize="8" Foreground="#9E9E9E"
+										   Canvas.Right="2" Canvas.Bottom="2" HorizontalAlignment="Right" Margin="0,0,2,2"/>
 							</Grid>
 						</Border>
+
+						<!-- Легенда графика -->
+						<StackPanel Orientation="Horizontal" Margin="0,10,0,0" HorizontalAlignment="Center" Spacing="10">
+							<StackPanel Orientation="Horizontal" Spacing="5">
+								<Border Width="12" Height="4" Background="#00ACC1" VerticalAlignment="Center"/>
+								<TextBlock Text="Выполнено" FontSize="10" Foreground="#666"/>
+							</StackPanel>
+						</StackPanel>
+					</StackPanel>
+				</Border>
+
+				<!-- Статистика по статусам задач -->
+				<Border Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000" Margin="0,15,0,0">
+					<StackPanel Margin="20,20,20,20">
+						<TextBlock Text="Статистика по статусам" FontSize="16" FontWeight="Medium" Foreground="#333333" Margin="0,0,0,10"/>
+
+						<ItemsControl ItemsSource="{Binding TasksByStatus}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<StackPanel Margin="0,8,0,0">
+										<Grid ColumnDefinitions="*,Auto">
+											<TextBlock Text="{Binding Status}" FontSize="12" Foreground="#333"/>
+											<TextBlock Grid.Column="1" Text="{Binding Count}" FontSize="12" Foreground="#666"/>
+										</Grid>
+										<Grid Height="6" Margin="0,3,0,0">
+											<Border Background="#E0E0E0" Height="6" CornerRadius="3"/>
+											<Border Background="{Binding ColorHex}" Height="6" CornerRadius="3"
+													Width="{Binding Percentage, Converter={StaticResource PercentToWidthConverter}, ConverterParameter=170}"
+													HorizontalAlignment="Left"/>
+										</Grid>
+									</StackPanel>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+
+						<!-- Когда нет статистики -->
+						<TextBlock Text="Нет данных" FontSize="12" Foreground="#9E9E9E"
+								   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0"
+								   IsVisible="{Binding !TasksByStatus.Count}"/>
 					</StackPanel>
 				</Border>
 			</StackPanel>

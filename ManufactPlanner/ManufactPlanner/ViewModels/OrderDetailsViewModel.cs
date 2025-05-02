@@ -1,4 +1,5 @@
 ﻿using ManufactPlanner.Models;
+using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -121,9 +122,95 @@ namespace ManufactPlanner.ViewModels
 
         private void LoadOrderDetails(int orderId)
         {
-            // В реальном приложении здесь будет загрузка данных о заказе из БД
-            // Для примера используем тестовые данные
-            LoadTestData();
+            try
+            {
+                // Загружаем данные заказа из базы данных
+                var order = _dbContext.Orders
+                    .Include(o => o.OrderPositions)
+                    .FirstOrDefault(o => o.Id == orderId);
+
+                if (order == null)
+                {
+                    // Если заказ не найден, используем тестовые данные
+                    LoadTestData();
+                    return;
+                }
+
+                // Заполняем свойства ViewModel данными из базы
+                OrderNumber = order.OrderNumber;
+                OrderName = order.Name;
+                Customer = order.Customer;
+                ContractDeadline = order.ContractDeadline?.ToString("dd.MM.yyyy") ?? "-";
+                DeliveryDeadline = order.DeliveryDeadline?.ToString("dd.MM.yyyy") ?? "-";
+                IsDeliveryDateCritical = order.DeliveryDeadline.HasValue &&
+                                       order.DeliveryDeadline.Value <= DateOnly.FromDateTime(DateTime.Now.AddDays(7));
+                ContractQuantity = $"{order.ContractQuantity} шт.";
+                TotalPrice = $"{order.TotalPrice:N2} руб.";
+                Status = order.Status ?? "Неизвестно";
+
+                // Загружаем позиции заказа
+                var positions = order.OrderPositions.Select((op, index) => new OrderPositionViewModel
+                {
+                    Id = op.Id,
+                    PositionNumber = op.PositionNumber,
+                    ProductName = op.ProductName,
+                    Quantity = $"{op.Quantity} шт.",
+                    Price = $"{op.Price:N2} руб.",
+                    DevelopmentType = GetDevelopmentTypeName(op.DevelopmentType),
+                    Status = GetStatusName(op.CurrentStatus),
+                    StatusColor = GetStatusColor(op.CurrentStatus),
+                    IsAlternate = index % 2 == 1 // Чередование строк
+                }).ToList();
+
+                Positions = new ObservableCollection<OrderPositionViewModel>(positions);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при загрузке данных заказа: {ex.Message}");
+                // В случае ошибки используем тестовые данные
+                LoadTestData();
+            }
+        }
+
+        // Вспомогательные методы для преобразования строк в читаемые значения
+        private string GetDevelopmentTypeName(string type)
+        {
+            if (string.IsNullOrEmpty(type)) return "Неизвестно";
+
+            return type switch
+            {
+                "Purchase" => "Покупное",
+                "Development" => "Разработка",
+                _ => type // Возвращаем как есть, если не знаем как преобразовать
+            };
+        }
+
+        private string GetStatusName(string status)
+        {
+            if (string.IsNullOrEmpty(status)) return "Неизвестно";
+
+            return status switch
+            {
+                "Queue" => "В очереди",
+                "InProgress" => "В процессе",
+                "WaitingForProduction" => "Ждем производство",
+                "Completed" => "Завершено",
+                _ => status // Возвращаем как есть, если не знаем как преобразовать
+            };
+        }
+
+        private string GetStatusColor(string status)
+        {
+            if (string.IsNullOrEmpty(status)) return "#9E9E9E"; // Серый для неизвестного статуса
+
+            return status switch
+            {
+                "Queue" => "#9575CD", // Фиолетовый
+                "InProgress" => "#00ACC1", // Голубой
+                "WaitingForProduction" => "#FFB74D", // Оранжевый
+                "Completed" => "#81C784", // Зеленый
+                _ => "#9E9E9E" // Серый
+            };
         }
 
         private void LoadTestData()

@@ -1,5 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Data.Converters;
+﻿using Avalonia.Data.Converters;
 using System;
 using System.Globalization;
 
@@ -9,9 +8,9 @@ namespace ManufactPlanner.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is double d)
+            if (value is double point && double.TryParse(parameter as string, out double subtractValue))
             {
-                return d - 3; // Половина от 6 (размер точки)
+                return point - subtractValue;
             }
             return value;
         }
