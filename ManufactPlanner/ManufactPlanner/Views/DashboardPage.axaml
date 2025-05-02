@@ -2,10 +2,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:ManufactPlanner.ViewModels"
+             xmlns:converters="using:ManufactPlanner.Converters"
              mc:Ignorable="d" d:DesignWidth="760" d:DesignHeight="640"
              x:Class="ManufactPlanner.Views.DashboardPage"
-             x:DataType="vm:DashboardViewModel"
-             xmlns:vm="using:ManufactPlanner.ViewModels">
+             x:DataType="vm:DashboardViewModel">
+
+	<UserControl.Resources>
+		<converters:SubtractHalfPointConverter x:Key="SubtractHalfPoint"/>
+	</UserControl.Resources>
 
 	<Grid RowDefinitions="Auto,Auto,*">
 		<!-- Заголовок страницы -->
@@ -70,53 +75,21 @@
 			<!-- Список задач -->
 			<Border Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Background="White" CornerRadius="8" Margin="0,0,15,0"
                     BoxShadow="0 2 3 #10000000">
-				<StackPanel>
-					<Rectangle Height="1" Fill="#E0E0E0" Margin="20,40,20,0"/>
-
-					<!-- Задача 1 -->
-					<Border Height="60" Background="#F9FAFB" Margin="20,10,20,0" CornerRadius="4">
-						<Grid Margin="10,0">
-							<StackPanel VerticalAlignment="Center">
-								<TextBlock Text="Разработка схемы электрической" FontSize="14" Foreground="#333333"/>
-								<TextBlock Text="ОП-136-24 поз. 1" FontSize="12" Foreground="#9E9E9E"/>
-							</StackPanel>
-							<Ellipse Width="20" Height="20" Fill="#4CAF9D" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-						</Grid>
-					</Border>
-
-					<!-- Задача 2 -->
-					<Border Height="60" Background="#F9FAFB" Margin="20,10,20,0" CornerRadius="4">
-						<Grid Margin="10,0">
-							<StackPanel VerticalAlignment="Center">
-								<TextBlock Text="Отладка монтажной схемы" FontSize="14" Foreground="#333333"/>
-								<TextBlock Text="ОП-168-24 поз. 1.14" FontSize="12" Foreground="#9E9E9E"/>
-							</StackPanel>
-							<Ellipse Width="20" Height="20" Fill="#FFB74D" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-						</Grid>
-					</Border>
-
-					<!-- Задача 3 -->
-					<Border Height="60" Background="#F9FAFB" Margin="20,10,20,0" CornerRadius="4">
-						<Grid Margin="10,0">
-							<StackPanel VerticalAlignment="Center">
-								<TextBlock Text="Проектирование корпуса" FontSize="14" Foreground="#333333"/>
-								<TextBlock Text="ОП-113-24 поз. 18" FontSize="12" Foreground="#9E9E9E"/>
-							</StackPanel>
-							<Ellipse Width="20" Height="20" Fill="#FF7043" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-						</Grid>
-					</Border>
-
-					<!-- Задача 4 -->
-					<Border Height="60" Background="#F9FAFB" Margin="20,10,20,0" CornerRadius="4">
-						<Grid Margin="10,0">
-							<StackPanel VerticalAlignment="Center">
-								<TextBlock Text="Подготовка технического задания" FontSize="14" Foreground="#333333"/>
-								<TextBlock Text="ОП-169-24 поз. 1" FontSize="12" Foreground="#9E9E9E"/>
-							</StackPanel>
-							<Ellipse Width="20" Height="20" Fill="#9575CD" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-						</Grid>
-					</Border>
-				</StackPanel>
+				<ListBox ItemsSource="{Binding RecentTasks}" Background="Transparent" BorderThickness="0">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Height="60" Background="#F9FAFB" Margin="20,10,20,0" CornerRadius="4">
+								<Grid Margin="10,0">
+									<StackPanel VerticalAlignment="Center">
+										<TextBlock Text="{Binding Name}" FontSize="14" Foreground="#333333"/>
+										
+									</StackPanel>
+									
+								</Grid>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
 			</Border>
 
 			<!-- Календарь и график справа -->
@@ -125,7 +98,7 @@
 				<Border Background="White" CornerRadius="8" Margin="0,0,0,15" BoxShadow="0 2 3 #10000000">
 					<StackPanel Margin="20,20,20,20">
 						<TextBlock Text="Календарь" FontSize="16" FontWeight="Medium" Foreground="#333333" Margin="0,0,0,10"/>
-						<TextBlock Text="Апрель 2025" FontSize="14" FontWeight="Medium" HorizontalAlignment="Center" Margin="0,10,0,10"/>
+						<TextBlock Text="{Binding CurrentMonthYear}" FontSize="14" FontWeight="Medium" HorizontalAlignment="Center" Margin="0,10,0,10"/>
 
 						<!-- Дни недели -->
 						<Grid ColumnDefinitions="*,*,*,*,*,*,*">
@@ -138,7 +111,7 @@
 							<TextBlock Grid.Column="6" Text="Вс" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
 						</Grid>
 
-						<!-- Числа (первая неделя) -->
+						<!-- Числа (пример для первой недели) -->
 						<Grid ColumnDefinitions="*,*,*,*,*,*,*" Margin="0,10,0,0">
 							<TextBlock Grid.Column="0" Text="31" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
 							<TextBlock Grid.Column="1" Text="1" FontSize="12" Foreground="#333333" HorizontalAlignment="Center"/>
@@ -157,7 +130,7 @@
 
 							<!-- Текущий день -->
 							<Border Grid.Column="3" Width="24" Height="24" CornerRadius="12" Background="#00ACC1" Opacity="0.2">
-								<TextBlock Text="10" FontSize="12" Foreground="#00ACC1" FontWeight="Medium"
+								<TextBlock Text="{Binding CurrentDay}" FontSize="12" Foreground="#00ACC1" FontWeight="Medium"
                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</Border>
 
@@ -175,22 +148,28 @@
 
 						<!-- Фон графика -->
 						<Border Width="190" Height="130" Background="#F8F9FA" CornerRadius="4" Margin="0,10,0,0">
-							<!-- Оси графика -->
 							<Grid>
 								<Line StartPoint="0,130" EndPoint="190,130" Stroke="#E0E0E0" StrokeThickness="1"/>
 								<Line StartPoint="0,0" EndPoint="0,130" Stroke="#E0E0E0" StrokeThickness="1"/>
 
 								<!-- Данные графика (линия) -->
-								<Polyline Points="0,60 30,70 60,50 90,40 120,10 150,20 180,0"
+								<Polyline Points="{Binding TaskCompletionGraphPointsString}"
                                           Stroke="#00ACC1" StrokeThickness="2" Fill="Transparent"/>
 
 								<!-- Точки данных -->
-								<Ellipse Width="6" Height="6" Fill="#00ACC1" Margin="30,70,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-								<Ellipse Width="6" Height="6" Fill="#00ACC1" Margin="60,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-								<Ellipse Width="6" Height="6" Fill="#00ACC1" Margin="90,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-								<Ellipse Width="6" Height="6" Fill="#00ACC1" Margin="120,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-								<Ellipse Width="6" Height="6" Fill="#00ACC1" Margin="150,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-								<Ellipse Width="6" Height="6" Fill="#00ACC1" Margin="180,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+								<ItemsControl>
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<Canvas/>
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Ellipse Width="6" Height="6" Fill="#00ACC1"
+                                                    />
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
 							</Grid>
 						</Border>
 					</StackPanel>

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ManufactPlanner")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e4c6eb4cfa29016ff76816991945aefe838a2bda")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b4fee5439887c79c201ae1f2c97a264193d0a6f2")]
 [assembly: System.Reflection.AssemblyProductAttribute("ManufactPlanner")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ManufactPlanner")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

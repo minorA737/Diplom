@@ -3,16 +3,132 @@
   "WorkspaceRootPath": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\viewmodels\\dashboardviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\viewmodels\\dashboardviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\dashboardpage.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\dashboardpage.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\dashboardpage.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\dashboardpage.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\taskcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\taskcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\task.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\task.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\role.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\role.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\converters\\subtracthalfpointconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\converters\\subtracthalfpointconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\mainwindow.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\mainwindow.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\mainwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\mainwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\postgrescontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\postgrescontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\productiondetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\productiondetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\orderpositionsview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\orderpositionsview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\converters\\stringconverters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\converters\\stringconverters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\orderposition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\orderposition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\userdepartment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\userdepartment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\taskuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\taskuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\tasktemplate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\tasktemplate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\taskhistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\taskhistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\taskdevelopmentdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\taskdevelopmentdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\taskdetailsview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\taskdetailsview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\notification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\notification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\materialsmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\materialsmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\designdocumentation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\designdocumentation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\department.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\department.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\comment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\comment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\models\\attachment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\models\\attachment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\services\\services.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\services\\services.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\viewmodels\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\viewmodels\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\viewmodels\\authviewmodel .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\viewmodels\\authviewmodel .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\viewmodels\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\viewmodels\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\authpage.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -21,18 +137,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\app.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\app.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\mainwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\mainwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\dashboardpage.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\dashboardpage.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\mainwindow.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\mainwindow.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,7 +146,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,20 +158,331 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DashboardPage.axaml",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\DashboardPage.axaml",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Views\\DashboardPage.axaml",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\DashboardPage.axaml",
+              "RelativeToolTip": "ManufactPlanner\\Views\\DashboardPage.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-04-27T15:21:15.236Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "DashboardViewModel.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\DashboardViewModel.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\ViewModels\\DashboardViewModel.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\DashboardViewModel.cs",
+              "RelativeToolTip": "ManufactPlanner\\ViewModels\\DashboardViewModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAzAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:11:22.663Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "SubtractHalfPointConverter.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Converters\\SubtractHalfPointConverter.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Converters\\SubtractHalfPointConverter.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Converters\\SubtractHalfPointConverter.cs",
+              "RelativeToolTip": "ManufactPlanner\\Converters\\SubtractHalfPointConverter.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABcAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T19:45:16.612Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "StringConverters.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Converters\\StringConverters.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Converters\\StringConverters.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Converters\\StringConverters.cs",
+              "RelativeToolTip": "ManufactPlanner\\Converters\\StringConverters.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T16:32:32.291Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "PostgresContext.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\PostgresContext.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\PostgresContext.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\PostgresContext.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\PostgresContext.cs",
+              "ViewState": "AQIAADUDAAAAAAAAAAAuwEQDAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:28:52.361Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "UserDepartment.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\UserDepartment.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\UserDepartment.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\UserDepartment.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\UserDepartment.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAcwBEAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:28:30.184Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "User.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\User.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\User.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\User.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\User.cs",
+              "ViewState": "AQIAAB8AAAAAAAAAAAAuwDEAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:28:21.584Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "TaskUser.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\TaskUser.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\TaskUser.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\TaskUser.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\TaskUser.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:28:12.598Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "TaskTemplate.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\TaskTemplate.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\TaskTemplate.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\TaskTemplate.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\TaskTemplate.cs",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAuwB0AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:28:05.366Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "TaskHistory.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\TaskHistory.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\TaskHistory.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\TaskHistory.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\TaskHistory.cs",
+              "ViewState": "AQIAAAcAAAAAAAAAAAAuwBkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:27:57.598Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "TaskDevelopmentDetail.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\TaskDevelopmentDetail.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\TaskDevelopmentDetail.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\TaskDevelopmentDetail.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\TaskDevelopmentDetail.cs",
+              "ViewState": "AQIAAAUAAAAAAAAAAAAuwBcAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:27:48.246Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "TaskDetailsView.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\TaskDetailsView.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\TaskDetailsView.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\TaskDetailsView.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\TaskDetailsView.cs",
+              "ViewState": "AQIAABsAAAAAAAAAAAAuwCkAAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:27:19.662Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "TaskCategory.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\TaskCategory.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\TaskCategory.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\TaskCategory.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\TaskCategory.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:27:09.934Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Task.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\Task.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\Task.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\Task.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\Task.cs",
+              "ViewState": "AQIAACcAAAAAAAAAAAAiwDcAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:26:57.781Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Role.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\Role.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\Role.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\Role.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\Role.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:26:49.829Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ProductionDetail.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\ProductionDetail.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\ProductionDetail.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\ProductionDetail.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\ProductionDetail.cs",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAiwB0AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:26:41.775Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "OrderPositionsView.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\OrderPositionsView.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\OrderPositionsView.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\OrderPositionsView.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\OrderPositionsView.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACMAAAAvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:26:05.885Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "OrderPosition.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\OrderPosition.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\OrderPosition.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\OrderPosition.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\OrderPosition.cs",
+              "ViewState": "AQIAABcAAAAAAAAAAAAuwCkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:25:58.183Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Order.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\Order.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\Order.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\Order.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\Order.cs",
+              "ViewState": "AQIAABgAAAAAAAAAAAAYwCsAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:25:49.39Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Notification.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\Notification.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\Notification.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\Notification.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\Notification.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAYwBkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:25:41.473Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "MaterialsManagement.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\MaterialsManagement.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\MaterialsManagement.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\MaterialsManagement.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\MaterialsManagement.cs",
+              "ViewState": "AQIAABIAAAAAAAAAAAAYwCUAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:25:32.439Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "DesignDocumentation.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\DesignDocumentation.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\DesignDocumentation.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\DesignDocumentation.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\DesignDocumentation.cs",
+              "ViewState": "AQIAACEAAAAAAAAAAAAowDUAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:25:24.425Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "Department.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\Department.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\Department.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\Department.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\Department.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:25:18.278Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "Customer.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\Customer.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\Customer.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\Customer.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\Customer.cs",
+              "ViewState": "AQIAAAUAAAAAAAAAAAAowBkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:24:58.934Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "Comment.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\Comment.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\Comment.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\Comment.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\Comment.cs",
+              "ViewState": "AQIAAA0AAAAAAAAAAAAUwBYAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:25:03.006Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "Attachment.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\Attachment.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Models\\Attachment.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Models\\Attachment.cs",
+              "RelativeToolTip": "ManufactPlanner\\Models\\Attachment.cs",
+              "ViewState": "AQIAAA0AAAAAAAAAAAA5wBsAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-27T15:24:59.534Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
               "Title": "Services.cs",
               "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Services\\Services.cs",
               "RelativeDocumentMoniker": "ManufactPlanner\\Services\\Services.cs",
               "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Services\\Services.cs",
               "RelativeToolTip": "ManufactPlanner\\Services\\Services.cs",
-              "ViewState": "AQIAAHAAAAAAAAAAAAAuwI0AAAAJAAAA",
+              "ViewState": "AQIAAAQAAAAAAAAAAAAowBIAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-27T14:48:33.303Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-27T14:48:33.303Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 33,
               "Title": "App.axaml.cs",
               "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\App.axaml.cs",
               "RelativeDocumentMoniker": "ManufactPlanner\\App.axaml.cs",
@@ -75,36 +490,35 @@
               "RelativeToolTip": "ManufactPlanner\\App.axaml.cs",
               "ViewState": "AQIAACwAAAAAAAAAAAAswD0AAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-26T18:28:52.051Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-26T18:28:52.051Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "MainWindow.axaml.cs",
               "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\MainWindow.axaml.cs",
               "RelativeDocumentMoniker": "ManufactPlanner\\Views\\MainWindow.axaml.cs",
               "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\MainWindow.axaml.cs",
               "RelativeToolTip": "ManufactPlanner\\Views\\MainWindow.axaml.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-26T18:28:40.235Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 2,
               "Title": "DashboardPage.axaml.cs",
               "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\DashboardPage.axaml.cs",
               "RelativeDocumentMoniker": "ManufactPlanner\\Views\\DashboardPage.axaml.cs",
               "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\DashboardPage.axaml.cs",
               "RelativeToolTip": "ManufactPlanner\\Views\\DashboardPage.axaml.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAABAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-26T18:28:29.65Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 32,
               "Title": "AuthPage.axaml.cs",
               "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\AuthPage.axaml.cs",
               "RelativeDocumentMoniker": "ManufactPlanner\\Views\\AuthPage.axaml.cs",
@@ -112,25 +526,23 @@
               "RelativeToolTip": "ManufactPlanner\\Views\\AuthPage.axaml.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-26T18:28:21.187Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-26T18:28:21.187Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 30,
               "Title": "AuthViewModel .cs",
               "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\AuthViewModel .cs",
               "RelativeDocumentMoniker": "ManufactPlanner\\ViewModels\\AuthViewModel .cs",
               "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\AuthViewModel .cs",
               "RelativeToolTip": "ManufactPlanner\\ViewModels\\AuthViewModel .cs",
-              "ViewState": "AQIAAIwAAAAAAAAAAAAwwJsAAAAAAAAA",
+              "ViewState": "AQIAAIwAAAAAAAAAAAAwwJ8AAAAGAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-26T18:25:42.538Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-26T18:25:42.538Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 31,
               "Title": "MainWindowViewModel.cs",
               "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\MainWindowViewModel.cs",
               "RelativeDocumentMoniker": "ManufactPlanner\\ViewModels\\MainWindowViewModel.cs",
@@ -138,8 +550,7 @@
               "RelativeToolTip": "ManufactPlanner\\ViewModels\\MainWindowViewModel.cs",
               "ViewState": "AQIAAKsAAAAAAAAAAAAAALgAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-26T15:11:12.979Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-26T15:11:12.979Z"
             },
             {
               "$type": "Document",
