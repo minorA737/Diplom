@@ -17,7 +17,7 @@ namespace ManufactPlanner.ViewModels
         private int _activeTasksCount;
         private int _activeOrdersCount;
         private int _deadlinesTodayCount;
-        private ObservableCollection<TaskItemViewModel> _recentTasks;
+        private ObservableCollection<TaskItemViewModelDashbord> _recentTasks;
         private ObservableCollection<CalendarItemViewModel> _calendarItems;
         private ObservableCollection<TaskStatisticItem> _tasksByStatus;
         private string _userName;
@@ -42,7 +42,7 @@ namespace ManufactPlanner.ViewModels
             set => this.RaiseAndSetIfChanged(ref _deadlinesTodayCount, value);
         }
 
-        public ObservableCollection<TaskItemViewModel> RecentTasks
+        public ObservableCollection<TaskItemViewModelDashbord> RecentTasks
         {
             get => _recentTasks;
             set => this.RaiseAndSetIfChanged(ref _recentTasks, value);
@@ -98,7 +98,7 @@ namespace ManufactPlanner.ViewModels
             _dbContext = dbContext;
 
             // Инициализация коллекций
-            RecentTasks = new ObservableCollection<TaskItemViewModel>();
+            RecentTasks = new ObservableCollection<TaskItemViewModelDashbord>();
             CalendarItems = new ObservableCollection<CalendarItemViewModel>();
             TasksByStatus = new ObservableCollection<TaskStatisticItem>();
             TaskCompletionGraphPoints = new List<GraphPoint>();
@@ -148,7 +148,8 @@ namespace ManufactPlanner.ViewModels
             if (UserRole == "Администратор")
             {
                 // Администратор видит все задачи
-                ActiveTasksCount = _dbContext.Tasks.Count(t => t.Status == "В процессе" || t.Status == "В очереди");
+                //ActiveTasksCount = _dbContext.Tasks.Count(t => t.Status == "В процессе" || t.Status == "В очереди");
+                ActiveTasksCount = _dbContext.Tasks.Count(t => t.Status == "В процессе" || t.Status == "В очереди" || t.Status == "Просрочено" || t.Status == "Ждем производство" || t.Status == "В процессе" || t.Status == "Выполнено");
                 LoadRecentTasksForAdmin();
             }
             else if (UserRole == "Менеджер")
@@ -248,7 +249,7 @@ namespace ManufactPlanner.ViewModels
             RecentTasks.Clear();
             foreach (var task in recentTasks)
             {
-                RecentTasks.Add(new TaskItemViewModel
+                RecentTasks.Add(new TaskItemViewModelDashbord
                 {
                     Id = task.Id ?? 0,
                     Name = task.Name ?? string.Empty,
@@ -278,7 +279,7 @@ namespace ManufactPlanner.ViewModels
             RecentTasks.Clear();
             foreach (var task in recentTasks)
             {
-                RecentTasks.Add(new TaskItemViewModel
+                RecentTasks.Add(new TaskItemViewModelDashbord
                 {
                     Id = task.Id ?? 0,
                     Name = task.Name ?? string.Empty,
@@ -308,7 +309,7 @@ namespace ManufactPlanner.ViewModels
             RecentTasks.Clear();
             foreach (var task in recentTasks)
             {
-                RecentTasks.Add(new TaskItemViewModel
+                RecentTasks.Add(new TaskItemViewModelDashbord
                 {
                     Id = task.Id ?? 0,
                     Name = task.Name ?? string.Empty,
@@ -624,7 +625,7 @@ namespace ManufactPlanner.ViewModels
         }
     }
 
-    public class TaskItemViewModel : ViewModelBase
+    public class TaskItemViewModelDashbord : ViewModelBase
     {
         public int Id { get; set; }
         public string Name { get; set; }

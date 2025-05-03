@@ -6,15 +6,20 @@
              x:Class="ManufactPlanner.Views.CalendarPage"
              x:DataType="vm:CalendarViewModel"
              xmlns:vm="using:ManufactPlanner.ViewModels"
-			 xmlns:converters="using:ManufactPlanner.Converters">
+             xmlns:converters="using:ManufactPlanner.Converters">
 	<UserControl.Resources>
 		<converters:BoolToValueConverter x:Key="BoolToValue"/>
 		<converters:IsGreaterThanConverter x:Key="IsGreaterThan"/>
 		<converters:StringEqualsValueConverter x:Key="StringEqualsValue"/>
 		<converters:MarginConverter x:Key="MarginConverter"/>
+		<converters:TimePositionToMarginConverter x:Key="TimePositionToMarginConverter"/>
+		<converters:DoubleToPointConverter x:Key="DoubleToPointConverter"/>
+		<converters:EventsCountToFillConverter x:Key="EventsCountToFillConverter"/>
+		<converters:EventsCountToTextConverter x:Key="EventsCountToTextConverter"/>
+		<converters:EventsToIndicatorsConverter x:Key="EventsToIndicatorsConverter"/>
 	</UserControl.Resources>
 
-	<Grid RowDefinitions="Auto,*">
+	<Grid RowDefinitions="Auto,Auto,*">
 		<!-- Заголовок и управление календарем -->
 		<Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="20,20,20,0">
 			<TextBlock Grid.Column="0" Text="Календарь" FontSize="20" FontWeight="SemiBold" Foreground="#333333"/>
@@ -23,197 +28,596 @@
 			<Border Grid.Column="1" Width="200" Height="36" CornerRadius="18" Background="#F1F3F4"
                     HorizontalAlignment="Center" VerticalAlignment="Center">
 				<Grid ColumnDefinitions="*,*,*">
-					<Border Grid.Column="0" Width="66" Height="36" CornerRadius="18" Background="#00ACC1">
-						<TextBlock Text="Неделя" FontSize="12" Foreground="White"
-                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					<Border Grid.Column="0" Width="66" Height="36" CornerRadius="18"
+                            Background="{Binding IsWeekMode, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1,Transparent'}">
+						<Button Command="{Binding SwitchToWeekModeCommand}" Background="Transparent"
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+							<TextBlock Text="Неделя" FontSize="12"
+                                    Foreground="{Binding IsWeekMode, Converter={StaticResource BoolToValue}, ConverterParameter='White,#666'}"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Button>
 					</Border>
-					<TextBlock Grid.Column="1" Text="Месяц" FontSize="12" Foreground="#666"
-                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
-					<TextBlock Grid.Column="2" Text="Год" FontSize="12" Foreground="#666"
-                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+					<Border Grid.Column="1" Width="66" Height="36" CornerRadius="18"
+                            Background="{Binding IsMonthMode, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1,Transparent'}">
+						<Button Command="{Binding SwitchToMonthModeCommand}" Background="Transparent"
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+							<TextBlock Text="Месяц" FontSize="12"
+                                    Foreground="{Binding IsMonthMode, Converter={StaticResource BoolToValue}, ConverterParameter='White,#666'}"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Button>
+					</Border>
+
+					<Border Grid.Column="2" Width="66" Height="36" CornerRadius="18"
+                            Background="{Binding IsYearMode, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1,Transparent'}">
+						<Button Command="{Binding SwitchToYearModeCommand}" Background="Transparent"
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+							<TextBlock Text="Год" FontSize="12"
+                                    Foreground="{Binding IsYearMode, Converter={StaticResource BoolToValue}, ConverterParameter='White,#666'}"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Button>
+					</Border>
 				</Grid>
 			</Border>
 
 			<!-- Навигация по датам -->
-			<Border Grid.Column="2" Width="120" Height="36" CornerRadius="4" Background="White"
-                    BorderBrush="#E0E0E0" BorderThickness="1" VerticalAlignment="Center">
-				<Grid ColumnDefinitions="Auto,*,Auto">
-					<Button Grid.Column="0" Width="24" Height="36" Background="Transparent"
-                            Command="{Binding PreviousWeekCommand}">
-						<TextBlock Text="◀" FontSize="13" Foreground="#333" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-					</Button>
-					<TextBlock Grid.Column="1" Text="{Binding CurrentPeriod}" FontSize="13" Foreground="#333"
-                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
-					<Button Grid.Column="2" Width="24" Height="36" Background="Transparent"
-                            Command="{Binding NextWeekCommand}">
-						<TextBlock Text="▶" FontSize="13" Foreground="#333" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-					</Button>
-				</Grid>
-			</Border>
+			<StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10">
+				<Button Command="{Binding TodayCommand}" Width="80" Height="36"
+                        Background="#F1F3F4" CornerRadius="18">
+					<TextBlock Text="Сегодня" FontSize="12" Foreground="#333"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
+				</Button>
+
+				<Border Width="200" Height="36" CornerRadius="4" Background="White"
+                        BorderBrush="#E0E0E0" BorderThickness="1" VerticalAlignment="Center">
+					<Grid ColumnDefinitions="Auto,*,Auto">
+						<Button Grid.Column="0" Width="24" Height="36" Background="Transparent"
+                                Command="{Binding PreviousPeriodCommand}">
+							<TextBlock Text="◀" FontSize="13" Foreground="#333" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Button>
+						<TextBlock Grid.Column="1" Text="{Binding CurrentPeriod}" FontSize="13" Foreground="#333"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<Button Grid.Column="2" Width="24" Height="36" Background="Transparent"
+                                Command="{Binding NextPeriodCommand}">
+							<TextBlock Text="▶" FontSize="13" Foreground="#333" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Button>
+					</Grid>
+				</Border>
+			</StackPanel>
 		</Grid>
 
-		<!-- Основное содержимое календаря -->
-		<Border Grid.Row="1" Margin="20,20,20,20" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
-			<Grid RowDefinitions="Auto,*">
-				<!-- Шапка календаря с днями недели -->
-				<Grid Grid.Row="0" Height="60" Background="#F8F9FA" ColumnDefinitions="50,*,*,*,*,*,*,*">
-					<TextBlock Grid.Column="0" Text="" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+		<!-- Панель фильтров -->
+		<Border Grid.Row="1" Height="50" Background="White" CornerRadius="8" Margin="20,15,20,0"
+                BoxShadow="0 2 3 #10000000">
+			<Grid ColumnDefinitions="Auto, Auto" VerticalAlignment="Center" Margin="20,0">
 
-					<!-- Дни недели -->
-					<StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-						<TextBlock Text="Пн" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-						<TextBlock Text="{Binding WeekDays[0]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-					</StackPanel>
+				<!-- Фильтр приоритета -->
+				<ComboBox Grid.Column="0" Width="200" Height="30" Margin="0,0,15,0"
+                          ItemsSource="{Binding Priorities}" SelectedItem="{Binding SelectedPriority}"/>
 
-					<StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-						<TextBlock Text="Вт" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-						<TextBlock Text="{Binding WeekDays[1]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-					</StackPanel>
-
-					<StackPanel Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center">
-						<TextBlock Text="Ср" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-						<TextBlock Text="{Binding WeekDays[2]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-					</StackPanel>
-
-					<StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                Background="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1 0.1,Transparent'}">
-						<TextBlock Text="Чт" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-						<TextBlock Text="{Binding WeekDays[3]}" FontSize="14"
-                                   Foreground="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1,#333'}"
-                                   FontWeight="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='Bold,Normal'}"
-                                   HorizontalAlignment="Center"/>
-					</StackPanel>
-
-					<StackPanel Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center">
-						<TextBlock Text="Пт" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-						<TextBlock Text="{Binding WeekDays[4]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-					</StackPanel>
-
-					<StackPanel Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center">
-						<TextBlock Text="Сб" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-						<TextBlock Text="{Binding WeekDays[5]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-					</StackPanel>
-
-					<StackPanel Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center">
-						<TextBlock Text="Вс" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-						<TextBlock Text="{Binding WeekDays[6]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-					</StackPanel>
-				</Grid>
-
-				<!-- Основная сетка календаря -->
-				<Grid Grid.Row="1" ColumnDefinitions="50,*,*,*,*,*,*,*">
-					<!-- Колонка времени -->
-					<StackPanel Grid.Column="0" Background="#F8F9FA">
-						<TextBlock Text="08:00" FontSize="12" Foreground="#666" Margin="0,10" HorizontalAlignment="Center"/>
-						<TextBlock Text="09:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-						<TextBlock Text="10:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-						<TextBlock Text="11:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-						<TextBlock Text="12:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-						<TextBlock Text="13:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-						<TextBlock Text="14:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-						<TextBlock Text="15:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-						<TextBlock Text="16:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-						<TextBlock Text="17:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-						<TextBlock Text="18:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-					</StackPanel>
-
-					<!-- Сетка дней - вертикальные линии -->
-					<Border Grid.Column="1" BorderBrush="#E0E0E0" BorderThickness="1,0,1,0">
-						<ItemsControl ItemsSource="{Binding MondayEvents}">
-							<ItemsControl.ItemTemplate>
-								<DataTemplate>
-									<Border Height="{Binding Duration}" Width="45" Background="{Binding Color}" Opacity="0.8"
-                                            CornerRadius="4" Margin="0,0,0,0" VerticalAlignment="Top">
-										<StackPanel VerticalAlignment="Center">
-											<TextBlock Text="{Binding Title}" FontSize="10" Foreground="White" HorizontalAlignment="Center"/>
-											<TextBlock Text="{Binding Time}" FontSize="8" Foreground="White" HorizontalAlignment="Center"/>
-										</StackPanel>
-									</Border>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
-					</Border>
-
-					<Border Grid.Column="2" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
-						<ItemsControl ItemsSource="{Binding TuesdayEvents}">
-							<ItemsControl.ItemTemplate>
-								<DataTemplate>
-									<Border Height="{Binding Duration}" Width="45" Background="{Binding Color}" Opacity="0.8"
-                                            CornerRadius="4" Margin="0,0,0,0" VerticalAlignment="Top">
-										<StackPanel VerticalAlignment="Center">
-											<TextBlock Text="{Binding Title}" FontSize="10" Foreground="White" HorizontalAlignment="Center"/>
-											<TextBlock Text="{Binding Time}" FontSize="8" Foreground="White" HorizontalAlignment="Center"/>
-										</StackPanel>
-									</Border>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
-					</Border>
-
-					<Border Grid.Column="3" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
-						<ItemsControl ItemsSource="{Binding WednesdayEvents}">
-							<ItemsControl.ItemTemplate>
-								<DataTemplate>
-									<Border Height="{Binding Duration}" Width="45" Background="{Binding Color}" Opacity="0.8"
-                                            CornerRadius="4" Margin="0,0,0,0" VerticalAlignment="Top">
-										<StackPanel VerticalAlignment="Center">
-											<TextBlock Text="{Binding Title}" FontSize="10" Foreground="White" HorizontalAlignment="Center"/>
-											<TextBlock Text="{Binding Time}" FontSize="8" Foreground="White" HorizontalAlignment="Center"/>
-										</StackPanel>
-									</Border>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
-					</Border>
-
-					<Border Grid.Column="4" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0" Background="#00ACC1" Opacity="0.05">
-						<ItemsControl ItemsSource="{Binding ThursdayEvents}">
-							<ItemsControl.ItemTemplate>
-								<DataTemplate>
-									<Border Height="{Binding Duration}" Width="45" Background="{Binding Color}" Opacity="0.8"
-                                            CornerRadius="4" Margin="0,0,0,0" VerticalAlignment="Top">
-										<StackPanel VerticalAlignment="Center">
-											<TextBlock Text="{Binding Title}" FontSize="10" Foreground="White" HorizontalAlignment="Center"/>
-											<TextBlock Text="{Binding Time}" FontSize="8" Foreground="White" HorizontalAlignment="Center"/>
-										</StackPanel>
-									</Border>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
-					</Border>
-
-					<Border Grid.Column="5" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
-						<ItemsControl ItemsSource="{Binding FridayEvents}">
-							<ItemsControl.ItemTemplate>
-								<DataTemplate>
-									<Border Height="{Binding Duration}" Width="45" Background="{Binding Color}" Opacity="0.8"
-                                            CornerRadius="4" Margin="0,0,0,0" VerticalAlignment="Top">
-										<StackPanel VerticalAlignment="Center">
-											<TextBlock Text="{Binding Title}" FontSize="10" Foreground="White" HorizontalAlignment="Center"/>
-											<TextBlock Text="{Binding Time}" FontSize="8" Foreground="White" HorizontalAlignment="Center"/>
-										</StackPanel>
-									</Border>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
-					</Border>
-
-					<Border Grid.Column="6" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0"></Border>
-					<Border Grid.Column="7" BorderBrush="#E0E0E0" BorderThickness="0,0,0,0"></Border>
-
-					<!-- Текущее время -->
-					<Line Grid.ColumnSpan="8" StartPoint="50,210" EndPoint="770,210" Stroke="#00ACC1" StrokeThickness="2" StrokeDashArray="4,2"/>
-					<Ellipse Grid.Column="0" Width="8" Height="8" Fill="#00ACC1" Margin="46,206"/>
-
-					<!-- Кнопка добавления события -->
-					<Button Grid.Column="7" Width="40" Height="40" CornerRadius="20" Background="#00ACC1"
-                            VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,20,20"
-                            Command="{Binding CreateEventCommand}">
-						<TextBlock Text="+" FontSize="24" Foreground="White" FontWeight="Bold"
-                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-					</Button>
-				</Grid>
+				<!-- Кнопка обновления -->
+				<Button Grid.Column="1" Width="36" Height="36" CornerRadius="18" Background="#00ACC1"
+                        Command="{Binding RefreshCommand}">
+					<TextBlock Text="⟳" FontSize="16" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+				</Button>
 			</Grid>
 		</Border>
+
+		<!-- Содержимое календаря: неделя/месяц/год -->
+		<Grid Grid.Row="2" Margin="20,15,20,20">
+			<!-- Индикатор загрузки -->
+			<ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoading}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Height="4"/>
+
+			<!-- Недельный вид календаря -->
+			<Border IsVisible="{Binding IsWeekMode}" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+				<Grid RowDefinitions="Auto,*">
+					<!-- Шапка календаря с днями недели -->
+					<Grid Grid.Row="0" Height="60" Background="#F8F9FA" ColumnDefinitions="50,*,*,*,*,*,*,*">
+						<TextBlock Grid.Column="0" Text="" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+						<!-- Дни недели -->
+						<StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+							<TextBlock Text="Пн" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding WeekDays[0]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+						</StackPanel>
+
+						<StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+							<TextBlock Text="Вт" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding WeekDays[1]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+						</StackPanel>
+
+						<StackPanel Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center">
+							<TextBlock Text="Ср" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding WeekDays[2]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+						</StackPanel>
+
+						<StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                    Background="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1 0.1,Transparent'}">
+							<TextBlock Text="Чт" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding WeekDays[3]}" FontSize="14"
+                                       Foreground="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1,#333'}"
+                                       FontWeight="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='Bold,Normal'}"
+                                       HorizontalAlignment="Center"/>
+						</StackPanel>
+
+						<StackPanel Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center">
+							<TextBlock Text="Пт" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding WeekDays[4]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+						</StackPanel>
+
+						<StackPanel Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center">
+							<TextBlock Text="Сб" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding WeekDays[5]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+						</StackPanel>
+
+						<StackPanel Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center">
+							<TextBlock Text="Вс" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding WeekDays[6]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+						</StackPanel>
+					</Grid>
+
+					<!-- Основная сетка календаря -->
+					<Grid Grid.Row="1" ColumnDefinitions="50,*,*,*,*,*,*,*">
+						<!-- Колонка времени -->
+						<StackPanel Grid.Column="0" Background="#F8F9FA">
+							<TextBlock Text="08:00" FontSize="12" Foreground="#666" Margin="0,10" HorizontalAlignment="Center"/>
+							<TextBlock Text="09:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="10:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="11:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="12:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="13:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="14:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="15:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="16:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="17:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="18:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+						</StackPanel>
+
+						<!-- Сетка дней - вертикальные линии -->
+						<Border Grid.Column="1" BorderBrush="#E0E0E0" BorderThickness="1,0,1,0">
+							<ScrollViewer VerticalScrollBarVisibility="Auto">
+								<ItemsControl ItemsSource="{Binding MondayEvents}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Button Command="{Binding $parent[ItemsControl].((vm:CalendarViewModel)DataContext).OpenTaskDetailsCommand}"
+                                                    CommandParameter="{Binding Id}"
+                                                    Background="Transparent" Padding="0" Margin="0,0,0,5">
+												<Border Height="{Binding Duration}" Width="85" Background="{Binding Color}" Opacity="0.8"
+                                                        CornerRadius="4" Margin="0,0,0,0">
+													<StackPanel VerticalAlignment="Center" Margin="5,0">
+														<TextBlock Text="{Binding Title}" FontSize="10" Foreground="White"
+                                                                   HorizontalAlignment="Center" TextWrapping="Wrap"/>
+														<TextBlock Text="{Binding Time}" FontSize="8" Foreground="White"
+                                                                   HorizontalAlignment="Center"/>
+													</StackPanel>
+												</Border>
+											</Button>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</ScrollViewer>
+						</Border>
+
+						<Border Grid.Column="2" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+							<ScrollViewer VerticalScrollBarVisibility="Auto">
+								<ItemsControl ItemsSource="{Binding TuesdayEvents}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Button Command="{Binding $parent[ItemsControl].((vm:CalendarViewModel)DataContext).OpenTaskDetailsCommand}"
+                                                    CommandParameter="{Binding Id}"
+                                                    Background="Transparent" Padding="0" Margin="0,0,0,5">
+												<Border Height="{Binding Duration}" Width="85" Background="{Binding Color}" Opacity="0.8"
+                                                        CornerRadius="4" Margin="0,0,0,0">
+													<StackPanel VerticalAlignment="Center" Margin="5,0">
+														<TextBlock Text="{Binding Title}" FontSize="10" Foreground="White"
+                                                                   HorizontalAlignment="Center" TextWrapping="Wrap"/>
+														<TextBlock Text="{Binding Time}" FontSize="8" Foreground="White"
+                                                                   HorizontalAlignment="Center"/>
+													</StackPanel>
+												</Border>
+											</Button>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</ScrollViewer>
+						</Border>
+
+						<Border Grid.Column="3" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+							<ScrollViewer VerticalScrollBarVisibility="Auto">
+								<ItemsControl ItemsSource="{Binding WednesdayEvents}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Button Command="{Binding $parent[ItemsControl].((vm:CalendarViewModel)DataContext).OpenTaskDetailsCommand}"
+                                                    CommandParameter="{Binding Id}"
+                                                    Background="Transparent" Padding="0" Margin="0,0,0,5">
+												<Border Height="{Binding Duration}" Width="85" Background="{Binding Color}" Opacity="0.8"
+                                                        CornerRadius="4" Margin="0,0,0,0">
+													<StackPanel VerticalAlignment="Center" Margin="5,0">
+														<TextBlock Text="{Binding Title}" FontSize="10" Foreground="White"
+                                                                   HorizontalAlignment="Center" TextWrapping="Wrap"/>
+														<TextBlock Text="{Binding Time}" FontSize="8" Foreground="White"
+                                                                   HorizontalAlignment="Center"/>
+													</StackPanel>
+												</Border>
+											</Button>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</ScrollViewer>
+						</Border>
+
+						<Border Grid.Column="4" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0"
+                                Background="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1 0.05,Transparent'}">
+							<ScrollViewer VerticalScrollBarVisibility="Auto">
+								<ItemsControl ItemsSource="{Binding ThursdayEvents}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Button Command="{Binding $parent[ItemsControl].((vm:CalendarViewModel)DataContext).OpenTaskDetailsCommand}"
+                                                    CommandParameter="{Binding Id}"
+                                                    Background="Transparent" Padding="0" Margin="0,0,0,5">
+												<Border Height="{Binding Duration}" Width="85" Background="{Binding Color}" Opacity="0.8"
+                                                        CornerRadius="4" Margin="0,0,0,0">
+													<StackPanel VerticalAlignment="Center" Margin="5,0">
+														<TextBlock Text="{Binding Title}" FontSize="10" Foreground="White"
+                                                                   HorizontalAlignment="Center" TextWrapping="Wrap"/>
+														<TextBlock Text="{Binding Time}" FontSize="8" Foreground="White"
+                                                                   HorizontalAlignment="Center"/>
+													</StackPanel>
+												</Border>
+											</Button>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</ScrollViewer>
+						</Border>
+
+						<Border Grid.Column="5" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+							<ScrollViewer VerticalScrollBarVisibility="Auto">
+								<ItemsControl ItemsSource="{Binding FridayEvents}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Button Command="{Binding $parent[ItemsControl].((vm:CalendarViewModel)DataContext).OpenTaskDetailsCommand}"
+                                                    CommandParameter="{Binding Id}"
+                                                    Background="Transparent" Padding="0" Margin="0,0,0,5">
+												<Border Height="{Binding Duration}" Width="85" Background="{Binding Color}" Opacity="0.8"
+                                                        CornerRadius="4" Margin="0,0,0,0">
+													<StackPanel VerticalAlignment="Center" Margin="5,0">
+														<TextBlock Text="{Binding Title}" FontSize="10" Foreground="White"
+                                                                   HorizontalAlignment="Center" TextWrapping="Wrap"/>
+														<TextBlock Text="{Binding Time}" FontSize="8" Foreground="White"
+                                                                   HorizontalAlignment="Center"/>
+													</StackPanel>
+												</Border>
+											</Button>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</ScrollViewer>
+						</Border>
+
+						<Border Grid.Column="6" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+							<ScrollViewer VerticalScrollBarVisibility="Auto">
+								<ItemsControl ItemsSource="{Binding SaturdayEvents}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Button Command="{Binding $parent[ItemsControl].((vm:CalendarViewModel)DataContext).OpenTaskDetailsCommand}"
+                                                    CommandParameter="{Binding Id}"
+                                                    Background="Transparent" Padding="0" Margin="0,0,0,5">
+												<Border Height="{Binding Duration}" Width="85" Background="{Binding Color}" Opacity="0.8"
+                                                        CornerRadius="4" Margin="0,0,0,0">
+													<StackPanel VerticalAlignment="Center" Margin="5,0">
+														<TextBlock Text="{Binding Title}" FontSize="10" Foreground="White"
+                                                                   HorizontalAlignment="Center" TextWrapping="Wrap"/>
+														<TextBlock Text="{Binding Time}" FontSize="8" Foreground="White"
+                                                                   HorizontalAlignment="Center"/>
+													</StackPanel>
+												</Border>
+											</Button>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</ScrollViewer>
+						</Border>
+
+						<Border Grid.Column="7" BorderBrush="#E0E0E0" BorderThickness="0,0,0,0">
+							<ScrollViewer VerticalScrollBarVisibility="Auto">
+								<ItemsControl ItemsSource="{Binding SundayEvents}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Button Command="{Binding $parent[ItemsControl].((vm:CalendarViewModel)DataContext).OpenTaskDetailsCommand}"
+                                                    CommandParameter="{Binding Id}"
+                                                    Background="Transparent" Padding="0" Margin="0,0,0,5">
+												<Border Height="{Binding Duration}" Width="85" Background="{Binding Color}" Opacity="0.8"
+                                                        CornerRadius="4" Margin="0,0,0,0">
+													<StackPanel VerticalAlignment="Center" Margin="5,0">
+														<TextBlock Text="{Binding Title}" FontSize="10" Foreground="White"
+                                                                   HorizontalAlignment="Center" TextWrapping="Wrap"/>
+														<TextBlock Text="{Binding Time}" FontSize="8" Foreground="White"
+                                                                   HorizontalAlignment="Center"/>
+													</StackPanel>
+												</Border>
+											</Button>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</ScrollViewer>
+						</Border>
+
+						<!-- Текущее время -->
+						<Line Grid.ColumnSpan="8"
+							StartPoint="{Binding CurrentTimePosition, Converter={StaticResource DoubleToPointConverter}, ConverterParameter='50,Y'}"
+							EndPoint="{Binding CurrentTimePosition, Converter={StaticResource DoubleToPointConverter}, ConverterParameter='770,Y'}"
+							Stroke="#00ACC1"
+							StrokeThickness="2"
+							StrokeDashArray="4,2"
+							IsVisible="{Binding IsToday}"/>
+						<Ellipse Grid.Column="0"
+							Width="8"
+							Height="8"
+							Fill="#00ACC1"
+							HorizontalAlignment="Left"
+							Margin="{Binding CurrentTimePosition, Converter={StaticResource TimePositionToMarginConverter}}"
+							IsVisible="{Binding IsToday}"/>
+
+					</Grid>
+				</Grid>
+			</Border>
+
+			<!-- Месячный вид календаря -->
+			<Border IsVisible="{Binding IsMonthMode}" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+				<Grid>
+					<!-- Дни недели и сетка календаря -->
+					<Grid Margin="20">
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="*"/>
+						</Grid.RowDefinitions>
+
+						<!-- Заголовки дней недели -->
+						<Grid Grid.Row="0" ColumnDefinitions="*,*,*,*,*,*,*">
+							<TextBlock Grid.Column="0" Text="Пн" FontSize="14" FontWeight="Medium"
+									  Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+							<TextBlock Grid.Column="1" Text="Вт" FontSize="14" FontWeight="Medium"
+									  Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+							<TextBlock Grid.Column="2" Text="Ср" FontSize="14" FontWeight="Medium"
+									  Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+							<TextBlock Grid.Column="3" Text="Чт" FontSize="14" FontWeight="Medium"
+									  Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+							<TextBlock Grid.Column="4" Text="Пт" FontSize="14" FontWeight="Medium"
+									  Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+							<TextBlock Grid.Column="5" Text="Сб" FontSize="14" FontWeight="Medium"
+									  Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+							<TextBlock Grid.Column="6" Text="Вс" FontSize="14" FontWeight="Medium"
+									  Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+						</Grid>
+
+						<!-- Сетка календаря месяца -->
+						<Grid Grid.Row="1">
+							<ItemsControl ItemsSource="{Binding MonthCalendar}">
+								<ItemsControl.ItemsPanel>
+									<ItemsPanelTemplate>
+										<UniformGrid Columns="7" Rows="6"/>
+									</ItemsPanelTemplate>
+								</ItemsControl.ItemsPanel>
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<!-- Добавляем кнопку для обработки нажатия -->
+										<Button Command="{Binding $parent[ItemsControl].((vm:CalendarViewModel)DataContext).SelectDayCommand}"
+												CommandParameter="{Binding}"
+												Background="Transparent"
+												Padding="0"
+												Margin="2"
+												HorizontalAlignment="Stretch"
+												VerticalAlignment="Stretch"
+												HorizontalContentAlignment="Stretch"
+												VerticalContentAlignment="Stretch">
+											<Border CornerRadius="4"
+												  Background="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='White,#F8F9FA'}"
+												  BorderBrush="#E0E0E0" BorderThickness="1">
+												<Grid RowDefinitions="Auto,*">
+													<!-- Номер дня -->
+													<Border Grid.Row="0" Background="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1,Transparent'}"
+														  CornerRadius="4,4,0,0" Height="20">
+														<TextBlock Text="{Binding Day}" FontSize="12"
+																  Foreground="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='#333,#9E9E9E'}"
+																  FontWeight="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='Bold,Normal'}"
+																  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+													</Border>
+
+													<!-- Упрощенный вид с количеством событий и индикаторами -->
+													<Grid Grid.Row="1" RowDefinitions="Auto,*" Margin="3">
+														<!-- Индикаторы событий (точки разных цветов) -->
+														<ItemsControl ItemsSource="{Binding EventIndicators}"
+																	IsVisible="{Binding HasEvents}">
+															<ItemsControl.ItemsPanel>
+																<ItemsPanelTemplate>
+																	<WrapPanel Orientation="Horizontal"/>
+																</ItemsPanelTemplate>
+															</ItemsControl.ItemsPanel>
+															<ItemsControl.ItemTemplate>
+																<DataTemplate>
+																	<Ellipse Width="8" Height="8" Margin="2"
+																		   Fill="{Binding Color}"/>
+																</DataTemplate>
+															</ItemsControl.ItemTemplate>
+														</ItemsControl>
+
+														<!-- Если есть слишком много событий, показываем количество -->
+														<TextBlock Grid.Row="1"
+																 Text="{Binding EventsCountText}"
+																 FontSize="10"
+																 Foreground="#666"
+																 HorizontalAlignment="Center"
+																 VerticalAlignment="Center"
+																 IsVisible="{Binding ShowEventsCount}"/>
+													</Grid>
+												</Grid>
+											</Border>
+										</Button>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</Grid>
+					</Grid>
+
+					<!-- Отдельная панель списка событий месяца (активируется при нажатии на день) -->
+					<Border IsVisible="{Binding IsSelectedDayVisible}"
+						  Background="#FFFFFF"
+						  BorderBrush="#E0E0E0"
+						  BorderThickness="1"
+						  CornerRadius="8"
+						  Width="300"
+						  Height="400"
+						  HorizontalAlignment="Right"
+						  VerticalAlignment="Center"
+						  Margin="0,0,20,0"
+						  BoxShadow="0 2 5 #20000000">
+						<Grid RowDefinitions="Auto,*,Auto">
+							<!-- Заголовок с датой -->
+							<Grid Grid.Row="0" Background="#F8F9FA" Height="40" ColumnDefinitions="*,Auto">
+								<TextBlock Text="{Binding SelectedDayTitle}"
+										 FontSize="16"
+										 FontWeight="Medium"
+										 Foreground="#333"
+										 VerticalAlignment="Center"
+										 Margin="15,0,0,0"/>
+								<Button Grid.Column="1"
+									   Content="✕"
+									   Background="Transparent"
+									   Foreground="#666"
+									   Command="{Binding CloseSelectedDayCommand}"
+									   Width="40"
+									   Height="40"/>
+							</Grid>
+
+							<!-- Список событий -->
+							<ScrollViewer Grid.Row="1" Margin="10">
+								<ItemsControl ItemsSource="{Binding SelectedDayEvents}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Button Command="{Binding $parent[ItemsControl].((vm:CalendarViewModel)DataContext).OpenTaskDetailsCommand}"
+												   CommandParameter="{Binding Id}"
+												   Background="Transparent"
+												   Padding="0"
+												   Margin="0,0,0,10"
+												   HorizontalAlignment="Stretch"
+												   HorizontalContentAlignment="Stretch">
+												<Border Background="#F9FAFB"
+													  CornerRadius="4"
+													  Padding="10"
+													  BorderBrush="{Binding Color}"
+													  BorderThickness="2,0,0,0">
+													<Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
+														<TextBlock Grid.Row="0"
+																 Grid.Column="0"
+																 Text="{Binding Title}"
+																 FontSize="14"
+																 Foreground="#333"
+																 TextWrapping="Wrap"/>
+														<TextBlock Grid.Row="1"
+																 Grid.Column="0"
+																 Text="{Binding Time}"
+																 FontSize="12"
+																 Foreground="#666"/>
+														<Border Grid.Row="0"
+															   Grid.Column="1"
+															   Grid.RowSpan="2"
+															   Background="{Binding Color}"
+															   Opacity="0.2"
+															   CornerRadius="4"
+															   Padding="8,4"
+															   VerticalAlignment="Center">
+															<TextBlock Text="{Binding Status}"
+																	 FontSize="10"
+																	 Foreground="{Binding Color}"/>
+														</Border>
+													</Grid>
+												</Border>
+											</Button>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</ScrollViewer>
+
+							<!-- Кнопка создания задачи на выбранную дату -->
+							<Button Grid.Row="2"
+								   Content="+ Создать задачу"
+								   Background="#00ACC1"
+								   Foreground="White"
+								   HorizontalAlignment="Center"
+								   Margin="0,0,0,10"
+								   Padding="15,8"
+								   CornerRadius="18"
+								   Command="{Binding CreateEventOnSelectedDayCommand}"/>
+						</Grid>
+					</Border>
+				</Grid>
+			</Border>
+
+			<!-- Годовой вид календаря -->
+			<Border IsVisible="{Binding IsYearMode}" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+				<ScrollViewer VerticalScrollBarVisibility="Auto">
+					<Grid Margin="20">
+						<UniformGrid Columns="3" Rows="4">
+							<ItemsControl ItemsSource="{Binding YearCalendar}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<Button Background="Transparent"
+												Command="{Binding $parent[ItemsControl].((vm:CalendarViewModel)DataContext).SelectMonthCommand}"
+												CommandParameter="{Binding Month}"
+												Padding="0"
+												Margin="10"
+												HorizontalAlignment="Stretch"
+												VerticalAlignment="Stretch">
+											<Border Height="120" CornerRadius="6"
+													Background="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='White,#F8F9FA'}"
+													BorderBrush="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1,#E0E0E0'}"
+													BorderThickness="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='2,1'}">
+												<Grid RowDefinitions="Auto,*">
+													<!-- Название месяца -->
+													<Border Grid.Row="0" Background="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1 0.1,Transparent'}"
+															CornerRadius="6,6,0,0" Padding="5">
+														<TextBlock Text="{Binding MonthName}" FontSize="14"
+																  Foreground="#333"
+																  FontWeight="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='Bold,Normal'}"
+																  HorizontalAlignment="Center"/>
+													</Border>
+
+													<!-- Количество событий -->
+													<Grid Grid.Row="1" RowDefinitions="*,Auto" Margin="5">
+														<!-- Визуальный индикатор активности -->
+														<Border Background="{Binding ActivityColor}"
+																Opacity="0.2"
+																CornerRadius="4"
+																Margin="10"
+																IsVisible="{Binding HasEvents}"/>
+
+														<StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+															<TextBlock Text="{Binding EventsCount}" FontSize="24"
+																	  Foreground="{Binding EventsCount, Converter={StaticResource IsGreaterThan}, ConverterParameter='0,#00ACC1,#9E9E9E'}"
+																	  HorizontalAlignment="Center"
+																	  FontWeight="{Binding HasEvents, Converter={StaticResource BoolToValue}, ConverterParameter='SemiBold,Normal'}"/>
+															<TextBlock Text="{Binding EventsCountText}" FontSize="12" Foreground="#666" HorizontalAlignment="Center"/>
+														</StackPanel>
+													</Grid>
+												</Grid>
+											</Border>
+										</Button>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</UniformGrid>
+					</Grid>
+				</ScrollViewer>
+			</Border>
+
+			<!-- Кнопка создания события -->
+			<Button Width="56" Height="56" CornerRadius="28" Background="#00ACC1"
+					VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,20,20"
+					Command="{Binding CreateEventCommand}">
+				<TextBlock Text="+" FontSize="28" Foreground="White"
+						   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			</Button>
+		</Grid>
 	</Grid>
 </UserControl>
