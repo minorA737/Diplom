@@ -4,13 +4,14 @@ using Avalonia.Markup.Xaml;
 using ManufactPlanner.Models;
 using ManufactPlanner.ViewModels;
 
-namespace ManufactPlanner.Views;
-
-public partial class DocumentationPage : UserControl
+namespace ManufactPlanner.Views
 {
-    public DocumentationPage(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext)
+    public partial class DocumentationPage : UserControl
     {
-        InitializeComponent();
-        DataContext = new DocumentationViewModel(mainWindowViewModel, dbContext);
+        public DocumentationPage(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext)
+        {
+            InitializeComponent();
+            DataContext = new DocumentationViewModel(mainWindowViewModel, dbContext);
+        }
     }
 }

@@ -22,8 +22,14 @@
 			<TextBlock Text="{Binding OrderNumber}" Foreground="#333" FontWeight="Medium" VerticalAlignment="Center"/>
 		</StackPanel>
 
+		<!-- Индикатор загрузки -->
+		<ProgressBar Grid.Row="1" IsIndeterminate="True" IsVisible="{Binding IsLoading}"
+                    VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,50,0,0"
+                    Width="200" Height="10"/>
+
 		<!-- Информация о заказе -->
-		<Border Grid.Row="1" Margin="20,15,20,0" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+		<Border Grid.Row="1" Margin="20,15,20,0" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000"
+                IsVisible="{Binding !IsLoading}">
 			<Grid RowDefinitions="Auto,Auto" Margin="20">
 				<!-- Заголовок и кнопки действий -->
 				<Grid Grid.Row="0" ColumnDefinitions="*,Auto">
@@ -35,9 +41,15 @@
 					<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
 						<Button Width="110" Height="36" CornerRadius="18" Background="#00ACC1" Command="{Binding EditOrderCommand}">
 							<TextBlock Text="Редактировать" FontSize="12" Foreground="White"/>
+							<ToolTip.Tip>
+								<TextBlock Text="Редактировать информацию о заказе"/>
+							</ToolTip.Tip>
 						</Button>
 						<Button Width="100" Height="36" CornerRadius="18" Background="White" BorderBrush="#E0E0E0" BorderThickness="1">
 							<TextBlock Text="Действия ▼" FontSize="12" Foreground="#666"/>
+							<ToolTip.Tip>
+								<TextBlock Text="Дополнительные действия с заказом"/>
+							</ToolTip.Tip>
 						</Button>
 					</StackPanel>
 				</Grid>
@@ -46,7 +58,7 @@
 				<Grid Grid.Row="1" ColumnDefinitions="1*,1*,1*" RowDefinitions="Auto,Auto" Margin="0,20,0,0">
 					<StackPanel Grid.Column="0" Grid.Row="0" Margin="0,0,10,15">
 						<TextBlock Text="Заказчик" FontSize="12" Foreground="#9E9E9E"/>
-						<TextBlock Text="{Binding Customer}" FontSize="14" Foreground="#333" Margin="0,5,0,0"/>
+						<TextBlock Text="{Binding Customer}" FontSize="14" Foreground="#333" Margin="0,5,0,0" TextWrapping="Wrap"/>
 					</StackPanel>
 
 					<StackPanel Grid.Column="1" Grid.Row="0" Margin="0,0,10,15">
@@ -71,7 +83,7 @@
 
 					<StackPanel Grid.Column="2" Grid.Row="1">
 						<TextBlock Text="Статус" FontSize="12" Foreground="#9E9E9E"/>
-						<Border Width="80" Height="24" CornerRadius="12" Background="#4CAF9D" Opacity="0.2" HorizontalAlignment="Left" Margin="0,5,0,0">
+						<Border Width="" MinWidth="80" Height="24" CornerRadius="12" Padding="10,0" Background="#4CAF9D" Opacity="0.2" HorizontalAlignment="Left" Margin="0,5,0,0">
 							<TextBlock Text="{Binding Status}" FontSize="12" Foreground="#4CAF9D" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Border>
 					</StackPanel>
@@ -79,8 +91,8 @@
 			</Grid>
 		</Border>
 
-		<!-- Вкладки и таблица позиций -->
-		<Grid Grid.Row="2" Margin="20,20,20,20" RowDefinitions="Auto,*">
+		<!-- Вкладки и таблица позиций (отображается только когда нет загрузки) -->
+		<Grid Grid.Row="2" Margin="20,20,20,20" RowDefinitions="Auto,*" IsVisible="{Binding !IsLoading}">
 			<!-- Вкладки -->
 			<Grid Grid.Row="0" Background="White" Height="40" ColumnDefinitions="Auto,Auto,Auto,*,Auto">
 				<Border Grid.Column="0" BorderThickness="0,0,0,2" BorderBrush="#00ACC1">
@@ -92,6 +104,9 @@
 				<!-- Кнопка добавления позиции -->
 				<Button Grid.Column="4" Width="150" Height="36" CornerRadius="18" Background="#00ACC1" HorizontalAlignment="Right" Command="{Binding AddPositionCommand}">
 					<TextBlock Text="+ Добавить позицию" FontSize="12" Foreground="White"/>
+					<ToolTip.Tip>
+						<TextBlock Text="Добавить новую позицию в заказ"/>
+					</ToolTip.Tip>
 				</Button>
 			</Grid>
 
@@ -106,7 +121,7 @@
 						<TextBlock Grid.Column="3" Text="Цена" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
 						<TextBlock Grid.Column="4" Text="Тип разработки" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
 						<TextBlock Grid.Column="5" Text="Статус" FontSize="12" Foreground="#666" FontWeight="Medium" Margin="20,0,0,0" VerticalAlignment="Center"/>
-						<TextBlock Grid.Column="6" Text="▾" FontSize="12" Foreground="#666" FontWeight="Medium" Margin="5,0" VerticalAlignment="Center"/>
+						<TextBlock Grid.Column="6" Text="Действия" FontSize="12" Foreground="#666" FontWeight="Medium" Margin="5,0" VerticalAlignment="Center"/>
 					</Grid>
 
 					<!-- Линия разделителя -->
@@ -114,39 +129,55 @@
 
 					<!-- Список позиций -->
 					<ScrollViewer Grid.Row="1">
-						<ItemsControl ItemsSource="{Binding Positions}">
-							<ItemsControl.ItemTemplate>
-								<DataTemplate>
-									<Grid Height="60" ColumnDefinitions="100,250,100,100,100,*,Auto" Background="{Binding IsAlternate, Converter={StaticResource BoolToValue}, ConverterParameter='White,#F9FAFB'}">
-										<TextBlock Grid.Column="0" Text="{Binding PositionNumber}" FontSize="13" Foreground="#333" Margin="20,0,0,0" VerticalAlignment="Center"/>
-										<TextBlock Grid.Column="1" Text="{Binding ProductName}" FontSize="13" Foreground="#333" VerticalAlignment="Center" TextWrapping="Wrap"/>
-										<TextBlock Grid.Column="2" Text="{Binding Quantity}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
-										<TextBlock Grid.Column="3" Text="{Binding Price}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
-										<TextBlock Grid.Column="4" Text="{Binding DevelopmentType}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
+						<Grid>
+							<ItemsControl ItemsSource="{Binding Positions}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<Grid Height="60" ColumnDefinitions="100,250,100,100,100,*,Auto" Background="{Binding IsAlternate, Converter={StaticResource BoolToValue}, ConverterParameter='White,#F9FAFB'}">
+											<TextBlock Grid.Column="0" Text="{Binding PositionNumber}" FontSize="13" Foreground="#333" Margin="20,0,0,0" VerticalAlignment="Center"/>
+											<TextBlock Grid.Column="1" Text="{Binding ProductName}" FontSize="13" Foreground="#333" VerticalAlignment="Center" TextWrapping="Wrap"/>
+											<TextBlock Grid.Column="2" Text="{Binding Quantity}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
+											<TextBlock Grid.Column="3" Text="{Binding Price}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
+											<TextBlock Grid.Column="4" Text="{Binding DevelopmentType}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
 
-										<!-- Статус позиции -->
-										<Border Grid.Column="5"  Height="24" Padding="10,0" CornerRadius="12" Background="{Binding StatusColor}" Opacity="0.2" VerticalAlignment="Center" Margin="20,0,0,0" HorizontalAlignment="Left">
-											<TextBlock Text="{Binding Status}" FontSize="12" Foreground="{Binding StatusColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-										</Border>
+											<!-- Статус позиции -->
+											<Border Grid.Column="5" Height="24" Padding="10,0" CornerRadius="12" Background="{Binding StatusColor}" Opacity="0.2" VerticalAlignment="Center" Margin="20,0,0,0" HorizontalAlignment="Left">
+												<TextBlock Text="{Binding Status}" FontSize="12" Foreground="{Binding StatusColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+											</Border>
 
-										<!-- Меню действий -->
-										<StackPanel Grid.Column="6" Orientation="Horizontal" Spacing="5" Margin="5,0" VerticalAlignment="Center">
-											<!-- Command="{Binding $parent[ItemsControl].DataContext.EditPositionCommand}" CommandParameter="{Binding Id}" -->
-											<Button Width="24" Height="24" CornerRadius="12" Background="#F1F3F4" >
-												<TextBlock Text="✎" FontSize="12" Foreground="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-											</Button>
-											<!-- Command="{Binding $parent[ItemsControl].DataContext.CreateTaskCommand}" CommandParameter="{Binding Id}" -->
-											<Button Width="24" Height="24" CornerRadius="12" Background="#F1F3F4" >
-												<TextBlock Text="+" FontSize="12" Foreground="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-											</Button>
-										</StackPanel>
+											<!-- Меню действий -->
+											<StackPanel Grid.Column="6" Orientation="Horizontal" Spacing="5" Margin="5,0" VerticalAlignment="Center">
+												<Button Width="24" Height="24" CornerRadius="12" Background="#F1F3F4"
+                                                        Command="{Binding $parent[ItemsControl].((vm:OrderDetailsViewModel)DataContext).EditPositionCommand}"
+                                                        CommandParameter="{Binding Id}">
+													<TextBlock Text="✎" FontSize="12" Foreground="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+													<ToolTip.Tip>
+														<TextBlock Text="Редактировать позицию"/>
+													</ToolTip.Tip>
+												</Button>
+												<Button Width="24" Height="24" CornerRadius="12" Background="#F1F3F4"
+                                                        Command="{Binding $parent[ItemsControl].((vm:OrderDetailsViewModel)DataContext).CreateTaskCommand}"
+                                                        CommandParameter="{Binding Id}">
+													<TextBlock Text="+" FontSize="12" Foreground="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+													<ToolTip.Tip>
+														<TextBlock Text="Создать задачу"/>
+													</ToolTip.Tip>
+												</Button>
+											</StackPanel>
 
-										<!-- Линия разделителя -->
-										<Rectangle Grid.ColumnSpan="7" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom"/>
-									</Grid>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
+											<!-- Линия разделителя -->
+											<Rectangle Grid.ColumnSpan="7" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom"/>
+										</Grid>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+
+							<!-- Сообщение, если нет данных -->
+							<TextBlock Text="Нет данных для отображения"
+                                    IsVisible="{Binding Positions.Count, Converter={StaticResource IsGreaterThan}, ConverterParameter='0 Invert=true'}"
+                                    FontSize="16" Foreground="#666" FontWeight="Medium"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Grid>
 					</ScrollViewer>
 				</Grid>
 			</Border>

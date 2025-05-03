@@ -16,15 +16,16 @@ namespace ManufactPlanner.ViewModels
         private readonly MainWindowViewModel _mainWindowViewModel;
         private readonly PostgresContext _dbContext;
 
-        private string _orderNumber = "ОП-168/24";
-        private string _orderName = "Губкинский горно-политехнический колледж. Эксплуатация и обслуживание электрического и электромеханического оборудования. 2024";
-        private string _customer = "Губкинский горно-политехнический колледж";
-        private string _contractDeadline = "20.12.2024";
-        private string _deliveryDeadline = "17.02.2024";
-        private bool _isDeliveryDateCritical = true;
-        private string _contractQuantity = "7 шт.";
-        private string _totalPrice = "6 667 599,18 руб.";
-        private string _status = "Активен";
+        private string _orderNumber = "";
+        private string _orderName = "";
+        private string _customer = "";
+        private string _contractDeadline = "";
+        private string _deliveryDeadline = "";
+        private bool _isDeliveryDateCritical = false;
+        private string _contractQuantity = "";
+        private string _totalPrice = "";
+        private string _status = "";
+        private bool _isLoading = false;
 
         private ObservableCollection<OrderPositionViewModel> _positions;
 
@@ -82,6 +83,12 @@ namespace ManufactPlanner.ViewModels
             set => this.RaiseAndSetIfChanged(ref _status, value);
         }
 
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => this.RaiseAndSetIfChanged(ref _isLoading, value);
+        }
+
         public ObservableCollection<OrderPositionViewModel> Positions
         {
             get => _positions;
@@ -105,34 +112,34 @@ namespace ManufactPlanner.ViewModels
             EditPositionCommand = ReactiveCommand.Create<int>(EditPosition);
             CreateTaskCommand = ReactiveCommand.Create<int>(CreateTask);
 
-            LoadOrderDetails(orderId);
+            // Инициализация пустой коллекции для предотвращения NullReferenceException
+            _positions = new ObservableCollection<OrderPositionViewModel>();
+
+            // Асинхронная загрузка данных
+            System.Threading.Tasks.Task.Run(() => LoadOrderDetailsAsync(orderId));
         }
 
-        public OrderDetailsViewModel()
-        {
-            // Конструктор для дизайнера
-            NavigateToOrdersCommand = ReactiveCommand.Create(NavigateToOrders);
-            EditOrderCommand = ReactiveCommand.Create(EditOrder);
-            AddPositionCommand = ReactiveCommand.Create(AddPosition);
-            EditPositionCommand = ReactiveCommand.Create<int>(EditPosition);
-            CreateTaskCommand = ReactiveCommand.Create<int>(CreateTask);
-
-            LoadTestData();
-        }
-
-        private void LoadOrderDetails(int orderId)
+        private async System.Threading.Tasks.Task LoadOrderDetailsAsync(int orderId)
         {
             try
             {
-                // Загружаем данные заказа из базы данных
-                var order = _dbContext.Orders
+                IsLoading = true;
+
+                // Проверка доступности БД
+                if (_dbContext == null)
+                {
+                    Console.WriteLine("База данных недоступна.");
+                    return;
+                }
+
+                // Загружаем заказ со всеми связанными данными
+                var order = await _dbContext.Orders
                     .Include(o => o.OrderPositions)
-                    .FirstOrDefault(o => o.Id == orderId);
+                    .FirstOrDefaultAsync(o => o.Id == orderId);
 
                 if (order == null)
                 {
-                    // Если заказ не найден, используем тестовые данные
-                    LoadTestData();
+                    Console.WriteLine($"Заказ с идентификатором {orderId} не найден.");
                     return;
                 }
 
@@ -142,11 +149,14 @@ namespace ManufactPlanner.ViewModels
                 Customer = order.Customer;
                 ContractDeadline = order.ContractDeadline?.ToString("dd.MM.yyyy") ?? "-";
                 DeliveryDeadline = order.DeliveryDeadline?.ToString("dd.MM.yyyy") ?? "-";
+
+                // Считаем срок критическим, если до него осталось меньше 7 дней
                 IsDeliveryDateCritical = order.DeliveryDeadline.HasValue &&
-                                       order.DeliveryDeadline.Value <= DateOnly.FromDateTime(DateTime.Now.AddDays(7));
+                    order.DeliveryDeadline.Value <= DateOnly.FromDateTime(DateTime.Now.AddDays(7));
+
                 ContractQuantity = $"{order.ContractQuantity} шт.";
                 TotalPrice = $"{order.TotalPrice:N2} руб.";
-                Status = order.Status ?? "Неизвестно";
+                Status = order.Status ?? "Не указан";
 
                 // Загружаем позиции заказа
                 var positions = order.OrderPositions.Select((op, index) => new OrderPositionViewModel
@@ -155,39 +165,56 @@ namespace ManufactPlanner.ViewModels
                     PositionNumber = op.PositionNumber,
                     ProductName = op.ProductName,
                     Quantity = $"{op.Quantity} шт.",
-                    Price = $"{op.Price:N2} руб.",
+                    Price = op.Price.HasValue ? $"{op.Price:N2} руб." : "0,00 руб.",
                     DevelopmentType = GetDevelopmentTypeName(op.DevelopmentType),
                     Status = GetStatusName(op.CurrentStatus),
                     StatusColor = GetStatusColor(op.CurrentStatus),
                     IsAlternate = index % 2 == 1 // Чередование строк
                 }).ToList();
 
-                Positions = new ObservableCollection<OrderPositionViewModel>(positions);
+                // Обновляем коллекцию позиций в UI потоке
+                await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    Positions = new ObservableCollection<OrderPositionViewModel>(positions);
+                });
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Ошибка при загрузке данных заказа: {ex.Message}");
-                // В случае ошибки используем тестовые данные
-                LoadTestData();
+
+                // Здесь мы не загружаем тестовые данные, а просто логируем ошибку
+                // и оставляем пустые значения или устанавливаем значения по умолчанию
+                await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    OrderNumber = "Ошибка загрузки";
+                    Status = "Неизвестно";
+                    Positions = new ObservableCollection<OrderPositionViewModel>();
+                });
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
         // Вспомогательные методы для преобразования строк в читаемые значения
         private string GetDevelopmentTypeName(string type)
         {
-            if (string.IsNullOrEmpty(type)) return "Неизвестно";
+            if (string.IsNullOrEmpty(type)) return "Не указан";
 
             return type switch
             {
                 "Purchase" => "Покупное",
                 "Development" => "Разработка",
+                "Покупное" => "Покупное",
+                "Разработка" => "Разработка",
                 _ => type // Возвращаем как есть, если не знаем как преобразовать
             };
         }
 
         private string GetStatusName(string status)
         {
-            if (string.IsNullOrEmpty(status)) return "Неизвестно";
+            if (string.IsNullOrEmpty(status)) return "Не указан";
 
             return status switch
             {
@@ -195,6 +222,10 @@ namespace ManufactPlanner.ViewModels
                 "InProgress" => "В процессе",
                 "WaitingForProduction" => "Ждем производство",
                 "Completed" => "Завершено",
+                "В очереди" => "В очереди",
+                "В процессе" => "В процессе",
+                "Ждем производство" => "Ждем производство",
+                "Завершено" => "Завершено",
                 _ => status // Возвращаем как есть, если не знаем как преобразовать
             };
         }
@@ -208,24 +239,12 @@ namespace ManufactPlanner.ViewModels
                 "Queue" => "#9575CD", // Фиолетовый
                 "InProgress" => "#00ACC1", // Голубой
                 "WaitingForProduction" => "#FFB74D", // Оранжевый
-                "Completed" => "#81C784", // Зеленый
+                "Completed" => "#4CAF9D", // Зеленый
+                "В очереди" => "#9575CD", // Фиолетовый
+                "В процессе" => "#00ACC1", // Голубой
+                "Ждем производство" => "#FFB74D", // Оранжевый
+                "Завершено" => "#4CAF9D", // Зеленый
                 _ => "#9E9E9E" // Серый
-            };
-        }
-
-        private void LoadTestData()
-        {
-            // Пример данных позиций заказа
-            Positions = new ObservableCollection<OrderPositionViewModel>
-            {
-                new OrderPositionViewModel { Id = 1, PositionNumber = "1", ProductName = "Комплект лабораторного оборудования", Quantity = "1", Price = "10 453 200,03 руб.", DevelopmentType = "Разработка", Status = "В процессе", StatusColor = "#00ACC1", IsAlternate = false },
-                new OrderPositionViewModel { Id = 2, PositionNumber = "1.2", ProductName = "Стенд учебный \"Монтаж и подключение контрольно-измерительных приборов гидравлических и механических величин\"", Quantity = "1", Price = "1 341 795,40 руб.", DevelopmentType = "Разработка", Status = "В процессе", StatusColor = "#00ACC1", IsAlternate = true },
-                new OrderPositionViewModel { Id = 3, PositionNumber = "1.6", ProductName = "Стенд \"Основы электромеханики и электроники\"", Quantity = "1", Price = "926 402,55 руб.", DevelopmentType = "Покупное", Status = "В очереди", StatusColor = "#9575CD", IsAlternate = false },
-                new OrderPositionViewModel { Id = 4, PositionNumber = "1.7", ProductName = "Стенд \"Силовая электроника и электропривод\"", Quantity = "1", Price = "787 444,35 руб.", DevelopmentType = "Разработка", Status = "В очереди", StatusColor = "#9575CD", IsAlternate = true },
-                new OrderPositionViewModel { Id = 5, PositionNumber = "1.8", ProductName = "Стенд \"Электротехника, электроника, электрические машины и электропривод\"", Quantity = "1", Price = "1 204 318,96 руб.", DevelopmentType = "Разработка", Status = "В процессе", StatusColor = "#00ACC1", IsAlternate = false },
-                new OrderPositionViewModel { Id = 6, PositionNumber = "1.9", ProductName = "Стенд \"Микропроцессорные системы управления электроприводов\"", Quantity = "1", Price = "694 801,91 руб.", DevelopmentType = "Покупное", Status = "В очереди", StatusColor = "#9575CD", IsAlternate = true },
-                new OrderPositionViewModel { Id = 7, PositionNumber = "1.13", ProductName = "Стенд \"Основы релейной защиты и автоматики\"", Quantity = "1", Price = "602 159,48 руб.", DevelopmentType = "Покупное", Status = "В очереди", StatusColor = "#9575CD", IsAlternate = false },
-                new OrderPositionViewModel { Id = 8, PositionNumber = "1.14", ProductName = "Стенд \"Электрические станции и подстанции\"", Quantity = "1", Price = "1 111 676,53 руб.", DevelopmentType = "Разработка", Status = "Ждем производство", StatusColor = "#FFB74D", IsAlternate = true }
             };
         }
 
@@ -237,21 +256,25 @@ namespace ManufactPlanner.ViewModels
         private void EditOrder()
         {
             // Логика редактирования заказа
+            // В будущем здесь может быть код для открытия диалога редактирования
         }
 
         private void AddPosition()
         {
             // Логика добавления новой позиции в заказ
+            // В будущем здесь может быть код для открытия диалога добавления позиции
         }
 
         private void EditPosition(int positionId)
         {
             // Логика редактирования позиции заказа
+            // В будущем здесь может быть код для открытия диалога редактирования позиции
         }
 
         private void CreateTask(int positionId)
         {
             // Логика создания задачи для позиции заказа
+            // В будущем здесь может быть код для открытия диалога создания задачи
         }
     }
 

@@ -6,7 +6,7 @@
              x:Class="ManufactPlanner.Views.TaskDetailsPage"
              x:DataType="vm:TaskDetailsViewModel"
              xmlns:vm="using:ManufactPlanner.ViewModels"
-			 xmlns:converters="using:ManufactPlanner.Converters">
+             xmlns:converters="using:ManufactPlanner.Converters">
 	<UserControl.Resources>
 		<converters:BoolToValueConverter x:Key="BoolToValue"/>
 		<converters:IsGreaterThanConverter x:Key="IsGreaterThan"/>
@@ -22,8 +22,14 @@
 			<TextBlock Text="{Binding TaskName}" Foreground="#333" FontWeight="Medium" VerticalAlignment="Center"/>
 		</StackPanel>
 
+		<!-- Индикатор загрузки -->
+		<ProgressBar Grid.Row="1" IsIndeterminate="True" IsVisible="{Binding IsLoading}"
+                    VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,50,0,0"
+                    Width="200" Height="10"/>
+
 		<!-- Информация о задаче -->
-		<Border Grid.Row="1" Margin="20,15,20,0" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+		<Border Grid.Row="1" Margin="20,15,20,0" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000"
+                IsVisible="{Binding !IsLoading}">
 			<Grid Margin="20">
 				<!-- Заголовок и кнопки действий -->
 				<Grid ColumnDefinitions="*,Auto">
@@ -39,9 +45,15 @@
 					<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
 						<Button Width="120" Height="32" CornerRadius="16" Background="#00ACC1" Command="{Binding EditTaskCommand}">
 							<TextBlock Text="Редактировать" FontSize="12" Foreground="White"/>
+							<ToolTip.Tip>
+								<TextBlock Text="Редактировать информацию о задаче"/>
+							</ToolTip.Tip>
 						</Button>
 						<Button Width="110" Height="32" CornerRadius="16" Background="White" BorderBrush="#E0E0E0" BorderThickness="1">
 							<TextBlock Text="Действия ▼" FontSize="12" Foreground="#666"/>
+							<ToolTip.Tip>
+								<TextBlock Text="Дополнительные действия с задачей"/>
+							</ToolTip.Tip>
 						</Button>
 					</StackPanel>
 				</Grid>
@@ -64,7 +76,8 @@
 		</Border>
 
 		<!-- Вкладки и основное содержимое -->
-		<Grid Grid.Row="2" Margin="20,20,20,20" ColumnDefinitions="3*,1*" RowDefinitions="Auto,*">
+		<Grid Grid.Row="2" Margin="20,20,20,20" ColumnDefinitions="3*,1*" RowDefinitions="Auto,*"
+             IsVisible="{Binding !IsLoading}">
 			<!-- Вкладки -->
 			<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Background="White">
 				<Border BorderThickness="0,0,0,2" BorderBrush="#00ACC1">
@@ -128,18 +141,27 @@
 						<TextBlock Text="Связанные задачи" FontSize="16" FontWeight="Medium" Foreground="#333"/>
 						<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,15"/>
 
-						<ItemsControl ItemsSource="{Binding RelatedTasks}">
-							<ItemsControl.ItemTemplate>
-								<DataTemplate>
-									<StackPanel Margin="0,0,0,15">
-										<TextBlock Text="{Binding Name}" FontSize="13" Foreground="#333"/>
-										<Border Width="55" Height="16" CornerRadius="8" Background="{Binding StatusColor}" Opacity="0.2" HorizontalAlignment="Left" Margin="0,5,0,0">
-											<TextBlock Text="{Binding Status}" FontSize="10" Foreground="{Binding StatusColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-										</Border>
-									</StackPanel>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
+						<Grid>
+							<ItemsControl ItemsSource="{Binding RelatedTasks}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Margin="0,0,0,15">
+											<TextBlock Text="{Binding Name}" FontSize="13" Foreground="#333" TextWrapping="Wrap"/>
+											<Border Width="" MinWidth="55" Height="16" Padding="5,0" CornerRadius="8" Background="{Binding StatusColor}" Opacity="0.2" HorizontalAlignment="Left" Margin="0,5,0,0">
+												<TextBlock Text="{Binding Status}" FontSize="10" Foreground="{Binding StatusColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+											</Border>
+										</StackPanel>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+
+							<!-- Сообщение, если нет связанных задач -->
+							<TextBlock Text="Нет связанных задач"
+                                      IsVisible="{Binding RelatedTasks.Count, Converter={StaticResource IsGreaterThan}, ConverterParameter='0 Invert=true'}"
+                                      FontSize="13" Foreground="#666"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      Margin="0,20,0,0"/>
+						</Grid>
 					</StackPanel>
 				</Border>
 			</StackPanel>

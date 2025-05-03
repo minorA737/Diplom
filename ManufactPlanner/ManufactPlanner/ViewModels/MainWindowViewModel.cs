@@ -154,8 +154,8 @@ namespace ManufactPlanner.ViewModels
         // Метод для отображения подробной информации о задаче
         public void NavigateToTaskDetails(int taskId)
         {
-            CurrentMenuItem = "tasks";
-            CurrentView = new Views.TaskDetailsPage(this, DbContext, taskId);
+            CurrentMenuItem = "tasks"; // Устанавливаем текущий пункт меню как "tasks"
+            CurrentView = new TaskDetailsPage(this, DbContext, taskId);
         }
 
         // Метод для отображения подробной информации о заказе

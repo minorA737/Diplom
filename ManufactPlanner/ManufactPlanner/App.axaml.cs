@@ -7,6 +7,11 @@ using ManufactPlanner.ViewModels;
 using ManufactPlanner.Views;
 using Avalonia.Data.Core.Plugins;
 using ManufactPlanner.Models;
+using ManufactPlanner.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Splat;
+using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace ManufactPlanner
 {
@@ -16,7 +21,7 @@ namespace ManufactPlanner
         {
             AvaloniaXamlLoader.Load(this);
         }
-
+        
         public override void OnFrameworkInitializationCompleted()
         {
             // Удаляем DataAnnotations validator для улучшения производительности
