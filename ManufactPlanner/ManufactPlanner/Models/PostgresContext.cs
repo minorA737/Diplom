@@ -76,6 +76,9 @@ public partial class PostgresContext : DbContext
             entity.HasIndex(e => e.TaskId, "idx_attachments_task_id");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.FileContent)
+                .HasComment("Содержимое файла в бинарном формате (PDF, документы и пр.)")
+                .HasColumnName("file_content");
             entity.Property(e => e.FileName)
                 .HasMaxLength(255)
                 .HasColumnName("file_name");

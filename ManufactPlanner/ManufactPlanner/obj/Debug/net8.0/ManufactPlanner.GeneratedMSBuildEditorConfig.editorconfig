@@ -51,6 +51,15 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/OrderEditDialog.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/OrderPositionSelectionDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/OrderSelectionDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/ProductionOrderDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/TaskEditDialog.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 

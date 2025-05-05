@@ -8,10 +8,29 @@ namespace ManufactPlanner.Views
 {
     public partial class DocumentationPage : UserControl
     {
+        private readonly MainWindowViewModel _mainWindowViewModel;
+        private readonly PostgresContext _dbContext;
+
         public DocumentationPage(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext)
         {
             InitializeComponent();
-            DataContext = new DocumentationViewModel(mainWindowViewModel, dbContext);
+            _mainWindowViewModel = mainWindowViewModel;
+            _dbContext = dbContext;
+
+            // Подписываемся на событие загрузки контрола
+            this.Loaded += DocumentationPage_Loaded;
+        }
+
+        private void DocumentationPage_Loaded(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            // Получаем окно только после полной загрузки контрола
+            var window = TopLevel.GetTopLevel(this) as Window;
+            DataContext = new DocumentationViewModel(_mainWindowViewModel, _dbContext, window);
+        }
+
+        private void InitializeComponent()
+        {
+            AvaloniaXamlLoader.Load(this);
         }
     }
 }

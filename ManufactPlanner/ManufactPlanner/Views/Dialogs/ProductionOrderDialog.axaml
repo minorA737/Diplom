@@ -1,0 +1,118 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="using:ManufactPlanner.Converters"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="550"
+        x:Class="ManufactPlanner.Views.Dialogs.ProductionOrderDialog"
+        Title="Создание заказ-наряда"
+        Width="600" Height="800"
+        WindowStartupLocation="CenterOwner"
+        x:DataType="vm:ProductionOrderDialogViewModel"
+        xmlns:vm="using:ManufactPlanner.ViewModels.Dialogs">
+
+	<Window.Resources>
+		
+		<converters:BoolToValueConverter x:Key="BoolToValue"/>
+		<converters:DateTimeConverter x:Key="DateTimeConverter"/>
+	</Window.Resources>
+
+	<Grid RowDefinitions="Auto,*,Auto" Margin="20">
+		<!-- Заголовок -->
+		<TextBlock Grid.Row="0" Text="Создание заказ-наряда" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,20"/>
+
+		<!-- Основная форма -->
+		<ScrollViewer Grid.Row="1">
+			<StackPanel Spacing="15">
+				<!-- Выбор заказа -->
+				<StackPanel>
+					<TextBlock Text="Выберите заказ:" FontSize="14" Margin="0,0,0,5"/>
+					<Grid ColumnDefinitions="*,Auto">
+						<ComboBox Grid.Column="0" ItemsSource="{Binding Orders}"
+                                  SelectedItem="{Binding SelectedOrder}"
+                                  PlaceholderText="Выберите заказ"
+                                  HorizontalAlignment="Stretch">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding DisplayText}"/>
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
+						<Button Grid.Column="1" Margin="5,0,0,0"
+                                Command="{Binding RefreshOrdersCommand}"
+                                ToolTip.Tip="Обновить список заказов">
+							<TextBlock Text="⟳"/>
+						</Button>
+					</Grid>
+				</StackPanel>
+
+				<!-- Выбор позиции заказа -->
+				<StackPanel IsEnabled="{Binding HasSelectedOrder}">
+					<TextBlock Text="Выберите позицию заказа:" FontSize="14" Margin="0,0,0,5"/>
+					<ComboBox ItemsSource="{Binding OrderPositions}"
+                              SelectedItem="{Binding SelectedOrderPosition}"
+                              PlaceholderText="Выберите позицию заказа"
+                              IsEnabled="{Binding HasOrderPositions}"
+                              HorizontalAlignment="Stretch">
+						<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding DisplayText}"/>
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
+					</ComboBox>
+				</StackPanel>
+
+				<!-- Номер заказ-наряда -->
+				<StackPanel>
+					<TextBlock Text="Номер заказ-наряда:" FontSize="14" Margin="0,0,0,5"/>
+					<TextBox Text="{Binding OrderNumber}" Watermark="Введите номер заказ-наряда"/>
+				</StackPanel>
+
+				<!-- Мастер -->
+				<StackPanel>
+					<TextBlock Text="Мастер:" FontSize="14" Margin="0,0,0,5"/>
+					<TextBox Text="{Binding MasterName}" Watermark="Введите ФИО мастера"/>
+				</StackPanel>
+
+				<!-- Даты производственного процесса -->
+				<Expander Header="График производства" IsExpanded="True">
+					<StackPanel Spacing="10" Margin="0,10,0,0">
+						<Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto">
+							<TextBlock Grid.Row="0" Grid.Column="0" Text="Дата изготовления:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+							<DatePicker Grid.Row="0" Grid.Column="1" SelectedDate="{Binding ProductionDate,Converter= {StaticResource DateTimeConverter}}"/>
+
+							<TextBlock Grid.Row="1" Grid.Column="0" Text="Дата отладки:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+							<DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding DebuggingDate,Converter= {StaticResource DateTimeConverter}}"/>
+
+							<TextBlock Grid.Row="2" Grid.Column="0" Text="Дата приемки:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+							<DatePicker Grid.Row="2" Grid.Column="1" SelectedDate="{Binding AcceptanceDate,Converter= {StaticResource DateTimeConverter}}"/>
+
+							<TextBlock Grid.Row="3" Grid.Column="0" Text="Дата упаковки:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+							<DatePicker Grid.Row="3" Grid.Column="1" SelectedDate="{Binding PackagingDate,Converter= {StaticResource DateTimeConverter}}"/>
+						</Grid>
+					</StackPanel>
+				</Expander>
+
+				<!-- Примечания -->
+				<StackPanel>
+					<TextBlock Text="Примечания:" FontSize="14" Margin="0,0,0,5"/>
+					<TextBox Text="{Binding Notes}" AcceptsReturn="True" TextWrapping="Wrap" Height="100"/>
+				</StackPanel>
+
+				<!-- Статус и сообщения -->
+				<TextBlock Text="{Binding StatusMessage}"
+                           Foreground="{Binding HasError, Converter={StaticResource BoolToValue}, ConverterParameter='#FF7043,#4CAF9D'}"
+                           IsVisible="{Binding ShowStatusMessage}"/>
+			</StackPanel>
+		</ScrollViewer>
+
+		<!-- Кнопки -->
+		<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0" Spacing="10">
+			<Button Content="Отмена" Width="100" Command="{Binding CancelCommand}"/>
+			<Button Content="Создать" Width="100"
+                    Background="#00ACC1" Foreground="White"
+                    Command="{Binding ConfirmCommand}"
+                    IsEnabled="{Binding CanCreate}"/>
+		</StackPanel>
+	</Grid>
+</Window>

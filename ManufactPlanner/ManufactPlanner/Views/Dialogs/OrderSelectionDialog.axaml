@@ -1,0 +1,54 @@
+<!-- Views/Dialogs/OrderSelectionDialog.axaml -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="400"
+        x:Class="ManufactPlanner.Views.Dialogs.OrderSelectionDialog"
+        Title="Выбор заказа"
+        Width="500" Height="400"
+        WindowStartupLocation="CenterOwner"
+        x:DataType="vm:OrderSelectionDialogViewModel"
+        xmlns:vm="using:ManufactPlanner.ViewModels.Dialogs">
+
+	<Grid RowDefinitions="Auto,*,Auto" Margin="20">
+		<!-- Заголовок и строка поиска -->
+		<StackPanel Grid.Row="0" Spacing="15">
+			<TextBlock Text="Выберите заказ для документа" FontSize="16" FontWeight="SemiBold"/>
+			<TextBox Text="{Binding SearchText}" Watermark="Поиск по номеру или названию..." Margin="0,0,0,10"/>
+		</StackPanel>
+
+		<!-- Список заказов -->
+		<Border Grid.Row="1" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4">
+			<ScrollViewer>
+				<ListBox ItemsSource="{Binding FilteredOrders}"
+                         SelectedItem="{Binding SelectedOrder}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Grid ColumnDefinitions="Auto,*">
+								<TextBlock Grid.Column="0"
+                                           Text="{Binding OrderNumber}"
+                                           FontWeight="SemiBold"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,10,0"/>
+								<TextBlock Grid.Column="1"
+                                           Text="{Binding Name}"
+                                           TextWrapping="Wrap"
+                                           VerticalAlignment="Center"/>
+							</Grid>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</ScrollViewer>
+		</Border>
+
+		<!-- Кнопки -->
+		<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0" Spacing="10">
+			<Button Content="Отмена" Width="100" Command="{Binding CancelCommand}"/>
+			<Button Content="Выбрать" Width="100"
+                    Background="#00ACC1" Foreground="White"
+                    Command="{Binding ConfirmCommand}"
+                    IsEnabled="{Binding IsOrderSelected}"/>
+		</StackPanel>
+	</Grid>
+</Window>

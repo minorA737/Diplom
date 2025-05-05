@@ -6,12 +6,12 @@
              x:Class="ManufactPlanner.Views.DocumentationPage"
              x:DataType="vm:DocumentationViewModel"
              xmlns:vm="using:ManufactPlanner.ViewModels"
-			 xmlns:converters="using:ManufactPlanner.Converters">
+             xmlns:converters="using:ManufactPlanner.Converters">
 	<UserControl.Resources>
-		<converters:BoolToValueConverter x:Key="BoolToValue"/>
-		<converters:IsGreaterThanConverter x:Key="IsGreaterThan"/>
-		<converters:StringEqualsValueConverter x:Key="StringEqualsValue"/>
-		<converters:MarginConverter x:Key="MarginConverter"/>
+		<converters:BoolToValueConverterDoc x:Key="BoolToValue"/>
+		<converters:IsGreaterThanConverterDoc x:Key="IsGreaterThan"/>
+		<converters:StringEqualsValueConverterDoc x:Key="StringEqualsValue"/>
+		<converters:MarginConverterDoc x:Key="MarginConverter"/>
 	</UserControl.Resources>
 
 	<Grid RowDefinitions="Auto,*">
@@ -52,7 +52,7 @@
 					<TextBlock Grid.Column="2" Text="Заказ" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
 					<TextBlock Grid.Column="3" Text="Дата создания" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
 					<TextBlock Grid.Column="4" Text="Автор" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
-					<TextBlock Grid.Column="5" Text="▾" FontSize="12" Foreground="#666" FontWeight="Medium" Margin="5,0" VerticalAlignment="Center"/>
+					<TextBlock Grid.Column="5" Text="Действия" FontSize="12" Foreground="#666" FontWeight="Medium" Margin="5,0" VerticalAlignment="Center"/>
 				</Grid>
 
 				<!-- Линия разделителя -->
@@ -77,17 +77,23 @@
 
 										<!-- Меню действий -->
 										<StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="10" Margin="5,0" VerticalAlignment="Center">
-											<Button Width="24" Height="24" CornerRadius="12" Background="#F1F3F4"
-												Command="{Binding $parent[ItemsControl].((vm:DocumentationViewModel)DataContext).DownloadCommand}"
-												CommandParameter="{Binding Id}"
-												ToolTip.Tip="Скачать документ">
+											<Button Width="30" Height="30" CornerRadius="15" Background="#F1F3F4"
+                                                Command="{Binding $parent[ItemsControl].((vm:DocumentationViewModel)DataContext).DownloadCommand}"
+                                                CommandParameter="{Binding Id}"
+                                                ToolTip.Tip="Скачать документ">
 												<TextBlock Text="↓" FontSize="12" Foreground="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 											</Button>
-											<Button Width="24" Height="24" CornerRadius="12" Background="#F1F3F4"
-												Command="{Binding $parent[ItemsControl].((vm:DocumentationViewModel)DataContext).ViewCommand}"
-												CommandParameter="{Binding Id}"
-												ToolTip.Tip="Просмотреть документ">
+											<Button Width="30" Height="30" CornerRadius="15" Background="#F1F3F4"
+                                                Command="{Binding $parent[ItemsControl].((vm:DocumentationViewModel)DataContext).ViewCommand}"
+                                                CommandParameter="{Binding Id}"
+                                                ToolTip.Tip="Просмотреть документ">
 												<TextBlock Text="👁" FontSize="12" Foreground="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+											</Button>
+											<Button Width="30" Height="30" CornerRadius="15" Background="#F1F3F4"
+                                                Command="{Binding $parent[ItemsControl].((vm:DocumentationViewModel)DataContext).DeleteDocumentCommand}"
+                                                CommandParameter="{Binding Id}"
+                                                ToolTip.Tip="Удалить документ">
+												<TextBlock Text="🗑" FontSize="12" Foreground="#FF7043" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 											</Button>
 										</StackPanel>
 
@@ -105,10 +111,12 @@
 						<TextBlock Text="Загрузка документов..." Margin="0,10,0,0" HorizontalAlignment="Center"/>
 					</StackPanel>
 
-					<!-- Сообщение "Нет документов" -->
-					<!-- <TextBlock  Text="Документы не найдены"
-							HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#666"
-							IsVisible="{Binding Documents.Count, Converter={StaticResource IsGreaterThan}, ConverterParameter='0', Converter2={StaticResource BoolToValue}, ConverterParameter2='False,True'}"/> -->
+					<!-- Сообщение, когда нет документов -->
+					<TextBlock Text="Документы не найдены"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Foreground="#666"
+                               IsVisible="{Binding !HasDocuments}"/>
 				</Grid>
 
 				<!-- Статусное сообщение -->

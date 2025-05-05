@@ -1,4 +1,5 @@
 ﻿using ManufactPlanner.Models;
+using ManufactPlanner.Services;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -6,12 +7,12 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Microsoft.EntityFrameworkCore;
-using QuestPDF.Fluent;
-using QuestPDF.Helpers;
-using QuestPDF.Infrastructure;
+using Avalonia.Controls;
+using ManufactPlanner.ViewModels.Dialogs;
+using ManufactPlanner.Views.Dialogs;
 
 namespace ManufactPlanner.ViewModels
 {
@@ -19,6 +20,8 @@ namespace ManufactPlanner.ViewModels
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
         private readonly PostgresContext _dbContext;
+        private readonly DocumentationService _documentationService;
+        private readonly Window _parentWindow;
 
         private ObservableCollection<DocumentViewModel> _documents;
         private bool _isLoading = false;
@@ -27,10 +30,16 @@ namespace ManufactPlanner.ViewModels
         private string _statusMessage = string.Empty;
         private bool _showStatusMessage = false;
 
+        public bool HasDocuments => Documents != null && Documents.Count > 0;
+
         public ObservableCollection<DocumentViewModel> Documents
         {
             get => _documents;
-            set => this.RaiseAndSetIfChanged(ref _documents, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _documents, value);
+                this.RaisePropertyChanged(nameof(HasDocuments));
+            }
         }
 
         public bool IsLoading
@@ -62,7 +71,11 @@ namespace ManufactPlanner.ViewModels
         public string StatusMessage
         {
             get => _statusMessage;
-            set => this.RaiseAndSetIfChanged(ref _statusMessage, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _statusMessage, value);
+                ShowStatusMessage = !string.IsNullOrEmpty(value);
+            }
         }
 
         public bool ShowStatusMessage
@@ -71,37 +84,46 @@ namespace ManufactPlanner.ViewModels
             set => this.RaiseAndSetIfChanged(ref _showStatusMessage, value);
         }
 
-        public ICommand DownloadCommand { get; }
-        public ICommand ViewCommand { get; }
-        public ICommand AddDocumentCommand { get; }
-        public ICommand RefreshCommand { get; }
+        public ReactiveCommand<int, Unit> DownloadCommand { get; }
+        public ReactiveCommand<int, Unit> ViewCommand { get; }
+        public ReactiveCommand<Unit, Unit> AddDocumentCommand { get; }
+        public ReactiveCommand<Unit, Unit> RefreshCommand { get; }
+        public ReactiveCommand<int, Unit> DeleteDocumentCommand { get; }
 
         private ObservableCollection<DocumentViewModel> _allDocuments;
 
-        public DocumentationViewModel(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext)
+
+
+        public DocumentationViewModel(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext, Window parentWindow)
         {
             _mainWindowViewModel = mainWindowViewModel;
             _dbContext = dbContext;
+            _parentWindow = parentWindow;
+            _documentationService = new DocumentationService(dbContext);
 
+            // Создаем команды
             DownloadCommand = ReactiveCommand.CreateFromTask<int>(DownloadDocumentAsync);
             ViewCommand = ReactiveCommand.CreateFromTask<int>(ViewDocumentAsync);
-            AddDocumentCommand = ReactiveCommand.Create(AddDocument);
+            AddDocumentCommand = ReactiveCommand.CreateFromTask(AddDocumentAsync);
             RefreshCommand = ReactiveCommand.CreateFromTask(LoadDocumentsAsync);
+            DeleteDocumentCommand = ReactiveCommand.CreateFromTask<int>(DeleteDocumentAsync);
 
             // Инициализация коллекции
             Documents = new ObservableCollection<DocumentViewModel>();
 
             // Асинхронно загружаем документы
-            LoadDocumentsAsync().ConfigureAwait(false);
+            System.Threading.Tasks.Task.Run(() => LoadDocumentsAsync()).ConfigureAwait(false);
         }
 
         // Конструктор для дизайнера
         public DocumentationViewModel()
         {
-            DownloadCommand = ReactiveCommand.CreateFromTask<int>(DownloadDocumentAsync);
-            ViewCommand = ReactiveCommand.CreateFromTask<int>(ViewDocumentAsync);
-            AddDocumentCommand = ReactiveCommand.Create(AddDocument);
-            RefreshCommand = ReactiveCommand.CreateFromTask(LoadDocumentsAsync);
+            var canExecute = Observable.Return(true);
+            DownloadCommand = ReactiveCommand.Create<int>(_ => { }, canExecute);
+            ViewCommand = ReactiveCommand.Create<int>(_ => { }, canExecute);
+            AddDocumentCommand = ReactiveCommand.Create(() => { }, canExecute);
+            RefreshCommand = ReactiveCommand.Create(() => { }, canExecute);
+            DeleteDocumentCommand = ReactiveCommand.Create<int>(_ => { }, canExecute);
 
             // Для отображения в дизайнере
             LoadSampleData();
@@ -112,70 +134,88 @@ namespace ManufactPlanner.ViewModels
             try
             {
                 IsLoading = true;
+                StatusMessage = "Загрузка документов...";
 
-                if (_dbContext != null)
+                if (_dbContext != null && _documentationService != null)
                 {
-                    // Загрузка данных из базы
-                    var designDocs = await _dbContext.DesignDocumentations
-                        .Include(d => d.OrderPosition)
-                            .ThenInclude(op => op.Order)
-                        .ToListAsync();
-
+                    // Загрузка данных из таблицы Attachments с включением информации о задаче, позиции заказа и заказе
+                    var attachments = await _documentationService.GetDocumentsAsync();
                     var result = new List<DocumentViewModel>();
-                    int counter = 0;
 
-                    foreach (var doc in designDocs)
+                    foreach (var attachment in attachments)
                     {
-                        var orderNumber = doc.OrderPosition?.Order?.OrderNumber ?? "Не указан";
-                        var productName = doc.OrderPosition?.ProductName ?? "Не указан";
+                        // Получаем связанные данные
+                        var orderNumber = attachment.Task?.OrderPosition?.Order?.OrderNumber ?? "Не указан";
+                        var productName = attachment.Task?.OrderPosition?.ProductName ?? "Без описания";
+                        var userName = attachment.UploadedByNavigation?.FirstName + " " +
+                                       attachment.UploadedByNavigation?.LastName ?? "Система";
 
-                        // Определяем типы документации и даты создания
-                        AddDocumentIfExists(result, doc.TechnicalTaskDate, "Техническое задание", orderNumber, productName, counter++);
-                        AddDocumentIfExists(result, doc.ComponentListDate, "Спецификация", orderNumber, productName, counter++);
-                        AddDocumentIfExists(result, doc.ProductCompositionDate, "Состав изделия", orderNumber, productName, counter++);
-                        AddDocumentIfExists(result, doc.OperationManualDate, "Руководство по эксплуатации", orderNumber, productName, counter++);
-                        AddDocumentIfExists(result, doc.ManualDate, "Методичка", orderNumber, productName, counter++);
-                        AddDocumentIfExists(result, doc.PassportDate, "Паспорт", orderNumber, productName, counter++);
-                        AddDocumentIfExists(result, doc.DesignDocsDate, "Конструкторская документация", orderNumber, productName, counter++);
-                        AddDocumentIfExists(result, doc.PrintingFileDate, "Файл печати", orderNumber, productName, counter++);
-                        AddDocumentIfExists(result, doc.SoftwareDate, "Программное обеспечение", orderNumber, productName, counter++);
+                        // Определяем тип документа по расширению или MIME-типу
+                        string docType = DetermineDocumentType(attachment.FileName, attachment.FileType);
+
+                        result.Add(new DocumentViewModel
+                        {
+                            Id = attachment.Id,
+                            Name = attachment.FileName,
+                            Description = productName,
+                            Type = docType,
+                            OrderNumber = orderNumber,
+                            CreatedDate = attachment.UploadedAt?.ToString("dd.MM.yyyy HH:mm") ?? "Не указана",
+                            Author = userName,
+                            IsAlternate = (result.Count % 2 == 0)
+                        });
                     }
 
                     _allDocuments = new ObservableCollection<DocumentViewModel>(result);
                     Documents = new ObservableCollection<DocumentViewModel>(_allDocuments);
+
+                    if (_allDocuments.Count == 0)
+                    {
+                        StatusMessage = "Документов не найдено";
+                    }
+                    else
+                    {
+                        StatusMessage = $"Загружено документов: {_allDocuments.Count}";
+                    }
                 }
                 else
                 {
                     LoadSampleData();
+                    StatusMessage = "Работа в режиме демонстрации (без подключения к БД)";
                 }
             }
             catch (Exception ex)
             {
                 StatusMessage = $"Ошибка загрузки документов: {ex.Message}";
-                ShowStatusMessage = true;
             }
             finally
             {
                 IsLoading = false;
             }
         }
-
-        private void AddDocumentIfExists(List<DocumentViewModel> list, DateOnly? date, string type, string orderNumber, string productName, int id)
+        private string DetermineDocumentType(string fileName, string fileType)
         {
-            if (date.HasValue)
+            // Определение типа документа по расширению или MIME-типу
+            if (fileType?.Contains("pdf", StringComparison.OrdinalIgnoreCase) == true ||
+                fileName?.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase) == true)
             {
-                list.Add(new DocumentViewModel
-                {
-                    Id = id,
-                    Name = $"{type} - {productName}",
-                    Description = $"Создан {date.Value.ToString("dd.MM.yyyy")}",
-                    Type = type,
-                    OrderNumber = orderNumber,
-                    CreatedDate = date.Value.ToString("dd.MM.yyyy"),
-                    Author = "Система",
-                    IsAlternate = (id % 2 == 0)
-                });
+                // Анализируем имя файла для определения типа документа
+                string lowerFileName = fileName.ToLower();
+                if (lowerFileName.Contains("тз") || lowerFileName.Contains("техническое задание") || lowerFileName.Contains("technical"))
+                    return "Техническое задание";
+                else if (lowerFileName.Contains("спецификац") || lowerFileName.Contains("специф") || lowerFileName.Contains("specification"))
+                    return "Спецификация";
+                else if (lowerFileName.Contains("руководство") || lowerFileName.Contains("manual") || lowerFileName.Contains("инструкц"))
+                    return "Руководство";
+                else if (lowerFileName.Contains("чертеж") || lowerFileName.Contains("drawing"))
+                    return "Чертеж";
+                else if (lowerFileName.Contains("схем") || lowerFileName.Contains("scheme") || lowerFileName.Contains("diagram"))
+                    return "Схема";
+                else
+                    return "PDF документ";
             }
+
+            return "Документ";
         }
 
         private void LoadSampleData()
@@ -205,7 +245,8 @@ namespace ManufactPlanner.ViewModels
                 filteredDocs = filteredDocs.Where(d =>
                     d.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
                     d.Description.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
-                    d.OrderNumber.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
+                    d.OrderNumber.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
+                    d.Author.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
             }
 
             // Фильтрация по типу
@@ -219,6 +260,9 @@ namespace ManufactPlanner.ViewModels
             }
 
             Documents = new ObservableCollection<DocumentViewModel>(filteredDocs);
+            StatusMessage = Documents.Count > 0
+                ? $"Найдено документов: {Documents.Count}"
+                : "Документов не найдено";
         }
 
         private string GetSelectedType()
@@ -239,83 +283,38 @@ namespace ManufactPlanner.ViewModels
             try
             {
                 IsLoading = true;
-                StatusMessage = "Создание документа...";
-                ShowStatusMessage = true;
+                StatusMessage = "Подготовка документа к скачиванию...";
 
-                var document = _allDocuments.FirstOrDefault(d => d.Id == documentId);
-                if (document == null)
+                // Получаем документ из базы
+                var attachment = await _documentationService.GetDocumentByIdAsync(documentId);
+                if (attachment == null || attachment.FileContent == null)
                 {
-                    StatusMessage = "Документ не найден";
+                    StatusMessage = "Ошибка: Документ не найден или не содержит данных";
                     return;
                 }
 
-                // Здесь должна быть логика создания PDF
-                string fileName = $"{document.Type}_{document.OrderNumber}_{DateTime.Now:yyyyMMdd}.pdf";
-                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                string filePath = Path.Combine(desktopPath, fileName);
+                // Открываем диалог выбора места сохранения
+                string defaultFileName = attachment.FileName ?? $"document_{documentId}.pdf";
+                string filePath = await _documentationService.SaveFilePickerAsync(_parentWindow, defaultFileName);
 
-                // Генерируем PDF с помощью QuestPDF
-                await System.Threading.Tasks.Task.Run(() => {
-                    QuestPDF.Settings.License = LicenseType.Community;
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    StatusMessage = "Скачивание отменено";
+                    return;
+                }
 
-                    Document.Create(container =>
-                    {
-                        container.Page(page =>
-                        {
-                            page.Size(PageSizes.A4);
-                            page.Margin(2, QuestPDF.Infrastructure.Unit.Centimetre);
-                            page.PageColor(Colors.White);
-                            page.DefaultTextStyle(x => x.FontSize(12));
+                // Сохраняем файл
+                await _documentationService.SaveDocumentToFileAsync(attachment, filePath);
 
-                            page.Header()
-                                .Text($"{document.OrderNumber} - {document.Type}")
-                                .SemiBold().FontSize(16).FontColor(Colors.Blue.Medium);
-
-                            page.Content()
-                                .PaddingVertical(1, QuestPDF.Infrastructure.Unit.Centimetre)
-                                .Column(x =>
-                                {
-                                    x.Spacing(20);
-
-                                    x.Item().Text($"Наименование: {document.Name}").FontSize(14);
-                                    x.Item().Text($"Описание: {document.Description}");
-                                    x.Item().Text($"Дата создания: {document.CreatedDate}");
-                                    x.Item().Text($"Автор: {document.Author}");
-
-                                    // Здесь нужно будет добавить содержимое документа из БД
-                                    x.Item().Background(Colors.Grey.Lighten3).Padding(10).Column(column =>
-                                    {
-                                        column.Item().Text("Содержимое документа:").Bold();
-                                        column.Item().Text("Документ представляет собой техническую спецификацию для разработки изделия.");
-                                        column.Item().Text("Включает в себя описание требований, параметры и характеристики.");
-                                    });
-                                });
-
-                            page.Footer()
-                                .AlignCenter()
-                                .Text(x =>
-                                {
-                                    x.Span("Страница ");
-                                    x.CurrentPageNumber();
-                                    x.Span(" из ");
-                                    x.TotalPages();
-                                    x.Span($" - Создано: {DateTime.Now:dd.MM.yyyy HH:mm}");
-                                });
-                        });
-                    })
-                    .GeneratePdf(filePath);
-                });
-
-                StatusMessage = $"Документ сохранен: {filePath}";
+                StatusMessage = $"Документ успешно сохранен: {Path.GetFileName(filePath)}";
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Ошибка при создании документа: {ex.Message}";
+                StatusMessage = $"Ошибка при скачивании документа: {ex.Message}";
             }
             finally
             {
                 IsLoading = false;
-                ShowStatusMessage = true;
             }
         }
 
@@ -323,27 +322,30 @@ namespace ManufactPlanner.ViewModels
         {
             try
             {
-                // Сначала создаем PDF
-                await DownloadDocumentAsync(documentId);
+                IsLoading = true;
+                StatusMessage = "Подготовка документа для просмотра...";
 
-                // Затем открываем его через системное приложение
-                var document = _allDocuments.FirstOrDefault(d => d.Id == documentId);
-                if (document != null)
+                // Получаем документ из базы
+                var attachment = await _documentationService.GetDocumentByIdAsync(documentId);
+                if (attachment == null || attachment.FileContent == null)
                 {
-                    string fileName = $"{document.Type}_{document.OrderNumber}_{DateTime.Now:yyyyMMdd}.pdf";
-                    string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                    string filePath = Path.Combine(desktopPath, fileName);
-
-                    // Открываем файл через системное приложение
-                    var psi = new System.Diagnostics.ProcessStartInfo
-                    {
-                        FileName = filePath,
-                        UseShellExecute = true
-                    };
-                    System.Diagnostics.Process.Start(psi);
-
-                    StatusMessage = "Документ открыт для просмотра";
+                    StatusMessage = "Ошибка: Документ не найден или не содержит данных";
+                    return;
                 }
+
+                // Сохраняем во временный файл и открываем его
+                string tempPath = Path.Combine(Path.GetTempPath(), attachment.FileName ?? $"document_{documentId}.pdf");
+                await _documentationService.SaveDocumentToFileAsync(attachment, tempPath);
+
+                // Открываем файл через системную программу просмотра PDF
+                var psi = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = tempPath,
+                    UseShellExecute = true
+                };
+                System.Diagnostics.Process.Start(psi);
+
+                StatusMessage = "Документ открыт для просмотра";
             }
             catch (Exception ex)
             {
@@ -351,16 +353,156 @@ namespace ManufactPlanner.ViewModels
             }
             finally
             {
-                ShowStatusMessage = true;
+                IsLoading = false;
             }
         }
 
-        private void AddDocument()
+        // Новое поле для хранения выбранного заказа
+        private OrderListItem _selectedOrder;
+        private int? _selectedOrderPositionId;
+
+        // Модифицируйте метод AddDocumentAsync
+        private async System.Threading.Tasks.Task AddDocumentAsync()
         {
-            // Здесь будет логика добавления нового документа
-            // Возможно, открытие диалогового окна для ввода данных
-            StatusMessage = "Функция добавления документа в разработке";
-            ShowStatusMessage = true;
+            try
+            {
+                IsLoading = true;
+                StatusMessage = "Выберите документ для загрузки...";
+
+                if (_parentWindow == null)
+                {
+                    StatusMessage = "Ошибка: не удалось открыть диалог выбора файла";
+                    return;
+                }
+
+                // Открываем диалог выбора файла
+                var (fileName, content, fileType) = await _documentationService.OpenFilePickerAsync(_parentWindow);
+
+                if (content == null || string.IsNullOrEmpty(fileName))
+                {
+                    StatusMessage = "Загрузка отменена";
+                    return;
+                }
+
+                // Открываем диалог выбора заказа
+                var orderDialog = new OrderSelectionDialog(_dbContext);
+                await orderDialog.ShowDialog(_parentWindow);
+
+                var dialogViewModel = orderDialog.DataContext as OrderSelectionDialogViewModel;
+                if (dialogViewModel != null && dialogViewModel.DialogResult && dialogViewModel.SelectedOrder != null)
+                {
+                    _selectedOrder = dialogViewModel.SelectedOrder;
+
+                    // Если заказ выбран, предлагаем выбрать позицию заказа
+                    var orderPositionId = await SelectOrderPositionAsync(_selectedOrder.Id);
+                    _selectedOrderPositionId = orderPositionId;
+                }
+                else
+                {
+                    StatusMessage = "Выбор заказа отменен";
+                    return;
+                }
+
+                // Получаем текущего пользователя из MainWindowViewModel
+                var currentUserId = _mainWindowViewModel.CurrentUserId;
+                if (currentUserId == Guid.Empty)
+                {
+                    // Используем значение по умолчанию, если ID не определен
+                    currentUserId = new Guid("00000000-0000-0000-0000-000000000001");
+                }
+
+                // Загружаем файл в базу данных с привязкой к заказу
+                bool success = await _documentationService.UploadDocumentAsync(
+                    fileName,
+                    content,
+                    _selectedOrder.Id,
+                    _selectedOrderPositionId,
+                    fileType,
+                    currentUserId);
+
+                if (success)
+                {
+                    StatusMessage = $"Документ '{fileName}' успешно загружен для заказа {_selectedOrder.OrderNumber}";
+                    // Обновляем список документов
+                    await LoadDocumentsAsync();
+                }
+                else
+                {
+                    StatusMessage = "Ошибка при загрузке документа";
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Ошибка при загрузке документа: {ex.Message}";
+                Console.WriteLine($"Подробности исключения: {ex}");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        // Метод для выбора позиции заказа
+        private async Task<int?> SelectOrderPositionAsync(int orderId)
+        {
+            try
+            {
+                // Получаем позиции заказа
+                var orderPositions = await _documentationService.GetOrderPositionsAsync(orderId);
+
+                if (orderPositions == null || orderPositions.Count == 0)
+                {
+                    // Заказ не имеет позиций
+                    return null;
+                }
+
+                // Создаем и показываем диалог выбора позиции заказа
+                var positionDialog = new OrderPositionSelectionDialog(orderPositions);
+                await positionDialog.ShowDialog(_parentWindow);
+
+                var positionViewModel = positionDialog.DataContext as OrderPositionSelectionDialogViewModel;
+                if (positionViewModel != null && positionViewModel.DialogResult && positionViewModel.SelectedOrderPosition != null)
+                {
+                    return positionViewModel.SelectedOrderPosition.Id;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при выборе позиции заказа: {ex.Message}");
+                return null;
+            }
+        }
+
+        private async System.Threading.Tasks.Task DeleteDocumentAsync(int documentId)
+        {
+            try
+            {
+                IsLoading = true;
+                StatusMessage = "Удаление документа...";
+
+                bool success = await _documentationService.DeleteDocumentAsync(documentId);
+
+                if (success)
+                {
+                    StatusMessage = "Документ успешно удален";
+                    // Обновляем список документов
+                    await LoadDocumentsAsync();
+                }
+                else
+                {
+                    StatusMessage = "Ошибка при удалении документа";
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Ошибка при удалении документа: {ex.Message}";
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
     }
 

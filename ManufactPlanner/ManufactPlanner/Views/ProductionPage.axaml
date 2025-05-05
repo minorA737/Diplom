@@ -14,9 +14,44 @@
 		<converters:MarginConverter x:Key="MarginConverter"/>
 	</UserControl.Resources>
 
-	<Grid RowDefinitions="Auto,Auto,*">
-		<!-- Заголовок страницы -->
-		<TextBlock Grid.Row="0" Text="Производство" FontSize="20" FontWeight="SemiBold" Foreground="#333333" Margin="20,20,0,0"/>
+	<UserControl.Styles>
+		<!-- Стили для ComboBox -->
+		<Style Selector="ComboBox">
+			<Setter Property="FontSize" Value="12"/>
+			<Setter Property="Height" Value="30"/>
+			<Setter Property="CornerRadius" Value="13"/>
+			<Setter Property="Background" Value="#F1F3F4"/>
+			<Setter Property="BorderBrush" Value="#E0E0E0"/>
+			<Setter Property="BorderThickness" Value="1"/>
+		</Style>
+		<Style Selector="ComboBoxItem">
+			<Setter Property="FontSize" Value="12"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+	</UserControl.Styles>
+
+	<Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+		<!-- Заголовок страницы и поиск -->
+		<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="20,20,20,0">
+			<TextBlock Grid.Column="0" Text="Производство" FontSize="20" FontWeight="SemiBold" Foreground="#333333"/>
+
+			<!-- Поле поиска -->
+			<Border Grid.Column="1" Width="200" Height="36" CornerRadius="18" Background="#F1F3F4"
+                    BorderBrush="#E0E0E0" BorderThickness="1" Margin="0,0,0,0">
+				<Grid ColumnDefinitions="Auto,*">
+					<TextBlock Grid.Column="0" Text="🔍" FontSize="14" Foreground="#9E9E9E" Margin="12,0,5,0"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+					<TextBox Grid.Column="1" Text="{Binding SearchText}" Watermark="Поиск..."
+                             BorderThickness="0" Background="Transparent"
+                             VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
+                             VerticalAlignment="Center" Height="36">
+						<ToolTip.Tip>
+							<TextBlock Text="Введите номер задания, наименование или мастера для поиска"/>
+						</ToolTip.Tip>
+					</TextBox>
+				</Grid>
+			</Border>
+		</Grid>
 
 		<!-- Карточки статистики -->
 		<Grid Grid.Row="1" Margin="20,20,20,0" ColumnDefinitions="*,*,*" RowDefinitions="Auto">
@@ -69,9 +104,65 @@
 			</Border>
 		</Grid>
 
+		<!-- Панель фильтров -->
+		<Border Grid.Row="2" Height="50" Background="White" CornerRadius="8" Margin="20,20,20,0"
+                BoxShadow="0 2 3 #10000000">
+			<StackPanel Orientation="Horizontal" Margin="20,10" Spacing="15" HorizontalAlignment="Center">
+				<!-- Фильтр статуса -->
+				<ComboBox Width="120" ItemsSource="{Binding Statuses}"
+                          SelectedItem="{Binding SelectedStatus}"
+                          PlaceholderText="Статус">
+					<ToolTip.Tip>
+						<TextBlock Text="Фильтр по статусу производства"/>
+					</ToolTip.Tip>
+				</ComboBox>
+
+				<!-- Фильтр мастера -->
+				<ComboBox Width="130" ItemsSource="{Binding Masters}"
+                          SelectedItem="{Binding SelectedMaster}"
+                          PlaceholderText="Все мастера">
+					<ToolTip.Tip>
+						<TextBlock Text="Фильтр по мастеру"/>
+					</ToolTip.Tip>
+				</ComboBox>
+
+				<!-- Фильтр периода -->
+				<ComboBox Width="130" ItemsSource="{Binding Periods}"
+                          SelectedItem="{Binding SelectedPeriod}"
+                          PlaceholderText="Период">
+					<ToolTip.Tip>
+						<TextBlock Text="Фильтр по периоду производства"/>
+					</ToolTip.Tip>
+				</ComboBox>
+
+				<!-- Кнопка обновления -->
+				<Button Width="30" Height="30" CornerRadius="15" Background="#00ACC1"
+                        Command="{Binding RefreshCommand}">
+					<TextBlock Text="⟳" FontSize="14" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					<ToolTip.Tip>
+						<TextBlock Text="Обновить данные"/>
+					</ToolTip.Tip>
+				</Button>
+
+				<!-- Кнопка создания производственного задания -->
+				<Button Width="180" Height="36" Background="#00ACC1" CornerRadius="18"
+                        Command="{Binding CreateProductionOrderCommand}">
+					<TextBlock Text="+ Создать заказ-наряд" FontSize="12" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					<ToolTip.Tip>
+						<TextBlock Text="Создать новый заказ-наряд на производство"/>
+					</ToolTip.Tip>
+				</Button>
+			</StackPanel>
+		</Border>
+
 		<!-- Таблица производственных заданий -->
-		<Border Grid.Row="2" Margin="20,20,20,20" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+		<Border Grid.Row="3" Margin="20,20,20,0" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
 			<Grid RowDefinitions="Auto,*">
+				<!-- Индикатор загрузки -->
+				<ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoading}"
+                           VerticalAlignment="Center" HorizontalAlignment="Center"
+                           Width="200" Height="10"/>
+
 				<!-- Заголовок таблицы -->
 				<Grid Grid.Row="0" Background="#F8F9FA" Height="40" ColumnDefinitions="150,200,150,100,100,*">
 					<TextBlock Grid.Column="0" Text="№ заказ-наряда" FontSize="12" Foreground="#666" FontWeight="Medium" Margin="20,0,0,0" VerticalAlignment="Center"/>
@@ -86,43 +177,79 @@
 				<Rectangle Grid.Row="0" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom" IsHitTestVisible="False"/>
 
 				<!-- Список производственных заданий -->
-				<ScrollViewer Grid.Row="1">
-					<ItemsControl ItemsSource="{Binding ProductionItems}">
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<Grid Height="60" ColumnDefinitions="150,200,150,100,100,*" Background="{Binding IsAlternate, Converter={StaticResource BoolToValue}, ConverterParameter='White,#F9FAFB'}">
-									<TextBlock Grid.Column="0" Text="{Binding OrderNumber}" FontSize="13" Foreground="#333" Margin="20,0,0,0" VerticalAlignment="Center"/>
-									<StackPanel Grid.Column="1" VerticalAlignment="Center">
-										<TextBlock Text="{Binding Name}" FontSize="13" Foreground="#333" TextWrapping="Wrap"/>
-										<TextBlock Text="{Binding OrderReference}" FontSize="11" Foreground="#666"/>
-									</StackPanel>
-									<TextBlock Grid.Column="2" Text="{Binding Master}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
-									<TextBlock Grid.Column="3" Text="{Binding StartDate}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
-									<TextBlock Grid.Column="4" Text="{Binding EndDate}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
+				<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+					<Grid>
+						<ItemsControl ItemsSource="{Binding ProductionItems}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Grid Height="60" ColumnDefinitions="150,200,150,100,100,*" Background="{Binding IsAlternate, Converter={StaticResource BoolToValue}, ConverterParameter='White,#F9FAFB'}">
+										<TextBlock Grid.Column="0" Text="{Binding OrderNumber}" FontSize="13" Foreground="#333" Margin="20,0,0,0" VerticalAlignment="Center"/>
+										<StackPanel Grid.Column="1" VerticalAlignment="Center">
+											<TextBlock Text="{Binding Name}" FontSize="13" Foreground="#333" TextWrapping="Wrap"/>
+											<TextBlock Text="{Binding OrderReference}" FontSize="11" Foreground="#666"/>
+										</StackPanel>
+										<TextBlock Grid.Column="2" Text="{Binding Master}" FontSize="12" Foreground="#333" VerticalAlignment="Center" TextWrapping="Wrap"/>
+										<TextBlock Grid.Column="3" Text="{Binding StartDate}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
+										<TextBlock Grid.Column="4" Text="{Binding EndDate}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
 
-									<!-- Статус производства -->
-									<StackPanel Grid.Column="5" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0">
-										<Border Height="24" CornerRadius="12" Padding="10,0" Background="{Binding StatusColor}" Opacity="0.2">
-											<TextBlock Text="{Binding Status}" FontSize="12" Foreground="{Binding StatusColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-										</Border>
+										<!-- Статус производства -->
+										<StackPanel Grid.Column="5" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0">
+											<Border Height="24" CornerRadius="12" Padding="10,0" Background="{Binding StatusColor}" Opacity="0.2">
+												<TextBlock Text="{Binding Status}" FontSize="12" Foreground="{Binding StatusColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+											</Border>
 
-										<!-- Прогресс выполнения -->
-										<Grid Width="120" Height="4" Margin="15,0,0,0" VerticalAlignment="Center">
-											<Border Background="#E0E0E0" Width="120" Height="4" CornerRadius="2"/>
-											<Border Background="{Binding StatusColor}" Width="{Binding ProgressWidth}" Height="4" HorizontalAlignment="Left" CornerRadius="2"/>
-										</Grid>
+											<!-- Прогресс выполнения -->
+											<Grid Width="120" Height="4" Margin="15,0,0,0" VerticalAlignment="Center">
+												<Border Background="#E0E0E0" Width="120" Height="4" CornerRadius="2"/>
+												<Border Background="{Binding StatusColor}" Width="{Binding ProgressWidth}" Height="4" HorizontalAlignment="Left" CornerRadius="2"/>
+											</Grid>
 
-										<TextBlock Text="{Binding Progress}" FontSize="12" Foreground="#666" Margin="5,0,0,0" VerticalAlignment="Center"/>
-									</StackPanel>
+											<TextBlock Text="{Binding Progress}" FontSize="12" Foreground="#666" Margin="5,0,0,0" VerticalAlignment="Center"/>
+										</StackPanel>
 
-									<!-- Линия разделителя -->
-									<Rectangle Grid.ColumnSpan="6" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom"/>
-								</Grid>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
+										<!-- Линия разделителя -->
+										<Rectangle Grid.ColumnSpan="6" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom"/>
+									</Grid>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+
+						<!-- Сообщение, если нет данных -->
+						<TextBlock Text="Нет производственных заданий для отображения"
+                                 IsVisible="{Binding ProductionItems.Count, Converter={StaticResource IsGreaterThan}, ConverterParameter='0 Invert=true'}"
+                                 FontSize="16" Foreground="#666" FontWeight="Medium"
+                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Grid>
 				</ScrollViewer>
 			</Grid>
 		</Border>
+
+		<!-- Пагинация -->
+		<StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center"
+                   Margin="0,20,0,20">
+			<Button Command="{Binding PreviousPageCommand}" Background="Transparent" BorderThickness="0"
+                   IsEnabled="{Binding CanGoToPreviousPage}">
+				<TextBlock Text="◀ Пред." FontSize="13"
+                          Foreground="{Binding CanGoToPreviousPage, Converter={StaticResource BoolToValue}, ConverterParameter='#666,#CCC'}"
+                          VerticalAlignment="Center"/>
+			</Button>
+
+			<!-- Текущая страница -->
+			<Border Width="30" Height="30" CornerRadius="15" Background="#00ACC1" VerticalAlignment="Center" Margin="15,0">
+				<TextBlock Text="{Binding CurrentPage}" FontSize="13" Foreground="White"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			</Border>
+
+			<!-- Индикатор количества страниц -->
+			<TextBlock Text="из" FontSize="13" Foreground="#666" VerticalAlignment="Center" Margin="5,0"/>
+			<TextBlock Text="{Binding TotalPages}" FontSize="13" Foreground="#666" VerticalAlignment="Center" Margin="5,0"/>
+
+			<Button Command="{Binding NextPageCommand}" Background="Transparent" BorderThickness="0"
+                   IsEnabled="{Binding CanGoToNextPage}" Margin="15,0,0,0">
+				<TextBlock Text="След. ▶" FontSize="13"
+                          Foreground="{Binding CanGoToNextPage, Converter={StaticResource BoolToValue}, ConverterParameter='#666,#CCC'}"
+                          VerticalAlignment="Center"/>
+			</Button>
+		</StackPanel>
 	</Grid>
 </UserControl>
