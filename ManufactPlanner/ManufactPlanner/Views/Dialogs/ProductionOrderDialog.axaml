@@ -50,16 +50,24 @@
 				<StackPanel IsEnabled="{Binding HasSelectedOrder}">
 					<TextBlock Text="Выберите позицию заказа:" FontSize="14" Margin="0,0,0,5"/>
 					<ComboBox ItemsSource="{Binding OrderPositions}"
-                              SelectedItem="{Binding SelectedOrderPosition}"
-                              PlaceholderText="Выберите позицию заказа"
-                              IsEnabled="{Binding HasOrderPositions}"
-                              HorizontalAlignment="Stretch">
+							  SelectedItem="{Binding SelectedOrderPosition}"
+							  PlaceholderText="Выберите позицию заказа"
+							  IsEnabled="{Binding HasOrderPositions}"
+							  HorizontalAlignment="Stretch">
 						<ComboBox.ItemTemplate>
 							<DataTemplate>
 								<TextBlock Text="{Binding DisplayText}"/>
 							</DataTemplate>
 						</ComboBox.ItemTemplate>
 					</ComboBox>
+					<!-- Добавим индикатор загрузки -->
+					<ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoading}" Height="2" Margin="0,5,0,0"/>
+					<!-- Показываем сообщение, если позиции не найдены -->
+					<TextBlock Text="Позиции для выбранного заказа не найдены"
+							   Foreground="#FF7043"
+							   IsVisible="{Binding HasError}"
+							   Margin="0,5,0,0"
+							   FontSize="12"/>
 				</StackPanel>
 
 				<!-- Номер заказ-наряда -->

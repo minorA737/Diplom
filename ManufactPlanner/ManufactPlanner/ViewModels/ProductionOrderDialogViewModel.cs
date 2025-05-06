@@ -50,7 +50,11 @@ namespace ManufactPlanner.ViewModels.Dialogs
         public ObservableCollection<OrderPositionListItem> OrderPositions
         {
             get => _orderPositions;
-            set => this.RaiseAndSetIfChanged(ref _orderPositions, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _orderPositions, value);
+                this.RaisePropertyChanged(nameof(HasOrderPositions));
+            }
         }
 
         public OrderListItem2 SelectedOrder
@@ -176,6 +180,10 @@ namespace ManufactPlanner.ViewModels.Dialogs
         {
             _dbContext = dbContext;
 
+            // Инициализируем пустые коллекции
+            Orders = new ObservableCollection<OrderListItem2>();
+            OrderPositions = new ObservableCollection<OrderPositionListItem>();
+
             // Инициализация команд
             RefreshOrdersCommand = ReactiveCommand.CreateFromTask(LoadOrdersAsync);
             ConfirmCommand = ReactiveCommand.CreateFromTask(CreateProductionOrderAsync);
@@ -241,9 +249,15 @@ namespace ManufactPlanner.ViewModels.Dialogs
         }
 
         // Загрузка позиций выбранного заказа
+        // Исправление метода загрузки позиций заказа
         private async void LoadOrderPositions()
         {
-            if (_dbContext == null || SelectedOrder == null) return;
+            if (_dbContext == null || SelectedOrder == null)
+            {
+                // Если нет контекста БД или не выбран заказ, очищаем список позиций
+                OrderPositions = new ObservableCollection<OrderPositionListItem>();
+                return;
+            }
 
             try
             {
@@ -251,6 +265,10 @@ namespace ManufactPlanner.ViewModels.Dialogs
                 StatusMessage = "Загрузка позиций заказа...";
                 HasError = false;
 
+                // Добавим логирование для отладки
+                Console.WriteLine($"Загрузка позиций для заказа ID: {SelectedOrder.Id}");
+
+                // Явно указываем загрузку позиций для выбранного заказа
                 var positions = await _dbContext.OrderPositions
                     .Where(op => op.OrderId == SelectedOrder.Id)
                     .OrderBy(op => op.PositionNumber)
@@ -263,6 +281,10 @@ namespace ManufactPlanner.ViewModels.Dialogs
                     })
                     .ToListAsync();
 
+                // Проверяем результат запроса
+                Console.WriteLine($"Загружено позиций: {positions.Count}");
+
+                // Обновляем коллекцию в основном потоке
                 OrderPositions = new ObservableCollection<OrderPositionListItem>(positions);
 
                 if (positions.Count == 0)
@@ -272,13 +294,19 @@ namespace ManufactPlanner.ViewModels.Dialogs
                 }
                 else
                 {
-                    StatusMessage = string.Empty;
+                    StatusMessage = $"Загружено позиций: {positions.Count}";
+                    HasError = false;
                 }
             }
             catch (Exception ex)
             {
+                // Расширенное логирование ошибки
+                Console.WriteLine($"Ошибка загрузки позиций заказа: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+
                 StatusMessage = $"Ошибка загрузки позиций заказа: {ex.Message}";
                 HasError = true;
+                OrderPositions = new ObservableCollection<OrderPositionListItem>();
             }
             finally
             {

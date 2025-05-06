@@ -1,0 +1,211 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:ManufactPlanner.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="600"
+        x:Class="ManufactPlanner.Views.Dialogs.OrderCreateDialog"
+        x:DataType="vm:OrderCreateDialogViewModel"
+        Width="500" Height="650"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Создание нового заказа"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Background="#F8F9FA"
+		xmlns:converters="using:ManufactPlanner.Converters">
+
+	<Window.Styles>
+		<!-- Стили для TextBox -->
+		<Style Selector="TextBox">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="BorderBrush" Value="#E0E0E0"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Padding" Value="10,5"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+
+		<!-- Стили для ComboBox -->
+		<Style Selector="ComboBox">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="BorderBrush" Value="#E0E0E0"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Padding" Value="10,5"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+
+		<!-- Стили для CheckBox -->
+		<Style Selector="CheckBox">
+			<Setter Property="Margin" Value="0,5"/>
+		</Style>
+
+		<!-- Стили для DatePicker -->
+		<Style Selector="DatePicker">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="BorderBrush" Value="#E0E0E0"/>
+			<Setter Property="BorderThickness" Value="1"/>
+		</Style>
+
+		<!-- Стили для NumericUpDown -->
+		<Style Selector="NumericUpDown">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="BorderBrush" Value="#E0E0E0"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="HorizontalContentAlignment" Value="Left"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="Padding" Value="10,0"/>
+		</Style>
+
+		<!-- Основные кнопки -->
+		<Style Selector="Button.primary">
+			<Setter Property="Height" Value="40"/>
+			<Setter Property="Background" Value="#00ACC1"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+		</Style>
+
+		<!-- Кнопки отмены и второстепенные действия -->
+		<Style Selector="Button.secondary">
+			<Setter Property="Height" Value="40"/>
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="BorderBrush" Value="#E0E0E0"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Foreground" Value="#666666"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+	</Window.Styles>
+	<Window.Resources>
+		<converters:NullableDateOnlyToDateTimeConverter x:Key="DateConverter"/>
+	</Window.Resources>
+
+	<Panel>
+		<Grid RowDefinitions="Auto,*,Auto" Margin="20">
+			<!-- Заголовок -->
+			<TextBlock Grid.Row="0" Text="Создание нового заказа"
+                       FontSize="20" FontWeight="SemiBold" Foreground="#333333"
+                       Margin="0,0,0,20"/>
+
+			<!-- Форма заказа -->
+			<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+				<StackPanel Spacing="15">
+					<!-- Номер заказа -->
+					<StackPanel>
+						<TextBlock Text="Номер заказа *" FontSize="14" Foreground="#666666" Margin="0,0,0,5"/>
+						<TextBox Text="{Binding OrderNumber}" Watermark="Например: ОП-123/24"/>
+					</StackPanel>
+
+					<!-- Наименование заказа -->
+					<StackPanel>
+						<TextBlock Text="Наименование заказа *" FontSize="14" Foreground="#666666" Margin="0,0,0,5"/>
+						<TextBox Text="{Binding Name}" Watermark="Полное наименование"/>
+					</StackPanel>
+
+					<!-- Заказчик -->
+					<StackPanel>
+						<TextBlock Text="Заказчик *" FontSize="14" Foreground="#666666" Margin="0,0,0,5"/>
+						<Grid ColumnDefinitions="*,Auto">
+							<ComboBox Grid.Column="0"
+								  ItemsSource="{Binding Customers}"
+								  SelectedItem="{Binding SelectedCustomer}"
+								  PlaceholderText="Выберите заказчика" />
+
+							<Button Grid.Column="1" Content="+"
+                                    Width="36" Height="36"
+                                    Background="#00ACC1" Foreground="White"
+                                    CornerRadius="4" Margin="5,0,0,0"
+                                    ToolTip.Tip="Добавить нового заказчика"/>
+						</Grid>
+					</StackPanel>
+
+					<!-- Монтаж -->
+					<CheckBox Content="Требуется монтаж" IsChecked="{Binding HasInstallation}"/>
+
+					<!-- Сроки выполнения -->
+					<StackPanel>
+						<TextBlock Text="Срок по договору" FontSize="14" Foreground="#666666" Margin="0,0,0,5"/>
+						<DatePicker SelectedDate="{Binding ContractDeadline, Converter={StaticResource DateConverter}}"/>
+					</StackPanel>
+
+					<StackPanel>
+						<TextBlock Text="Срок поставки" FontSize="14" Foreground="#666666" Margin="0,0,0,5"/>
+						<DatePicker SelectedDate="{Binding DeliveryDeadline, Converter={StaticResource DateConverter}}"/>
+					</StackPanel>
+
+					<StackPanel>
+						<TextBlock Text="Срок отгрузки" FontSize="14" Foreground="#666666" Margin="0,0,0,5"/>
+						<DatePicker SelectedDate="{Binding ShippingDate, Converter={StaticResource DateConverter}}"/>
+					</StackPanel>
+
+					<!-- Количество и цена -->
+					<StackPanel>
+						<TextBlock Text="Количество по договору *" FontSize="14" Foreground="#666666" Margin="0,0,0,5"/>
+						<NumericUpDown Value="{Binding ContractQuantity}"
+                                       Minimum="1" Maximum="1000"
+                                       Increment="1"
+                                       FormatString="0"/>
+					</StackPanel>
+
+					<StackPanel>
+						<TextBlock Text="Общая сумма заказа" FontSize="14" Foreground="#666666" Margin="0,0,0,5"/>
+						<NumericUpDown Value="{Binding TotalPrice}"
+                                       Minimum="0"
+                                       Increment="1000"
+                                       FormatString="₽ #,##0.00"/>
+					</StackPanel>
+
+					<!-- Статус заказа -->
+					<StackPanel>
+						<TextBlock Text="Статус" FontSize="14" Foreground="#666666" Margin="0,0,0,5"/>
+						<ComboBox ItemsSource="{Binding StatusOptions}"
+                                  SelectedItem="{Binding Status}"
+                                  HorizontalAlignment="Stretch"/>
+					</StackPanel>
+
+					<!-- Сообщение об ошибке -->
+					<TextBlock Text="{Binding ErrorMessage}"
+                               Foreground="#FF7043"
+                               TextWrapping="Wrap"
+                               IsVisible="{Binding HasError}"/>
+				</StackPanel>
+			</ScrollViewer>
+
+			<!-- Кнопки действий -->
+			<Grid Grid.Row="2" ColumnDefinitions="*,*" Margin="0,20,0,0" VerticalAlignment="Bottom">
+				<Button Grid.Column="0" Content="Отмена"
+                        Classes="secondary"
+                        HorizontalAlignment="Stretch"
+                        Margin="0,0,5,0"
+                        Command="{Binding CancelCommand}"/>
+
+				<Button Grid.Column="1" Content="Сохранить"
+                        Classes="primary"
+                        HorizontalAlignment="Stretch"
+                        Margin="5,0,0,0"
+                        Command="{Binding SaveCommand}"
+                        IsEnabled="{Binding !IsProcessing}"/>
+			</Grid>
+
+			<!-- Индикатор загрузки -->
+			<Border Grid.Row="0" Grid.RowSpan="3"
+                    Background="#80000000"
+                    IsVisible="{Binding IsProcessing}">
+				<ProgressBar IsIndeterminate="True"
+                             Width="200" Height="10"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Center"/>
+			</Border>
+		</Grid>
+	</Panel>
+</Window>

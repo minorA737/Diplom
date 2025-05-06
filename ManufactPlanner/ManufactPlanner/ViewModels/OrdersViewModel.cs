@@ -1,4 +1,7 @@
-﻿using ManufactPlanner.Models;
+﻿using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls;
+using ManufactPlanner.Models;
+using ManufactPlanner.Views.Dialogs;
 using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
 using System;
@@ -10,6 +13,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Task = System.Threading.Tasks.Task;
+using Avalonia;
 
 namespace ManufactPlanner.ViewModels
 {
@@ -588,13 +592,78 @@ namespace ManufactPlanner.ViewModels
             }
         }
 
-        private void CreateOrder()
+        // Вставьте этот код вместо существующего метода CreateOrder в классе OrdersViewModel
+
+        private async void CreateOrder()
         {
-            // Здесь будет логика создания нового заказа
-            // Например, открытие диалогового окна для создания заказа
-            // В реальном приложении это может быть переход на другую страницу
-            // или открытие модального окна
-            //_mainWindowViewModel.NavigateToCreateOrder();
+            try
+            {
+                // Получаем главное окно приложения
+                var mainWindow = GetMainWindow();
+                if (mainWindow == null)
+                {
+                    Console.WriteLine("Не удалось получить главное окно приложения");
+                    return;
+                }
+
+                // Показываем диалог создания заказа
+                var order = await OrderCreateDialog.ShowDialog(mainWindow, _dbContext);
+
+                // Если заказ был создан, обновляем список заказов
+                if (order != null)
+                {
+                    // Добавляем новый заказ в коллекцию с временным преобразованием в ViewModel
+                    var newOrderVm = new OrderItemViewModel
+                    {
+                        Id = order.Id,
+                        OrderNumber = order.OrderNumber,
+                        Name = order.Name,
+                        Customer = order.Customer,
+                        Deadline = order.DeliveryDeadline.HasValue
+                            ? order.DeliveryDeadline.Value.ToString("dd.MM.yyyy")
+                            : "-",
+                        PositionsCount = "0", // Новый заказ еще не имеет позиций
+                        Status = order.Status ?? "Активен",
+                        IsDateCritical = order.DeliveryDeadline.HasValue &&
+                            order.DeliveryDeadline.Value <= DateOnly.FromDateTime(DateTime.Now.AddDays(7)),
+                        CreatedAt = order.CreatedAt
+                    };
+
+                    // Добавляем новый заказ в начало списка
+                    _orders.Insert(0, newOrderVm);
+
+                    // Обновляем фильтры и пагинацию
+                    ApplyFilters();
+
+                    // Выводим уведомление об успешном создании заказа
+                    Console.WriteLine($"Заказ {order.OrderNumber} успешно создан");
+
+                    // Обновляем списки фильтров
+                    if (!Customers.Contains(order.Customer))
+                    {
+                        Customers.Add(order.Customer);
+                    }
+
+                    if (!Statuses.Contains(order.Status) && !string.IsNullOrEmpty(order.Status))
+                    {
+                        Statuses.Add(order.Status);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при создании заказа: {ex.Message}");
+                // Обработка ошибок
+            }
+        }
+
+        private Window GetMainWindow()
+        {
+            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                return desktop.MainWindow;
+            }
+            return null;
         }
 
         private void ShowOrderDetails(int orderId)

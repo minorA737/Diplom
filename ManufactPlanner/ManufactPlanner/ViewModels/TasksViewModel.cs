@@ -8,6 +8,10 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls;
+using ManufactPlanner.Views.Dialogs;
+using Avalonia;
 
 namespace ManufactPlanner.ViewModels
 {
@@ -217,11 +221,7 @@ namespace ManufactPlanner.ViewModels
                 this.RaisePropertyChanged(nameof(IsCalendarViewActive));
             });
 
-            CreateTaskCommand = ReactiveCommand.Create(() =>
-            {
-                // Логика создания новой задачи
-                // Можно открыть диалоговое окно или перейти на страницу создания задачи
-            });
+            CreateTaskCommand = ReactiveCommand.Create(CreateTask);
 
             OpenTaskDetailsCommand = ReactiveCommand.Create<int>((taskId) =>
             {
@@ -262,7 +262,51 @@ namespace ManufactPlanner.ViewModels
             // Загрузка данных из БД
             LoadTasks();
         }
+        // Обновленная реализация метода CreateTask в классе TasksViewModel
 
+        private async void CreateTask()
+        {
+            try
+            {
+                // Получаем главное окно приложения
+                var mainWindow = GetMainWindow();
+                if (mainWindow == null)
+                {
+                    Console.WriteLine("Не удалось получить главное окно приложения");
+                    return;
+                }
+
+                // Получаем текущего пользователя из MainWindowViewModel
+                Guid currentUserId = _mainWindowViewModel.CurrentUserId;
+
+                // Показываем диалог создания задачи
+                var task = await TaskCreateDialog.ShowDialog(mainWindow, _dbContext, currentUserId);
+
+                // Если задача была создана, обновляем список задач
+                if (task != null)
+                {
+                    // Обновляем список задач
+                    RefreshTasksList();
+
+                    // Выводим уведомление об успешном создании задачи
+                    Console.WriteLine($"Задача {task.Name} успешно создана");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при создании задачи: {ex.Message}");
+                // Обработка ошибок
+            }
+        }
+
+        private Window GetMainWindow()
+        {
+            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                return desktop.MainWindow;
+            }
+            return null;
+        }
         private async void InitializeFiltersAsync()
         {
             try
