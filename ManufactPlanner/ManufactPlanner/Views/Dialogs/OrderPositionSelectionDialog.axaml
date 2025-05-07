@@ -9,17 +9,53 @@
         Width="500" Height="400"
         WindowStartupLocation="CenterOwner"
         x:DataType="vm:OrderPositionSelectionDialogViewModel"
-        xmlns:vm="using:ManufactPlanner.ViewModels.Dialogs">
+        xmlns:vm="using:ManufactPlanner.ViewModels.Dialogs"
+        Background="{DynamicResource BackgroundBrush}">
+
+	<Window.Styles>
+		<!-- Стили для TextBox -->
+		<Style Selector="TextBox">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Padding" Value="10,5"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+
+		<!-- Стили для ListBox -->
+		<Style Selector="ListBox">
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+		</Style>
+
+		<!-- Стили для кнопок -->
+		<Style Selector="Button">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="CornerRadius" Value="4"/>
+		</Style>
+
+		<!-- Стиль для основной кнопки -->
+		<Style Selector="Button.primary">
+			<Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+			<Setter Property="Foreground" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderThickness" Value="0"/>
+		</Style>
+	</Window.Styles>
 
 	<Grid RowDefinitions="Auto,*,Auto" Margin="20">
 		<!-- Заголовок и строка поиска -->
 		<StackPanel Grid.Row="0" Spacing="15">
-			<TextBlock Text="{Binding DialogTitle}" FontSize="16" FontWeight="SemiBold"/>
-			<TextBox Text="{Binding SearchText}" Watermark="Поиск по номеру или названию..." Margin="0,0,0,10"/>
+			<TextBlock Text="{Binding DialogTitle}" FontSize="16" FontWeight="SemiBold"
+                     Foreground="{DynamicResource TextPrimaryBrush}"/>
+			<TextBox Background="{DynamicResource SurfaceBrush}" Text="{Binding SearchText}" Watermark="Поиск по номеру или названию..." Margin="0,0,0,10"/>
 		</StackPanel>
 
 		<!-- Список позиций -->
-		<Border Grid.Row="1" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4">
+		<Border Grid.Row="1" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4">
 			<ScrollViewer>
 				<ListBox ItemsSource="{Binding FilteredOrderPositions}"
                          SelectedItem="{Binding SelectedOrderPosition}">
@@ -30,10 +66,12 @@
                                            Text="{Binding PositionNumber}"
                                            FontWeight="SemiBold"
                                            VerticalAlignment="Center"
+                                           Foreground="{DynamicResource TextPrimaryBrush}"
                                            Margin="0,0,10,0"/>
 								<TextBlock Grid.Column="1"
                                            Text="{Binding ProductName}"
                                            TextWrapping="Wrap"
+                                           Foreground="{DynamicResource TextSecondaryBrush}"
                                            VerticalAlignment="Center"/>
 							</Grid>
 						</DataTemplate>
@@ -45,8 +83,7 @@
 		<!-- Кнопки -->
 		<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0" Spacing="10">
 			<Button Content="Пропустить" Width="100" Command="{Binding SkipCommand}"/>
-			<Button Content="Выбрать" Width="100"
-                    Background="#00ACC1" Foreground="White"
+			<Button Content="Выбрать" Width="100" Classes="primary"
                     Command="{Binding ConfirmCommand}"
                     IsEnabled="{Binding IsPositionSelected}"/>
 		</StackPanel>

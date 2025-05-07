@@ -19,27 +19,27 @@
 		<!-- Заголовок страницы с информацией о пользователе -->
 		<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="20,20,20,0">
 			<StackPanel>
-				<TextBlock Text="Дашборд" FontSize="20" FontWeight="SemiBold" Foreground="#333333"/>
-				<TextBlock Text="{Binding UserName}" FontSize="12" Foreground="#666" Margin="0,5,0,0"/>
-				<TextBlock Text="{Binding UserRole}" FontSize="12" Foreground="#9E9E9E" Margin="0,2,0,0"/>
+				<TextBlock Text="Дашборд" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+				<TextBlock Text="{Binding UserName}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,5,0,0"/>
+				<TextBlock Text="{Binding UserRole}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7" Margin="0,2,0,0"/>
 			</StackPanel>
 
 			<Button Grid.Column="1" Content="Обновить" Command="{Binding RefreshDataCommand}"
-					Background="#00ACC1" Foreground="White" CornerRadius="4" Padding="12,6"/>
+					Background="{DynamicResource PrimaryBrush}" Foreground="White" CornerRadius="4" Padding="12,6"/>
 		</Grid>
 
 		<!-- Карточки статистики -->
 		<Grid Grid.Row="1" Margin="20,20,20,0" ColumnDefinitions="*,*,*" RowDefinitions="Auto">
 			<!-- Карточка 1: Активные задачи -->
-			<Border Grid.Column="0" Height="120" Background="White" CornerRadius="8" Margin="0,0,10,0"
-                    BoxShadow="0 2 3 #10000000">
+			<Border Grid.Column="0" Height="120" Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Margin="0,0,10,0"
+                    >
 				<Grid Margin="20,0">
 					<StackPanel VerticalAlignment="Center">
-						<TextBlock Text="Активные задачи" FontSize="14" Foreground="#9E9E9E"/>
-						<TextBlock Text="{Binding ActiveTasksCount}" FontSize="30" FontWeight="Medium" Foreground="#333333" Margin="0,10,0,0"/>
+						<TextBlock Text="Активные задачи" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"/>
+						<TextBlock Text="{Binding ActiveTasksCount}" FontSize="30" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,10,0,0"/>
 						<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10">
-							<Border Width="70" Height="24" Background="#4CAF9D" Opacity="0.2" CornerRadius="12">
-								<TextBlock Text="+12%" FontSize="12" Foreground="#4CAF9D" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							<Border Width="70" Height="24" Background="{DynamicResource SuccessBrush}" Opacity="0.2" CornerRadius="12">
+								<TextBlock Text="+12%" FontSize="12" Foreground="{DynamicResource SuccessBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</Border>
 						</StackPanel>
 					</StackPanel>
@@ -47,15 +47,15 @@
 			</Border>
 
 			<!-- Карточка 2: Активных заказов -->
-			<Border Grid.Column="1" Height="120" Background="White" CornerRadius="8" Margin="10,0"
-                    BoxShadow="0 2 3 #10000000">
+			<Border Grid.Column="1" Height="120" Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Margin="10,0"
+                    >
 				<Grid Margin="20,0">
 					<StackPanel VerticalAlignment="Center">
-						<TextBlock Text="Активных заказов" FontSize="14" Foreground="#9E9E9E"/>
-						<TextBlock Text="{Binding ActiveOrdersCount}" FontSize="30" FontWeight="Medium" Foreground="#333333" Margin="0,10,0,0"/>
+						<TextBlock Text="Активных заказов" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"/>
+						<TextBlock Text="{Binding ActiveOrdersCount}" FontSize="30" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,10,0,0"/>
 						<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10">
-							<Border Width="70" Height="24" Background="#FF7043" Opacity="0.2" CornerRadius="12">
-								<TextBlock Text="-3%" FontSize="12" Foreground="#FF7043" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							<Border Width="70" Height="24" Background="{DynamicResource ErrorBrush}" Opacity="0.2" CornerRadius="12">
+								<TextBlock Text="-3%" FontSize="12" Foreground="{DynamicResource ErrorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</Border>
 						</StackPanel>
 					</StackPanel>
@@ -63,15 +63,15 @@
 			</Border>
 
 			<!-- Карточка 3: Дедлайнов сегодня -->
-			<Border Grid.Column="2" Height="120" Background="White" CornerRadius="8" Margin="10,0,0,0"
-                    BoxShadow="0 2 3 #10000000">
+			<Border Grid.Column="2" Height="120" Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Margin="10,0,0,0"
+                   >
 				<Grid Margin="20,0">
 					<StackPanel VerticalAlignment="Center">
-						<TextBlock Text="Дедлайнов сегодня" FontSize="14" Foreground="#9E9E9E"/>
-						<TextBlock Text="{Binding DeadlinesTodayCount}" FontSize="30" FontWeight="Medium" Foreground="#333333" Margin="0,10,0,0"/>
+						<TextBlock Text="Дедлайнов сегодня" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"/>
+						<TextBlock Text="{Binding DeadlinesTodayCount}" FontSize="30" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,10,0,0"/>
 						<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10">
-							<Border Width="70" Height="24" Background="#FFB74D" Opacity="0.2" CornerRadius="12">
-								<TextBlock Text="Срочно" FontSize="12" Foreground="#FFB74D" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							<Border Width="70" Height="24" Background="{DynamicResource WarningBrush}" Opacity="0.2" CornerRadius="12">
+								<TextBlock Text="Срочно" FontSize="12" Foreground="{DynamicResource WarningBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</Border>
 						</StackPanel>
 					</StackPanel>
@@ -83,25 +83,25 @@
 		<Grid Grid.Row="2" Margin="20,20,20,20" ColumnDefinitions="3*,1*" RowDefinitions="Auto,*,Auto">
 			<!-- Заголовок раздела задач -->
 			<Grid Grid.Row="0" Grid.Column="0" ColumnDefinitions="*,Auto">
-				<TextBlock Text="Недавние задачи" FontSize="16" FontWeight="Medium" Foreground="#333333" Margin="20,0,0,10"/>
-				<Button Grid.Column="1" Command="{Binding ViewCalendarCommand}"
-						Content="Все задачи →" Foreground="#00ACC1" Background="Transparent"/>
+				<TextBlock Text="Недавние задачи" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,0,0,10"/>
+				<Button Grid.Column="1" Command="{Binding ViewTasksCommand}"
+						Content="Все задачи →" Foreground="{DynamicResource PrimaryBrush}" Background="Transparent"/>
 			</Grid>
 
 			<!-- Список задач -->
-			<Border Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Background="White" CornerRadius="8" Margin="0,0,15,0"
-                    BoxShadow="0 2 3 #10000000">
+			<Border Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Margin="0,0,15,0"
+                    >
 				<StackPanel>
-					<Rectangle Height="1" Fill="#E0E0E0" Margin="20,40,20,0"/>
+					<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="20,40,20,0"/>
 
 					<ItemsControl ItemsSource="{Binding RecentTasks}">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
-								<Border Height="60" Background="#F9FAFB" Margin="20,10,20,0" CornerRadius="4">
+								<Border Height="60" Background="{DynamicResource BackgroundBrush}" Margin="20,10,20,0" CornerRadius="4">
 									<Grid Margin="10,0" ColumnDefinitions="*,Auto">
 										<StackPanel VerticalAlignment="Center">
-											<TextBlock Text="{Binding Name}" FontSize="14" Foreground="#333333"/>
-											<TextBlock Text="{Binding Description}" FontSize="12" Foreground="#9E9E9E"/>
+											<TextBlock Text="{Binding Name}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}"/>
+											<TextBlock Text="{Binding Description}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"/>
 										</StackPanel>
 
 										<Border Grid.Column="1" Height="24" CornerRadius="12"
@@ -118,7 +118,7 @@
 					</ItemsControl>
 
 					<!-- Когда нет задач -->
-					<TextBlock Text="Нет активных задач" FontSize="14" Foreground="#9E9E9E"
+					<TextBlock Text="Нет активных задач" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"
 							   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,40,0,0"
 							   IsVisible="{Binding !RecentTasks.Count}"/>
 				</StackPanel>
@@ -127,24 +127,24 @@
 			<!-- Календарь и график справа -->
 			<StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="3">
 				<!-- Календарь -->
-				<Border Background="White" CornerRadius="8" Margin="0,0,0,15" BoxShadow="0 2 3 #10000000">
+				<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Margin="0,0,0,15" >
 					<StackPanel Margin="20,20,20,20">
 						<Grid ColumnDefinitions="*,Auto">
-							<TextBlock Text="Календарь" FontSize="16" FontWeight="Medium" Foreground="#333333" Margin="0,0,0,10"/>
+							<TextBlock Text="Календарь" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,10"/>
 							<Button Grid.Column="1" Command="{Binding ViewCalendarCommand}"
-									Content="→" Foreground="#00ACC1" Background="Transparent" Padding="0"/>
+									Content="→" Foreground="{DynamicResource PrimaryBrush}" Background="Transparent" Padding="0"/>
 						</Grid>
 						<TextBlock Text="{Binding CurrentMonthYear}" FontSize="14" FontWeight="Medium" HorizontalAlignment="Center" Margin="0,10,0,10"/>
 
 						<!-- Дни недели -->
 						<Grid ColumnDefinitions="*,*,*,*,*,*,*">
-							<TextBlock Grid.Column="0" Text="Пн" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="1" Text="Вт" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="2" Text="Ср" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="3" Text="Чт" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="4" Text="Пт" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="5" Text="Сб" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="6" Text="Вс" FontSize="12" Foreground="#9E9E9E" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="0" Text="Пн" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="1" Text="Вт" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="2" Text="Ср" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="3" Text="Чт" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="4" Text="Пт" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="5" Text="Сб" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7" HorizontalAlignment="Center"/>
+							<TextBlock Grid.Column="6" Text="Вс" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7" HorizontalAlignment="Center"/>
 						</Grid>
 
 						<!-- Вместо двух жестко закодированных недель используем ItemsControl для динамической генерации дней календаря -->
@@ -157,15 +157,15 @@
 							<ItemsControl.ItemTemplate>
 								<DataTemplate>
 									<Border Width="24" Height="24" CornerRadius="12"
-											Background="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1 0.2,Transparent'}"
+											Background="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush} 0.2,Transparent'}"
 											Margin="2">
 										<Grid>
 											<TextBlock Text="{Binding Day}" FontSize="12"
-													  Foreground="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1,#333'}"
+													  Foreground="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush},{DynamicResource TextPrimaryBrush}'}"
 													  FontWeight="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='Bold,Normal'}"
 													  HorizontalAlignment="Center" VerticalAlignment="Center"/>
 											<!-- Индикатор событий -->
-											<Ellipse Width="4" Height="4" Fill="#00ACC1" VerticalAlignment="Bottom" Margin="0,0,0,2"
+											<Ellipse Width="4" Height="4" Fill="{DynamicResource PrimaryBrush}" VerticalAlignment="Bottom" Margin="0,0,0,2"
 													 IsVisible="{Binding HasEvents}"/>
 										</Grid>
 									</Border>
@@ -176,31 +176,31 @@
 				</Border>
 
 				<!-- График выполнения задач -->
-				<Border Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+				<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8" >
 					<StackPanel Margin="20,20,20,20">
-						<TextBlock Text="Выполнение задач" FontSize="16" FontWeight="Medium" Foreground="#333333" Margin="0,0,0,10"/>
+						<TextBlock Text="Выполнение задач" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,10"/>
 
 						<!-- Фон графика -->
-						<Border Width="190" Height="130" Background="#F8F9FA" CornerRadius="4" Margin="0,10,0,0">
+						<Border Width="190" Height="130" Background="{DynamicResource BackgroundBrush}" CornerRadius="4" Margin="0,10,0,0">
 							<Grid>
 								<!-- Оси координат и сетка -->
-								<Line StartPoint="0,130" EndPoint="190,130" Stroke="#E0E0E0" StrokeThickness="1"/>
-								<Line StartPoint="0,0" EndPoint="0,130" Stroke="#E0E0E0" StrokeThickness="1"/>
+								<Line StartPoint="0,130" EndPoint="190,130" Stroke="{DynamicResource BorderBrush}" StrokeThickness="1"/>
+								<Line StartPoint="0,0" EndPoint="0,130" Stroke="{DynamicResource BorderBrush}" StrokeThickness="1"/>
 
 								<!-- Горизонтальные линии сетки -->
-								<Line StartPoint="0,32.5" EndPoint="190,32.5" Stroke="#E0E0E0" StrokeThickness="0.5"/>
-								<Line StartPoint="0,65" EndPoint="190,65" Stroke="#E0E0E0" StrokeThickness="0.5"/>
-								<Line StartPoint="0,97.5" EndPoint="190,97.5" Stroke="#E0E0E0" StrokeThickness="0.5"/>
+								<Line StartPoint="0,32.5" EndPoint="190,32.5" Stroke="{DynamicResource BorderBrush}" StrokeThickness="0.5"/>
+								<Line StartPoint="0,65" EndPoint="190,65" Stroke="{DynamicResource BorderBrush}" StrokeThickness="0.5"/>
+								<Line StartPoint="0,97.5" EndPoint="190,97.5" Stroke="{DynamicResource BorderBrush}" StrokeThickness="0.5"/>
 
 								<!-- Вертикальные линии сетки -->
-								<Line StartPoint="38,0" EndPoint="38,130" Stroke="#E0E0E0" StrokeThickness="0.5"/>
-								<Line StartPoint="76,0" EndPoint="76,130" Stroke="#E0E0E0" StrokeThickness="0.5"/>
-								<Line StartPoint="114,0" EndPoint="114,130" Stroke="#E0E0E0" StrokeThickness="0.5"/>
-								<Line StartPoint="152,0" EndPoint="152,130" Stroke="#E0E0E0" StrokeThickness="0.5"/>
+								<Line StartPoint="38,0" EndPoint="38,130" Stroke="{DynamicResource BorderBrush}" StrokeThickness="0.5"/>
+								<Line StartPoint="76,0" EndPoint="76,130" Stroke="{DynamicResource BorderBrush}" StrokeThickness="0.5"/>
+								<Line StartPoint="114,0" EndPoint="114,130" Stroke="{DynamicResource BorderBrush}" StrokeThickness="0.5"/>
+								<Line StartPoint="152,0" EndPoint="152,130" Stroke="{DynamicResource BorderBrush}" StrokeThickness="0.5"/>
 
 								<!-- Данные графика (линия) -->
 								<Polyline Points="{Binding TaskCompletionGraphPointsString}"
-                                          Stroke="#00ACC1" StrokeThickness="2" Fill="Transparent"/>
+                                          Stroke="{DynamicResource PrimaryBrush}" StrokeThickness="2" Fill="Transparent"/>
 
 								<!-- Точки данных -->
 								<ItemsControl ItemsSource="{Binding TaskCompletionGraphPoints}">
@@ -211,7 +211,7 @@
 									</ItemsControl.ItemsPanel>
 									<ItemsControl.ItemTemplate>
 										<DataTemplate>
-											<Ellipse Width="6" Height="6" Fill="#00ACC1"
+											<Ellipse Width="6" Height="6" Fill="{DynamicResource PrimaryBrush}"
 												Canvas.Left="{Binding X, Converter={StaticResource SubtractHalfPoint}, ConverterParameter=3}"
 												Canvas.Top="{Binding Y, Converter={StaticResource SubtractHalfPoint}, ConverterParameter=3}"/>
 										</DataTemplate>
@@ -219,9 +219,9 @@
 								</ItemsControl>
 
 								<!-- Подписи осей -->
-								<TextBlock Text="0" FontSize="8" Foreground="#9E9E9E"
+								<TextBlock Text="0" FontSize="8" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"
 										   Canvas.Left="2" Canvas.Bottom="2" Margin="2,0,0,2"/>
-								<TextBlock Text="6 мес" FontSize="8" Foreground="#9E9E9E"
+								<TextBlock Text="6 мес" FontSize="8" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"
 										   Canvas.Right="2" Canvas.Bottom="2" HorizontalAlignment="Right" Margin="0,0,2,2"/>
 							</Grid>
 						</Border>
@@ -229,28 +229,28 @@
 						<!-- Легенда графика -->
 						<StackPanel Orientation="Horizontal" Margin="0,10,0,0" HorizontalAlignment="Center" Spacing="10">
 							<StackPanel Orientation="Horizontal" Spacing="5">
-								<Border Width="12" Height="4" Background="#00ACC1" VerticalAlignment="Center"/>
-								<TextBlock Text="Выполнено" FontSize="10" Foreground="#666"/>
+								<Border Width="12" Height="4" Background="{DynamicResource PrimaryBrush}" VerticalAlignment="Center"/>
+								<TextBlock Text="Выполнено" FontSize="10" Foreground="{DynamicResource TextSecondaryBrush}"/>
 							</StackPanel>
 						</StackPanel>
 					</StackPanel>
 				</Border>
 
 				<!-- Статистика по статусам задач -->
-				<Border Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000" Margin="0,15,0,0">
+				<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Margin="0,15,0,0">
 					<StackPanel Margin="20,20,20,20">
-						<TextBlock Text="Статистика по статусам" FontSize="16" FontWeight="Medium" Foreground="#333333" Margin="0,0,0,10"/>
+						<TextBlock Text="Статистика по статусам" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,10"/>
 
 						<ItemsControl ItemsSource="{Binding TasksByStatus}">
 							<ItemsControl.ItemTemplate>
 								<DataTemplate>
 									<StackPanel Margin="0,8,0,0">
 										<Grid ColumnDefinitions="*,Auto">
-											<TextBlock Text="{Binding Status}" FontSize="12" Foreground="#333"/>
-											<TextBlock Grid.Column="1" Text="{Binding Count}" FontSize="12" Foreground="#666"/>
+											<TextBlock Text="{Binding Status}" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}"/>
+											<TextBlock Grid.Column="1" Text="{Binding Count}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
 										</Grid>
 										<Grid Height="6" Margin="0,3,0,0">
-											<Border Background="#E0E0E0" Height="6" CornerRadius="3"/>
+											<Border Background="{DynamicResource BorderBrush}" Height="6" CornerRadius="3"/>
 											<Border Background="{Binding ColorHex}" Height="6" CornerRadius="3"
 													Width="{Binding Percentage, Converter={StaticResource PercentToWidthConverter}, ConverterParameter=170}"
 													HorizontalAlignment="Left"/>
@@ -261,7 +261,7 @@
 						</ItemsControl>
 
 						<!-- Когда нет статистики -->
-						<TextBlock Text="Нет данных" FontSize="12" Foreground="#9E9E9E"
+						<TextBlock Text="Нет данных" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"
 								   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0"
 								   IsVisible="{Binding !TasksByStatus.Count}"/>
 					</StackPanel>

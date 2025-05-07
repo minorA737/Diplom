@@ -17,8 +17,10 @@ namespace ManufactPlanner.ViewModels
         private string _description;
         private int _priority = 3; // По умолчанию низкий приоритет
         private string _status = "В очереди"; // По умолчанию
-        private DateOnly? _startDate;
-        private DateOnly? _endDate;
+
+        private DateTime? _startDate;
+        private DateTime? _endDate;
+
         private Guid? _assigneeId;
         private string _coAssignees;
         private int? _orderPositionId;
@@ -35,6 +37,21 @@ namespace ManufactPlanner.ViewModels
         private OrderPositionViewModel2 _selectedOrderPosition;
         private UserViewModel _selectedAssignee;
 
+
+        public DateTime? StartDate
+        {
+            get => _startDate;
+            set => this.RaiseAndSetIfChanged(ref _startDate, value);
+        }
+
+        public DateTime? EndDate
+        {
+            get => _endDate;
+            set => this.RaiseAndSetIfChanged(ref _endDate, value);
+        }
+
+        // В конструкторе замените
+        
         public string Name
         {
             get => _name;
@@ -59,17 +76,7 @@ namespace ManufactPlanner.ViewModels
             set => this.RaiseAndSetIfChanged(ref _status, value);
         }
 
-        public DateOnly? StartDate
-        {
-            get => _startDate;
-            set => this.RaiseAndSetIfChanged(ref _startDate, value);
-        }
-
-        public DateOnly? EndDate
-        {
-            get => _endDate;
-            set => this.RaiseAndSetIfChanged(ref _endDate, value);
-        }
+        
 
         public string CoAssignees
         {
@@ -176,8 +183,8 @@ namespace ManufactPlanner.ViewModels
             _dbContext = dbContext;
 
             // Инициализируем текущую дату как начальную
-            _startDate = DateOnly.FromDateTime(DateTime.Today);
-            _endDate = DateOnly.FromDateTime(DateTime.Today.AddDays(7)); // По умолчанию неделя на выполнение
+            _startDate = DateTime.Today;
+            _endDate = DateTime.Today.AddDays(7); // По умолчанию неделя на выполнение
 
             // Загружаем данные для выпадающих списков
             LoadOrderPositions();
@@ -279,8 +286,8 @@ namespace ManufactPlanner.ViewModels
                     Description = Description,
                     Priority = Priority,
                     Status = Status,
-                    StartDate = StartDate,
-                    EndDate = EndDate,
+                    StartDate = StartDate.HasValue ? DateOnly.FromDateTime(StartDate.Value) : null,
+                    EndDate = EndDate.HasValue ? DateOnly.FromDateTime(EndDate.Value) : null,
                     AssigneeId = _assigneeId,
                     CoAssignees = CoAssignees,
                     Stage = Stage,

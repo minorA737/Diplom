@@ -18,16 +18,16 @@
 		<!-- Заголовок страницы и кнопки действий -->
 		<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="20,20,20,0">
 			<StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
-				<TextBlock Text="Документация" FontSize="20" FontWeight="SemiBold" Foreground="#333333" VerticalAlignment="Center"/>
+				<TextBlock Text="Документация" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
 				<Button Command="{Binding RefreshCommand}" Background="Transparent" BorderThickness="0" ToolTip.Tip="Обновить">
-					<TextBlock Text="⟳" FontSize="16" VerticalAlignment="Center"/>
+					<TextBlock Text="⟳" FontSize="16" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
 				</Button>
 			</StackPanel>
 
 			<!-- Кнопки действий -->
 			<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
 				<TextBox Width="180" Watermark="Поиск..." Text="{Binding SearchText}" VerticalAlignment="Center"/>
-				<ComboBox Width="150" SelectedIndex="{Binding SelectedTypeIndex}" VerticalAlignment="Center">
+				<ComboBox Width="150" SelectedIndex="{Binding SelectedTypeIndex}" VerticalAlignment="Center" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}">
 					<ComboBoxItem>Все типы</ComboBoxItem>
 					<ComboBoxItem>Техническое задание</ComboBoxItem>
 					<ComboBoxItem>Спецификация</ComboBoxItem>
@@ -36,27 +36,27 @@
 					<ComboBoxItem>Схема</ComboBoxItem>
 				</ComboBox>
 
-				<Button Width="140" Height="36" CornerRadius="18" Background="#00ACC1" Command="{Binding AddDocumentCommand}">
-					<TextBlock Text="+ Добавить документ" FontSize="12" Foreground="White"/>
+				<Button Width="140" Height="36" CornerRadius="18" Background="{DynamicResource PrimaryBrush}" Command="{Binding AddDocumentCommand}">
+					<TextBlock Text="+ Добавить документ" FontSize="12" Foreground="{DynamicResource SurfaceBrush}"/>
 				</Button>
 			</StackPanel>
 		</Grid>
 
 		<!-- Список документов -->
-		<Border Grid.Row="1" Margin="20,20,20,20" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+		<Border Grid.Row="1" Margin="20,20,20,20" Background="{DynamicResource SurfaceBrush}" CornerRadius="8">
 			<Grid RowDefinitions="Auto,*,Auto">
 				<!-- Заголовок таблицы -->
-				<Grid Grid.Row="0" Background="#F8F9FA" Height="40" ColumnDefinitions="*,150,150,120,100,Auto">
-					<TextBlock Grid.Column="0" Text="Название документа" FontSize="12" Foreground="#666" FontWeight="Medium" Margin="20,0,0,0" VerticalAlignment="Center"/>
-					<TextBlock Grid.Column="1" Text="Тип" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
-					<TextBlock Grid.Column="2" Text="Заказ" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
-					<TextBlock Grid.Column="3" Text="Дата создания" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
-					<TextBlock Grid.Column="4" Text="Автор" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
-					<TextBlock Grid.Column="5" Text="Действия" FontSize="12" Foreground="#666" FontWeight="Medium" Margin="5,0" VerticalAlignment="Center"/>
+				<Grid Grid.Row="0" Background="{DynamicResource BackgroundBrush}" Height="40" ColumnDefinitions="*,150,150,120,100,Auto">
+					<TextBlock Grid.Column="0" Text="Название документа" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium" Margin="20,0,0,0" VerticalAlignment="Center"/>
+					<TextBlock Grid.Column="1" Text="Тип" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium" VerticalAlignment="Center"/>
+					<TextBlock Grid.Column="2" Text="Заказ" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium" VerticalAlignment="Center"/>
+					<TextBlock Grid.Column="3" Text="Дата создания" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium" VerticalAlignment="Center"/>
+					<TextBlock Grid.Column="4" Text="Автор" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium" VerticalAlignment="Center"/>
+					<TextBlock Grid.Column="5" Text="Действия" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium" Margin="5,0" VerticalAlignment="Center"/>
 				</Grid>
 
 				<!-- Линия разделителя -->
-				<Rectangle Grid.Row="0" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom" IsHitTestVisible="False"/>
+				<Rectangle Grid.Row="0" Height="1" Fill="{DynamicResource BorderBrush}" VerticalAlignment="Bottom" IsHitTestVisible="False"/>
 
 				<!-- Список документов или индикатор загрузки -->
 				<Grid Grid.Row="1">
@@ -64,41 +64,41 @@
 						<ItemsControl ItemsSource="{Binding Documents}">
 							<ItemsControl.ItemTemplate>
 								<DataTemplate>
-									<Grid Height="60" ColumnDefinitions="*,150,150,120,100,Auto" Background="{Binding IsAlternate, Converter={StaticResource BoolToValue}, ConverterParameter='White,#F9FAFB'}">
+									<Grid Height="60" ColumnDefinitions="*,150,150,120,100,Auto" Background="{Binding IsAlternate, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource SurfaceBrush},{DynamicResource BackgroundBrush}'}">
 										<StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="20,0,0,0">
-											<TextBlock Text="{Binding Name}" FontSize="13" Foreground="#333" TextWrapping="Wrap"/>
-											<TextBlock Text="{Binding Description}" FontSize="11" Foreground="#666" TextWrapping="Wrap"/>
+											<TextBlock Text="{Binding Name}" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap"/>
+											<TextBlock Text="{Binding Description}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"/>
 										</StackPanel>
 
-										<TextBlock Grid.Column="1" Text="{Binding Type}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
-										<TextBlock Grid.Column="2" Text="{Binding OrderNumber}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
-										<TextBlock Grid.Column="3" Text="{Binding CreatedDate}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
-										<TextBlock Grid.Column="4" Text="{Binding Author}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
+										<TextBlock Grid.Column="1" Text="{Binding Type}" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+										<TextBlock Grid.Column="2" Text="{Binding OrderNumber}" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+										<TextBlock Grid.Column="3" Text="{Binding CreatedDate}" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+										<TextBlock Grid.Column="4" Text="{Binding Author}" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
 
 										<!-- Меню действий -->
 										<StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="10" Margin="5,0" VerticalAlignment="Center">
-											<Button Width="30" Height="30" CornerRadius="15" Background="#F1F3F4"
+											<Button Width="30" Height="30" CornerRadius="15" Background="{DynamicResource BackgroundBrush}"
                                                 Command="{Binding $parent[ItemsControl].((vm:DocumentationViewModel)DataContext).DownloadCommand}"
                                                 CommandParameter="{Binding Id}"
                                                 ToolTip.Tip="Скачать документ">
-												<TextBlock Text="↓" FontSize="12" Foreground="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+												<TextBlock Text="↓" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 											</Button>
-											<Button Width="30" Height="30" CornerRadius="15" Background="#F1F3F4"
+											<Button Width="30" Height="30" CornerRadius="15" Background="{DynamicResource BackgroundBrush}"
                                                 Command="{Binding $parent[ItemsControl].((vm:DocumentationViewModel)DataContext).ViewCommand}"
                                                 CommandParameter="{Binding Id}"
                                                 ToolTip.Tip="Просмотреть документ">
-												<TextBlock Text="👁" FontSize="12" Foreground="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+												<TextBlock Text="👁" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 											</Button>
-											<Button Width="30" Height="30" CornerRadius="15" Background="#F1F3F4"
+											<Button Width="30" Height="30" CornerRadius="15" Background="{DynamicResource BackgroundBrush}"
                                                 Command="{Binding $parent[ItemsControl].((vm:DocumentationViewModel)DataContext).DeleteDocumentCommand}"
                                                 CommandParameter="{Binding Id}"
                                                 ToolTip.Tip="Удалить документ">
-												<TextBlock Text="🗑" FontSize="12" Foreground="#FF7043" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+												<TextBlock Text="🗑" FontSize="12" Foreground="{DynamicResource ErrorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 											</Button>
 										</StackPanel>
 
 										<!-- Линия разделителя -->
-										<Rectangle Grid.ColumnSpan="6" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom"/>
+										<Rectangle Grid.ColumnSpan="6" Height="1" Fill="{DynamicResource BorderBrush}" VerticalAlignment="Bottom"/>
 									</Grid>
 								</DataTemplate>
 							</ItemsControl.ItemTemplate>
@@ -108,20 +108,20 @@
 					<!-- Индикатор загрузки -->
 					<StackPanel IsVisible="{Binding IsLoading}" VerticalAlignment="Center" HorizontalAlignment="Center">
 						<ProgressBar IsIndeterminate="True" Width="200" Height="4" />
-						<TextBlock Text="Загрузка документов..." Margin="0,10,0,0" HorizontalAlignment="Center"/>
+						<TextBlock Text="Загрузка документов..." Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,10,0,0" HorizontalAlignment="Center"/>
 					</StackPanel>
 
 					<!-- Сообщение, когда нет документов -->
 					<TextBlock Text="Документы не найдены"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
-                               Foreground="#666"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
                                IsVisible="{Binding !HasDocuments}"/>
 				</Grid>
 
 				<!-- Статусное сообщение -->
-				<Border Grid.Row="2" Background="#F1F3F4" Height="40" IsVisible="{Binding ShowStatusMessage}">
-					<TextBlock Text="{Binding StatusMessage}" Foreground="#333" VerticalAlignment="Center" Margin="20,0,0,0"/>
+				<Border Grid.Row="2" Background="{DynamicResource BackgroundBrush}" Height="40" IsVisible="{Binding ShowStatusMessage}">
+					<TextBlock Text="{Binding StatusMessage}" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center" Margin="20,0,0,0"/>
 				</Border>
 			</Grid>
 		</Border>

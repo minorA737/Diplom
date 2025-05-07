@@ -45,8 +45,14 @@ C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\8.0.6\ref\net8.0\Microso
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\8.0.6\ref\net8.0\Microsoft.Win32.Registry.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\8.0.6\ref\net8.0\mscorlib.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\8.0.6\ref\net8.0\netstandard.dll
+C:\Users\Admin\.nuget\packages\newtonsoft.json\13.0.3\lib\net6.0\Newtonsoft.Json.dll
 C:\Users\Admin\.nuget\packages\npgsql\9.0.3\lib\net8.0\Npgsql.dll
 C:\Users\Admin\.nuget\packages\npgsql.entityframeworkcore.postgresql\9.0.4\lib\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+C:\Users\Admin\.nuget\packages\nunittestadapter.withframework\2.0.0\lib\nunit.core.dll
+C:\Users\Admin\.nuget\packages\nunittestadapter.withframework\2.0.0\lib\nunit.core.interfaces.dll
+C:\Users\Admin\.nuget\packages\nunittestadapter.withframework\2.0.0\lib\nunit.framework.dll
+C:\Users\Admin\.nuget\packages\nunittestadapter.withframework\2.0.0\lib\nunit.util.dll
+C:\Users\Admin\.nuget\packages\nunittestadapter.withframework\2.0.0\lib\NUnit.VisualStudio.TestAdapter.dll
 C:\Users\Admin\.nuget\packages\questpdf\2025.4.2\lib\net8.0\QuestPDF.dll
 C:\Users\Admin\.nuget\packages\reactiveui\20.1.1\lib\net8.0\ReactiveUI.dll
 C:\Users\Admin\.nuget\packages\skiasharp\2.88.8\lib\net6.0\SkiaSharp.dll

@@ -1,0 +1,15 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<!-- Общие ресурсы (не зависят от темы) -->
+	<Color x:Key="PrimaryColor">#00ACC1</Color>
+	<Color x:Key="SecondaryColor">#9575CD</Color>
+	<Color x:Key="SuccessColor">#4CAF9D</Color>
+	<Color x:Key="WarningColor">#FFB74D</Color>
+	<Color x:Key="ErrorColor">#FF7043</Color>
+
+	<SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
+	<SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource SecondaryColor}"/>
+	<SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource SuccessColor}"/>
+	<SolidColorBrush x:Key="WarningBrush" Color="{StaticResource WarningColor}"/>
+	<SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource ErrorColor}"/>
+</ResourceDictionary>

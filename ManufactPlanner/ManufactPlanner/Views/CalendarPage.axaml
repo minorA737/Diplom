@@ -22,38 +22,38 @@
 	<Grid RowDefinitions="Auto,Auto,*">
 		<!-- Заголовок и управление календарем -->
 		<Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="20,20,20,0">
-			<TextBlock Grid.Column="0" Text="Календарь" FontSize="20" FontWeight="SemiBold" Foreground="#333333"/>
+			<TextBlock Grid.Column="0" Text="Календарь" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
 			<!-- Переключение режимов отображения -->
-			<Border Grid.Column="1" Width="200" Height="36" CornerRadius="18" Background="#F1F3F4"
+			<Border Grid.Column="1" Width="200" Height="36" CornerRadius="18" Background="{DynamicResource BackgroundBrush}"
                     HorizontalAlignment="Center" VerticalAlignment="Center">
 				<Grid ColumnDefinitions="*,*,*">
 					<Border Grid.Column="0" Width="66" Height="36" CornerRadius="18"
-                            Background="{Binding IsWeekMode, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1,Transparent'}">
+                            Background="{Binding IsWeekMode, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush},Transparent'}">
 						<Button Command="{Binding SwitchToWeekModeCommand}" Background="Transparent"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 							<TextBlock Text="Неделя" FontSize="12"
-                                    Foreground="{Binding IsWeekMode, Converter={StaticResource BoolToValue}, ConverterParameter='White,#666'}"
+                                    Foreground="{Binding IsWeekMode, Converter={StaticResource BoolToValue}, ConverterParameter='White,{DynamicResource TextSecondaryBrush}'}"
                                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Button>
 					</Border>
 
 					<Border Grid.Column="1" Width="66" Height="36" CornerRadius="18"
-                            Background="{Binding IsMonthMode, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1,Transparent'}">
+                            Background="{Binding IsMonthMode, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush},Transparent'}">
 						<Button Command="{Binding SwitchToMonthModeCommand}" Background="Transparent"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 							<TextBlock Text="Месяц" FontSize="12"
-                                    Foreground="{Binding IsMonthMode, Converter={StaticResource BoolToValue}, ConverterParameter='White,#666'}"
+                                    Foreground="{Binding IsMonthMode, Converter={StaticResource BoolToValue}, ConverterParameter='White,{DynamicResource TextSecondaryBrush}'}"
                                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Button>
 					</Border>
 
 					<Border Grid.Column="2" Width="66" Height="36" CornerRadius="18"
-                            Background="{Binding IsYearMode, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1,Transparent'}">
+                            Background="{Binding IsYearMode, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush},Transparent'}">
 						<Button Command="{Binding SwitchToYearModeCommand}" Background="Transparent"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 							<TextBlock Text="Год" FontSize="12"
-                                    Foreground="{Binding IsYearMode, Converter={StaticResource BoolToValue}, ConverterParameter='White,#666'}"
+                                    Foreground="{Binding IsYearMode, Converter={StaticResource BoolToValue}, ConverterParameter='White,{DynamicResource TextSecondaryBrush}'}"
                                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Button>
 					</Border>
@@ -63,23 +63,23 @@
 			<!-- Навигация по датам -->
 			<StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10">
 				<Button Command="{Binding TodayCommand}" Width="80" Height="36"
-                        Background="#F1F3F4" CornerRadius="18">
-					<TextBlock Text="Сегодня" FontSize="12" Foreground="#333"
+                        Background="{DynamicResource BackgroundBrush}" CornerRadius="18">
+					<TextBlock Text="Сегодня" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}"
                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
 				</Button>
 
-				<Border Width="200" Height="36" CornerRadius="4" Background="White"
-                        BorderBrush="#E0E0E0" BorderThickness="1" VerticalAlignment="Center">
+				<Border Width="200" Height="36" CornerRadius="4" Background="{DynamicResource SurfaceBrush}"
+                        BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" VerticalAlignment="Center">
 					<Grid ColumnDefinitions="Auto,*,Auto">
 						<Button Grid.Column="0" Width="24" Height="36" Background="Transparent"
                                 Command="{Binding PreviousPeriodCommand}">
-							<TextBlock Text="◀" FontSize="13" Foreground="#333" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							<TextBlock Text="◀" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Button>
-						<TextBlock Grid.Column="1" Text="{Binding CurrentPeriod}" FontSize="13" Foreground="#333"
+						<TextBlock Grid.Column="1" Text="{Binding CurrentPeriod}" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						<Button Grid.Column="2" Width="24" Height="36" Background="Transparent"
                                 Command="{Binding NextPeriodCommand}">
-							<TextBlock Text="▶" FontSize="13" Foreground="#333" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							<TextBlock Text="▶" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Button>
 					</Grid>
 				</Border>
@@ -87,8 +87,7 @@
 		</Grid>
 
 		<!-- Панель фильтров -->
-		<Border Grid.Row="1" Height="50" Background="White" CornerRadius="8" Margin="20,15,20,0"
-                BoxShadow="0 2 3 #10000000">
+		<Border Grid.Row="1" Height="50" Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Margin="20,15,20,0">
 			<Grid ColumnDefinitions="Auto, Auto" VerticalAlignment="Center" Margin="20,0">
 
 				<!-- Фильтр приоритета -->
@@ -96,7 +95,7 @@
                           ItemsSource="{Binding Priorities}" SelectedItem="{Binding SelectedPriority}"/>
 
 				<!-- Кнопка обновления -->
-				<Button Grid.Column="1" Width="36" Height="36" CornerRadius="18" Background="#00ACC1"
+				<Button Grid.Column="1" Width="36" Height="36" CornerRadius="18" Background="{DynamicResource PrimaryBrush}"
                         Command="{Binding RefreshCommand}">
 					<TextBlock Text="⟳" FontSize="16" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 				</Button>
@@ -109,72 +108,72 @@
 			<ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoading}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Height="4"/>
 
 			<!-- Недельный вид календаря -->
-			<Border IsVisible="{Binding IsWeekMode}" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+			<Border IsVisible="{Binding IsWeekMode}" Background="{DynamicResource SurfaceBrush}" CornerRadius="8">
 				<Grid RowDefinitions="Auto,*">
 					<!-- Шапка календаря с днями недели -->
-					<Grid Grid.Row="0" Height="60" Background="#F8F9FA" ColumnDefinitions="50,*,*,*,*,*,*,*">
+					<Grid Grid.Row="0" Height="60" Background="{DynamicResource BackgroundBrush}" ColumnDefinitions="50,*,*,*,*,*,*,*">
 						<TextBlock Grid.Column="0" Text="" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
 						<!-- Дни недели -->
 						<StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-							<TextBlock Text="Пн" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-							<TextBlock Text="{Binding WeekDays[0]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+							<TextBlock Text="Пн" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding WeekDays[0]}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center"/>
 						</StackPanel>
 
 						<StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-							<TextBlock Text="Вт" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-							<TextBlock Text="{Binding WeekDays[1]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+							<TextBlock Text="Вт" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding WeekDays[1]}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center"/>
 						</StackPanel>
 
 						<StackPanel Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center">
-							<TextBlock Text="Ср" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-							<TextBlock Text="{Binding WeekDays[2]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+							<TextBlock Text="Ср" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding WeekDays[2]}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center"/>
 						</StackPanel>
 
 						<StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                    Background="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1 0.1,Transparent'}">
-							<TextBlock Text="Чт" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+                                    Background="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush} 0.1,Transparent'}">
+							<TextBlock Text="Чт" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center"/>
 							<TextBlock Text="{Binding WeekDays[3]}" FontSize="14"
-                                       Foreground="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1,#333'}"
+                                       Foreground="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush},{DynamicResource TextPrimaryBrush}'}"
                                        FontWeight="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='Bold,Normal'}"
                                        HorizontalAlignment="Center"/>
 						</StackPanel>
 
 						<StackPanel Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center">
-							<TextBlock Text="Пт" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-							<TextBlock Text="{Binding WeekDays[4]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+							<TextBlock Text="Пт" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding WeekDays[4]}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center"/>
 						</StackPanel>
 
 						<StackPanel Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center">
-							<TextBlock Text="Сб" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-							<TextBlock Text="{Binding WeekDays[5]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+							<TextBlock Text="Сб" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding WeekDays[5]}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center"/>
 						</StackPanel>
 
 						<StackPanel Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center">
-							<TextBlock Text="Вс" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
-							<TextBlock Text="{Binding WeekDays[6]}" FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
+							<TextBlock Text="Вс" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center"/>
+							<TextBlock Text="{Binding WeekDays[6]}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center"/>
 						</StackPanel>
 					</Grid>
 
 					<!-- Основная сетка календаря -->
 					<Grid Grid.Row="1" ColumnDefinitions="50,*,*,*,*,*,*,*">
 						<!-- Колонка времени -->
-						<StackPanel Grid.Column="0" Background="#F8F9FA">
-							<TextBlock Text="08:00" FontSize="12" Foreground="#666" Margin="0,10" HorizontalAlignment="Center"/>
-							<TextBlock Text="09:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-							<TextBlock Text="10:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-							<TextBlock Text="11:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-							<TextBlock Text="12:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-							<TextBlock Text="13:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-							<TextBlock Text="14:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-							<TextBlock Text="15:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-							<TextBlock Text="16:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-							<TextBlock Text="17:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
-							<TextBlock Text="18:00" FontSize="12" Foreground="#666" Margin="0,30" HorizontalAlignment="Center"/>
+						<StackPanel Grid.Column="0" Background="{DynamicResource BackgroundBrush}">
+							<TextBlock Text="08:00" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,10" HorizontalAlignment="Center"/>
+							<TextBlock Text="09:00" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="10:00" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="11:00" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="12:00" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="13:00" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="14:00" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="15:00" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="16:00" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="17:00" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,30" HorizontalAlignment="Center"/>
+							<TextBlock Text="18:00" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,30" HorizontalAlignment="Center"/>
 						</StackPanel>
 
 						<!-- Сетка дней - вертикальные линии -->
-						<Border Grid.Column="1" BorderBrush="#E0E0E0" BorderThickness="1,0,1,0">
+						<Border Grid.Column="1" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,0,1,0">
 							<ScrollViewer VerticalScrollBarVisibility="Auto">
 								<ItemsControl ItemsSource="{Binding MondayEvents}">
 									<ItemsControl.ItemTemplate>
@@ -198,7 +197,7 @@
 							</ScrollViewer>
 						</Border>
 
-						<Border Grid.Column="2" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+						<Border Grid.Column="2" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,0">
 							<ScrollViewer VerticalScrollBarVisibility="Auto">
 								<ItemsControl ItemsSource="{Binding TuesdayEvents}">
 									<ItemsControl.ItemTemplate>
@@ -222,7 +221,7 @@
 							</ScrollViewer>
 						</Border>
 
-						<Border Grid.Column="3" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+						<Border Grid.Column="3" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,0">
 							<ScrollViewer VerticalScrollBarVisibility="Auto">
 								<ItemsControl ItemsSource="{Binding WednesdayEvents}">
 									<ItemsControl.ItemTemplate>
@@ -246,8 +245,8 @@
 							</ScrollViewer>
 						</Border>
 
-						<Border Grid.Column="4" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0"
-                                Background="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1 0.05,Transparent'}">
+						<Border Grid.Column="4" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,0"
+                                Background="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush} 0.05,Transparent'}">
 							<ScrollViewer VerticalScrollBarVisibility="Auto">
 								<ItemsControl ItemsSource="{Binding ThursdayEvents}">
 									<ItemsControl.ItemTemplate>
@@ -271,7 +270,7 @@
 							</ScrollViewer>
 						</Border>
 
-						<Border Grid.Column="5" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+						<Border Grid.Column="5" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,0">
 							<ScrollViewer VerticalScrollBarVisibility="Auto">
 								<ItemsControl ItemsSource="{Binding FridayEvents}">
 									<ItemsControl.ItemTemplate>
@@ -295,7 +294,7 @@
 							</ScrollViewer>
 						</Border>
 
-						<Border Grid.Column="6" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+						<Border Grid.Column="6" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,0">
 							<ScrollViewer VerticalScrollBarVisibility="Auto">
 								<ItemsControl ItemsSource="{Binding SaturdayEvents}">
 									<ItemsControl.ItemTemplate>
@@ -319,7 +318,7 @@
 							</ScrollViewer>
 						</Border>
 
-						<Border Grid.Column="7" BorderBrush="#E0E0E0" BorderThickness="0,0,0,0">
+						<Border Grid.Column="7" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,0">
 							<ScrollViewer VerticalScrollBarVisibility="Auto">
 								<ItemsControl ItemsSource="{Binding SundayEvents}">
 									<ItemsControl.ItemTemplate>
@@ -347,14 +346,14 @@
 						<Line Grid.ColumnSpan="8"
 							StartPoint="{Binding CurrentTimePosition, Converter={StaticResource DoubleToPointConverter}, ConverterParameter='50,Y'}"
 							EndPoint="{Binding CurrentTimePosition, Converter={StaticResource DoubleToPointConverter}, ConverterParameter='770,Y'}"
-							Stroke="#00ACC1"
+							Stroke="{DynamicResource PrimaryBrush}"
 							StrokeThickness="2"
 							StrokeDashArray="4,2"
 							IsVisible="{Binding IsToday}"/>
 						<Ellipse Grid.Column="0"
 							Width="8"
 							Height="8"
-							Fill="#00ACC1"
+							Fill="{DynamicResource PrimaryBrush}"
 							HorizontalAlignment="Left"
 							Margin="{Binding CurrentTimePosition, Converter={StaticResource TimePositionToMarginConverter}}"
 							IsVisible="{Binding IsToday}"/>
@@ -364,7 +363,7 @@
 			</Border>
 
 			<!-- Месячный вид календаря -->
-			<Border IsVisible="{Binding IsMonthMode}" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+			<Border IsVisible="{Binding IsMonthMode}" Background="{DynamicResource SurfaceBrush}" CornerRadius="8">
 				<Grid>
 					<!-- Дни недели и сетка календаря -->
 					<Grid Margin="20">
@@ -376,19 +375,19 @@
 						<!-- Заголовки дней недели -->
 						<Grid Grid.Row="0" ColumnDefinitions="*,*,*,*,*,*,*">
 							<TextBlock Grid.Column="0" Text="Пн" FontSize="14" FontWeight="Medium"
-									  Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+									  Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,10"/>
 							<TextBlock Grid.Column="1" Text="Вт" FontSize="14" FontWeight="Medium"
-									  Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+									  Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,10"/>
 							<TextBlock Grid.Column="2" Text="Ср" FontSize="14" FontWeight="Medium"
-									  Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+									  Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,10"/>
 							<TextBlock Grid.Column="3" Text="Чт" FontSize="14" FontWeight="Medium"
-									  Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+									  Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,10"/>
 							<TextBlock Grid.Column="4" Text="Пт" FontSize="14" FontWeight="Medium"
-									  Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+									  Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,10"/>
 							<TextBlock Grid.Column="5" Text="Сб" FontSize="14" FontWeight="Medium"
-									  Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+									  Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,10"/>
 							<TextBlock Grid.Column="6" Text="Вс" FontSize="14" FontWeight="Medium"
-									  Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+									  Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,10"/>
 						</Grid>
 
 						<!-- Сетка календаря месяца -->
@@ -412,14 +411,14 @@
 												HorizontalContentAlignment="Stretch"
 												VerticalContentAlignment="Stretch">
 											<Border CornerRadius="4"
-												  Background="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='White,#F8F9FA'}"
-												  BorderBrush="#E0E0E0" BorderThickness="1">
+												  Background="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource SurfaceBrush},{DynamicResource BackgroundBrush}'}"
+												  BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
 												<Grid RowDefinitions="Auto,*">
 													<!-- Номер дня -->
-													<Border Grid.Row="0" Background="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1,Transparent'}"
+													<Border Grid.Row="0" Background="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush},Transparent'}"
 														  CornerRadius="4,4,0,0" Height="20">
 														<TextBlock Text="{Binding Day}" FontSize="12"
-																  Foreground="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='#333,#9E9E9E'}"
+																  Foreground="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource TextPrimaryBrush},{DynamicResource TextSecondaryBrush}'}"
 																  FontWeight="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='Bold,Normal'}"
 																  HorizontalAlignment="Center" VerticalAlignment="Center"/>
 													</Border>
@@ -446,7 +445,7 @@
 														<TextBlock Grid.Row="1"
 																 Text="{Binding EventsCountText}"
 																 FontSize="10"
-																 Foreground="#666"
+																 Foreground="{DynamicResource TextSecondaryBrush}"
 																 HorizontalAlignment="Center"
 																 VerticalAlignment="Center"
 																 IsVisible="{Binding ShowEventsCount}"/>
@@ -462,29 +461,28 @@
 
 					<!-- Отдельная панель списка событий месяца (активируется при нажатии на день) -->
 					<Border IsVisible="{Binding IsSelectedDayVisible}"
-						  Background="#FFFFFF"
-						  BorderBrush="#E0E0E0"
+						  Background="{DynamicResource SurfaceBrush}"
+						  BorderBrush="{DynamicResource BorderBrush}"
 						  BorderThickness="1"
 						  CornerRadius="8"
 						  Width="300"
 						  Height="400"
 						  HorizontalAlignment="Right"
 						  VerticalAlignment="Center"
-						  Margin="0,0,20,0"
-						  BoxShadow="0 2 5 #20000000">
+						  Margin="0,0,20,0">
 						<Grid RowDefinitions="Auto,*,Auto">
 							<!-- Заголовок с датой -->
-							<Grid Grid.Row="0" Background="#F8F9FA" Height="40" ColumnDefinitions="*,Auto">
+							<Grid Grid.Row="0" Background="{DynamicResource BackgroundBrush}" Height="40" ColumnDefinitions="*,Auto">
 								<TextBlock Text="{Binding SelectedDayTitle}"
 										 FontSize="16"
 										 FontWeight="Medium"
-										 Foreground="#333"
+										 Foreground="{DynamicResource TextPrimaryBrush}"
 										 VerticalAlignment="Center"
 										 Margin="15,0,0,0"/>
 								<Button Grid.Column="1"
 									   Content="✕"
 									   Background="Transparent"
-									   Foreground="#666"
+									   Foreground="{DynamicResource TextSecondaryBrush}"
 									   Command="{Binding CloseSelectedDayCommand}"
 									   Width="40"
 									   Height="40"/>
@@ -502,7 +500,7 @@
 												   Margin="0,0,0,10"
 												   HorizontalAlignment="Stretch"
 												   HorizontalContentAlignment="Stretch">
-												<Border Background="#F9FAFB"
+												<Border Background="{DynamicResource BackgroundBrush}"
 													  CornerRadius="4"
 													  Padding="10"
 													  BorderBrush="{Binding Color}"
@@ -512,13 +510,13 @@
 																 Grid.Column="0"
 																 Text="{Binding Title}"
 																 FontSize="14"
-																 Foreground="#333"
+																 Foreground="{DynamicResource TextPrimaryBrush}"
 																 TextWrapping="Wrap"/>
 														<TextBlock Grid.Row="1"
 																 Grid.Column="0"
 																 Text="{Binding Time}"
 																 FontSize="12"
-																 Foreground="#666"/>
+																 Foreground="{DynamicResource TextSecondaryBrush}"/>
 														<Border Grid.Row="0"
 															   Grid.Column="1"
 															   Grid.RowSpan="2"
@@ -542,7 +540,7 @@
 							<!-- Кнопка создания задачи на выбранную дату -->
 							<Button Grid.Row="2"
 								   Content="+ Создать задачу"
-								   Background="#00ACC1"
+								   Background="{DynamicResource PrimaryBrush}"
 								   Foreground="White"
 								   HorizontalAlignment="Center"
 								   Margin="0,0,0,10"
@@ -555,7 +553,7 @@
 			</Border>
 
 			<!-- Годовой вид календаря -->
-			<Border IsVisible="{Binding IsYearMode}" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+			<Border IsVisible="{Binding IsYearMode}" Background="{DynamicResource SurfaceBrush}" CornerRadius="8">
 				<ScrollViewer VerticalScrollBarVisibility="Auto">
 					<Grid Margin="20">
 						<UniformGrid Columns="3" Rows="4">
@@ -570,15 +568,15 @@
 												HorizontalAlignment="Stretch"
 												VerticalAlignment="Stretch">
 											<Border Height="120" CornerRadius="6"
-													Background="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='White,#F8F9FA'}"
-													BorderBrush="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1,#E0E0E0'}"
+													Background="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource SurfaceBrush},{DynamicResource BackgroundBrush}'}"
+													BorderBrush="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush},{DynamicResource BorderBrush}'}"
 													BorderThickness="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='2,1'}">
 												<Grid RowDefinitions="Auto,*">
 													<!-- Название месяца -->
-													<Border Grid.Row="0" Background="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='#00ACC1 0.1,Transparent'}"
+													<Border Grid.Row="0" Background="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush} 0.1,Transparent'}"
 															CornerRadius="6,6,0,0" Padding="5">
 														<TextBlock Text="{Binding MonthName}" FontSize="14"
-																  Foreground="#333"
+																  Foreground="{DynamicResource TextPrimaryBrush}"
 																  FontWeight="{Binding IsCurrentMonth, Converter={StaticResource BoolToValue}, ConverterParameter='Bold,Normal'}"
 																  HorizontalAlignment="Center"/>
 													</Border>
@@ -594,10 +592,10 @@
 
 														<StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
 															<TextBlock Text="{Binding EventsCount}" FontSize="24"
-																	  Foreground="{Binding EventsCount, Converter={StaticResource IsGreaterThan}, ConverterParameter='0,#00ACC1,#9E9E9E'}"
+																	  Foreground="{Binding EventsCount, Converter={StaticResource IsGreaterThan}, ConverterParameter='0,{DynamicResource PrimaryBrush},{DynamicResource TextSecondaryBrush}'}"
 																	  HorizontalAlignment="Center"
 																	  FontWeight="{Binding HasEvents, Converter={StaticResource BoolToValue}, ConverterParameter='SemiBold,Normal'}"/>
-															<TextBlock Text="{Binding EventsCountText}" FontSize="12" Foreground="#666" HorizontalAlignment="Center"/>
+															<TextBlock Text="{Binding EventsCountText}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
 														</StackPanel>
 													</Grid>
 												</Grid>
@@ -612,7 +610,7 @@
 			</Border>
 
 			<!-- Кнопка создания события -->
-			<Button Width="56" Height="56" CornerRadius="28" Background="#00ACC1"
+			<Button Width="56" Height="56" CornerRadius="28" Background="{DynamicResource PrimaryBrush}"
 					VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,20,20"
 					Command="{Binding CreateEventCommand}">
 				<TextBlock Text="+" FontSize="28" Foreground="White"

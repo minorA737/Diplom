@@ -43,13 +43,13 @@
 					</StackPanel>
 
 					<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
-						<Button Width="120" Height="32" CornerRadius="16" Background="#00ACC1" Command="{Binding EditTaskCommand}">
+						<Button Width="120" Height="32" CornerRadius="16" Background="{DynamicResource PrimaryBrush}" Command="{Binding EditTaskCommand}">
 							<TextBlock Text="Редактировать" FontSize="12" Foreground="White"/>
 							<ToolTip.Tip>
 								<TextBlock Text="Редактировать информацию о задаче"/>
 							</ToolTip.Tip>
 						</Button>
-						<Button Width="110" Height="32" CornerRadius="16" Background="White" BorderBrush="#E0E0E0" BorderThickness="1">
+						<Button Width="110" Height="32" CornerRadius="16" Background="White" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
 							<TextBlock Text="Действия ▼" FontSize="12" Foreground="#666"/>
 							<ToolTip.Tip>
 								<TextBlock Text="Дополнительные действия с задачей"/>
@@ -80,8 +80,8 @@
              IsVisible="{Binding !IsLoading}">
 			<!-- Вкладки -->
 			<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Background="White">
-				<Border BorderThickness="0,0,0,2" BorderBrush="#00ACC1">
-					<TextBlock Text="Описание" FontSize="14" Foreground="#00ACC1" FontWeight="Medium" Margin="20,10"/>
+				<Border BorderThickness="0,0,0,2" BorderBrush="{DynamicResource PrimaryBrush}">
+					<TextBlock Text="Описание" FontSize="14" Foreground="{DynamicResource PrimaryBrush}" FontWeight="Medium" Margin="20,10"/>
 				</Border>
 				<TextBlock Text="Комментарии" FontSize="14" Foreground="#666" Margin="20,10"/>
 				<TextBlock Text="Вложения" FontSize="14" Foreground="#666" Margin="20,10"/>
@@ -92,11 +92,11 @@
 			<Border Grid.Row="1" Grid.Column="0" Background="White" CornerRadius="0,0,8,8" BoxShadow="0 2 3 #10000000">
 				<StackPanel Margin="20">
 					<TextBlock Text="Описание" FontSize="16" FontWeight="Medium" Foreground="#333"/>
-					<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,15"/>
+					<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="0,10,0,15"/>
 					<TextBlock Text="{Binding Description}" FontSize="14" Foreground="#333" TextWrapping="Wrap"/>
 
 					<TextBlock Text="Детали задачи" FontSize="16" FontWeight="Medium" Foreground="#333" Margin="0,30,0,0"/>
-					<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,15"/>
+					<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="0,10,0,15"/>
 
 					<Grid ColumnDefinitions="90,*" RowDefinitions="Auto,Auto,Auto,Auto" Margin="0,0,0,20">
 						<TextBlock Grid.Row="0" Grid.Column="0" Text="Исполнитель:" FontSize="13" Foreground="#666" Margin="0,0,0,10"/>
@@ -120,7 +120,7 @@
 				<Border Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
 					<StackPanel Margin="15">
 						<TextBlock Text="Информация о заказе" FontSize="16" FontWeight="Medium" Foreground="#333"/>
-						<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,15"/>
+						<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="0,10,0,15"/>
 
 						<Grid ColumnDefinitions="70,*" RowDefinitions="Auto,Auto,Auto" Margin="10">
 							<TextBlock Grid.Row="0" Grid.Column="0" Text="Заказчик:" FontSize="13" Foreground="#666"/>
@@ -139,7 +139,7 @@
 				<Border Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
 					<StackPanel Margin="15">
 						<TextBlock Text="Связанные задачи" FontSize="16" FontWeight="Medium" Foreground="#333"/>
-						<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,15"/>
+						<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="0,10,0,15"/>
 
 						<Grid>
 							<ItemsControl ItemsSource="{Binding RelatedTasks}">

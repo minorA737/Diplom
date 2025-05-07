@@ -17,7 +17,7 @@
 	
 	<Grid RowDefinitions="Auto,Auto,*">
 		<!-- Заголовок страницы -->
-		<TextBlock Grid.Row="0" Text="Профиль пользователя" FontSize="20" FontWeight="SemiBold" Foreground="#333333" Margin="20,20,0,0"/>
+		<TextBlock Grid.Row="0" Text="Профиль пользователя" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,0"/>
 
 		<!-- Карточка профиля пользователя -->
 		<Border Grid.Row="1" Background="White" CornerRadius="8" Margin="20,20,20,0" BoxShadow="0 2 3 #10000000">
@@ -30,23 +30,23 @@
 
 				<!-- Информация о пользователе -->
 				<StackPanel Grid.Column="1" VerticalAlignment="Center">
-					<TextBlock Text="{Binding FullName}" FontSize="24" FontWeight="Medium" Foreground="#333333"/>
+					<TextBlock Text="{Binding FullName}" FontSize="24" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}"/>
 					<TextBlock Text="{Binding Username}" FontSize="16" Foreground="#9E9E9E" Margin="0,5,0,0"/>
 					<StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-						<TextBlock Text="Отдел:" FontSize="14" Foreground="#666666"/>
-						<TextBlock Text="{Binding Department}" FontSize="14" Foreground="#333333" Margin="5,0,0,0"/>
+						<TextBlock Text="Отдел:" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
+						<TextBlock Text="{Binding Department}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" Margin="5,0,0,0"/>
 					</StackPanel>
 					<StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-						<TextBlock Text="Роль:" FontSize="14" Foreground="#666666"/>
-						<TextBlock Text="{Binding Role}" FontSize="14" Foreground="#333333" Margin="5,0,0,0"/>
+						<TextBlock Text="Роль:" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
+						<TextBlock Text="{Binding Role}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" Margin="5,0,0,0"/>
 					</StackPanel>
 					<StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-						<TextBlock Text="Email:" FontSize="14" Foreground="#666666"/>
-						<TextBlock Text="{Binding Email}" FontSize="14" Foreground="#333333" Margin="5,0,0,0"/>
+						<TextBlock Text="Email:" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
+						<TextBlock Text="{Binding Email}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" Margin="5,0,0,0"/>
 					</StackPanel>
 					<StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-						<TextBlock Text="Последний вход:" FontSize="14" Foreground="#666666"/>
-						<TextBlock Text="{Binding LastLogin}" FontSize="14" Foreground="#333333" Margin="5,0,0,0"/>
+						<TextBlock Text="Последний вход:" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
+						<TextBlock Text="{Binding LastLogin}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" Margin="5,0,0,0"/>
 					</StackPanel>
 				</StackPanel>
 			</Grid>
@@ -55,67 +55,67 @@
 		<!-- Нижняя часть: активные задачи и статистика -->
 		<Grid Grid.Row="2" Margin="20,20,20,20" ColumnDefinitions="3*,1*" RowDefinitions="Auto,*">
 			<!-- Заголовок раздела задач -->
-			<TextBlock Grid.Row="0" Grid.Column="0" Text="Мои задачи" FontSize="16" FontWeight="Medium" Foreground="#333333" Margin="20,0,0,10"/>
+			<TextBlock Grid.Row="0" Grid.Column="0" Text="Мои задачи" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,0,0,10"/>
 
 			<!-- Список задач -->
 			<Border Grid.Row="1" Grid.Column="0" Background="White" CornerRadius="8" Margin="0,0,15,0"
                     BoxShadow="0 2 3 #10000000">
 				<StackPanel>
-					<Rectangle Height="1" Fill="#E0E0E0" Margin="20,40,20,0"/>
+					<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="20,40,20,0"/>
 
 					<!-- Заголовки колонок -->
 					<Grid Margin="20,10,20,10" ColumnDefinitions="3*,2*,1*,1*">
-						<TextBlock Grid.Column="0" Text="Название задачи" FontSize="14" FontWeight="Medium" Foreground="#666666"/>
-						<TextBlock Grid.Column="1" Text="Проект" FontSize="14" FontWeight="Medium" Foreground="#666666"/>
-						<TextBlock Grid.Column="2" Text="Статус" FontSize="14" FontWeight="Medium" Foreground="#666666"/>
-						<TextBlock Grid.Column="3" Text="Срок" FontSize="14" FontWeight="Medium" Foreground="#666666"/>
+						<TextBlock Grid.Column="0" Text="Название задачи" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource TextSecondaryBrush}"/>
+						<TextBlock Grid.Column="1" Text="Проект" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource TextSecondaryBrush}"/>
+						<TextBlock Grid.Column="2" Text="Статус" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource TextSecondaryBrush}"/>
+						<TextBlock Grid.Column="3" Text="Срок" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource TextSecondaryBrush}"/>
 					</Grid>
 
 					<!-- Задача 1 -->
 					<Border Height="60" Background="#F9FAFB" Margin="20,5,20,0" CornerRadius="4">
 						<Grid Margin="10,0" ColumnDefinitions="3*,2*,1*,1*">
-							<TextBlock Grid.Column="0" Text="Разработка схемы электрической" FontSize="14" Foreground="#333333" VerticalAlignment="Center"/>
-							<TextBlock Grid.Column="1" Text="ОП-136-24 поз. 1" FontSize="14" Foreground="#666666" VerticalAlignment="Center"/>
-							<Border Grid.Column="2" Width="80" Height="24" Background="#4CAF9D" Opacity="0.2" CornerRadius="12" VerticalAlignment="Center">
-								<TextBlock Text="В процессе" FontSize="12" Foreground="#4CAF9D" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							<TextBlock Grid.Column="0" Text="Разработка схемы электрической" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+							<TextBlock Grid.Column="1" Text="ОП-136-24 поз. 1" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+							<Border Grid.Column="2" Width="80" Height="24" Background="{DynamicResource SuccessBrush}" Opacity="0.2" CornerRadius="12" VerticalAlignment="Center">
+								<TextBlock Text="В процессе" FontSize="12" Foreground="{DynamicResource SuccessBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</Border>
-							<TextBlock Grid.Column="3" Text="07.05.2025" FontSize="14" Foreground="#666666" VerticalAlignment="Center"/>
+							<TextBlock Grid.Column="3" Text="07.05.2025" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
 						</Grid>
 					</Border>
 
 					<!-- Задача 2 -->
 					<Border Height="60" Background="#F9FAFB" Margin="20,5,20,0" CornerRadius="4">
 						<Grid Margin="10,0" ColumnDefinitions="3*,2*,1*,1*">
-							<TextBlock Grid.Column="0" Text="Отладка монтажной схемы" FontSize="14" Foreground="#333333" VerticalAlignment="Center"/>
-							<TextBlock Grid.Column="1" Text="ОП-168-24 поз. 1.14" FontSize="14" Foreground="#666666" VerticalAlignment="Center"/>
-							<Border Grid.Column="2" Width="80" Height="24" Background="#FFB74D" Opacity="0.2" CornerRadius="12" VerticalAlignment="Center">
-								<TextBlock Text="Ожидание" FontSize="12" Foreground="#FFB74D" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							<TextBlock Grid.Column="0" Text="Отладка монтажной схемы" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+							<TextBlock Grid.Column="1" Text="ОП-168-24 поз. 1.14" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+							<Border Grid.Column="2" Width="80" Height="24" Background="{DynamicResource WarningBrush}" Opacity="0.2" CornerRadius="12" VerticalAlignment="Center">
+								<TextBlock Text="Ожидание" FontSize="12" Foreground="{DynamicResource WarningBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</Border>
-							<TextBlock Grid.Column="3" Text="12.05.2025" FontSize="14" Foreground="#666666" VerticalAlignment="Center"/>
+							<TextBlock Grid.Column="3" Text="12.05.2025" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
 						</Grid>
 					</Border>
 
 					<!-- Задача 3 -->
 					<Border Height="60" Background="#F9FAFB" Margin="20,5,20,0" CornerRadius="4">
 						<Grid Margin="10,0" ColumnDefinitions="3*,2*,1*,1*">
-							<TextBlock Grid.Column="0" Text="Подготовка технического задания" FontSize="14" Foreground="#333333" VerticalAlignment="Center"/>
-							<TextBlock Grid.Column="1" Text="ОП-169-24 поз. 1" FontSize="14" Foreground="#666666" VerticalAlignment="Center"/>
-							<Border Grid.Column="2" Width="80" Height="24" Background="#FF7043" Opacity="0.2" CornerRadius="12" VerticalAlignment="Center">
-								<TextBlock Text="Срочно" FontSize="12" Foreground="#FF7043" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							<TextBlock Grid.Column="0" Text="Подготовка технического задания" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+							<TextBlock Grid.Column="1" Text="ОП-169-24 поз. 1" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+							<Border Grid.Column="2" Width="80" Height="24" Background="{DynamicResource ErrorBrush}" Opacity="0.2" CornerRadius="12" VerticalAlignment="Center">
+								<TextBlock Text="Срочно" FontSize="12" Foreground="{DynamicResource ErrorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</Border>
-							<TextBlock Grid.Column="3" Text="Сегодня" FontSize="14" Foreground="#FF7043" FontWeight="Medium" VerticalAlignment="Center"/>
+							<TextBlock Grid.Column="3" Text="Сегодня" FontSize="14" Foreground="{DynamicResource ErrorBrush}" FontWeight="Medium" VerticalAlignment="Center"/>
 						</Grid>
 					</Border>
 
 					<!-- Задача 4 -->
 					<Border Height="60" Background="#F9FAFB" Margin="20,5,20,0" CornerRadius="4">
 						<Grid Margin="10,0" ColumnDefinitions="3*,2*,1*,1*">
-							<TextBlock Grid.Column="0" Text="Проектирование корпуса" FontSize="14" Foreground="#333333" VerticalAlignment="Center"/>
-							<TextBlock Grid.Column="1" Text="ОП-113-24 поз. 18" FontSize="14" Foreground="#666666" VerticalAlignment="Center"/>
+							<TextBlock Grid.Column="0" Text="Проектирование корпуса" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+							<TextBlock Grid.Column="1" Text="ОП-113-24 поз. 18" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
 							<Border Grid.Column="2" Width="80" Height="24" Background="#9575CD" Opacity="0.2" CornerRadius="12" VerticalAlignment="Center">
 								<TextBlock Text="Завершено" FontSize="12" Foreground="#9575CD" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</Border>
-							<TextBlock Grid.Column="3" Text="05.05.2025" FontSize="14" Foreground="#666666" VerticalAlignment="Center"/>
+							<TextBlock Grid.Column="3" Text="05.05.2025" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
 						</Grid>
 					</Border>
 				</StackPanel>
@@ -126,41 +126,41 @@
 				<!-- Статистика -->
 				<Border Background="White" CornerRadius="8" Margin="0,0,0,15" BoxShadow="0 2 3 #10000000">
 					<StackPanel Margin="20,20,20,20">
-						<TextBlock Text="Активность" FontSize="16" FontWeight="Medium" Foreground="#333333" Margin="0,0,0,15"/>
+						<TextBlock Text="Активность" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,15"/>
 
 						<!-- Статистика задач -->
 						<StackPanel Orientation="Horizontal" Margin="0,5,0,5">
-							<TextBlock Text="Всего задач:" FontSize="14" Foreground="#666666"/>
-							<TextBlock Text="{Binding TotalTasks}" FontSize="14" Foreground="#333333" Margin="5,0,0,0"/>
+							<TextBlock Text="Всего задач:" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
+							<TextBlock Text="{Binding TotalTasks}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" Margin="5,0,0,0"/>
 						</StackPanel>
 
 						<StackPanel Orientation="Horizontal" Margin="0,5,0,5">
-							<TextBlock Text="Выполнено:" FontSize="14" Foreground="#666666"/>
-							<TextBlock Text="{Binding CompletedTasks}" FontSize="14" Foreground="#333333" Margin="5,0,0,0"/>
+							<TextBlock Text="Выполнено:" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
+							<TextBlock Text="{Binding CompletedTasks}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" Margin="5,0,0,0"/>
 						</StackPanel>
 
 						<StackPanel Orientation="Horizontal" Margin="0,5,0,5">
-							<TextBlock Text="В процессе:" FontSize="14" Foreground="#666666"/>
-							<TextBlock Text="{Binding InProgressTasks}" FontSize="14" Foreground="#333333" Margin="5,0,0,0"/>
+							<TextBlock Text="В процессе:" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
+							<TextBlock Text="{Binding InProgressTasks}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" Margin="5,0,0,0"/>
 						</StackPanel>
 
 						<StackPanel Orientation="Horizontal" Margin="0,5,0,5">
-							<TextBlock Text="Ожидание:" FontSize="14" Foreground="#666666"/>
-							<TextBlock Text="{Binding PendingTasks}" FontSize="14" Foreground="#333333" Margin="5,0,0,0"/>
+							<TextBlock Text="Ожидание:" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
+							<TextBlock Text="{Binding PendingTasks}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" Margin="5,0,0,0"/>
 						</StackPanel>
 
 						<!-- Прогресс-бар выполнения задач -->
-						<TextBlock Text="Выполнение задач" FontSize="14" Foreground="#666666" Margin="0,15,0,5"/>
+						<TextBlock Text="Выполнение задач" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,15,0,5"/>
 						<Grid Height="10" Background="#F1F3F4">
 							<Border Width="{Binding CompletionPercentage, Converter={StaticResource PercentToWidthConverter}}"
                                     HorizontalAlignment="Left"
                                     Height="10"
-                                    Background="#4CAF9D"
+                                    Background="{DynamicResource SuccessBrush}"
                                     CornerRadius="5"/>
 						</Grid>
 						<TextBlock Text="{Binding CompletionPercentage, StringFormat='{}{0}%'}"
                                    FontSize="12"
-                                   Foreground="#333333"
+                                   Foreground="{DynamicResource TextPrimaryBrush}"
                                    HorizontalAlignment="Right"
                                    Margin="0,5,0,0"/>
 					</StackPanel>
@@ -169,12 +169,12 @@
 				<!-- Последние события -->
 				<Border Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
 					<StackPanel Margin="20,20,20,20">
-						<TextBlock Text="Последние события" FontSize="16" FontWeight="Medium" Foreground="#333333" Margin="0,0,0,15"/>
+						<TextBlock Text="Последние события" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,15"/>
 
 						<!-- Событие 1 -->
 						<Border Background="#F9FAFB" CornerRadius="4" Padding="10,10" Margin="0,0,0,5">
 							<StackPanel>
-								<TextBlock Text="Назначена новая задача" FontSize="14" Foreground="#333333"/>
+								<TextBlock Text="Назначена новая задача" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}"/>
 								<TextBlock Text="10.05.2025, 14:30" FontSize="12" Foreground="#9E9E9E" Margin="0,5,0,0"/>
 							</StackPanel>
 						</Border>
@@ -182,7 +182,7 @@
 						<!-- Событие 2 -->
 						<Border Background="#F9FAFB" CornerRadius="4" Padding="10,10" Margin="0,5,0,5">
 							<StackPanel>
-								<TextBlock Text="Изменен статус задачи" FontSize="14" Foreground="#333333"/>
+								<TextBlock Text="Изменен статус задачи" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}"/>
 								<TextBlock Text="09.05.2025, 09:45" FontSize="12" Foreground="#9E9E9E" Margin="0,5,0,0"/>
 							</StackPanel>
 						</Border>
@@ -190,7 +190,7 @@
 						<!-- Событие 3 -->
 						<Border Background="#F9FAFB" CornerRadius="4" Padding="10,10" Margin="0,5,0,0">
 							<StackPanel>
-								<TextBlock Text="Комментарий к задаче" FontSize="14" Foreground="#333333"/>
+								<TextBlock Text="Комментарий к задаче" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}"/>
 								<TextBlock Text="08.05.2025, 16:20" FontSize="12" Foreground="#9E9E9E" Margin="0,5,0,0"/>
 							</StackPanel>
 						</Border>

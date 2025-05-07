@@ -12,6 +12,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls;
 using ManufactPlanner.Views.Dialogs;
 using Avalonia;
+using NUnit.Core;
 
 namespace ManufactPlanner.ViewModels
 {
@@ -215,10 +216,7 @@ namespace ManufactPlanner.ViewModels
 
             SwitchToCalendarViewCommand = ReactiveCommand.Create(() =>
             {
-                CurrentViewMode = ViewMode.Calendar;
-                this.RaisePropertyChanged(nameof(IsTableViewActive));
-                this.RaisePropertyChanged(nameof(IsKanbanViewActive));
-                this.RaisePropertyChanged(nameof(IsCalendarViewActive));
+                _mainWindowViewModel.NavigateToCalendar();
             });
 
             CreateTaskCommand = ReactiveCommand.Create(CreateTask);

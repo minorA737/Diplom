@@ -39,13 +39,13 @@
 					</StackPanel>
 
 					<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
-						<Button Width="110" Height="36" CornerRadius="18" Background="#00ACC1" Command="{Binding EditOrderCommand}">
+						<Button Width="110" Height="36" CornerRadius="18" Background="{DynamicResource PrimaryBrush}" Command="{Binding EditOrderCommand}">
 							<TextBlock Text="Редактировать" FontSize="12" Foreground="White"/>
 							<ToolTip.Tip>
 								<TextBlock Text="Редактировать информацию о заказе"/>
 							</ToolTip.Tip>
 						</Button>
-						<Button Width="100" Height="36" CornerRadius="18" Background="White" BorderBrush="#E0E0E0" BorderThickness="1">
+						<Button Width="100" Height="36" CornerRadius="18" Background="White" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
 							<TextBlock Text="Действия ▼" FontSize="12" Foreground="#666"/>
 							<ToolTip.Tip>
 								<TextBlock Text="Дополнительные действия с заказом"/>
@@ -68,7 +68,7 @@
 
 					<StackPanel Grid.Column="2" Grid.Row="0" Margin="0,0,0,15">
 						<TextBlock Text="Срок поставки" FontSize="12" Foreground="#9E9E9E"/>
-						<TextBlock Text="{Binding DeliveryDeadline}" FontSize="14" Foreground="{Binding IsDeliveryDateCritical, Converter={StaticResource BoolToValue}, ConverterParameter='#FF7043,#333'}" Margin="0,5,0,0"/>
+						<TextBlock Text="{Binding DeliveryDeadline}" FontSize="14" Foreground="{Binding IsDeliveryDateCritical, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource ErrorBrush},#333'}" Margin="0,5,0,0"/>
 					</StackPanel>
 
 					<StackPanel Grid.Column="0" Grid.Row="1">
@@ -83,8 +83,8 @@
 
 					<StackPanel Grid.Column="2" Grid.Row="1">
 						<TextBlock Text="Статус" FontSize="12" Foreground="#9E9E9E"/>
-						<Border Width="" MinWidth="80" Height="24" CornerRadius="12" Padding="10,0" Background="#4CAF9D" Opacity="0.2" HorizontalAlignment="Left" Margin="0,5,0,0">
-							<TextBlock Text="{Binding Status}" FontSize="12" Foreground="#4CAF9D" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<Border Width="" MinWidth="80" Height="24" CornerRadius="12" Padding="10,0" Background="{DynamicResource SuccessBrush}" Opacity="0.2" HorizontalAlignment="Left" Margin="0,5,0,0">
+							<TextBlock Text="{Binding Status}" FontSize="12" Foreground="{DynamicResource SuccessBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Border>
 					</StackPanel>
 				</Grid>
@@ -95,14 +95,14 @@
 		<Grid Grid.Row="2" Margin="20,20,20,20" RowDefinitions="Auto,*" IsVisible="{Binding !IsLoading}">
 			<!-- Вкладки -->
 			<Grid Grid.Row="0" Background="White" Height="40" ColumnDefinitions="Auto,Auto,Auto,*,Auto">
-				<Border Grid.Column="0" BorderThickness="0,0,0,2" BorderBrush="#00ACC1">
-					<TextBlock Text="Позиции" FontSize="14" Foreground="#00ACC1" FontWeight="Medium" VerticalAlignment="Center" Margin="20,0"/>
+				<Border Grid.Column="0" BorderThickness="0,0,0,2" BorderBrush="{DynamicResource PrimaryBrush}">
+					<TextBlock Text="Позиции" FontSize="14" Foreground="{DynamicResource PrimaryBrush}" FontWeight="Medium" VerticalAlignment="Center" Margin="20,0"/>
 				</Border>
 				<TextBlock Grid.Column="1" Text="Документация" FontSize="14" Foreground="#666" VerticalAlignment="Center" Margin="20,0"/>
 				<TextBlock Grid.Column="2" Text="Сроки" FontSize="14" Foreground="#666" VerticalAlignment="Center" Margin="20,0"/>
 
 				<!-- Кнопка добавления позиции -->
-				<Button Grid.Column="4" Width="150" Height="36" CornerRadius="18" Background="#00ACC1" HorizontalAlignment="Right" Command="{Binding AddPositionCommand}">
+				<Button Grid.Column="4" Width="150" Height="36" CornerRadius="18" Background="{DynamicResource PrimaryBrush}" HorizontalAlignment="Right" Command="{Binding AddPositionCommand}">
 					<TextBlock Text="+ Добавить позицию" FontSize="12" Foreground="White"/>
 					<ToolTip.Tip>
 						<TextBlock Text="Добавить новую позицию в заказ"/>
@@ -114,7 +114,7 @@
 			<Border Grid.Row="1" Background="White" CornerRadius="0,0,8,8" BoxShadow="0 2 3 #10000000">
 				<Grid RowDefinitions="Auto,*">
 					<!-- Заголовок таблицы -->
-					<Grid Grid.Row="0" Background="#F8F9FA" Height="40" ColumnDefinitions="100,250,100,100,100,*,Auto">
+					<Grid Grid.Row="0" Background="{DynamicResource BackgroundBrush}" Height="40" ColumnDefinitions="100,250,100,100,100,*,Auto">
 						<TextBlock Grid.Column="0" Text="№ позиции" FontSize="12" Foreground="#666" FontWeight="Medium" Margin="20,0,0,0" VerticalAlignment="Center"/>
 						<TextBlock Grid.Column="1" Text="Наименование" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
 						<TextBlock Grid.Column="2" Text="Количество" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
@@ -125,7 +125,7 @@
 					</Grid>
 
 					<!-- Линия разделителя -->
-					<Rectangle Grid.Row="0" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom" IsHitTestVisible="False"/>
+					<Rectangle Grid.Row="0" Height="1" Fill="{DynamicResource BorderBrush}" VerticalAlignment="Bottom" IsHitTestVisible="False"/>
 
 					<!-- Список позиций -->
 					<ScrollViewer Grid.Row="1">
@@ -166,7 +166,7 @@
 											</StackPanel>
 
 											<!-- Линия разделителя -->
-											<Rectangle Grid.ColumnSpan="7" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom"/>
+											<Rectangle Grid.ColumnSpan="7" Height="1" Fill="{DynamicResource BorderBrush}" VerticalAlignment="Bottom"/>
 										</Grid>
 									</DataTemplate>
 								</ItemsControl.ItemTemplate>

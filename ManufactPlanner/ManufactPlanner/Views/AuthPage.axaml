@@ -34,7 +34,7 @@
 			</Setter>
 		</Style>
 		<Style Selector="Border.input:pointerover">
-			<Setter Property="BorderBrush" Value="#00ACC1"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
 		</Style>
 
 		<Style Selector="Button.login">
@@ -68,7 +68,7 @@
 			</Grid.Background>
 
 			<!-- Декоративные элементы -->
-			<Ellipse Width="300" Height="300" Fill="#00ACC1" Opacity="0.05"
+			<Ellipse Width="300" Height="300" Fill="{DynamicResource PrimaryBrush}" Opacity="0.05"
                      HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-50,0,0,-50"/>
 			<Ellipse Width="200" Height="200" Fill="#009688" Opacity="0.06"
                      HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-50,-50,0"/>
@@ -84,23 +84,23 @@
 			<!-- Содержимое карточки -->
 			<Grid RowDefinitions="90,Auto,*,Auto">
 				<!-- Шапка (исправлена - теперь точно вверху) -->
-				<Rectangle Grid.Row="0" Fill="#00ACC1"/>
+				<Rectangle Grid.Row="0" Fill="{DynamicResource PrimaryBrush}"/>
 
 				<!-- Логотип и заголовок -->
 				<StackPanel Grid.Row="1" VerticalAlignment="Top" Margin="0,-35,0,0">
 					<Border Width="70" Height="70" CornerRadius="35" BoxShadow="0 4 15 #30000000"
                         Background="White" HorizontalAlignment="Center">
-						<TextBlock Text="MP" FontSize="24" FontWeight="Bold" Foreground="#00ACC1"
+						<TextBlock Text="MP" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource PrimaryBrush}"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
 					</Border>
-					<TextBlock Text="Вход в систему" FontSize="20" FontWeight="SemiBold" Foreground="#333333"
+					<TextBlock Text="Вход в систему" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}"
                                HorizontalAlignment="Center" Margin="0,20,0,0"/>
 				</StackPanel>
 
 				<!-- Форма входа -->
 				<StackPanel Grid.Row="2" Margin="35,15,35,0">
 					<!-- Поле логина -->
-					<Border Classes="input" Height="48" Background="#F8F9FA" BorderBrush="#E0E0E0" BorderThickness="1"
+					<Border Classes="input" Height="48" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
                             CornerRadius="6" Margin="0,0,0,15">
 						<Grid>
 							<TextBlock Text="Имя пользователя" Foreground="#9E9E9E" FontSize="12"
@@ -111,7 +111,7 @@
 					</Border>
 
 					<!-- Поле пароля -->
-					<Border Classes="input" Height="48" Background="#F8F9FA" BorderBrush="#E0E0E0" BorderThickness="1"
+					<Border Classes="input" Height="48" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
                             CornerRadius="6" Margin="0,0,0,15">
 						<Grid>
 							<TextBlock Text="Пароль" Foreground="#9E9E9E" FontSize="12"
@@ -130,25 +130,25 @@
 						<CheckBox Grid.Column="0" IsChecked="{Binding RememberMe}" VerticalAlignment="Center">
 							<CheckBox.Styles>
 								<Style Selector="CheckBox:checked /template/ Border#NormalRectangle">
-									<Setter Property="Background" Value="#00ACC1"/>
-									<Setter Property="BorderBrush" Value="#00ACC1"/>
+									<Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+									<Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
 								</Style>
 							</CheckBox.Styles>
 						</CheckBox>
-						<TextBlock Grid.Column="1" Text="Запомнить меня" FontSize="12" Foreground="#333333"
+						<TextBlock Grid.Column="1" Text="Запомнить меня" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}"
                                   VerticalAlignment="Center" Margin="5,0,0,0"/>
 					</Grid>
 
 					<!-- Кнопка входа - исправлено центрирование текста -->
 					<Button Classes="login" HorizontalAlignment="Stretch"
-                            Height="48" Background="#00ACC1" Foreground="White" CornerRadius="6"
+                            Height="48" Background="{DynamicResource PrimaryBrush}" Foreground="White" CornerRadius="6"
                             FontSize="14" FontWeight="Medium" Margin="0,0,0,15"
                             Command="{Binding LoginCommand}">
 						<TextBlock Text="ВОЙТИ" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 					</Button>
 
 					<ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoading}"
-                        Height="4" Margin="0,0,0,15" Foreground="#00ACC1"/>
+                        Height="4" Margin="0,0,0,15" Foreground="{DynamicResource PrimaryBrush}"/>
 
 				</StackPanel>
 

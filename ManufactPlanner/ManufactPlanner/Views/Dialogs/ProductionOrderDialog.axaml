@@ -9,27 +9,102 @@
         Width="600" Height="800"
         WindowStartupLocation="CenterOwner"
         x:DataType="vm:ProductionOrderDialogViewModel"
-        xmlns:vm="using:ManufactPlanner.ViewModels.Dialogs">
+        xmlns:vm="using:ManufactPlanner.ViewModels.Dialogs"
+        Background="{DynamicResource BackgroundBrush}">
 
 	<Window.Resources>
-		
 		<converters:BoolToValueConverter x:Key="BoolToValue"/>
 		<converters:DateTimeConverter x:Key="DateTimeConverter"/>
 	</Window.Resources>
 
+	<Window.Styles>
+		<!-- Стили для TextBox -->
+		<Style Selector="TextBox">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Padding" Value="10,5"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+
+		<!-- Стили для TextBox с многострочным вводом -->
+		<Style Selector="TextBox.multiline">
+			<Setter Property="Height" Value="100"/>
+			<Setter Property="AcceptsReturn" Value="True"/>
+			<Setter Property="TextWrapping" Value="Wrap"/>
+			<Setter Property="VerticalContentAlignment" Value="Top"/>
+			<Setter Property="VerticalAlignment" Value="Stretch"/>
+		</Style>
+
+		<!-- Стили для ComboBox -->
+		<Style Selector="ComboBox">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Padding" Value="10,5"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+
+		<!-- Стили для DatePicker -->
+		<Style Selector="DatePicker">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+		</Style>
+
+		<!-- Основные кнопки -->
+		<Style Selector="Button.primary">
+			<Setter Property="Height" Value="40"/>
+			<Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+			<Setter Property="Foreground" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+		</Style>
+
+		<!-- Кнопки отмены и второстепенные действия -->
+		<Style Selector="Button.secondary">
+			<Setter Property="Height" Value="40"/>
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+
+		<!-- Стандартные кнопки -->
+		<Style Selector="Button:not(.primary):not(.secondary)">
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="CornerRadius" Value="4"/>
+		</Style>
+	</Window.Styles>
+
 	<Grid RowDefinitions="Auto,*,Auto" Margin="20">
 		<!-- Заголовок -->
-		<TextBlock Grid.Row="0" Text="Создание заказ-наряда" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,20"/>
+		<TextBlock Grid.Row="0" Text="Создание заказ-наряда" FontSize="18" FontWeight="SemiBold"
+                 Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,20"/>
 
 		<!-- Основная форма -->
 		<ScrollViewer Grid.Row="1">
 			<StackPanel Spacing="15">
 				<!-- Выбор заказа -->
 				<StackPanel>
-					<TextBlock Text="Выберите заказ:" FontSize="14" Margin="0,0,0,5"/>
+					<TextBlock Text="Выберите заказ:" FontSize="14"
+                             Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
 					<Grid ColumnDefinitions="*,Auto">
 						<ComboBox Grid.Column="0" ItemsSource="{Binding Orders}"
-                                  SelectedItem="{Binding SelectedOrder}"
+                                  Background="{DynamicResource SurfaceBrush}"  SelectedItem="{Binding SelectedOrder}"
                                   PlaceholderText="Выберите заказ"
                                   HorizontalAlignment="Stretch">
 							<ComboBox.ItemTemplate>
@@ -48,9 +123,10 @@
 
 				<!-- Выбор позиции заказа -->
 				<StackPanel IsEnabled="{Binding HasSelectedOrder}">
-					<TextBlock Text="Выберите позицию заказа:" FontSize="14" Margin="0,0,0,5"/>
+					<TextBlock Text="Выберите позицию заказа:" FontSize="14"
+                             Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
 					<ComboBox ItemsSource="{Binding OrderPositions}"
-							  SelectedItem="{Binding SelectedOrderPosition}"
+							  Background="{DynamicResource SurfaceBrush}"  SelectedItem="{Binding SelectedOrderPosition}"
 							  PlaceholderText="Выберите позицию заказа"
 							  IsEnabled="{Binding HasOrderPositions}"
 							  HorizontalAlignment="Stretch">
@@ -64,7 +140,7 @@
 					<ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoading}" Height="2" Margin="0,5,0,0"/>
 					<!-- Показываем сообщение, если позиции не найдены -->
 					<TextBlock Text="Позиции для выбранного заказа не найдены"
-							   Foreground="#FF7043"
+							   Foreground="{DynamicResource ErrorBrush}"
 							   IsVisible="{Binding HasError}"
 							   Margin="0,5,0,0"
 							   FontSize="12"/>
@@ -72,53 +148,69 @@
 
 				<!-- Номер заказ-наряда -->
 				<StackPanel>
-					<TextBlock Text="Номер заказ-наряда:" FontSize="14" Margin="0,0,0,5"/>
-					<TextBox Text="{Binding OrderNumber}" Watermark="Введите номер заказ-наряда"/>
+					<TextBlock Text="Номер заказ-наряда:" FontSize="14"
+                             Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
+					<TextBox  Background="{DynamicResource SurfaceBrush}" Text="{Binding OrderNumber}" Watermark="Введите номер заказ-наряда"/>
 				</StackPanel>
 
 				<!-- Мастер -->
 				<StackPanel>
-					<TextBlock Text="Мастер:" FontSize="14" Margin="0,0,0,5"/>
-					<TextBox Text="{Binding MasterName}" Watermark="Введите ФИО мастера"/>
+					<TextBlock Text="Мастер:" FontSize="14"
+                             Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
+					<TextBox  Background="{DynamicResource SurfaceBrush}" Text="{Binding MasterName}" Watermark="Введите ФИО мастера"/>
 				</StackPanel>
 
 				<!-- Даты производственного процесса -->
-				<Expander Header="График производства" IsExpanded="True">
+				<Expander Header="График производства" IsExpanded="True" Background="{DynamicResource SurfaceBrush}">
 					<StackPanel Spacing="10" Margin="0,10,0,0">
 						<Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto">
-							<TextBlock Grid.Row="0" Grid.Column="0" Text="Дата изготовления:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-							<DatePicker Grid.Row="0" Grid.Column="1" SelectedDate="{Binding ProductionDate,Converter= {StaticResource DateTimeConverter}}"/>
+							<TextBlock Grid.Row="0" Grid.Column="0" Text="Дата изготовления:"
+                                     VerticalAlignment="Center" Margin="0,0,10,0"
+                                     Foreground="{DynamicResource TextSecondaryBrush}"/>
+							<DatePicker  Background="{DynamicResource SurfaceBrush}" Grid.Row="0" Grid.Column="1"
+                                      SelectedDate="{Binding ProductionDate,Converter={StaticResource DateTimeConverter}}"/>
 
-							<TextBlock Grid.Row="1" Grid.Column="0" Text="Дата отладки:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-							<DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding DebuggingDate,Converter= {StaticResource DateTimeConverter}}"/>
+							<TextBlock Grid.Row="1" Grid.Column="0" Text="Дата отладки:"
+                                     VerticalAlignment="Center" Margin="0,0,10,0"
+                                     Foreground="{DynamicResource TextSecondaryBrush}"/>
+							<DatePicker  Background="{DynamicResource SurfaceBrush}" Grid.Row="1" Grid.Column="1"
+                                      SelectedDate="{Binding DebuggingDate,Converter={StaticResource DateTimeConverter}}"/>
 
-							<TextBlock Grid.Row="2" Grid.Column="0" Text="Дата приемки:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-							<DatePicker Grid.Row="2" Grid.Column="1" SelectedDate="{Binding AcceptanceDate,Converter= {StaticResource DateTimeConverter}}"/>
+							<TextBlock Grid.Row="2" Grid.Column="0" Text="Дата приемки:"
+                                     VerticalAlignment="Center" Margin="0,0,10,0"
+                                     Foreground="{DynamicResource TextSecondaryBrush}"/>
+							<DatePicker  Background="{DynamicResource SurfaceBrush}" Grid.Row="2" Grid.Column="1"
+                                      SelectedDate="{Binding AcceptanceDate,Converter={StaticResource DateTimeConverter}}"/>
 
-							<TextBlock Grid.Row="3" Grid.Column="0" Text="Дата упаковки:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-							<DatePicker Grid.Row="3" Grid.Column="1" SelectedDate="{Binding PackagingDate,Converter= {StaticResource DateTimeConverter}}"/>
+							<TextBlock Grid.Row="3" Grid.Column="0" Text="Дата упаковки:"
+                                     VerticalAlignment="Center" Margin="0,0,10,0"
+                                     Foreground="{DynamicResource TextSecondaryBrush}"/>
+							<DatePicker  Background="{DynamicResource SurfaceBrush}" Grid.Row="3" Grid.Column="1"
+                                      SelectedDate="{Binding PackagingDate,Converter={StaticResource DateTimeConverter}}"/>
 						</Grid>
 					</StackPanel>
 				</Expander>
 
 				<!-- Примечания -->
 				<StackPanel>
-					<TextBlock Text="Примечания:" FontSize="14" Margin="0,0,0,5"/>
-					<TextBox Text="{Binding Notes}" AcceptsReturn="True" TextWrapping="Wrap" Height="100"/>
+					<TextBlock Text="Примечания:" FontSize="14"
+                             Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
+					<TextBox Background="{DynamicResource SurfaceBrush}"  Text="{Binding Notes}" AcceptsReturn="True" TextWrapping="Wrap"
+                           Classes="multiline"/>
 				</StackPanel>
 
 				<!-- Статус и сообщения -->
 				<TextBlock Text="{Binding StatusMessage}"
-                           Foreground="{Binding HasError, Converter={StaticResource BoolToValue}, ConverterParameter='#FF7043,#4CAF9D'}"
+                           Foreground="{Binding HasError, Converter={StaticResource BoolToValue}, 
+                                     ConverterParameter='{DynamicResource ErrorBrush},{DynamicResource SuccessBrush}'}"
                            IsVisible="{Binding ShowStatusMessage}"/>
 			</StackPanel>
 		</ScrollViewer>
 
 		<!-- Кнопки -->
 		<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0" Spacing="10">
-			<Button Content="Отмена" Width="100" Command="{Binding CancelCommand}"/>
-			<Button Content="Создать" Width="100"
-                    Background="#00ACC1" Foreground="White"
+			<Button Content="Отмена" Width="100" Classes="secondary" Command="{Binding CancelCommand}"/>
+			<Button Content="Создать" Width="100" Classes="primary"
                     Command="{Binding ConfirmCommand}"
                     IsEnabled="{Binding CanCreate}"/>
 		</StackPanel>

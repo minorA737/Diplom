@@ -61,35 +61,37 @@
 
 	<Grid>
 		<!-- Основной фон -->
-		<Border Background="#F8F9FA"/>
+		<Border Background="{DynamicResource BackgroundBrush}"/>
 
-		<!-- Используем Grid с определенными строками и столбцами для правильного расположения -->
 		<Grid RowDefinitions="60,*" ColumnDefinitions="Auto,*">
-			<!-- Верхняя панель (занимает всю ширину) -->
+			<!-- Верхняя панель -->
 			<Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-					Background="White" BoxShadow="0 2 3 #10000000"
-					IsVisible="{Binding IsAuthenticated}">
-			<Grid>
-				<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0">
-					<Ellipse Width="40" Height="40" Fill="#00ACC1"/>
-					<TextBlock Text="ManufactPlanner" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-				</StackPanel>
+                    Background="{DynamicResource SurfaceBrush}"
+                    IsVisible="{Binding IsAuthenticated}">
+				<Grid>
+					<!-- Содержимое верхней панели... -->
+					<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0">
+						<Ellipse Width="40" Height="40" Fill="{DynamicResource PrimaryBrush}"/>
+						<TextBlock Text="ManufactPlanner" FontSize="16" FontWeight="SemiBold"
+                                  Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+					</StackPanel>
 
-				<!-- Поиск -->
-				<Border Width="300" Height="30" CornerRadius="15" Background="#F1F3F4"
-                        BorderBrush="#E0E0E0" BorderThickness="1" HorizontalAlignment="Center">
-					<TextBox Watermark="Поиск..." BorderThickness="0" Background="Transparent"
-                             VerticalAlignment="Center" Padding="15,0,0,0"/>
-				</Border>
+					<!-- Поиск -->
+					<Border Width="300" Height="30" CornerRadius="15" Background="{DynamicResource BackgroundBrush}"
+                            BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" HorizontalAlignment="Center">
+						<TextBox Watermark="Поиск..." BorderThickness="0" Background="Transparent"
+                                 Foreground="{DynamicResource TextPrimaryBrush}"
+                                 VerticalAlignment="Center" Padding="15,0,0,0"/>
+					</Border>
 
 				<!-- Профиль и уведомления -->
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0">
 					<!-- Уведомления -->
-					<Border Width="30" Height="30" CornerRadius="15" Background="#F8F9FA"
-						BorderBrush="#E0E0E0" BorderThickness="1" Margin="0,0,20,0">
+					<Border Width="30" Height="30" CornerRadius="15" Background="{DynamicResource BackgroundBrush}"
+						BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Margin="0,0,20,0">
 						<Grid>
-							<Ellipse Width="10" Height="10" Fill="#FFB74D" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-							<Border Width="12" Height="12" CornerRadius="6" Background="#FF7043"
+							<Ellipse Width="10" Height="10" Fill="{DynamicResource WarningBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+							<Border Width="12" Height="12" CornerRadius="6" Background="{DynamicResource ErrorBrush}"
 									VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-2,-2,0"
 									IsVisible="{Binding UnreadNotificationsCount, Converter={StaticResource IsGreaterThan}, ConverterParameter='0'}">
 								<TextBlock Text="{Binding UnreadNotificationsCount}" FontSize="9" Foreground="White"

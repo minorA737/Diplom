@@ -89,6 +89,7 @@ namespace ManufactPlanner.ViewModels
 
         // Команды
         public ICommand OpenTaskDetailsCommand { get; }
+        public ICommand ViewTasksCommand { get; }
         public ICommand ViewCalendarCommand { get; }
         public ICommand RefreshDataCommand { get; }
 
@@ -105,6 +106,7 @@ namespace ManufactPlanner.ViewModels
 
             // Команды
             OpenTaskDetailsCommand = ReactiveCommand.Create<int>(OpenTaskDetails);
+            ViewTasksCommand = ReactiveCommand.Create(NavigateToTasks);
             ViewCalendarCommand = ReactiveCommand.Create(NavigateToCalendar);
             RefreshDataCommand = ReactiveCommand.Create(LoadDashboardData);
 
@@ -612,7 +614,10 @@ namespace ManufactPlanner.ViewModels
         {
             _mainWindowViewModel.NavigateToCalendar();
         }
-
+        private void NavigateToTasks()
+        {
+            _mainWindowViewModel.NavigateToTasks();
+        }
         public IBrush GetPriorityColor(int priority)
         {
             return priority switch

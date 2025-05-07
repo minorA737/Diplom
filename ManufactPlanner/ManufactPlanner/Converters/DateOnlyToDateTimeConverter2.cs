@@ -11,7 +11,7 @@ namespace ManufactPlanner.Converters
         {
             if (value is DateOnly dateOnly)
             {
-                return dateOnly.ToDateTime(TimeOnly.MinValue); // Преобразование DateOnly в DateTime
+                return new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day);
             }
             return null;
         }
@@ -20,7 +20,7 @@ namespace ManufactPlanner.Converters
         {
             if (value is DateTime dateTime)
             {
-                return DateOnly.FromDateTime(dateTime); // Преобразование DateTime в DateOnly
+                return DateOnly.FromDateTime(dateTime);
             }
             return null;
         }

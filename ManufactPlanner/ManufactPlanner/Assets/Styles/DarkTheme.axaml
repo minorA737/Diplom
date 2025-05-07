@@ -1,0 +1,37 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<!-- Ресурсы для темной темы - снижена контрастность -->
+	<Color x:Key="BackgroundColor">#1B2432</Color>
+	<Color x:Key="SurfaceColor">#29313E</Color>
+	<Color x:Key="TextPrimaryColor">#E1E6F0</Color>
+	<Color x:Key="TextSecondaryColor">#B3BAC5</Color>
+	<Color x:Key="BorderColor">#3A4253</Color>
+	<Color x:Key="ShadowColor">#25000000</Color>
+
+	<SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}"/>
+	<SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}"/>
+	<SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimaryColor}"/>
+	<SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondaryColor}"/>
+	<SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}"/>
+	<SolidColorBrush x:Key="ShadowBrush" Color="{StaticResource ShadowColor}"/>
+
+	<!-- Модификация основных цветов для темной темы -->
+	<Color x:Key="PrimaryColorDark">#00B8CF</Color>
+	<!-- Ярче, для лучшей видимости -->
+	<Color x:Key="SecondaryColorDark">#9F85D8</Color>
+	<Color x:Key="SuccessColorDark">#5BBCAC</Color>
+	<Color x:Key="WarningColorDark">#FFC266</Color>
+	<Color x:Key="ErrorColorDark">#FF8566</Color>
+
+	<SolidColorBrush x:Key="PrimaryBrushDark" Color="{StaticResource PrimaryColorDark}"/>
+	<SolidColorBrush x:Key="SecondaryBrushDark" Color="{StaticResource SecondaryColorDark}"/>
+	<SolidColorBrush x:Key="SuccessBrushDark" Color="{StaticResource SuccessColorDark}"/>
+	<SolidColorBrush x:Key="WarningBrushDark" Color="{StaticResource WarningColorDark}"/>
+	<SolidColorBrush x:Key="ErrorBrushDark" Color="{StaticResource ErrorColorDark}"/>
+
+	<!-- Градиент для сайдбара -->
+	<LinearGradientBrush x:Key="SidebarGradient" StartPoint="0%,0%" EndPoint="0%,100%">
+		<GradientStop Offset="0" Color="#004E57"/>
+		<GradientStop Offset="1" Color="#00353B"/>
+	</LinearGradientBrush>
+</ResourceDictionary>

@@ -21,7 +21,7 @@ namespace ManufactPlanner
         {
             AvaloniaXamlLoader.Load(this);
         }
-        
+
         public override void OnFrameworkInitializationCompleted()
         {
             // Удаляем DataAnnotations validator для улучшения производительности
@@ -29,28 +29,8 @@ namespace ManufactPlanner
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                // Добавляем ресурсы для навигационной панели и других элементов
-                if (Current != null)
-                {
-                    var resources = new ResourceDictionary();
-                    var sidebarGradient = new LinearGradientBrush
-                    {
-                        StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
-                        EndPoint = new RelativePoint(0, 1, RelativeUnit.Relative)
-                    };
-                    sidebarGradient.GradientStops.Add(new GradientStop { Color = Color.Parse("#00ACC1"), Offset = 0 });
-                    sidebarGradient.GradientStops.Add(new GradientStop { Color = Color.Parse("#008999"), Offset = 1 });
-                    resources.Add("SidebarGradient", sidebarGradient);
-
-                    // Добавляем цвета для приложения
-                    resources.Add("PrimaryColor", Color.Parse("#00ACC1"));
-                    resources.Add("SecondaryColor", Color.Parse("#9575CD"));
-                    resources.Add("SuccessColor", Color.Parse("#4CAF9D"));
-                    resources.Add("WarningColor", Color.Parse("#FFB74D"));
-                    resources.Add("ErrorColor", Color.Parse("#FF7043"));
-                    resources.Add("BackgroundColor", Color.Parse("#F8F9FA"));
-                    Current.Resources.MergedDictionaries.Add(resources);
-                }
+                // Инициализируем сервис тем
+                var themeService = ThemeService.Instance;
 
                 // Создаем экземпляр DbContext
                 var dbContext = new PostgresContext();

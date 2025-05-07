@@ -9,20 +9,52 @@
         Width="500" Height="400"
         WindowStartupLocation="CenterOwner"
         x:DataType="vm:OrderSelectionDialogViewModel"
-        xmlns:vm="using:ManufactPlanner.ViewModels.Dialogs">
+        xmlns:vm="using:ManufactPlanner.ViewModels.Dialogs"
+        Background="{DynamicResource BackgroundBrush}">
+
+	<Window.Styles>
+		<!-- Стили для TextBox -->
+		<Style Selector="TextBox">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Padding" Value="10,5"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+
+		<!-- Стили для кнопок -->
+		<Style Selector="Button">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="CornerRadius" Value="4"/>
+		</Style>
+
+		<!-- Стиль для основной кнопки -->
+		<Style Selector="Button.primary">
+			<Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+			<Setter Property="Foreground" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderThickness" Value="0"/>
+		</Style>
+	</Window.Styles>
 
 	<Grid RowDefinitions="Auto,*,Auto" Margin="20">
 		<!-- Заголовок и строка поиска -->
 		<StackPanel Grid.Row="0" Spacing="15">
-			<TextBlock Text="Выберите заказ для документа" FontSize="16" FontWeight="SemiBold"/>
-			<TextBox Text="{Binding SearchText}" Watermark="Поиск по номеру или названию..." Margin="0,0,0,10"/>
+			<TextBlock Text="Выберите заказ для документа" FontSize="16" FontWeight="SemiBold"
+                     Foreground="{DynamicResource TextPrimaryBrush}"/>
+			<TextBox Background="{DynamicResource SurfaceBrush}"  Text="{Binding SearchText}" Watermark="Поиск по номеру или названию..." Margin="0,0,0,10"/>
 		</StackPanel>
 
 		<!-- Список заказов -->
-		<Border Grid.Row="1" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4">
+		<Border Grid.Row="1" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4">
 			<ScrollViewer>
 				<ListBox ItemsSource="{Binding FilteredOrders}"
-                         SelectedItem="{Binding SelectedOrder}">
+                         SelectedItem="{Binding SelectedOrder}"
+                         Background="{DynamicResource SurfaceBrush}">
 					<ListBox.ItemTemplate>
 						<DataTemplate>
 							<Grid ColumnDefinitions="Auto,*">
@@ -30,11 +62,13 @@
                                            Text="{Binding OrderNumber}"
                                            FontWeight="SemiBold"
                                            VerticalAlignment="Center"
-                                           Margin="0,0,10,0"/>
+                                           Margin="0,0,10,0"
+                                           Foreground="{DynamicResource TextPrimaryBrush}"/>
 								<TextBlock Grid.Column="1"
                                            Text="{Binding Name}"
                                            TextWrapping="Wrap"
-                                           VerticalAlignment="Center"/>
+                                           VerticalAlignment="Center"
+                                           Foreground="{DynamicResource TextSecondaryBrush}"/>
 							</Grid>
 						</DataTemplate>
 					</ListBox.ItemTemplate>
@@ -45,8 +79,7 @@
 		<!-- Кнопки -->
 		<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0" Spacing="10">
 			<Button Content="Отмена" Width="100" Command="{Binding CancelCommand}"/>
-			<Button Content="Выбрать" Width="100"
-                    Background="#00ACC1" Foreground="White"
+			<Button Content="Выбрать" Width="100" Classes="primary"
                     Command="{Binding ConfirmCommand}"
                     IsEnabled="{Binding IsOrderSelected}"/>
 		</StackPanel>

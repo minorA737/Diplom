@@ -3,13 +3,34 @@
              x:Class="ManufactPlanner.App"
              xmlns:local="using:ManufactPlanner"
              RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+	<Application.DataTemplates>
+		<local:ViewLocator/>
+	</Application.DataTemplates>
 
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
-  
-    <Application.Styles>
-        <FluentTheme />
-    </Application.Styles>
+	<Application.Styles>
+		<FluentTheme />
+		<!-- Добавляем стили -->
+		<Style Selector="TextBlock.heading">
+			<Setter Property="FontSize" Value="20"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+			<Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+			<Setter Property="Margin" Value="20,20,0,0"/>
+		</Style>
+
+		<Style Selector="Border.card">
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="CornerRadius" Value="8"/>
+		</Style>
+	</Application.Styles>
+
+	<Application.Resources>
+		<!-- Подключаем общие ресурсы для всех тем -->
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/Assets/Styles/ThemeResources.axaml"/>
+				
+				<!-- Ресурсы для конкретной темы добавляются программно в ThemeService -->
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Application.Resources>
 </Application>

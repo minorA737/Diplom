@@ -81,8 +81,18 @@ namespace ManufactPlanner.ViewModels
                 this.RaiseAndSetIfChanged(ref _isAuthenticated, value);
             }
         }
+
+        private readonly ThemeService _themeService;
         public MainWindowViewModel()
         {
+            _themeService = ThemeService.Instance;
+
+            // Подписка на изменение темы
+            _themeService.ThemeChanged.Subscribe(isLight =>
+            {
+                // При необходимости можно обновить UI при изменении темы
+            });
+
             // Инициализация базы данных
             DbContext = new PostgresContext();
 
@@ -92,6 +102,11 @@ namespace ManufactPlanner.ViewModels
             // Заглушка данных пользователя (будет видна только после авторизации)
             CurrentUserName = string.Empty;
             UnreadNotificationsCount = 0;
+        }
+        // Метод для доступа к сервису тем из ViewModel
+        public void ToggleTheme()
+        {
+            _themeService.IsLightTheme = !_themeService.IsLightTheme;
         }
 
         // Навигационные методы для различных страниц

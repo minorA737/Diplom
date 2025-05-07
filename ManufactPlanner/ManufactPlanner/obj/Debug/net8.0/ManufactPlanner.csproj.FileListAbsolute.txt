@@ -222,3 +222,9 @@ D:\aa_Диплом\ManufactPlanner\ManufactPlanner\bin\Debug\net8.0\runtimes\win
 D:\aa_Диплом\ManufactPlanner\ManufactPlanner\bin\Debug\net8.0\runtimes\win-x86\native\libstdc++-6.dll
 D:\aa_Диплом\ManufactPlanner\ManufactPlanner\bin\Debug\net8.0\runtimes\win-x86\native\libwinpthread-1.dll
 D:\aa_Диплом\ManufactPlanner\ManufactPlanner\bin\Debug\net8.0\runtimes\win-x86\native\qpdf.dll
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\bin\Debug\net8.0\NUnit.VisualStudio.TestAdapter.dll
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\bin\Debug\net8.0\nunit.core.dll
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\bin\Debug\net8.0\nunit.core.interfaces.dll
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\bin\Debug\net8.0\nunit.framework.dll
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\bin\Debug\net8.0\nunit.util.dll
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\bin\Debug\net8.0\Newtonsoft.Json.dll
