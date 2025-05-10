@@ -156,7 +156,9 @@ namespace ManufactPlanner.ViewModels
 
                     // Устанавливаем имя пользователя в главном ViewModel
                     _mainWindowViewModel.CurrentUserName = $"{user.FirstName} {user.LastName}";
+                    _mainWindowViewModel.Inicial = $"{user.FirstName?[0]}{user.LastName?[0]}".ToUpper(); // Добавьте эту строку
                     _mainWindowViewModel.DbContext = _dbContext;
+
                     _mainWindowViewModel.CurrentUserId = user.Id ; // Сохраняем ID текущего пользователя
 
                     // Загружаем количество непрочитанных уведомлений

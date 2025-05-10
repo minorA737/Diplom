@@ -7,6 +7,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using ManufactPlanner.Views.Dialogs;
+using Avalonia.Controls;
 
 namespace ManufactPlanner.ViewModels
 {
@@ -14,9 +16,12 @@ namespace ManufactPlanner.ViewModels
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
         private readonly PostgresContext _dbContext;
+        private readonly Window _parentWindow;
+        private readonly Guid _currentUserId;
 
         // Свойства для отображения данных
         private string _taskId = string.Empty;
+        private int _taskDbId;
         private string _taskName = string.Empty;
         private string _createdDate = string.Empty;
         private string _status = string.Empty;
@@ -33,14 +38,27 @@ namespace ManufactPlanner.ViewModels
         private string _orderDeadline = string.Empty;
         private string _orderStatus = string.Empty;
         private bool _isLoading = true;
+        private int _selectedTabIndex = 0;
 
+        // Коллекции для вкладок
         private ObservableCollection<RelatedTaskViewModel> _relatedTasks = new ObservableCollection<RelatedTaskViewModel>();
+        private ObservableCollection<CommentViewModel> _comments = new ObservableCollection<CommentViewModel>();
+        private ObservableCollection<AttachmentViewModel> _attachments = new ObservableCollection<AttachmentViewModel>();
+
+        // Свойство для нового комментария
+        private string _newComment = string.Empty;
 
         #region Свойства
         public string TaskId
         {
             get => _taskId;
             set => this.RaiseAndSetIfChanged(ref _taskId, value);
+        }
+
+        public int TaskDbId
+        {
+            get => _taskDbId;
+            set => this.RaiseAndSetIfChanged(ref _taskDbId, value);
         }
 
         public string TaskName
@@ -139,23 +157,55 @@ namespace ManufactPlanner.ViewModels
             set => this.RaiseAndSetIfChanged(ref _relatedTasks, value);
         }
 
+        public ObservableCollection<CommentViewModel> Comments
+        {
+            get => _comments;
+            set => this.RaiseAndSetIfChanged(ref _comments, value);
+        }
+
+        public ObservableCollection<AttachmentViewModel> Attachments
+        {
+            get => _attachments;
+            set => this.RaiseAndSetIfChanged(ref _attachments, value);
+        }
+
         public bool IsLoading
         {
             get => _isLoading;
             set => this.RaiseAndSetIfChanged(ref _isLoading, value);
         }
+
+        public int SelectedTabIndex
+        {
+            get => _selectedTabIndex;
+            set => this.RaiseAndSetIfChanged(ref _selectedTabIndex, value);
+        }
+
+        public string NewComment
+        {
+            get => _newComment;
+            set => this.RaiseAndSetIfChanged(ref _newComment, value);
+        }
         #endregion
 
         public ICommand NavigateToTasksCommand { get; }
         public ICommand EditTaskCommand { get; }
+        public ICommand AddCommentCommand { get; }
+        public ICommand DownloadAttachmentCommand { get; }
+        public ICommand ViewAttachmentCommand { get; }
 
-        public TaskDetailsViewModel(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext, int taskId)
+        public TaskDetailsViewModel(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext, int taskId, Window parentWindow, Guid currentUserId)
         {
             _mainWindowViewModel = mainWindowViewModel;
             _dbContext = dbContext;
+            _parentWindow = mainWindowViewModel.MainWindow; // Используем главное окно из MainWindowViewModel
+            _currentUserId = currentUserId;
 
             NavigateToTasksCommand = ReactiveCommand.Create(() => _mainWindowViewModel.NavigateToTasks());
-            EditTaskCommand = ReactiveCommand.Create(EditTask);
+            EditTaskCommand = ReactiveCommand.CreateFromTask(EditTaskAsync);
+            AddCommentCommand = ReactiveCommand.CreateFromTask(AddCommentAsync);
+            DownloadAttachmentCommand = ReactiveCommand.Create<int>(DownloadAttachment);
+            ViewAttachmentCommand = ReactiveCommand.Create<int>(ViewAttachment);
 
             // Загружаем данные асинхронно
             LoadTaskDetailsAsync(taskId);
@@ -175,6 +225,7 @@ namespace ManufactPlanner.ViewModels
                 {
                     // Заполняем данные из представления
                     TaskId = $"T-{taskId}";
+                    TaskDbId = taskId;
                     TaskName = taskView.Name ?? "Без названия";
                     Status = taskView.Status ?? "Без статуса";
                     StatusColor = GetStatusColor(taskView.Status);
@@ -218,6 +269,7 @@ namespace ManufactPlanner.ViewModels
                     {
                         // Заполнение из основной таблицы
                         TaskId = $"T-{task.Id}";
+                        TaskDbId = task.Id;
                         TaskName = task.Name;
                         Status = task.Status ?? "Без статуса";
                         StatusColor = GetStatusColor(task.Status);
@@ -280,6 +332,7 @@ namespace ManufactPlanner.ViewModels
                     {
                         // Если задача не найдена, заполняем заглушками
                         TaskId = $"T-{taskId}";
+                        TaskDbId = taskId;
                         TaskName = "Задача не найдена";
                         Status = "Ошибка";
                         StatusColor = "#FF7043";
@@ -287,8 +340,10 @@ namespace ManufactPlanner.ViewModels
                     }
                 }
 
-                // Загрузим связанные задачи
+                // Загрузим связанные задачи, комментарии и вложения
                 await LoadRelatedTasksAsync(taskId);
+                await LoadCommentsAsync(taskId);
+                await LoadAttachmentsAsync(taskId);
             }
             catch (Exception ex)
             {
@@ -340,6 +395,67 @@ namespace ManufactPlanner.ViewModels
             }
         }
 
+        private async System.Threading.Tasks.Task LoadCommentsAsync(int taskId)
+        {
+            try
+            {
+                // Загружаем комментарии для задачи
+                var comments = await _dbContext.Comments
+                    .Include(c => c.User)
+                    .Where(c => c.TaskId == taskId)
+                    .OrderByDescending(c => c.CreatedAt)
+                    .ToListAsync();
+
+                // Преобразуем в модель представления
+                var commentVMs = comments.Select(c => new CommentViewModel
+                {
+                    Id = c.Id,
+                    Text = c.Text,
+                    Author = c.User != null ? $"{c.User.FirstName} {c.User.LastName}" : "Неизвестный пользователь",
+                    CreatedDate = c.CreatedAt?.ToString("dd.MM.yyyy HH:mm") ?? "Неизвестная дата",
+                    UserInitials = GetUserInitials(c.User)
+                }).ToList();
+
+                // Обновляем коллекцию
+                Comments = new ObservableCollection<CommentViewModel>(commentVMs);
+            }
+            catch (Exception)
+            {
+                // В случае ошибки просто оставляем пустую коллекцию
+            }
+        }
+
+        private async System.Threading.Tasks.Task LoadAttachmentsAsync(int taskId)
+        {
+            try
+            {
+                // Загружаем вложения для задачи
+                var attachments = await _dbContext.Attachments
+                    .Include(a => a.UploadedByNavigation)
+                    .Where(a => a.TaskId == taskId)
+                    .OrderByDescending(a => a.UploadedAt)
+                    .ToListAsync();
+
+                // Преобразуем в модель представления
+                var attachmentVMs = attachments.Select(a => new AttachmentViewModel
+                {
+                    Id = a.Id,
+                    FileName = a.FileName,
+                    FileType = a.FileType ?? "Неизвестный тип",
+                    FileSize = FormatFileSize(a.FileSize),
+                    UploadedBy = a.UploadedByNavigation != null ? $"{a.UploadedByNavigation.FirstName} {a.UploadedByNavigation.LastName}" : "Неизвестный пользователь",
+                    UploadedDate = a.UploadedAt?.ToString("dd.MM.yyyy HH:mm") ?? "Неизвестная дата"
+                }).ToList();
+
+                // Обновляем коллекцию
+                Attachments = new ObservableCollection<AttachmentViewModel>(attachmentVMs);
+            }
+            catch (Exception)
+            {
+                // В случае ошибки просто оставляем пустую коллекцию
+            }
+        }
+
         private string GetStatusColor(string? status)
         {
             if (string.IsNullOrEmpty(status))
@@ -379,10 +495,129 @@ namespace ManufactPlanner.ViewModels
             };
         }
 
-        private void EditTask()
+        private string GetUserInitials(User user)
         {
-            // Логика редактирования задачи
+            if (user == null)
+                return "??";
+
+            string firstName = !string.IsNullOrEmpty(user.FirstName) ? user.FirstName.Substring(0, 1) : "?";
+            string lastName = !string.IsNullOrEmpty(user.LastName) ? user.LastName.Substring(0, 1) : "?";
+
+            return $"{firstName}{lastName}";
+        }
+
+        private string FormatFileSize(long? bytes)
+        {
+            if (bytes == null || bytes <= 0)
+                return "0 B";
+
+            string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+            int order = 0;
+            double size = (long)bytes;
+
+            while (size >= 1024 && order < sizes.Length - 1)
+            {
+                order++;
+                size /= 1024;
+            }
+
+            return $"{size:0.##} {sizes[order]}";
+        }
+
+        // В TaskDetailsViewModel.cs нужно исправить метод EditTaskAsync
+        private async System.Threading.Tasks.Task EditTaskAsync()
+        {
+            System.Diagnostics.Debug.WriteLine("Начало метода EditTaskAsync");
+            try
+            {
+                IsLoading = true;
+
+                // Если _parentWindow все еще null, используйте глобальное окно
+                var parentWindow = _parentWindow ?? AppWindows.MainWindow;
+                System.Diagnostics.Debug.WriteLine($"Используемое окно: {parentWindow != null}");
+
+                System.Diagnostics.Debug.WriteLine($"TaskDbId: {TaskDbId}");
+
+                // Получаем задачу из БД для редактирования
+                var task = await _dbContext.Tasks.FindAsync(TaskDbId);
+                System.Diagnostics.Debug.WriteLine($"Задача найдена: {task != null}");
+
+                if (task == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("Задача не найдена в БД");
+                    return;
+                }
+
+                // Используем TaskEditDialog для редактирования задачи
+                System.Diagnostics.Debug.WriteLine("Вызываем TaskEditDialog.ShowDialog");
+                var updatedTask = await TaskEditDialog.ShowDialog(parentWindow, _dbContext, _currentUserId, task);
+                System.Diagnostics.Debug.WriteLine($"Результат диалога: {updatedTask != null}");
+
+                if (updatedTask != null)
+                {
+                    // Обновляем данные на странице
+                    System.Diagnostics.Debug.WriteLine("Обновляем данные на странице");
+                    LoadTaskDetailsAsync(TaskDbId);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Обработка ошибок
+                System.Diagnostics.Debug.WriteLine($"Ошибка при редактировании задачи: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
+            }
+            finally
+            {
+                IsLoading = false;
+                System.Diagnostics.Debug.WriteLine("Конец метода EditTaskAsync");
+            }
+        }
+
+        private async System.Threading.Tasks.Task AddCommentAsync()
+        {
+            if (string.IsNullOrWhiteSpace(NewComment))
+                return;
+
+            try
+            {
+                // Создаем новый комментарий
+                var comment = new Comment
+                {
+                    TaskId = TaskDbId,
+                    UserId = _currentUserId,
+                    Text = NewComment,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+
+                // Добавляем в БД
+                _dbContext.Comments.Add(comment);
+                await _dbContext.SaveChangesAsync();
+
+                // Очищаем поле ввода
+                NewComment = string.Empty;
+
+                // Обновляем список комментариев
+                await LoadCommentsAsync(TaskDbId);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка при добавлении комментария: {ex.Message}");
+            }
+        }
+
+        private void DownloadAttachment(int attachmentId)
+        {
+            // Логика для скачивания вложения
             // TODO: Реализовать в будущем
+            System.Diagnostics.Debug.WriteLine($"Скачивание вложения с ID: {attachmentId}");
+        }
+
+        private void ViewAttachment(int attachmentId)
+        {
+            // Логика для просмотра вложения
+            // TODO: Реализовать в будущем
+            System.Diagnostics.Debug.WriteLine($"Просмотр вложения с ID: {attachmentId}");
         }
     }
 
@@ -392,5 +627,24 @@ namespace ManufactPlanner.ViewModels
         public string Name { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
         public string StatusColor { get; set; } = "#666666";
+    }
+
+    public class CommentViewModel : ViewModelBase
+    {
+        public int Id { get; set; }
+        public string Text { get; set; } = string.Empty;
+        public string Author { get; set; } = string.Empty;
+        public string CreatedDate { get; set; } = string.Empty;
+        public string UserInitials { get; set; } = string.Empty;
+    }
+
+    public class AttachmentViewModel : ViewModelBase
+    {
+        public int Id { get; set; }
+        public string FileName { get; set; } = string.Empty;
+        public string FileType { get; set; } = string.Empty;
+        public string FileSize { get; set; } = string.Empty;
+        public string UploadedBy { get; set; } = string.Empty;
+        public string UploadedDate { get; set; } = string.Empty;
     }
 }

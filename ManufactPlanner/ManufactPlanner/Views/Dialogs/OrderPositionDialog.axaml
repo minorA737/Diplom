@@ -1,0 +1,153 @@
+<!-- Views/Dialogs/OrderPositionDialog.axaml -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="650"
+        x:Class="ManufactPlanner.Views.Dialogs.OrderPositionDialog"
+        Title="{Binding WindowTitle}"
+        Width="550" Height="600"
+        WindowStartupLocation="CenterOwner"
+        x:DataType="vm:OrderPositionDialogViewModel"
+        xmlns:vm="using:ManufactPlanner.ViewModels.Dialogs"
+        Background="{DynamicResource BackgroundBrush}">
+
+	<Window.Styles>
+		<!-- Стили для TextBox -->
+		<Style Selector="TextBox">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Padding" Value="10,5"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="0,0,0,15"/>
+		</Style>
+
+		<!-- Стили для ComboBox -->
+		<Style Selector="ComboBox">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Padding" Value="10,5"/>
+			<Setter Property="Margin" Value="0,0,0,15"/>
+		</Style>
+
+		<!-- Стили для кнопок -->
+		<Style Selector="Button">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="CornerRadius" Value="4"/>
+		</Style>
+
+		<!-- Стиль для основной кнопки -->
+		<Style Selector="Button.primary">
+			<Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+			<Setter Property="Foreground" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderThickness" Value="0"/>
+		</Style>
+	</Window.Styles>
+
+	<Grid RowDefinitions="Auto,*,Auto" Margin="20">
+		<!-- Заголовок -->
+		<TextBlock Grid.Row="0" Text="{Binding WindowTitle}" FontSize="18" FontWeight="SemiBold"
+                   Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,20"/>
+
+		<!-- Индикатор загрузки -->
+		<ProgressBar Grid.Row="1" IsIndeterminate="True" IsVisible="{Binding IsLoading}"
+                     VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0"
+                     Width="200" Height="10"/>
+
+		<!-- Форма редактирования -->
+		<ScrollViewer Grid.Row="1" IsVisible="{Binding !IsLoading}">
+			<StackPanel Spacing="10">
+				<!-- Сообщение об ошибке -->
+				<Border Background="#FFEBEE" BorderBrush="#FFCDD2" BorderThickness="1"
+                        CornerRadius="4" Padding="10" IsVisible="{Binding HasError}" Margin="0,0,0,10">
+					<TextBlock Text="{Binding ErrorMessage}" Foreground="#D32F2F" TextWrapping="Wrap"/>
+				</Border>
+
+				<!-- Информация о заказе (неизменяемая) -->
+				<StackPanel>
+					<TextBlock Text="Заказ" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0,0,0,5"/>
+					<TextBox Text="{Binding OrderNumber}" IsReadOnly="True" Foreground="{DynamicResource TextSecondaryBrush}"/>
+				</StackPanel>
+
+				<!-- Номер позиции -->
+				<StackPanel>
+					<TextBlock Text="Номер позиции *" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0,0,0,5"/>
+					<TextBox Text="{Binding PositionNumber}" Watermark="Введите номер позиции (напр. 1 или 1.1)"/>
+				</StackPanel>
+
+				<!-- Название продукта -->
+				<StackPanel>
+					<TextBlock Text="Наименование продукции *" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0,0,0,5"/>
+					<TextBox Text="{Binding ProductName}" Watermark="Введите наименование продукции"
+                             Height="80" AcceptsReturn="True" TextWrapping="Wrap"/>
+				</StackPanel>
+
+				<!-- Количество и цена -->
+				<StackPanel Orientation="Horizontal" Spacing="20">
+					<StackPanel Width="100">
+						<TextBlock Text="Количество *" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                                   Margin="0,0,0,5"/>
+						<NumericUpDown Value="{Binding Quantity}" Minimum="1" Maximum="1000"
+                                       VerticalContentAlignment="Center" Height="36"/>
+					</StackPanel>
+
+					<StackPanel Width="160">
+						<TextBlock Text="Цена за единицу (руб.) *" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                                  Margin="0,0,0,5"/>
+						<TextBox Text="{Binding Price}" Watermark="0.00"/>
+					</StackPanel>
+
+					<StackPanel Width="160">
+						<TextBlock Text="Общая сумма (руб.)" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                                  Margin="0,0,0,5"/>
+						<TextBox Text="{Binding TotalPrice}" IsReadOnly="True"
+                                 Background="#F0F0F0" Foreground="{DynamicResource TextSecondaryBrush}"/>
+					</StackPanel>
+				</StackPanel>
+
+				<!-- Тип разработки -->
+				<StackPanel>
+					<TextBlock Text="Тип разработки" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0,0,0,5"/>
+					<ComboBox ItemsSource="{Binding DevelopmentTypes}" SelectedItem="{Binding DevelopmentType}"
+                              HorizontalAlignment="Stretch"/>
+				</StackPanel>
+
+				<!-- Время выполнения -->
+				<StackPanel>
+					<TextBlock Text="Время на выполнение" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0,0,0,5"/>
+					<ComboBox ItemsSource="{Binding WorkflowTimes}" SelectedItem="{Binding WorkflowTime}"
+                              HorizontalAlignment="Stretch"/>
+				</StackPanel>
+
+				<!-- Статус -->
+				<StackPanel>
+					<TextBlock Text="Текущий статус" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0,0,0,5"/>
+					<ComboBox ItemsSource="{Binding Statuses}" SelectedItem="{Binding CurrentStatus}"
+                              HorizontalAlignment="Stretch"/>
+				</StackPanel>
+			</StackPanel>
+		</ScrollViewer>
+
+		<!-- Кнопки действий -->
+		<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0" Spacing="10">
+			<Button Content="Отмена" Width="100" Command="{Binding CancelCommand}"/>
+			<Button Content="Сохранить" Width="100" Classes="primary"
+                    Command="{Binding SaveCommand}" IsEnabled="{Binding !IsLoading}"/>
+		</StackPanel>
+	</Grid>
+</Window>

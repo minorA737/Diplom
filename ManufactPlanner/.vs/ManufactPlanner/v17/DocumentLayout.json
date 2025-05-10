@@ -3,12 +3,44 @@
   "WorkspaceRootPath": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\services\\notificationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\services\\notificationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\authpage.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\authpage.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\viewmodels\\notificationspageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\viewmodels\\notificationspageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\mainwindow.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\mainwindow.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\viewmodels\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\viewmodels\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\viewmodels\\authviewmodel .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\viewmodels\\authviewmodel .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\services\\services.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\services\\services.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\mainwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\mainwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\assets\\styles\\themeresources.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\assets\\styles\\themeresources.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\manufactplanner.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\manufactplanner.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\assets\\styles\\lighttheme.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\assets\\styles\\lighttheme.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\assets\\styles\\darktheme.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\assets\\styles\\darktheme.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +50,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,28 +62,127 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "NotificationsPageViewModel.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\NotificationsPageViewModel.cs",
-              "RelativeDocumentMoniker": "ManufactPlanner\\ViewModels\\NotificationsPageViewModel.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\NotificationsPageViewModel.cs",
-              "RelativeToolTip": "ManufactPlanner\\ViewModels\\NotificationsPageViewModel.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAA5AAAA",
+              "DocumentIndex": 4,
+              "Title": "Services.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Services\\Services.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Services\\Services.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Services\\Services.cs",
+              "RelativeToolTip": "ManufactPlanner\\Services\\Services.cs",
+              "ViewState": "AQIAAA0AAAAAAAAAAAAAAA0AAAAsAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-10T09:06:03.034Z",
+              "WhenOpened": "2025-05-10T15:13:42.319Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AuthViewModel .cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\AuthViewModel .cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\ViewModels\\AuthViewModel .cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\AuthViewModel .cs",
+              "RelativeToolTip": "ManufactPlanner\\ViewModels\\AuthViewModel .cs",
+              "ViewState": "AQIAAIsAAAAAAAAAAIAwwJkAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T15:09:55.971Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainWindowViewModel.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\MainWindowViewModel.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\ViewModels\\MainWindowViewModel.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\MainWindowViewModel.cs",
+              "RelativeToolTip": "ManufactPlanner\\ViewModels\\MainWindowViewModel.cs",
+              "ViewState": "AQIAAOEAAAAAAAAAAAAQwPIAAAAKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T15:07:41.195Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MainWindow.axaml.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\MainWindow.axaml.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Views\\MainWindow.axaml.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\MainWindow.axaml.cs",
+              "RelativeToolTip": "ManufactPlanner\\Views\\MainWindow.axaml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T15:07:05.923Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ManufactPlanner",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ManufactPlanner.csproj",
+              "RelativeDocumentMoniker": "ManufactPlanner\\ManufactPlanner.csproj",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ManufactPlanner.csproj",
+              "RelativeToolTip": "ManufactPlanner\\ManufactPlanner.csproj",
+              "ViewState": "AQIAACQAAAAAAAAAAAAAABYAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-05-10T14:39:26.47Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainWindow.axaml",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\MainWindow.axaml",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Views\\MainWindow.axaml",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\MainWindow.axaml",
+              "RelativeToolTip": "ManufactPlanner\\Views\\MainWindow.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-10T14:12:49.039Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "NotificationService.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Services\\NotificationService.cs",
-              "RelativeDocumentMoniker": "ManufactPlanner\\Services\\NotificationService.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Services\\NotificationService.cs",
-              "RelativeToolTip": "ManufactPlanner\\Services\\NotificationService.cs",
-              "ViewState": "AQIAAIMDAAAAAAAAAAAAAJkDAAAaAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-10T09:05:00.929Z",
+              "Title": "AuthPage.axaml",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\AuthPage.axaml",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Views\\AuthPage.axaml",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\AuthPage.axaml",
+              "RelativeToolTip": "ManufactPlanner\\Views\\AuthPage.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-10T13:56:56.023Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ThemeResources.axaml",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Assets\\Styles\\ThemeResources.axaml",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Assets\\Styles\\ThemeResources.axaml",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Assets\\Styles\\ThemeResources.axaml",
+              "RelativeToolTip": "ManufactPlanner\\Assets\\Styles\\ThemeResources.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-10T13:53:04.142Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "LightTheme.axaml",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Assets\\Styles\\LightTheme.axaml",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Assets\\Styles\\LightTheme.axaml",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Assets\\Styles\\LightTheme.axaml",
+              "RelativeToolTip": "ManufactPlanner\\Assets\\Styles\\LightTheme.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-10T13:52:57.117Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "DarkTheme.axaml",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Assets\\Styles\\DarkTheme.axaml",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Assets\\Styles\\DarkTheme.axaml",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Assets\\Styles\\DarkTheme.axaml",
+              "RelativeToolTip": "ManufactPlanner\\Assets\\Styles\\DarkTheme.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-10T13:52:47.88Z",
               "EditorCaption": ""
             }
           ]

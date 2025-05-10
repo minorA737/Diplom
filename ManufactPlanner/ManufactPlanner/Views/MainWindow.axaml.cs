@@ -10,6 +10,7 @@ namespace ManufactPlanner.Views
         {
             InitializeComponent();
 
+            AppWindows.MainWindow = this;
         }
     }
 }

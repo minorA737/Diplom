@@ -1,0 +1,219 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:ManufactPlanner.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="650"
+        x:Class="ManufactPlanner.Views.Dialogs.TaskEditDialog"
+        x:DataType="vm:TaskEditDialogViewModel"
+        Width="500" Height="680"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Редактирование задачи"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Background="{DynamicResource BackgroundBrush}"
+        xmlns:converters="using:ManufactPlanner.Converters">
+
+	<Window.Styles>
+		<!-- Стили для TextBox -->
+		<Style Selector="TextBox">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Padding" Value="10,5"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+
+		<!-- Стили для TextBox с многострочным вводом -->
+		<Style Selector="TextBox.multiline">
+			<Setter Property="Height" Value="80"/>
+			<Setter Property="AcceptsReturn" Value="True"/>
+			<Setter Property="TextWrapping" Value="Wrap"/>
+			<Setter Property="VerticalContentAlignment" Value="Top"/>
+		</Style>
+
+		<!-- Стили для ComboBox -->
+		<Style Selector="ComboBox">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Padding" Value="10,5"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+
+		<!-- Стили для DatePicker -->
+		<Style Selector="DatePicker">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+		</Style>
+
+		<!-- Основные кнопки -->
+		<Style Selector="Button.primary">
+			<Setter Property="Height" Value="40"/>
+			<Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+		</Style>
+
+		<!-- Кнопки отмены и второстепенные действия -->
+		<Style Selector="Button.secondary">
+			<Setter Property="Height" Value="40"/>
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+		</Style>
+	</Window.Styles>
+	<Window.Resources>
+		<converters:PriorityToTextConverter x:Key="PriorityConverter"/>
+		<converters:DateOnlyToDateTimeConverter2 x:Key="DateOnlyConverter"/>
+	</Window.Resources>
+
+	<Panel>
+		<Grid RowDefinitions="Auto,*,Auto" Margin="20">
+			<!-- Заголовок -->
+			<TextBlock Grid.Row="0" Text="Редактирование задачи"
+                       FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}"
+                       Margin="0,0,0,20"/>
+
+			<!-- Форма задачи -->
+			<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+				<StackPanel Spacing="15">
+					<!-- Название задачи -->
+					<StackPanel>
+						<TextBlock Text="Название задачи *" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
+						<TextBox Background="{DynamicResource SurfaceBrush}" Text="{Binding Name}" Watermark="Название задачи"/>
+					</StackPanel>
+
+					<!-- Описание задачи -->
+					<StackPanel>
+						<TextBlock Text="Описание задачи" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
+						<TextBox Background="{DynamicResource SurfaceBrush}" Text="{Binding Description}" Classes="multiline" Watermark="Детальное описание задачи..."/>
+					</StackPanel>
+
+					<!-- Исполнитель -->
+					<StackPanel>
+						<TextBlock Text="Исполнитель" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
+						<ComboBox Background="{DynamicResource SurfaceBrush}" ItemsSource="{Binding Users}"
+                                  SelectedItem="{Binding SelectedAssignee}"
+                                  DisplayMemberBinding="{Binding Name}"
+                                  HorizontalAlignment="Stretch"
+                                  PlaceholderText="Выберите исполнителя"/>
+					</StackPanel>
+
+					<!-- Соисполнители -->
+					<StackPanel>
+						<TextBlock Text="Соисполнители" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
+						<TextBox Background="{DynamicResource SurfaceBrush}" Text="{Binding CoAssignees}" Watermark="Через запятую, если несколько"/>
+					</StackPanel>
+
+					<!-- Приоритет -->
+					<StackPanel>
+						<TextBlock Text="Приоритет" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
+						<ComboBox Background="{DynamicResource SurfaceBrush}" SelectedItem="{Binding Priority}"
+                                  ItemsSource="{Binding PriorityOptions}"
+                                  HorizontalAlignment="Stretch">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock>
+										<TextBlock.Text>
+											<MultiBinding StringFormat="{}{0} - {1}">
+												<Binding Path="."/>
+												<Binding Path="." Converter="{StaticResource PriorityConverter}"/>
+											</MultiBinding>
+										</TextBlock.Text>
+									</TextBlock>
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
+					</StackPanel>
+
+					<!-- Статус -->
+					<StackPanel>
+						<TextBlock Text="Статус" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
+						<ComboBox Background="{DynamicResource SurfaceBrush}" ItemsSource="{Binding StatusOptions}"
+                                  SelectedItem="{Binding Status}"
+                                  HorizontalAlignment="Stretch"/>
+					</StackPanel>
+
+					<!-- Сроки выполнения -->
+					<Grid RowDefinitions="Auto,Auto,Auto,Auto">
+						<!-- Дата начала -->
+						<TextBlock Grid.Row="0" Text="Дата начала" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
+						<DatePicker Grid.Row="1"
+									SelectedDate="{Binding StartDate, Converter={StaticResource DateOnlyConverter}}"
+									Margin="0,0,0,15"/>
+
+						<!-- Дата окончания -->
+						<TextBlock Grid.Row="2" Text="Дата окончания" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
+						<DatePicker Grid.Row="3"
+									SelectedDate="{Binding EndDate, Converter={StaticResource DateOnlyConverter}}"/>
+					</Grid>
+
+					<!-- Этап -->
+					<StackPanel>
+						<TextBlock Text="Этап" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
+						<TextBox Background="{DynamicResource SurfaceBrush}" Text="{Binding Stage}" Watermark="Этап работы"/>
+					</StackPanel>
+
+					<!-- Статус отладки -->
+					<StackPanel>
+						<TextBlock Text="Статус отладки" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
+						<TextBox Background="{DynamicResource SurfaceBrush}" Text="{Binding DebuggingStatus}" Watermark="Статус отладки"/>
+					</StackPanel>
+
+					<!-- Примечания -->
+					<StackPanel>
+						<TextBlock Text="Примечания" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
+						<TextBox Background="{DynamicResource SurfaceBrush}" Text="{Binding Notes}" Classes="multiline" Watermark="Дополнительные примечания..."/>
+					</StackPanel>
+
+					<!-- Сообщение об ошибке -->
+					<TextBlock Text="{Binding ErrorMessage}"
+                               Foreground="{DynamicResource ErrorBrush}"
+                               TextWrapping="Wrap"
+                               IsVisible="{Binding HasError}"/>
+				</StackPanel>
+			</ScrollViewer>
+
+			<!-- Кнопки действий -->
+			<Grid Grid.Row="2" ColumnDefinitions="*,*" Margin="0,20,0,0" VerticalAlignment="Bottom">
+				<Button Grid.Column="0" Content="Отмена"
+                        Classes="secondary"
+                        HorizontalAlignment="Stretch"
+                        Margin="0,0,5,0"
+                        Command="{Binding CancelCommand}"/>
+
+				<Button Grid.Column="1" Content="Сохранить"
+                        Classes="primary"
+                        HorizontalAlignment="Stretch"
+                        Margin="5,0,0,0"
+                        Command="{Binding SaveCommand}"
+                        IsEnabled="{Binding !IsProcessing}"/>
+			</Grid>
+
+			<!-- Индикатор загрузки -->
+			<Border Grid.Row="0" Grid.RowSpan="3"
+                    Background="#80000000"
+                    IsVisible="{Binding IsProcessing}">
+				<ProgressBar IsIndeterminate="True"
+                             Width="200" Height="10"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Center"/>
+			</Border>
+		</Grid>
+	</Panel>
+</Window>

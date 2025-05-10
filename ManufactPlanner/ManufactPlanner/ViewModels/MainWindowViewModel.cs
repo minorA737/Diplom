@@ -72,7 +72,13 @@ namespace ManufactPlanner.ViewModels
             get => _currentMenuItem;
             set => this.RaiseAndSetIfChanged(ref _currentMenuItem, value);
         }
-
+        private string _Inicial;
+        public string Inicial
+        {
+            get => _Inicial;
+            set => this.RaiseAndSetIfChanged(ref _Inicial, value);
+        }
+        
         public bool IsAuthenticated
         {
             get => _isAuthenticated;
@@ -88,11 +94,12 @@ namespace ManufactPlanner.ViewModels
         private readonly NotificationService _notificationService;
 
         public ICommand ToggleNotificationsPanel { get; }
+
+        public Window MainWindow { get; set; }
         public MainWindowViewModel()
         {
             _themeService = ThemeService.Instance;
             _notificationService = NotificationService.Instance;
-
             // Подписка на изменение темы
             _themeService.ThemeChanged.Subscribe(isLight =>
             {
@@ -231,7 +238,7 @@ namespace ManufactPlanner.ViewModels
             UnreadNotificationsCount = 0;
             CurrentUserId = Guid.Empty;
             IsAuthenticated = false; // Сбрасываем флаг авторизации
-
+            Inicial = string.Empty; // Добавьте эту строку
             // Удаляем сохраненные учетные данные
             var credentialService = new UserCredentialService();
             credentialService.ClearCredentials();

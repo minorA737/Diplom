@@ -7,11 +7,13 @@
         x:Class="ManufactPlanner.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         xmlns:vm="using:ManufactPlanner.ViewModels"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/logo.jpg"
         Title="ManufactPlanner"
         TransparencyLevelHint="AcrylicBlur"
         Background="Transparent"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+		
+		WindowState="Maximized">
 
 	<Window.Resources>
 		<converters:BoolToValueConverter x:Key="BoolToValue"/>
@@ -71,7 +73,7 @@
 				<Grid>
 					<!-- Содержимое верхней панели... -->
 					<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0">
-						<Ellipse Width="40" Height="40" Fill="{DynamicResource PrimaryBrush}"/>
+						<Image Source="/Assets/logo.jpg" Height="40" Width="40" ></Image>
 						<TextBlock Text="ManufactPlanner" FontSize="16" FontWeight="SemiBold"
                                   Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center" Margin="10,0,0,0"/>
 					</StackPanel>
@@ -104,7 +106,7 @@
 
 						<!-- Профиль -->
 						<Button Width="40" Height="40" CornerRadius="20" Background="#9575CD" Opacity="0.7" Command="{Binding NextProfil}">
-							<TextBlock Text="АП" FontSize="14" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							<TextBlock Text="{Binding Inicial}" FontSize="14" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Button>
 						<Button Margin="10,0,0,0" Background="Transparent" Command="{Binding Logout}">
 							<TextBlock Text="Выход" Foreground="#333" VerticalAlignment="Center"/>

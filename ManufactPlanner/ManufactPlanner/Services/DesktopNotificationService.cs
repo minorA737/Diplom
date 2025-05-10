@@ -58,7 +58,7 @@ namespace ManufactPlanner.Services
             try
             {
                 var assembly = Assembly.GetEntryAssembly();
-                var iconPath = Path.Combine(Path.GetDirectoryName(assembly.Location), "Assets", "avalonia-logo.ico");
+                var iconPath = Path.Combine(Path.GetDirectoryName(assembly.Location), "Assets", "logo.jpg");
 
                 if (File.Exists(iconPath))
                 {

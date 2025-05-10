@@ -44,6 +44,8 @@ namespace ManufactPlanner.Services
         // Флаг, показывающий, работает ли сервис в данный момент
         public bool IsRunning { get; private set; }
 
+
+        private readonly HashSet<string> _processedNotificationIds = new HashSet<string>();
         private NotificationService()
         {
             // Инициализируем строку подключения из PostgresContext
@@ -407,6 +409,18 @@ namespace ManufactPlanner.Services
                         // Неизвестная операция - пропускаем
                         return;
                 }
+
+                // Создаем уникальный идентификатор для уведомления
+                string notificationId = $"{operation}_{taskId}_{notificationType}";
+
+                // Проверяем, было ли это уведомление уже обработано
+                if (_processedNotificationIds.Contains(notificationId))
+                {
+                    return; // Уведомление уже было обработано, выходим
+                }
+
+                // Добавляем уникальный идентификатор в коллекцию обработанных уведомлений
+                _processedNotificationIds.Add(notificationId);
 
                 // Создаем объект уведомления
                 var notification = new NotificationViewModel

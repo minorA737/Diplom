@@ -1,0 +1,166 @@
+<!-- Views/Dialogs/OrderEditDialog.axaml -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="700"
+        x:Class="ManufactPlanner.Views.Dialogs.OrderEditDialog"
+        Title=""
+        Width="600" Height="700"
+        WindowStartupLocation="CenterOwner"
+        x:DataType="vm:OrderEditDialogViewModel"
+        xmlns:vm="using:ManufactPlanner.ViewModels.Dialogs"
+        Background="{DynamicResource BackgroundBrush}">
+
+	<Window.Styles>
+		<!-- Стили для TextBox -->
+		<Style Selector="TextBox">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Padding" Value="10,5"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="0,0,0,15"/>
+		</Style>
+
+		<!-- Стили для ComboBox -->
+		<Style Selector="ComboBox">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Padding" Value="10,5"/>
+			<Setter Property="Margin" Value="0,0,0,15"/>
+		</Style>
+
+		<!-- Стили для DatePicker -->
+		<Style Selector="DatePicker">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Padding" Value="10,5"/>
+			<Setter Property="Margin" Value="0,0,0,15"/>
+		</Style>
+
+		<!-- Стили для кнопок -->
+		<Style Selector="Button">
+			<Setter Property="Height" Value="36"/>
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="CornerRadius" Value="4"/>
+		</Style>
+
+		<!-- Стиль для основной кнопки -->
+		<Style Selector="Button.primary">
+			<Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+			<Setter Property="Foreground" Value="{DynamicResource SurfaceBrush}"/>
+			<Setter Property="BorderThickness" Value="0"/>
+		</Style>
+	</Window.Styles>
+
+	<Grid RowDefinitions="Auto,*,Auto" Margin="20">
+		<!-- Заголовок -->
+		<TextBlock Grid.Row="0" Text="" FontSize="18" FontWeight="SemiBold"
+                   Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,20"/>
+
+		<!-- Индикатор загрузки -->
+		<ProgressBar Grid.Row="1" IsIndeterminate="True" IsVisible="{Binding IsLoading}"
+                     VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0"
+                     Width="200" Height="10"/>
+
+		<!-- Форма редактирования -->
+		<ScrollViewer Grid.Row="1" IsVisible="{Binding !IsLoading}">
+			<StackPanel Spacing="10">
+				<!-- Сообщение об ошибке -->
+				<Border Background="#FFEBEE" BorderBrush="#FFCDD2" BorderThickness="1"
+                        CornerRadius="4" Padding="10" IsVisible="{Binding HasError}" Margin="0,0,0,10">
+					<TextBlock Text="{Binding ErrorMessage}" Foreground="#D32F2F" TextWrapping="Wrap"/>
+				</Border>
+
+				<!-- Номер заказа -->
+				<StackPanel>
+					<TextBlock Text="Номер заказа *" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0,0,0,5"/>
+					<TextBox Text="{Binding OrderNumber}" Watermark="Введите номер заказа (напр. ОП-123/24)"/>
+				</StackPanel>
+
+				<!-- Название заказа -->
+				<StackPanel>
+					<TextBlock Text="Название заказа *" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0,0,0,5"/>
+					<TextBox Text="{Binding OrderName}" Watermark="Введите название заказа" Height="60" AcceptsReturn="True" TextWrapping="Wrap"/>
+				</StackPanel>
+
+				<!-- Заказчик -->
+				<StackPanel>
+					<TextBlock Text="Заказчик *" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0,0,0,5"/>
+					<TextBox Text="{Binding Customer}" Watermark="Введите название организации-заказчика"/>
+				</StackPanel>
+
+				<!-- Сроки -->
+				<StackPanel Orientation="Horizontal" Spacing="20">
+					<StackPanel Width="170">
+						<TextBlock Text="Срок по договору" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                                   Margin="0,0,0,5"/>
+						<DatePicker SelectedDate="{Binding ContractDeadline}"/>
+					</StackPanel>
+
+					<StackPanel Width="170">
+						<TextBlock Text="Срок поставки" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                                   Margin="0,0,0,5"/>
+						<DatePicker SelectedDate="{Binding DeliveryDeadline}"/>
+					</StackPanel>
+
+					<StackPanel Width="170">
+						<TextBlock Text="Дата отгрузки" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                                   Margin="0,0,0,5"/>
+						<DatePicker SelectedDate="{Binding ShippingDate}"/>
+					</StackPanel>
+				</StackPanel>
+
+				<!-- Количество и стоимость -->
+				<StackPanel Orientation="Horizontal" Spacing="20">
+					<StackPanel Width="120">
+						<TextBlock Text="Количество" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                                   Margin="0,0,0,5"/>
+						<NumericUpDown Value="{Binding ContractQuantity}" Minimum="1" Maximum="1000"
+                                       VerticalContentAlignment="Center" Height="36"/>
+					</StackPanel>
+
+					<StackPanel Width="170">
+						<TextBlock Text="Общая сумма (руб.)" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                                  Margin="0,0,0,5"/>
+						<TextBox Text="{Binding TotalPrice}" Watermark="0.00"/>
+					</StackPanel>
+
+					<StackPanel Width="220">
+						<TextBlock Text="Статус" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                                  Margin="0,0,0,5"/>
+						<ComboBox ItemsSource="{Binding PossibleStatuses}" SelectedItem="{Binding Status}"
+                                  HorizontalAlignment="Stretch"/>
+					</StackPanel>
+				</StackPanel>
+
+				<!-- Дополнительные параметры -->
+				<StackPanel Margin="0,10,0,0">
+					<CheckBox Content="Наличие монтажа" IsChecked="{Binding HasInstallation}"
+                              Foreground="{DynamicResource TextPrimaryBrush}"/>
+				</StackPanel>
+			</StackPanel>
+		</ScrollViewer>
+
+		<!-- Кнопки действий -->
+		<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0" Spacing="10">
+			<Button Content="Отмена" Width="100" Command="{Binding CancelCommand}"/>
+			<Button Content="Сохранить" Width="100" Classes="primary"
+                    Command="{Binding SaveCommand}" IsEnabled="{Binding !IsLoading}"/>
+		</StackPanel>
+	</Grid>
+</Window>
