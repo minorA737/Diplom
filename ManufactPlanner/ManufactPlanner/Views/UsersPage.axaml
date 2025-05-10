@@ -6,15 +6,16 @@
              x:Class="ManufactPlanner.Views.UsersPage"
              x:DataType="vm:UsersViewModel"
              xmlns:vm="using:ManufactPlanner.ViewModels"
-			 
-			 xmlns:converters="using:ManufactPlanner.Converters">
+             xmlns:converters="using:ManufactPlanner.Converters">
 	<UserControl.Resources>
 		<converters:BoolToValueConverter x:Key="BoolToValue"/>
 		<converters:IsGreaterThanConverter x:Key="IsGreaterThan"/>
 		<converters:StringEqualsValueConverter x:Key="StringEqualsValue"/>
 		<converters:MarginConverter x:Key="MarginConverter"/>
+		<converters:PercentToWidthConverter x:Key="PercentToWidthConverter"/>
+		<converters:StatusToBrushConverter x:Key="StatusToBrushConverter"/>
 	</UserControl.Resources>
-	
+
 	<Grid RowDefinitions="Auto,Auto,*">
 		<!-- Заголовок страницы -->
 		<TextBlock Grid.Row="0" Text="Профиль пользователя" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,0"/>
@@ -71,53 +72,35 @@
 						<TextBlock Grid.Column="3" Text="Срок" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource TextSecondaryBrush}"/>
 					</Grid>
 
-					<!-- Задача 1 -->
-					<Border Height="60" Background="#F9FAFB" Margin="20,5,20,0" CornerRadius="4">
-						<Grid Margin="10,0" ColumnDefinitions="3*,2*,1*,1*">
-							<TextBlock Grid.Column="0" Text="Разработка схемы электрической" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
-							<TextBlock Grid.Column="1" Text="ОП-136-24 поз. 1" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
-							<Border Grid.Column="2" Width="80" Height="24" Background="{DynamicResource SuccessBrush}" Opacity="0.2" CornerRadius="12" VerticalAlignment="Center">
-								<TextBlock Text="В процессе" FontSize="12" Foreground="{DynamicResource SuccessBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-							</Border>
-							<TextBlock Grid.Column="3" Text="07.05.2025" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
-						</Grid>
-					</Border>
+					<!-- Динамический список задач -->
+					<ItemsControl ItemsSource="{Binding UserTasks}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Border Height="60" Background="#F9FAFB" Margin="20,5,20,0" CornerRadius="4">
+									<Grid Margin="10,0" ColumnDefinitions="3*,2*,1*,1*">
+										<TextBlock Grid.Column="0" Text="{Binding Name}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+										<TextBlock Grid.Column="1" Text="{Binding Project}" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+										<Border Grid.Column="2" Height="24" CornerRadius="12" VerticalAlignment="Center"
+												Background="{Binding Status, Converter={StaticResource StatusToBrushConverter}}" Opacity="0.2"
+												Padding="10,0" HorizontalAlignment="Left">
+											<TextBlock Text="{Binding Status}" FontSize="12"
+													   Foreground="{Binding Status, Converter={StaticResource StatusToBrushConverter}}"
+													   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+										</Border>
+										<TextBlock Grid.Column="3" Text="{Binding Deadline}" FontSize="14"
+												   Foreground="{Binding IsDeadlineToday, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource ErrorBrush},{DynamicResource TextSecondaryBrush}'}"
+												   FontWeight="{Binding IsDeadlineToday, Converter={StaticResource BoolToValue}, ConverterParameter='Medium,Normal'}"
+												   VerticalAlignment="Center"/>
+									</Grid>
+								</Border>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
 
-					<!-- Задача 2 -->
-					<Border Height="60" Background="#F9FAFB" Margin="20,5,20,0" CornerRadius="4">
-						<Grid Margin="10,0" ColumnDefinitions="3*,2*,1*,1*">
-							<TextBlock Grid.Column="0" Text="Отладка монтажной схемы" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
-							<TextBlock Grid.Column="1" Text="ОП-168-24 поз. 1.14" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
-							<Border Grid.Column="2" Width="80" Height="24" Background="{DynamicResource WarningBrush}" Opacity="0.2" CornerRadius="12" VerticalAlignment="Center">
-								<TextBlock Text="Ожидание" FontSize="12" Foreground="{DynamicResource WarningBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-							</Border>
-							<TextBlock Grid.Column="3" Text="12.05.2025" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
-						</Grid>
-					</Border>
-
-					<!-- Задача 3 -->
-					<Border Height="60" Background="#F9FAFB" Margin="20,5,20,0" CornerRadius="4">
-						<Grid Margin="10,0" ColumnDefinitions="3*,2*,1*,1*">
-							<TextBlock Grid.Column="0" Text="Подготовка технического задания" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
-							<TextBlock Grid.Column="1" Text="ОП-169-24 поз. 1" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
-							<Border Grid.Column="2" Width="80" Height="24" Background="{DynamicResource ErrorBrush}" Opacity="0.2" CornerRadius="12" VerticalAlignment="Center">
-								<TextBlock Text="Срочно" FontSize="12" Foreground="{DynamicResource ErrorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-							</Border>
-							<TextBlock Grid.Column="3" Text="Сегодня" FontSize="14" Foreground="{DynamicResource ErrorBrush}" FontWeight="Medium" VerticalAlignment="Center"/>
-						</Grid>
-					</Border>
-
-					<!-- Задача 4 -->
-					<Border Height="60" Background="#F9FAFB" Margin="20,5,20,0" CornerRadius="4">
-						<Grid Margin="10,0" ColumnDefinitions="3*,2*,1*,1*">
-							<TextBlock Grid.Column="0" Text="Проектирование корпуса" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
-							<TextBlock Grid.Column="1" Text="ОП-113-24 поз. 18" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
-							<Border Grid.Column="2" Width="80" Height="24" Background="#9575CD" Opacity="0.2" CornerRadius="12" VerticalAlignment="Center">
-								<TextBlock Text="Завершено" FontSize="12" Foreground="#9575CD" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-							</Border>
-							<TextBlock Grid.Column="3" Text="05.05.2025" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
-						</Grid>
-					</Border>
+					<!-- Сообщение, когда нет задач -->
+					<TextBlock Text="У вас нет активных задач" Foreground="{DynamicResource TextSecondaryBrush}"
+							   HorizontalAlignment="Center" Margin="0,20,0,0"
+							   IsVisible="{Binding !UserTasks.Count}"/>
 				</StackPanel>
 			</Border>
 
@@ -152,7 +135,7 @@
 						<!-- Прогресс-бар выполнения задач -->
 						<TextBlock Text="Выполнение задач" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,15,0,5"/>
 						<Grid Height="10" Background="#F1F3F4">
-							<Border Width="{Binding CompletionPercentage, Converter={StaticResource PercentToWidthConverter}}"
+							<Border Width="{Binding CompletionPercentage, Converter={StaticResource PercentToWidthConverter}, ConverterParameter=180}"
                                     HorizontalAlignment="Left"
                                     Height="10"
                                     Background="{DynamicResource SuccessBrush}"
@@ -171,29 +154,24 @@
 					<StackPanel Margin="20,20,20,20">
 						<TextBlock Text="Последние события" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,15"/>
 
-						<!-- Событие 1 -->
-						<Border Background="#F9FAFB" CornerRadius="4" Padding="10,10" Margin="0,0,0,5">
-							<StackPanel>
-								<TextBlock Text="Назначена новая задача" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}"/>
-								<TextBlock Text="10.05.2025, 14:30" FontSize="12" Foreground="#9E9E9E" Margin="0,5,0,0"/>
-							</StackPanel>
-						</Border>
+						<!-- Динамический список событий -->
+						<ItemsControl ItemsSource="{Binding RecentEvents}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Background="#F9FAFB" CornerRadius="4" Padding="10,10" Margin="0,0,0,5">
+										<StackPanel>
+											<TextBlock Text="{Binding Title}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}"/>
+											<TextBlock Text="{Binding Timestamp}" FontSize="12" Foreground="#9E9E9E" Margin="0,5,0,0"/>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
 
-						<!-- Событие 2 -->
-						<Border Background="#F9FAFB" CornerRadius="4" Padding="10,10" Margin="0,5,0,5">
-							<StackPanel>
-								<TextBlock Text="Изменен статус задачи" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}"/>
-								<TextBlock Text="09.05.2025, 09:45" FontSize="12" Foreground="#9E9E9E" Margin="0,5,0,0"/>
-							</StackPanel>
-						</Border>
-
-						<!-- Событие 3 -->
-						<Border Background="#F9FAFB" CornerRadius="4" Padding="10,10" Margin="0,5,0,0">
-							<StackPanel>
-								<TextBlock Text="Комментарий к задаче" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}"/>
-								<TextBlock Text="08.05.2025, 16:20" FontSize="12" Foreground="#9E9E9E" Margin="0,5,0,0"/>
-							</StackPanel>
-						</Border>
+						<!-- Сообщение, когда нет событий -->
+						<TextBlock Text="Нет последних событий" Foreground="{DynamicResource TextSecondaryBrush}"
+								   HorizontalAlignment="Center" Margin="0,10,0,0"
+								   IsVisible="{Binding !RecentEvents.Count}"/>
 					</StackPanel>
 				</Border>
 			</StackPanel>

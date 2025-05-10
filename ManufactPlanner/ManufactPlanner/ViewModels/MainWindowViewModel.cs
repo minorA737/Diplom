@@ -4,6 +4,7 @@ using ManufactPlanner.Services;
 using ManufactPlanner.Views;
 using ReactiveUI;
 using System;
+using System.Windows.Input;
 
 namespace ManufactPlanner.ViewModels
 {
@@ -83,9 +84,14 @@ namespace ManufactPlanner.ViewModels
         }
 
         private readonly ThemeService _themeService;
+
+        private readonly NotificationService _notificationService;
+
+        public ICommand ToggleNotificationsPanel { get; }
         public MainWindowViewModel()
         {
             _themeService = ThemeService.Instance;
+            _notificationService = NotificationService.Instance;
 
             // Подписка на изменение темы
             _themeService.ThemeChanged.Subscribe(isLight =>
@@ -102,14 +108,28 @@ namespace ManufactPlanner.ViewModels
             // Заглушка данных пользователя (будет видна только после авторизации)
             CurrentUserName = string.Empty;
             UnreadNotificationsCount = 0;
+
+
+            // Команда для переключения видимости панели уведомлений
+            ToggleNotificationsPanel = ReactiveCommand.Create(() =>
+            {
+                // Вместо переключения панели переходим на страницу уведомлений
+                NavigateToNotifications();
+            });
         }
+
         // Метод для доступа к сервису тем из ViewModel
         public void ToggleTheme()
         {
             _themeService.IsLightTheme = !_themeService.IsLightTheme;
         }
-
-        // Навигационные методы для различных страниц
+        // Добавьте этот метод в MainWindowViewModel.cs
+        public void NavigateToNotifications()
+        {
+            CurrentMenuItem = "notifications"; // Новый пункт меню
+            CurrentView = new Views.NotificationsPage(this, DbContext);
+        }
+        // Модифицируем метод NavigateToDashboard для инициализации NotificationService
         public void NavigateToDashboard()
         {
             CurrentMenuItem = "dashboard";
@@ -117,6 +137,13 @@ namespace ManufactPlanner.ViewModels
             Console.WriteLine($"Создана страница дашборда: {dashboardPage != null}");
             CurrentView = dashboardPage;
             IsAuthenticated = true;
+
+            // Инициализируем и запускаем сервис уведомлений после успешной авторизации
+            if (CurrentUserId != Guid.Empty)
+            {
+                _notificationService.Initialize(DbContext, this).ConfigureAwait(false);
+                _notificationService.Start();
+            }
         }
 
         public void NavigateToOrders()
@@ -196,6 +223,9 @@ namespace ManufactPlanner.ViewModels
         // Модифицируем метод Logout для очистки сохраненных данных
         public void Logout()
         {
+            // Останавливаем сервис уведомлений
+            _notificationService.Stop();
+
             // Очищаем данные пользователя
             CurrentUserName = string.Empty;
             UnreadNotificationsCount = 0;
@@ -206,8 +236,15 @@ namespace ManufactPlanner.ViewModels
             var credentialService = new UserCredentialService();
             credentialService.ClearCredentials();
 
+
             // Переходим обратно на страницу авторизации
             CurrentView = new AuthPage(this, DbContext);
+        }
+        public void NextProfil()
+        {
+            
+            // Переходим на страницу профиля
+            CurrentView = new UsersPage(this, DbContext);
         }
     }
 }

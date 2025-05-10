@@ -1,8 +1,10 @@
 ﻿// ViewModels/SettingsViewModel.cs
 using ManufactPlanner.Models;
 using ManufactPlanner.Services;
+using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
 using System;
+using System.Diagnostics;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -205,6 +207,16 @@ namespace ManufactPlanner.ViewModels
         public ReactiveCommand<Unit, Unit> SaveNotificationSettingsCommand { get; }
         public ReactiveCommand<Unit, Unit> ApplyInterfaceSettingsCommand { get; }
 
+
+        private bool _autoStartEnabled;
+
+        public bool AutoStartEnabled
+        {
+            get => _autoStartEnabled;
+            set => this.RaiseAndSetIfChanged(ref _autoStartEnabled, value);
+        }
+        // В начале класса добавьте новую команду:
+        public ReactiveCommand<Unit, Unit> ApplyAutoStartCommand { get; }
         public SettingsViewModel(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext)
         {
             _mainWindowViewModel = mainWindowViewModel;
@@ -218,15 +230,41 @@ namespace ManufactPlanner.ViewModels
             // Инициализируем состояние UI из сервисов
             //IsLightTheme = _themeService.IsLightTheme;
             SelectedLanguage = _localizationService.CurrentLanguage == "ru" ? 0 : 1;
+            ApplyAutoStartCommand = ReactiveCommand.Create(ApplyAutoStartSettings);
 
             SaveProfileCommand = ReactiveCommand.CreateFromTask(SaveProfile);
             ChangePasswordCommand = ReactiveCommand.CreateFromTask(ChangePassword);
             SaveNotificationSettingsCommand = ReactiveCommand.Create(SaveNotificationSettings);
             ApplyInterfaceSettingsCommand = ReactiveCommand.Create(ApplyInterfaceSettings);
-
+            AutoStartEnabled = AutoStartService.IsAutoStartEnabled();
             LoadUserSettings();
-        }
 
+            SaveNotificationSettingsCommand = ReactiveCommand.Create(SaveNotificationSettings);
+            ApplyInterfaceSettingsCommand = ReactiveCommand.Create(ApplyInterfaceSettings);
+
+            // Загрузка настроек пользователя
+            _ = LoadUserSettingsAsync();
+
+        }
+        private void ApplyAutoStartSettings()
+        {
+            try
+            {
+                // Применяем настройки автозапуска
+                AutoStartService.SetAutoStart(AutoStartEnabled);
+
+                // Показываем сообщение об успешном применении
+                StatusMessage = "Настройки автозапуска успешно применены";
+                IsStatusSuccess = true;
+                HasStatusMessage = true;
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Ошибка при настройке автозапуска: {ex.Message}";
+                IsStatusSuccess = false;
+                HasStatusMessage = true;
+            }
+        }
         public SettingsViewModel()
         {
             // Конструктор для дизайнера
@@ -339,21 +377,104 @@ namespace ManufactPlanner.ViewModels
             }
         }
 
-        private void SaveNotificationSettings()
+        public async System.Threading.Tasks.Task LoadUserSettingsAsync()
         {
-            // Логика сохранения настроек уведомлений
-            // Будет реализована в следующем этапе
+            if (_mainWindowViewModel?.CurrentUserId == null || _mainWindowViewModel.CurrentUserId == Guid.Empty)
+                return;
+
+            try
+            {
+                // Загружаем настройки пользователя
+                var settings = await _dbContext.UserSettings
+                    .FirstOrDefaultAsync(s => s.UserId == _mainWindowViewModel.CurrentUserId);
+
+                if (settings != null)
+                {
+                    // Настройки уведомлений
+                    NotifyNewTasks = settings.NotifyNewTasks;
+                    NotifyTaskStatusChanges = settings.NotifyTaskStatusChanges;
+                    NotifyComments = settings.NotifyComments;
+                    NotifyDeadlines = settings.NotifyDeadlines;
+                    NotifyEmail = settings.NotifyEmail;
+                    NotifyDesktop = settings.NotifyDesktop;
+
+                    // Автозапуск
+                    AutoStartEnabled = settings.AutoStartEnabled;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ошибка при загрузке настроек: {ex.Message}");
+                StatusMessage = "Ошибка при загрузке настроек";
+                IsStatusSuccess = false;
+                HasStatusMessage = true;
+            }
         }
-        
+
+        private async System.Threading.Tasks.Task SaveUserSettingsAsync()
+        {
+            if (_mainWindowViewModel?.CurrentUserId == null || _mainWindowViewModel.CurrentUserId == Guid.Empty)
+                return;
+
+            try
+            {
+                // Получаем или создаем настройки пользователя
+                var settings = await _dbContext.UserSettings
+                    .FirstOrDefaultAsync(s => s.UserId == _mainWindowViewModel.CurrentUserId);
+
+                if (settings == null)
+                {
+                    settings = new UserSettings
+                    {
+                        UserId = _mainWindowViewModel.CurrentUserId
+                    };
+                    _dbContext.UserSettings.Add(settings);
+                }
+
+                // Обновляем настройки
+                settings.NotifyNewTasks = NotifyNewTasks;
+                settings.NotifyTaskStatusChanges = NotifyTaskStatusChanges;
+                settings.NotifyComments = NotifyComments;
+                settings.NotifyDeadlines = NotifyDeadlines;
+                settings.NotifyEmail = NotifyEmail;
+                settings.NotifyDesktop = NotifyDesktop;
+                settings.UpdatedAt = DateTime.Now;
+
+                await _dbContext.SaveChangesAsync();
+
+                StatusMessage = "Настройки успешно сохранены";
+                IsStatusSuccess = true;
+                HasStatusMessage = true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ошибка при сохранении настроек: {ex.Message}");
+                StatusMessage = "Ошибка при сохранении настроек";
+                IsStatusSuccess = false;
+                HasStatusMessage = true;
+            }
+        }
+        private async void SaveNotificationSettings()
+        {
+            await SaveUserSettingsAsync();
+        }
+
 
         private void ApplyInterfaceSettings()
         {
-            // Применяем настройки темы
+            // Применяем настройки автозапуска
+            AutoStartService.SetAutoStart(AutoStartEnabled);
+
+            // Применяем другие настройки интерфейса
             ThemeService.Instance.IsLightTheme = IsLightTheme;
 
-            // Применяем настройки языка
             var language = SelectedLanguage == 0 ? "ru" : "en";
             _localizationService.SetLanguage(language);
+
+            // Показываем сообщение об успешном применении
+            StatusMessage = "Настройки интерфейса успешно применены";
+            IsStatusSuccess = true;
+            HasStatusMessage = true;
         }
 
         private void UpdateLocalizedProperties()

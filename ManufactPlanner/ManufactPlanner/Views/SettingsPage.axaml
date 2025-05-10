@@ -19,7 +19,7 @@
 		<TextBlock Grid.Row="0" Text="{Binding InterfaceSettingsText}"
                    FontSize="20" FontWeight="SemiBold"
                    Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,0"/>
-
+		
 		<!-- Основное содержимое - категории настроек -->
 		<ScrollViewer Grid.Row="1" Margin="20,20,20,20">
 			<StackPanel Spacing="20">
@@ -32,6 +32,32 @@
                               Foreground="{Binding IsStatusSuccess, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource SuccessColor},{DynamicResource ErrorColor}'}"
                               FontSize="14"/>
 				</Border>
+				<!-- Категория: автозапуск -->
+				<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8">
+					<StackPanel Margin="20">
+						<TextBlock Text="Автозапуск приложения"
+								  FontSize="16" FontWeight="Medium"
+								  Foreground="{DynamicResource TextPrimaryBrush}"/>
+						<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="0,10,0,20"/>
+
+						<Grid ColumnDefinitions="Auto,*" Margin="0,0,0,10">
+							<TextBlock Grid.Column="0" Text="Автозапуск"
+								FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
+								VerticalAlignment="Center"/>
+							<CheckBox Grid.Column="1" Margin="20,0,0,0"
+								IsChecked="{Binding AutoStartEnabled}"
+								Content="Запускать при входе в систему"
+								Foreground="{DynamicResource TextPrimaryBrush}"/>
+						</Grid>
+
+						<Button Content="Применить настройки автозапуска" Width="250"
+								Height="36" Background="{DynamicResource PrimaryBrush}"
+								Foreground="{DynamicResource SurfaceBrush}"
+								HorizontalAlignment="Left" CornerRadius="18"
+								Command="{Binding ApplyAutoStartCommand}"
+								Margin="0,10,0,0"/>
+					</StackPanel>
+				</Border>	
 
 				<!-- Категория: Профиль пользователя -->
 				<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8">

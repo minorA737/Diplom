@@ -84,30 +84,32 @@
                                  VerticalAlignment="Center" Padding="15,0,0,0"/>
 					</Border>
 
-				<!-- Профиль и уведомления -->
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0">
-					<!-- Уведомления -->
-					<Border Width="30" Height="30" CornerRadius="15" Background="{DynamicResource BackgroundBrush}"
-						BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Margin="0,0,20,0">
-						<Grid>
-							<Ellipse Width="10" Height="10" Fill="{DynamicResource WarningBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-							<Border Width="12" Height="12" CornerRadius="6" Background="{DynamicResource ErrorBrush}"
-									VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-2,-2,0"
-									IsVisible="{Binding UnreadNotificationsCount, Converter={StaticResource IsGreaterThan}, ConverterParameter='0'}">
-								<TextBlock Text="{Binding UnreadNotificationsCount}" FontSize="9" Foreground="White"
-											HorizontalAlignment="Center" VerticalAlignment="Center"/>
-							</Border>
-						</Grid>
-					</Border>
 
-					<!-- Профиль -->
-					<Border Width="40" Height="40" CornerRadius="20" Background="#9575CD" Opacity="0.7">
-						<TextBlock Text="АП" FontSize="14" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-					</Border>
-					<Button Margin="10,0,0,0" Background="Transparent" Command="{Binding Logout}">
-						<TextBlock Text="Выход" Foreground="#333" VerticalAlignment="Center"/>
-					</Button>
-				</StackPanel>
+					<!-- Профиль и уведомления -->
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0">
+						<!-- Уведомления -->
+						<Button Width="30" Height="30" CornerRadius="15" Background="{DynamicResource BackgroundBrush}"
+        BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Margin="0,0,20,0"
+        Command="{Binding NavigateToNotifications}">
+							<Grid>
+								<Ellipse Width="10" Height="10" Fill="{DynamicResource WarningBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+								<Border Width="12" Height="12" CornerRadius="6" Background="{DynamicResource ErrorBrush}"
+										VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-2,-2,0"
+										IsVisible="{Binding UnreadNotificationsCount, Converter={StaticResource IsGreaterThan}, ConverterParameter='0'}">
+									<TextBlock Text="{Binding UnreadNotificationsCount}" FontSize="9" Foreground="White"
+											   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+								</Border>
+							</Grid>
+						</Button>
+
+						<!-- Профиль -->
+						<Button Width="40" Height="40" CornerRadius="20" Background="#9575CD" Opacity="0.7" Command="{Binding NextProfil}">
+							<TextBlock Text="АП" FontSize="14" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Button>
+						<Button Margin="10,0,0,0" Background="Transparent" Command="{Binding Logout}">
+							<TextBlock Text="Выход" Foreground="#333" VerticalAlignment="Center"/>
+						</Button>
+					</StackPanel>
 			</Grid>
 		</Border>
 
@@ -218,7 +220,27 @@
 								<TextBlock Text="Аналитика" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
 							</StackPanel>
 						</Button>
+						<!-- Уведомления -->
+						<Button Classes="navButton" Command="{Binding NavigateToNotifications}"
+								Tag="{Binding CurrentMenuItem, Converter={StaticResource StringEqualsValue}, ConverterParameter='notifications'}"
+								Width="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToValue}, ConverterParameter='50,180'}"
+								HorizontalAlignment="Left"
+								Margin="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToValue}, ConverterParameter='5 5,10 5'}">
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="🔔" FontSize="14" VerticalAlignment="Center"
+										  HorizontalAlignment="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToValue}, ConverterParameter='Center,Left'}"
+										  Margin="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToValue}, ConverterParameter='0,0 0 10 0'}"/>
+								<TextBlock Text="Уведомления" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
 
+								<!-- Индикатор непрочитанных уведомлений -->
+								<Border Width="18" Height="18" CornerRadius="9" Background="#FF7043"
+										Margin="5,0,0,0" VerticalAlignment="Center"
+										IsVisible="{Binding !IsSidebarCollapsed}">
+									<TextBlock Text="{Binding UnreadNotificationsCount}" FontSize="10" Foreground="White"
+											   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+								</Border>
+							</StackPanel>
+						</Button>
 						<!-- Настройки -->
 						<Button Classes="navButton" Command="{Binding NavigateToSettings}"
 								Tag="{Binding CurrentMenuItem, Converter={StaticResource StringEqualsValue}, ConverterParameter='settings'}"
@@ -254,5 +276,6 @@
 							  Content="{Binding CurrentView}"
 							  IsVisible="True" />
 		</Grid>
+		
 	</Grid>
 </Window>

@@ -195,54 +195,65 @@ namespace ManufactPlanner.ViewModels
             CancelCommand = ReactiveCommand.Create(() => (false, (Task)null));
         }
 
-        private async void LoadOrderPositions()
+        private async System.Threading.Tasks.Task LoadOrderPositions()
         {
             try
             {
-                var orderPositions = await System.Threading.Tasks.Task.Run(() =>
-                    _dbContext.OrderPositions
-                        .Include(op => op.Order)
-                        .OrderByDescending(op => op.Order.CreatedAt)
-                        .Select(op => new OrderPositionViewModel2
-                        {
-                            Id = op.Id,
-                            Name = $"{op.Order.OrderNumber} поз. {op.PositionNumber} - {op.ProductName}"
-                        })
-                        .ToList());
+                IsProcessing = true;
+
+                var orderPositions = await _dbContext.OrderPositions
+                    .Include(op => op.Order)
+                    .OrderByDescending(op => op.Order.CreatedAt)
+                    .Select(op => new OrderPositionViewModel2
+                    {
+                        Id = op.Id,
+                        Name = $"{op.Order.OrderNumber} поз. {op.PositionNumber} - {op.ProductName}"
+                    })
+                    .ToListAsync();
 
                 OrderPositions = new ObservableCollection<OrderPositionViewModel2>(orderPositions);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Ошибка при загрузке позиций заказов: {ex.Message}");
+                ErrorMessage = $"Ошибка при загрузке позиций заказов: {ex.Message}";
                 OrderPositions = new ObservableCollection<OrderPositionViewModel2>();
+            }
+            finally
+            {
+                IsProcessing = false;
             }
         }
 
-        private async void LoadUsers()
+        private async System.Threading.Tasks.Task LoadUsers()
         {
             try
             {
-                var users = await System.Threading.Tasks.Task.Run(() =>
-                    _dbContext.Users
-                        .Where(u => u.IsActive == true)
-                        .OrderBy(u => u.LastName)
-                        .Select(u => new UserViewModel
-                        {
-                            Id = u.Id,
-                            Name = $"{u.LastName} {u.FirstName}"
-                        })
-                        .ToList());
+                IsProcessing = true;
+
+                var users = await _dbContext.Users
+                    .Where(u => u.IsActive == true)
+                    .OrderBy(u => u.LastName)
+                    .Select(u => new UserViewModel
+                    {
+                        Id = u.Id,
+                        Name = $"{u.LastName} {u.FirstName}"
+                    })
+                    .ToListAsync();
 
                 Users = new ObservableCollection<UserViewModel>(users);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Ошибка при загрузке пользователей: {ex.Message}");
+                ErrorMessage = $"Ошибка при загрузке пользователей: {ex.Message}";
                 Users = new ObservableCollection<UserViewModel>();
             }
+            finally
+            {
+                IsProcessing = false;
+            }
         }
-
         private bool ValidateInput()
         {
             if (string.IsNullOrWhiteSpace(Name))

@@ -16,17 +16,17 @@ namespace ManufactPlanner.Views.Dialogs
         public TaskCreateDialog()
         {
             InitializeComponent();
-#if DEBUG
+
             this.AttachDevTools();
-#endif
+
         }
 
         public TaskCreateDialog(PostgresContext dbContext, Guid currentUserId)
         {
             InitializeComponent();
-#if DEBUG
+
             this.AttachDevTools();
-#endif
+
             // Устанавливаем ViewModel
             DataContext = new TaskCreateDialogViewModel(dbContext, currentUserId);
         }

@@ -176,6 +176,13 @@ namespace ManufactPlanner.ViewModels
                         // то удаляем сохраненные ранее данные
                         _credentialService.ClearCredentials();
                     }
+                    // Запускаем сервис уведомлений после успешной авторизации
+                    var notificationService = NotificationService.Instance;
+                    notificationService.Initialize(_dbContext, _mainWindowViewModel).ConfigureAwait(false);
+                    notificationService.Start();
+
+                    // Переходим на дашборд
+                    _mainWindowViewModel.NavigateToDashboard();
 
                     _mainWindowViewModel.NavigateToDashboard();
                 }

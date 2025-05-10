@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="ManufactPlanner.Views.Components.EmbeddedDashboardControl">
+
+	<Grid>
+		<!-- WebView для отображения DataLens дашборда -->
+		<!-- <WebView x:Name="DashboardWebView"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch"/> -->
+
+		<!-- Индикатор загрузки -->
+		<ProgressBar x:Name="LoadingIndicator"
+                     IsIndeterminate="True"
+                     Width="200"
+                     Height="10"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"/>
+
+		<!-- Сообщение об ошибке -->
+		<Border x:Name="ErrorPanel"
+                Background="#FFF8F8"
+                BorderBrush="#FFCFCF"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="20"
+                Width="400"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                IsVisible="False">
+			<StackPanel Spacing="10">
+				<TextBlock Text="Не удалось загрузить дашборд"
+                           FontWeight="Bold"
+                           FontSize="16"
+                           Foreground="#D32F2F"/>
+				<TextBlock x:Name="ErrorMessage"
+                           TextWrapping="Wrap"
+                           Foreground="#555555"/>
+				<Button Content="Повторить"
+                        Click="RetryButton_Click"
+                        HorizontalAlignment="Center"
+                        Margin="0,10,0,0"/>
+			</StackPanel>
+		</Border>
+	</Grid>
+</UserControl>

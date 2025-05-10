@@ -14,7 +14,7 @@ public partial class PostgresContext : DbContext
         : base(options)
     {
     }
-
+    public virtual DbSet<UserSettings> UserSettings { get; set; }
     public virtual DbSet<Attachment> Attachments { get; set; }
 
     public virtual DbSet<Comment> Comments { get; set; }
@@ -66,7 +66,27 @@ public partial class PostgresContext : DbContext
         modelBuilder
             .HasPostgresExtension("pg_catalog", "adminpack")
             .HasPostgresExtension("uuid-ossp");
+        modelBuilder.Entity<UserSettings>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("user_settings_pkey");
+            entity.ToTable("user_settings");
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.NotifyNewTasks).HasColumnName("notify_new_tasks").HasDefaultValue(true);
+            entity.Property(e => e.NotifyTaskStatusChanges).HasColumnName("notify_status_changes").HasDefaultValue(true);
+            entity.Property(e => e.NotifyComments).HasColumnName("notify_comments").HasDefaultValue(true);
+            entity.Property(e => e.NotifyDeadlines).HasColumnName("notify_deadlines").HasDefaultValue(true);
+            entity.Property(e => e.NotifyEmail).HasColumnName("notify_email").HasDefaultValue(true);
+            entity.Property(e => e.NotifyDesktop).HasColumnName("notify_desktop").HasDefaultValue(true);
+            entity.Property(e => e.AutoStartEnabled).HasColumnName("auto_start_enabled").HasDefaultValue(false);
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+            entity.HasOne(d => d.User)
+                .WithMany()
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("user_settings_user_id_fkey");
+        });
         modelBuilder.Entity<Attachment>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("attachments_pkey");

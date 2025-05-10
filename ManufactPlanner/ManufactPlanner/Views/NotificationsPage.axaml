@@ -1,0 +1,105 @@
+<!-- NotificationsPage.axaml -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="760" d:DesignHeight="640"
+             x:Class="ManufactPlanner.Views.NotificationsPage"
+             x:DataType="vm:NotificationsPageViewModel"
+             xmlns:vm="using:ManufactPlanner.ViewModels"
+             xmlns:converters="using:ManufactPlanner.Converters">
+
+	<UserControl.Resources>
+		<converters:BoolToValueConverter x:Key="BoolToValue"/>
+		<converters:IsGreaterThanConverter x:Key="IsGreaterThan"/>
+		<converters:StringEqualsValueConverter x:Key="StringEqualsValue"/>
+		<converters:MarginConverter x:Key="MarginConverter"/>
+	</UserControl.Resources>
+
+	<Grid RowDefinitions="Auto,*">
+		<!-- Заголовок страницы и кнопки действий -->
+		<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="20,20,20,0">
+			<TextBlock Text="Уведомления" FontSize="20" FontWeight="SemiBold" Foreground="#333333"/>
+
+			<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+				<Button Width="120" Height="36" CornerRadius="18" Background="#00ACC1"
+                        Command="{Binding MarkAllAsReadCommand}">
+					<TextBlock Text="Прочитать все" FontSize="12" Foreground="White"/>
+				</Button>
+
+				<Button Width="100" Height="36" CornerRadius="18" Background="White"
+                        BorderBrush="#E0E0E0" BorderThickness="1"
+                        Command="{Binding RefreshCommand}">
+					<TextBlock Text="Обновить" FontSize="12" Foreground="#666"/>
+				</Button>
+			</StackPanel>
+		</Grid>
+
+		<!-- Список уведомлений -->
+		<Border Grid.Row="1" Margin="20,20,20,20" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+			<Grid>
+				<!-- Индикатор загрузки -->
+				<ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoading}"
+                             VerticalAlignment="Top" Height="4" Margin="0,0,0,0"/>
+
+				<!-- Список уведомлений -->
+				<ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,10,0,10">
+					<ItemsControl ItemsSource="{Binding Notifications}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Border Margin="15,8" Padding="15" CornerRadius="8"
+                                        Background="{Binding IsRead, Converter={StaticResource BoolToValue}, ConverterParameter='#F8F9FA,#E3F2FD'}"
+                                        BorderBrush="#E0E0E0" BorderThickness="1">
+
+									<Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+										<!-- Заголовок и время -->
+										<TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Title}"
+                                                   FontSize="14" FontWeight="Medium" Foreground="#333333"/>
+
+										<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding FormattedTime}"
+                                                   Foreground="#9E9E9E" FontSize="12"/>
+
+										<!-- Сообщение -->
+										<TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                                   Text="{Binding Message}" Foreground="#666666"
+                                                   TextWrapping="Wrap" Margin="0,10,0,0"/>
+
+										<!-- Дата и кнопки -->
+										<TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding FormattedDate}"
+                                                   Foreground="#9E9E9E" FontSize="12"
+                                                   VerticalAlignment="Center" Margin="0,15,0,0"/>
+
+										<StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal"
+                                                    HorizontalAlignment="Right" Margin="0,15,0,0" Spacing="8">
+
+											<!-- Если уведомление не прочитано, показываем кнопку "Прочитано" -->
+											<Button Content="Прочитано" Height="28" CornerRadius="14"
+                                                    Background="#F1F3F4" Foreground="#666666"
+                                                    IsVisible="{Binding !IsRead}"
+                                                    Command="{Binding $parent[ItemsControl].((vm:NotificationsPageViewModel)DataContext).MarkAsReadCommand}"
+                                                    CommandParameter="{Binding}"/>
+
+											<!-- Кнопка "Открыть" для всех уведомлений -->
+											<Button Content="Открыть" Height="28" CornerRadius="14"
+                                                    Background="#00ACC1" Foreground="White"
+                                                    Command="{Binding $parent[ItemsControl].((vm:NotificationsPageViewModel)DataContext).OpenItemCommand}"
+                                                    CommandParameter="{Binding}"/>
+										</StackPanel>
+									</Grid>
+								</Border>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
+
+				<!-- Сообщение если нет уведомлений -->
+				<TextBlock Text="У вас нет уведомлений"
+                           IsVisible="{Binding !Notifications.Count}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Foreground="#9E9E9E"
+                           FontSize="16"/>
+			</Grid>
+		</Border>
+	</Grid>
+</UserControl>
