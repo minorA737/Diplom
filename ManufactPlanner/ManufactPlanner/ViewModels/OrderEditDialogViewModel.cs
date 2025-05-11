@@ -33,7 +33,81 @@ namespace ManufactPlanner.ViewModels.Dialogs
         private bool _isLoading = false;
         private string _errorMessage;
         private bool _hasError;
+        // Добавьте эти свойства в класс OrderEditDialogViewModel
+        // Добавьте эти свойства в класс OrderEditDialogViewModel
+        private DateTimeOffset? _contractDeadlineOffset;
+        private DateTimeOffset? _deliveryDeadlineOffset;
+        private DateTimeOffset? _shippingDateOffset;
 
+        // Свойство для работы с DatePicker
+        public DateTimeOffset? ContractDeadlineOffset
+        {
+            get
+            {
+                try
+                {
+                    return _contractDeadline.HasValue
+                        ? new DateTimeOffset(new DateTime(_contractDeadline.Value.Year, _contractDeadline.Value.Month, _contractDeadline.Value.Day))
+                        : null;
+                }
+                catch
+                {
+                    // В случае ошибки возвращаем null
+                    return null;
+                }
+            }
+            set
+            {
+                try
+                {
+                    if (value.HasValue)
+                        ContractDeadline = DateOnly.FromDateTime(value.Value.DateTime);
+                    else
+                        ContractDeadline = null;
+                }
+                catch
+                {
+                    // В случае ошибки устанавливаем null
+                    ContractDeadline = null;
+                }
+
+                this.RaisePropertyChanged(nameof(ContractDeadlineOffset));
+            }
+        }
+
+        // Свойство для работы с DatePicker
+        public DateTimeOffset? DeliveryDeadlineOffset
+        {
+            get => _deliveryDeadline.HasValue
+                   ? new DateTimeOffset(new DateTime(_deliveryDeadline.Value.Year, _deliveryDeadline.Value.Month, _deliveryDeadline.Value.Day))
+                   : null;
+            set
+            {
+                if (value.HasValue)
+                    DeliveryDeadline = DateOnly.FromDateTime(value.Value.DateTime);
+                else
+                    DeliveryDeadline = null;
+
+                this.RaisePropertyChanged(nameof(DeliveryDeadlineOffset));
+            }
+        }
+
+        // Свойство для работы с DatePicker
+        public DateTimeOffset? ShippingDateOffset
+        {
+            get => _shippingDate.HasValue
+                   ? new DateTimeOffset(new DateTime(_shippingDate.Value.Year, _shippingDate.Value.Month, _shippingDate.Value.Day))
+                   : null;
+            set
+            {
+                if (value.HasValue)
+                    ShippingDate = DateOnly.FromDateTime(value.Value.DateTime);
+                else
+                    ShippingDate = null;
+
+                this.RaisePropertyChanged(nameof(ShippingDateOffset));
+            }
+        }
         // Возможные статусы заказа
         private List<string> _possibleStatuses = new List<string>
         {
@@ -204,6 +278,11 @@ namespace ManufactPlanner.ViewModels.Dialogs
                     TotalPrice = order.TotalPrice;
                     Status = order.Status ?? "Активен";
                     HasInstallation = order.HasInstallation ?? false;
+
+                    // Уведомляем об изменении свойств DateTimeOffset для обновления UI
+                    this.RaisePropertyChanged(nameof(ContractDeadlineOffset));
+                    this.RaisePropertyChanged(nameof(DeliveryDeadlineOffset));
+                    this.RaisePropertyChanged(nameof(ShippingDateOffset));
                 });
             }
             catch (Exception ex)

@@ -16,16 +16,16 @@ namespace ManufactPlanner.Views.Dialogs
         }
 
         //  онструктор дл€ создани€ новой позиции
-        public OrderPositionDialog(PostgresContext dbContext, int orderId)
+        public OrderPositionDialog(PostgresContext dbContext, int orderId, bool isNew = true)
         {
             InitializeComponent();
-            var viewModel = new OrderPositionDialogViewModel(dbContext, orderId);
+            var viewModel = new OrderPositionDialogViewModel(dbContext, orderId, isNew);
             DataContext = viewModel;
             viewModel.SetDialogWindow(this);
         }
 
         //  онструктор дл€ редактировани€ существующей позиции
-        public OrderPositionDialog(PostgresContext dbContext, int positionId, bool isEditMode)
+        public OrderPositionDialog(PostgresContext dbContext, int positionId)
         {
             InitializeComponent();
             var viewModel = new OrderPositionDialogViewModel(dbContext, positionId);
@@ -41,14 +41,14 @@ namespace ManufactPlanner.Views.Dialogs
         // ћетод дл€ открыти€ диалога создани€ новой позиции и получени€ результата
         public static async Task<bool> ShowDialogAsync(Window owner, PostgresContext dbContext, int orderId)
         {
-            var dialog = new OrderPositionDialog(dbContext, orderId);
+            var dialog = new OrderPositionDialog(dbContext, orderId, true);
             return await dialog.ShowDialog<bool>(owner);
         }
 
         // ћетод дл€ открыти€ диалога редактировани€ позиции и получени€ результата
         public static async Task<bool> ShowEditDialogAsync(Window owner, PostgresContext dbContext, int positionId)
         {
-            var dialog = new OrderPositionDialog(dbContext, positionId, true);
+            var dialog = new OrderPositionDialog(dbContext, positionId);
             return await dialog.ShowDialog<bool>(owner);
         }
     }

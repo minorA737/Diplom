@@ -1,19 +1,17 @@
-<!-- Views/Dialogs/OrderPositionDialog.axaml -->
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="650"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="550"
         x:Class="ManufactPlanner.Views.Dialogs.OrderPositionDialog"
         Title="{Binding WindowTitle}"
-        Width="550" Height="600"
+        Width="500" Height="550"
         WindowStartupLocation="CenterOwner"
         x:DataType="vm:OrderPositionDialogViewModel"
         xmlns:vm="using:ManufactPlanner.ViewModels.Dialogs"
         Background="{DynamicResource BackgroundBrush}">
 
 	<Window.Styles>
-		<!-- Ñòèëè äëÿ TextBox -->
 		<Style Selector="TextBox">
 			<Setter Property="Height" Value="36"/>
 			<Setter Property="CornerRadius" Value="4"/>
@@ -25,7 +23,6 @@
 			<Setter Property="Margin" Value="0,0,0,15"/>
 		</Style>
 
-		<!-- Ñòèëè äëÿ ComboBox -->
 		<Style Selector="ComboBox">
 			<Setter Property="Height" Value="36"/>
 			<Setter Property="CornerRadius" Value="4"/>
@@ -36,7 +33,6 @@
 			<Setter Property="Margin" Value="0,0,0,15"/>
 		</Style>
 
-		<!-- Ñòèëè äëÿ êíîïîê -->
 		<Style Selector="Button">
 			<Setter Property="Height" Value="36"/>
 			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
@@ -45,7 +41,6 @@
 			<Setter Property="CornerRadius" Value="4"/>
 		</Style>
 
-		<!-- Ñòèëü äëÿ îñíîâíîé êíîïêè -->
 		<Style Selector="Button.primary">
 			<Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
 			<Setter Property="Foreground" Value="{DynamicResource SurfaceBrush}"/>
@@ -54,99 +49,98 @@
 	</Window.Styles>
 
 	<Grid RowDefinitions="Auto,*,Auto" Margin="20">
-		<!-- Çàãîëîâîê -->
+		<!-- Ð—Ð°Ð³Ð¾Ð»Ð¾Ð²Ð¾Ðº -->
 		<TextBlock Grid.Row="0" Text="{Binding WindowTitle}" FontSize="18" FontWeight="SemiBold"
                    Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,20"/>
 
-		<!-- Èíäèêàòîð çàãðóçêè -->
+		<!-- Ð˜Ð½Ð´Ð¸ÐºÐ°Ñ‚Ð¾Ñ€ Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ¸ -->
 		<ProgressBar Grid.Row="1" IsIndeterminate="True" IsVisible="{Binding IsLoading}"
                      VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0"
                      Width="200" Height="10"/>
 
-		<!-- Ôîðìà ðåäàêòèðîâàíèÿ -->
+		<!-- Ð¤Ð¾Ñ€Ð¼Ð° Ñ€ÐµÐ´Ð°ÐºÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ -->
 		<ScrollViewer Grid.Row="1" IsVisible="{Binding !IsLoading}">
 			<StackPanel Spacing="10">
-				<!-- Ñîîáùåíèå îá îøèáêå -->
+				<!-- Ð¡Ð¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ -->
 				<Border Background="#FFEBEE" BorderBrush="#FFCDD2" BorderThickness="1"
                         CornerRadius="4" Padding="10" IsVisible="{Binding HasError}" Margin="0,0,0,10">
 					<TextBlock Text="{Binding ErrorMessage}" Foreground="#D32F2F" TextWrapping="Wrap"/>
 				</Border>
 
-				<!-- Èíôîðìàöèÿ î çàêàçå (íåèçìåíÿåìàÿ) -->
+				<!-- Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ Ð¾ Ð·Ð°ÐºÐ°Ð·Ðµ -->
 				<StackPanel>
-					<TextBlock Text="Çàêàç" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+					<TextBlock Text="ÐÐ¾Ð¼ÐµÑ€ Ð·Ð°ÐºÐ°Ð·Ð°" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
                                Margin="0,0,0,5"/>
-					<TextBox Text="{Binding OrderNumber}" IsReadOnly="True" Foreground="{DynamicResource TextSecondaryBrush}"/>
+					<TextBox Text="{Binding OrderNumber}" IsReadOnly="True" IsEnabled="False" Opacity="0.8"/>
 				</StackPanel>
 
-				<!-- Íîìåð ïîçèöèè -->
+				<!-- ÐÐ¾Ð¼ÐµÑ€ Ð¿Ð¾Ð·Ð¸Ñ†Ð¸Ð¸ -->
 				<StackPanel>
-					<TextBlock Text="Íîìåð ïîçèöèè *" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+					<TextBlock Text="ÐÐ¾Ð¼ÐµÑ€ Ð¿Ð¾Ð·Ð¸Ñ†Ð¸Ð¸ *" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
                                Margin="0,0,0,5"/>
-					<TextBox Text="{Binding PositionNumber}" Watermark="Ââåäèòå íîìåð ïîçèöèè (íàïð. 1 èëè 1.1)"/>
+					<TextBox Text="{Binding PositionNumber}" Watermark="Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ð¾Ð¼ÐµÑ€ Ð¿Ð¾Ð·Ð¸Ñ†Ð¸Ð¸ (Ð½Ð°Ð¿Ñ€. 1, 1.1)"/>
 				</StackPanel>
 
-				<!-- Íàçâàíèå ïðîäóêòà -->
+				<!-- ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ Ð¿Ñ€Ð¾Ð´ÑƒÐºÑ‚Ð° -->
 				<StackPanel>
-					<TextBlock Text="Íàèìåíîâàíèå ïðîäóêöèè *" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+					<TextBlock Text="ÐÐ°Ð¸Ð¼ÐµÐ½Ð¾Ð²Ð°Ð½Ð¸Ðµ *" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
                                Margin="0,0,0,5"/>
-					<TextBox Text="{Binding ProductName}" Watermark="Ââåäèòå íàèìåíîâàíèå ïðîäóêöèè"
-                             Height="80" AcceptsReturn="True" TextWrapping="Wrap"/>
+					<TextBox Text="{Binding ProductName}" Watermark="Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ð°Ð¸Ð¼ÐµÐ½Ð¾Ð²Ð°Ð½Ð¸Ðµ Ð¿Ñ€Ð¾Ð´ÑƒÐºÑ‚Ð°" Height="60" AcceptsReturn="True" TextWrapping="Wrap"/>
 				</StackPanel>
 
-				<!-- Êîëè÷åñòâî è öåíà -->
+				<!-- ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð¸ Ñ†ÐµÐ½Ð° -->
 				<StackPanel Orientation="Horizontal" Spacing="20">
-					<StackPanel Width="100">
-						<TextBlock Text="Êîëè÷åñòâî *" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+					<StackPanel Width="120">
+						<TextBlock Text="ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ *" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
                                    Margin="0,0,0,5"/>
 						<NumericUpDown Value="{Binding Quantity}" Minimum="1" Maximum="1000"
                                        VerticalContentAlignment="Center" Height="36"/>
 					</StackPanel>
 
-					<StackPanel Width="160">
-						<TextBlock Text="Öåíà çà åäèíèöó (ðóá.) *" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+					<StackPanel Width="240">
+						<TextBlock Text="Ð¦ÐµÐ½Ð° (Ñ€ÑƒÐ±.)" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
                                   Margin="0,0,0,5"/>
 						<TextBox Text="{Binding Price}" Watermark="0.00"/>
 					</StackPanel>
-
-					<StackPanel Width="160">
-						<TextBlock Text="Îáùàÿ ñóììà (ðóá.)" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
-                                  Margin="0,0,0,5"/>
-						<TextBox Text="{Binding TotalPrice}" IsReadOnly="True"
-                                 Background="#F0F0F0" Foreground="{DynamicResource TextSecondaryBrush}"/>
-					</StackPanel>
 				</StackPanel>
 
-				<!-- Òèï ðàçðàáîòêè -->
+				<!-- ÐžÐ±Ñ‰Ð°Ñ ÑÑƒÐ¼Ð¼Ð° -->
 				<StackPanel>
-					<TextBlock Text="Òèï ðàçðàáîòêè" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
-                               Margin="0,0,0,5"/>
+					<TextBlock Text="ÐžÐ±Ñ‰Ð°Ñ ÑÑƒÐ¼Ð¼Ð° (Ñ€ÑƒÐ±.)" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                              Margin="0,0,0,5"/>
+					<TextBox Text="{Binding TotalPrice}" IsReadOnly="True" IsEnabled="False" Opacity="0.8"/>
+				</StackPanel>
+
+				<!-- Ð¢Ð¸Ð¿ Ñ€Ð°Ð·Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ¸ -->
+				<StackPanel>
+					<TextBlock Text="Ð¢Ð¸Ð¿ Ñ€Ð°Ð·Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ¸" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                              Margin="0,0,0,5"/>
 					<ComboBox ItemsSource="{Binding DevelopmentTypes}" SelectedItem="{Binding DevelopmentType}"
                               HorizontalAlignment="Stretch"/>
 				</StackPanel>
 
-				<!-- Âðåìÿ âûïîëíåíèÿ -->
+				<!-- Ð’Ñ€ÐµÐ¼Ñ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ -->
 				<StackPanel>
-					<TextBlock Text="Âðåìÿ íà âûïîëíåíèå" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
-                               Margin="0,0,0,5"/>
+					<TextBlock Text="Ð’Ñ€ÐµÐ¼Ñ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                              Margin="0,0,0,5"/>
 					<ComboBox ItemsSource="{Binding WorkflowTimes}" SelectedItem="{Binding WorkflowTime}"
                               HorizontalAlignment="Stretch"/>
 				</StackPanel>
 
-				<!-- Ñòàòóñ -->
+				<!-- Ð¡Ñ‚Ð°Ñ‚ÑƒÑ -->
 				<StackPanel>
-					<TextBlock Text="Òåêóùèé ñòàòóñ" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
-                               Margin="0,0,0,5"/>
+					<TextBlock Text="Ð¡Ñ‚Ð°Ñ‚ÑƒÑ" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"
+                              Margin="0,0,0,5"/>
 					<ComboBox ItemsSource="{Binding Statuses}" SelectedItem="{Binding CurrentStatus}"
                               HorizontalAlignment="Stretch"/>
 				</StackPanel>
 			</StackPanel>
 		</ScrollViewer>
 
-		<!-- Êíîïêè äåéñòâèé -->
+		<!-- ÐšÐ½Ð¾Ð¿ÐºÐ¸ Ð´ÐµÐ¹ÑÑ‚Ð²Ð¸Ð¹ -->
 		<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0" Spacing="10">
-			<Button Content="Îòìåíà" Width="100" Command="{Binding CancelCommand}"/>
-			<Button Content="Ñîõðàíèòü" Width="100" Classes="primary"
+			<Button Content="ÐžÑ‚Ð¼ÐµÐ½Ð°" Width="100" Command="{Binding CancelCommand}"/>
+			<Button Content="Ð¡Ð¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ" Width="100" Classes="primary"
                     Command="{Binding SaveCommand}" IsEnabled="{Binding !IsLoading}"/>
 		</StackPanel>
 	</Grid>

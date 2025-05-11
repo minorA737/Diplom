@@ -1,8 +1,8 @@
-// NotificationsPage.axaml.cs
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using ManufactPlanner.Models;
+using ManufactPlanner.Services;
 using ManufactPlanner.ViewModels;
 
 namespace ManufactPlanner.Views
@@ -12,6 +12,8 @@ namespace ManufactPlanner.Views
         public NotificationsPage(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext)
         {
             InitializeComponent();
+
+            var notificationService = NotificationService.Instance;
             DataContext = new NotificationsPageViewModel(mainWindowViewModel, dbContext);
         }
 

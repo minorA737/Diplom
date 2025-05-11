@@ -179,11 +179,11 @@ namespace ManufactPlanner.ViewModels.Dialogs
         public ICommand CancelCommand { get; }
 
         // Конструктор для создания новой позиции
-        public OrderPositionDialogViewModel(PostgresContext dbContext, int orderId)
+        public OrderPositionDialogViewModel(PostgresContext dbContext, int orderId, bool isNew)
         {
             _dbContext = dbContext;
             _orderId = orderId;
-            _isEditMode = false;
+            _isEditMode = !isNew;
 
             SaveCommand = ReactiveCommand.CreateFromTask(SavePositionAsync);
             CancelCommand = ReactiveCommand.Create(CancelEdit);
@@ -193,10 +193,10 @@ namespace ManufactPlanner.ViewModels.Dialogs
         }
 
         // Конструктор для редактирования существующей позиции
-        public OrderPositionDialogViewModel(PostgresContext dbContext, double positionId)
+        public OrderPositionDialogViewModel(PostgresContext dbContext, int positionId)
         {
             _dbContext = dbContext;
-            _id = (int)positionId;
+            _id = positionId;
             _isEditMode = true;
             WindowTitle = "Редактирование позиции заказа";
 

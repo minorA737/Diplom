@@ -1,4 +1,3 @@
-<!-- NotificationsPage.axaml -->
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,98 +6,115 @@
              x:Class="ManufactPlanner.Views.NotificationsPage"
              x:DataType="vm:NotificationsPageViewModel"
              xmlns:vm="using:ManufactPlanner.ViewModels"
-             xmlns:converters="using:ManufactPlanner.Converters">
+			 xmlns:converters="using:ManufactPlanner.Converters">
 
 	<UserControl.Resources>
-		<converters:BoolToValueConverter x:Key="BoolToValue"/>
 		<converters:IsGreaterThanConverter x:Key="IsGreaterThan"/>
-		<converters:StringEqualsValueConverter x:Key="StringEqualsValue"/>
-		<converters:MarginConverter x:Key="MarginConverter"/>
+		<converters:BoolToValueConverter x:Key="BoolToValue"/>
 	</UserControl.Resources>
-
 	<Grid RowDefinitions="Auto,*">
-		<!-- Заголовок страницы и кнопки действий -->
+		<!-- Заголовок страницы -->
 		<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="20,20,20,0">
-			<TextBlock Text="Уведомления" FontSize="20" FontWeight="SemiBold" Foreground="#333333"/>
+			<TextBlock Text="Уведомления" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
+			<!-- Кнопки действий -->
 			<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
-				<Button Width="120" Height="36" CornerRadius="18" Background="#00ACC1"
-                        Command="{Binding MarkAllAsReadCommand}">
-					<TextBlock Text="Прочитать все" FontSize="12" Foreground="White"/>
-				</Button>
-
-				<Button Width="100" Height="36" CornerRadius="18" Background="White"
-                        BorderBrush="#E0E0E0" BorderThickness="1"
-                        Command="{Binding RefreshCommand}">
-					<TextBlock Text="Обновить" FontSize="12" Foreground="#666"/>
-				</Button>
+				<Button Content="Отметить все как прочитанные" Width="220" Height="36"
+                        CornerRadius="4" Background="{DynamicResource PrimaryBrush}" Foreground="{DynamicResource SurfaceBrush}"
+                        Command="{Binding MarkAllAsReadCommand}"/>
+				<Button Content="⟳" Width="36" Height="36"
+                        CornerRadius="4" Background="{DynamicResource PrimaryBrush}" Foreground="{DynamicResource SurfaceBrush}"
+                        Command="{Binding RefreshCommand}"/>
 			</StackPanel>
 		</Grid>
 
 		<!-- Список уведомлений -->
-		<Border Grid.Row="1" Margin="20,20,20,20" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
-			<Grid>
-				<!-- Индикатор загрузки -->
-				<ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoading}"
-                             VerticalAlignment="Top" Height="4" Margin="0,0,0,0"/>
+		<Border Grid.Row="1" Margin="20,20,20,20" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+			<Grid RowDefinitions="Auto,*">
+				<!-- Заголовок списка -->
+				<Grid Grid.Row="0" Height="40" Background="{DynamicResource BackgroundBrush}" ColumnDefinitions="*,150,100,Auto">
+					<TextBlock Grid.Column="0" Text="Сообщение" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
+                               VerticalAlignment="Center" Margin="20,0,0,0"/>
+					<TextBlock Grid.Column="1" Text="Дата" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
+                               VerticalAlignment="Center"/>
+					<TextBlock Grid.Column="2" Text="Статус" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
+                               VerticalAlignment="Center"/>
+				</Grid>
 
-				<!-- Список уведомлений -->
-				<ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,10,0,10">
+				<!-- Разделитель -->
+				<Rectangle Grid.Row="0" Height="1" Fill="{DynamicResource BorderBrush}" VerticalAlignment="Bottom"/>
+
+				<!-- Содержимое списка -->
+				<ScrollViewer Grid.Row="1">
 					<ItemsControl ItemsSource="{Binding Notifications}">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
-								<Border Margin="15,8" Padding="15" CornerRadius="8"
-                                        Background="{Binding IsRead, Converter={StaticResource BoolToValue}, ConverterParameter='#F8F9FA,#E3F2FD'}"
-                                        BorderBrush="#E0E0E0" BorderThickness="1">
+								<Grid Height="60" ColumnDefinitions="*,150,100,Auto"
+                                      Background="{Binding IsRead, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource SurfaceBrush},{DynamicResource BackgroundBrush}'}">
 
-									<Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
-										<!-- Заголовок и время -->
-										<TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Title}"
-                                                   FontSize="14" FontWeight="Medium" Foreground="#333333"/>
+									<!-- Сообщение и заголовок -->
+									<StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="20,0,10,0">
+										<TextBlock Text="{Binding Title}" FontSize="14" FontWeight="Medium"
+                                                   Foreground="{Binding IsRead, Converter={StaticResource BoolToValue}, 
+                                                   ConverterParameter='{DynamicResource TextSecondaryBrush},{DynamicResource TextPrimaryBrush}'}" TextWrapping="Wrap"/>
+										<TextBlock Text="{Binding Message}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"
+                                                   TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxLines="1"/>
+									</StackPanel>
 
-										<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding FormattedTime}"
-                                                   Foreground="#9E9E9E" FontSize="12"/>
+									<!-- Дата -->
+									<StackPanel Grid.Column="1" VerticalAlignment="Center">
+										<TextBlock Text="{Binding FormattedDate}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
+										<TextBlock Text="{Binding FormattedTime}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"/>
+									</StackPanel>
 
-										<!-- Сообщение -->
-										<TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                                   Text="{Binding Message}" Foreground="#666666"
-                                                   TextWrapping="Wrap" Margin="0,10,0,0"/>
+									<!-- Статус -->
+									<Border Grid.Column="2" Width="90" Height="24" CornerRadius="12"
+                                            Background="{Binding IsRead, Converter={StaticResource BoolToValue}, 
+                                            ConverterParameter='{DynamicResource SuccessBrush},{DynamicResource WarningBrush}'}" Opacity="0.2" VerticalAlignment="Center">
+										<TextBlock Text="{Binding IsRead, Converter={StaticResource BoolToValue}, 
+                                                 ConverterParameter='Прочитано,Новое'}" FontSize="12"
+                                                 Foreground="{Binding IsRead, Converter={StaticResource BoolToValue}, 
+                                                 ConverterParameter='{DynamicResource SuccessBrush},{DynamicResource WarningBrush}'}"
+                                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
+									</Border>
 
-										<!-- Дата и кнопки -->
-										<TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding FormattedDate}"
-                                                   Foreground="#9E9E9E" FontSize="12"
-                                                   VerticalAlignment="Center" Margin="0,15,0,0"/>
+									<!-- Кнопки действий -->
+									<StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="8" Margin="10,0,20,0">
+										<Button Width="30" Height="30" CornerRadius="15" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}"
+                                                BorderThickness="1"
+												Command="{Binding $parent[ItemsControl].((vm:NotificationsPageViewModel)DataContext).MarkAsReadCommand}"
+                                                CommandParameter="{Binding}"
+												IsVisible="{Binding !IsRead}">
+											<TextBlock Text="✓" FontSize="14" Foreground="{DynamicResource SuccessBrush}" HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
+										</Button>
+										<Button Width="30" Height="30" CornerRadius="15" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}"
+                                                BorderThickness="1" Command="{Binding $parent[ItemsControl].((vm:NotificationsPageViewModel)DataContext).OpenItemCommand}"
+                                                CommandParameter="{Binding}">
+											<TextBlock Text="→" FontSize="14" Foreground="{DynamicResource PrimaryBrush}" HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
+										</Button>
+									</StackPanel>
 
-										<StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal"
-                                                    HorizontalAlignment="Right" Margin="0,15,0,0" Spacing="8">
-
-											<!-- Если уведомление не прочитано, показываем кнопку "Прочитано" -->
-											<Button Content="Прочитано" Height="28" CornerRadius="14"
-                                                    Background="#F1F3F4" Foreground="#666666"
-                                                    IsVisible="{Binding !IsRead}"
-                                                    Command="{Binding $parent[ItemsControl].((vm:NotificationsPageViewModel)DataContext).MarkAsReadCommand}"
-                                                    CommandParameter="{Binding}"/>
-
-											<!-- Кнопка "Открыть" для всех уведомлений -->
-											<Button Content="Открыть" Height="28" CornerRadius="14"
-                                                    Background="#00ACC1" Foreground="White"
-                                                    Command="{Binding $parent[ItemsControl].((vm:NotificationsPageViewModel)DataContext).OpenItemCommand}"
-                                                    CommandParameter="{Binding}"/>
-										</StackPanel>
-									</Grid>
-								</Border>
+									<!-- Разделитель -->
+									<Rectangle Grid.ColumnSpan="4" Height="1" Fill="{DynamicResource BorderBrush}" VerticalAlignment="Bottom"/>
+								</Grid>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
 					</ItemsControl>
 				</ScrollViewer>
 
-				<!-- Сообщение если нет уведомлений -->
-				<TextBlock Text="У вас нет уведомлений"
-                           IsVisible="{Binding !Notifications.Count}"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Foreground="#9E9E9E"
-                           FontSize="16"/>
+				<!-- Индикатор загрузки -->
+				<Grid Grid.Row="1" IsVisible="{Binding IsLoading}" Background="#80FFFFFF">
+					<ProgressBar IsIndeterminate="True" Width="200" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+				</Grid>
+
+				<!-- Сообщение, если список пуст -->
+				<TextBlock Grid.Row="1" Text="У вас нет уведомлений"
+           HorizontalAlignment="Center" VerticalAlignment="Center"
+           FontSize="16" Foreground="{DynamicResource TextSecondaryBrush}"
+           IsVisible="{Binding Notifications.Count, Converter={StaticResource IsGreaterThan}, ConverterParameter='0 Invert=true', FallbackValue=true}"/>
 			</Grid>
 		</Border>
 	</Grid>

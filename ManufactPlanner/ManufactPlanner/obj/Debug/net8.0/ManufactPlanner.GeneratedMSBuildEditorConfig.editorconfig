@@ -60,6 +60,12 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/DashboardPage.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/DesktopNotificationDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/MessageBoxDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/OrderCreateDialog.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 

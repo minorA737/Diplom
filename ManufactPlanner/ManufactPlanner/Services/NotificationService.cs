@@ -438,7 +438,7 @@ namespace ManufactPlanner.Services
                 // Показываем десктопное уведомление, если включено
                 if (ShouldShowDesktopNotification())
                 {
-                    DesktopNotificationService.ShowNotification(notification.Title, notification.Message);
+                    ShowDesktopNotification(notification);
                 }
 
                 // Отправляем уведомление по email, если включено
@@ -456,21 +456,18 @@ namespace ManufactPlanner.Services
         // Добавляем новые методы для проверки настроек и отправки email
         private bool ShouldShowDesktopNotification()
         {
-            // По умолчанию показываем, если нет конкретных настроек
-            if (_mainViewModel == null || _mainViewModel.CurrentUserId == Guid.Empty)
-                return true;
-
             try
             {
-                // Проверяем настройку уведомлений на рабочем столе
-                var settings = _dbContext.UserSettings
-                    .FirstOrDefault(s => s.UserId == _mainViewModel.CurrentUserId);
+                if (_mainViewModel == null || _mainViewModel.CurrentUserId == Guid.Empty)
+                    return false; // По умолчанию не показываем, если нет текущего пользователя
 
-                return settings?.NotifyDesktop ?? true;
+                // Проверяем настройку в MainViewModel (которая кэширует настройку из БД)
+                return _mainViewModel.NotifyDesktopEnabled;
             }
-            catch
+            catch (Exception ex)
             {
-                return true; // В случае ошибки показываем уведомления
+                Debug.WriteLine($"Ошибка при проверке настройки уведомлений: {ex.Message}");
+                return false; // В случае ошибки не показываем уведомления
             }
         }
 
@@ -481,22 +478,41 @@ namespace ManufactPlanner.Services
 
             try
             {
-                // Проверяем настройку email уведомлений
+                // Проверяем настройку email уведомлений у текущего пользователя
                 var user = await _dbContext.Users
                     .FirstOrDefaultAsync(u => u.Id == _mainViewModel.CurrentUserId);
 
-                if (user == null || string.IsNullOrEmpty(user.Email))
+                if (user == null || string.IsNullOrEmpty(user.Email) || !EmailService.Instance.IsValidEmail(user.Email))
                     return;
 
                 var settings = await _dbContext.UserSettings
                     .FirstOrDefaultAsync(s => s.UserId == _mainViewModel.CurrentUserId);
 
+                // Проверяем, что пользователь включил email-уведомления
                 if (settings?.NotifyEmail != true)
                     return;
 
+                // Проверяем, что включен соответствующий тип уведомления
+                bool shouldSend = notification.Type switch
+                {
+                    "task_assigned" => settings.NotifyNewTasks ?? true,
+                    "status_changed" => settings.NotifyStatusChanges ?? true,
+                    "new_comment" => settings.NotifyComments ?? true,
+                    "deadline_approaching" => settings.NotifyDeadlines ?? true,
+                    _ => true // Для других типов уведомлений отправляем по умолчанию
+                };
+
+                if (!shouldSend)
+                    return;
+
                 // Отправляем email
-                var emailService = new EmailService(); // Используем значения по умолчанию
-                await emailService.SendNotificationEmailAsync(user.Email, notification.Title, notification.Message);
+                await EmailService.Instance.SendNotificationEmailAsync(
+                    user.Email,
+                    notification.Title,
+                    notification.Message
+                );
+
+                Debug.WriteLine($"Email уведомление отправлено на адрес {user.Email}");
             }
             catch (Exception ex)
             {
@@ -509,65 +525,15 @@ namespace ManufactPlanner.Services
         {
             try
             {
-                // Выбираем подходящий метод для текущей платформы
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                // Используем новый сервис диалоговых окон для отображения уведомления
+                Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    ShowWindowsNotification(notification);
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
-                    ShowLinuxNotification(notification);
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
-                    ShowMacOSNotification(notification);
-                }
+                    NotificationDialogService.ShowNotificationDialog(notification, _mainViewModel, this);
+                });
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Ошибка при показе десктопного уведомления: {ex.Message}");
-            }
-        }
-
-        // Метод для отображения уведомления в Windows
-        
-        // Метод для отображения уведомления в Linux
-        private void ShowLinuxNotification(NotificationViewModel notification)
-        {
-            try
-            {
-                using (var process = new Process())
-                {
-                    process.StartInfo.FileName = "notify-send";
-                    process.StartInfo.Arguments = $"-a \"ManufactPlanner\" \"{notification.Title}\" \"{notification.Message}\"";
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.CreateNoWindow = true;
-                    process.Start();
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Ошибка при показе Linux-уведомления: {ex.Message}");
-            }
-        }
-
-        // Метод для отображения уведомления в macOS
-        private void ShowMacOSNotification(NotificationViewModel notification)
-        {
-            try
-            {
-                using (var process = new Process())
-                {
-                    process.StartInfo.FileName = "osascript";
-                    process.StartInfo.Arguments = $"-e 'display notification \"{notification.Message}\" with title \"ManufactPlanner\" subtitle \"{notification.Title}\"'";
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.CreateNoWindow = true;
-                    process.Start();
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Ошибка при показе macOS-уведомления: {ex.Message}");
             }
         }
 
@@ -844,70 +810,6 @@ namespace ManufactPlanner.Services
                 return taskId;
 
             return 0;
-        }
-        private void ShowWindowsNotification(NotificationViewModel notification)
-        {
-            try
-            {
-                // Современный подход к отображению уведомлений в Windows 10/11 через toast-активатор
-                string appId = "ManufactPlannerApp"; // Должно соответствовать идентификатору приложения
-
-                // Создаем XML для уведомления
-                string xml = $@"
-            <toast>
-                <visual>
-                    <binding template='ToastGeneric'>
-                        <text>{notification.Title}</text>
-                        <text>{notification.Message}</text>
-                    </binding>
-                </visual>
-            </toast>";
-
-                // Сохраняем во временный файл для вызова через команду
-                string tempPath = Path.GetTempFileName();
-                File.WriteAllText(tempPath, xml);
-
-                // Используем специальный инструмент для уведомлений
-                using (var process = new Process())
-                {
-                    string exePath = Process.GetCurrentProcess().MainModule.FileName;
-                    string exeDir = Path.GetDirectoryName(exePath);
-
-                    process.StartInfo.FileName = "cmd.exe";
-                    process.StartInfo.Arguments = $"/c start powershell -NoProfile -ExecutionPolicy Bypass -Command \"[Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] > $null; $content = [Windows.Data.Xml.Dom.XmlDocument]::New(); $content.LoadXml((Get-Content '{tempPath}')); [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('{appId}').Show($content)\"";
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.CreateNoWindow = true;
-                    process.Start();
-                }
-
-                // В качестве запасного варианта используем balloontip для taskbar
-                try
-                {
-                    var notifyIcon = new System.Windows.Forms.NotifyIcon
-                    {
-                        Icon = System.Drawing.Icon.ExtractAssociatedIcon(Process.GetCurrentProcess().MainModule.FileName),
-                        Visible = true,
-                        BalloonTipTitle = notification.Title,
-                        BalloonTipText = notification.Message,
-                        BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info
-                    };
-
-                    notifyIcon.ShowBalloonTip(5000); // Показать на 5 секунд
-
-                    // Очищаем ресурсы через 6 секунд
-                    System.Threading.Tasks.Task.Delay(6000).ContinueWith(_ => {
-                        notifyIcon.Dispose();
-                    });
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Ошибка при показе запасного уведомления: {ex.Message}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Ошибка при показе Windows-уведомления: {ex.Message}");
-            }
         }
     }
 

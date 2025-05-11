@@ -1,9 +1,12 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using ManufactPlanner.Models;
 using ManufactPlanner.Services;
 using ManufactPlanner.Views;
+using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
 using System;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace ManufactPlanner.ViewModels
@@ -96,6 +99,24 @@ namespace ManufactPlanner.ViewModels
         public ICommand ToggleNotificationsPanel { get; }
 
         public Window MainWindow { get; set; }
+
+
+        
+        private bool _notifyDesktopEnabled = true;
+
+        public bool NotifyDesktopEnabled
+        {
+            get => _notifyDesktopEnabled;
+            set => this.RaiseAndSetIfChanged(ref _notifyDesktopEnabled, value);
+        }
+        private bool _notifyEmailEnabled;
+        public bool NotifyEmailEnabled
+        {
+            get => _notifyEmailEnabled;
+            set => this.RaiseAndSetIfChanged(ref _notifyEmailEnabled, value);
+        }
+
+        public MainWindowViewModel _mainViewModel;
         public MainWindowViewModel()
         {
             _themeService = ThemeService.Instance;
@@ -105,7 +126,7 @@ namespace ManufactPlanner.ViewModels
             {
                 // При необходимости можно обновить UI при изменении темы
             });
-
+            _mainViewModel = this;
             // Инициализация базы данных
             DbContext = new PostgresContext();
 
@@ -125,16 +146,37 @@ namespace ManufactPlanner.ViewModels
             });
         }
 
+        public async System.Threading.Tasks.Task CacheUserNotificationSettingsAsync(Guid userId)
+        {
+            try
+            {
+                if (_dbContext == null || userId == Guid.Empty || _mainViewModel == null)
+                    return;
+
+                var settings = await _dbContext.UserSettings
+                    .FirstOrDefaultAsync(s => s.UserId == userId);
+
+                // Кэшируем настройки в MainViewModel
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    _mainViewModel.NotifyDesktopEnabled = settings?.NotifyDesktop ?? true;
+                    _mainViewModel.NotifyEmailEnabled = settings?.NotifyEmail ?? false;
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ошибка при кэшировании настроек уведомлений: {ex.Message}");
+            }
+        }
+        public void NavigateToNotifications()
+        {
+            CurrentMenuItem = "notifications"; // Можно использовать существующий пункт меню или создать новый
+            CurrentView = new Views.NotificationsPage(this, DbContext);
+        }
         // Метод для доступа к сервису тем из ViewModel
         public void ToggleTheme()
         {
             _themeService.IsLightTheme = !_themeService.IsLightTheme;
-        }
-        // Добавьте этот метод в MainWindowViewModel.cs
-        public void NavigateToNotifications()
-        {
-            CurrentMenuItem = "notifications"; // Новый пункт меню
-            CurrentView = new Views.NotificationsPage(this, DbContext);
         }
         // Модифицируем метод NavigateToDashboard для инициализации NotificationService
         public void NavigateToDashboard()

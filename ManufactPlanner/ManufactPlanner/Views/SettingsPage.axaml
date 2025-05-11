@@ -16,7 +16,7 @@
 
 	<Grid RowDefinitions="Auto,*">
 		<!-- Заголовок страницы -->
-		<TextBlock Grid.Row="0" Text="{Binding InterfaceSettingsText}"
+		<TextBlock Grid.Row="0" Text="Настройки"
                    FontSize="20" FontWeight="SemiBold"
                    Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,0"/>
 		
@@ -62,38 +62,38 @@
 				<!-- Категория: Профиль пользователя -->
 				<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8">
 					<StackPanel Margin="20">
-						<TextBlock Text="{Binding ProfileSettingsText}"
+						<TextBlock Text="Профиль пользователя"
                                   FontSize="16" FontWeight="Medium"
                                   Foreground="{DynamicResource TextPrimaryBrush}"/>
 						<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="0,10,0,20"/>
 
 						<Grid ColumnDefinitions="150,*" RowDefinitions="Auto,Auto,Auto,Auto" Margin="0,0,0,10">
-							<TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding UsernameText}"
+							<TextBlock Grid.Row="0" Grid.Column="0" Text="Имя пользователя:"
                                       FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
                                       VerticalAlignment="Center"/>
 							<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Username}" IsEnabled="False"
                                      Width="250" Height="36" HorizontalAlignment="Left"/>
 
-							<TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding FirstNameText}"
+							<TextBlock Grid.Row="1" Grid.Column="0" Text="Имя:"
                                        FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
                                        VerticalAlignment="Center" Margin="0,15,0,0"/>
 							<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding FirstName}"
                                      Width="250" Height="36" HorizontalAlignment="Left" Margin="0,15,0,0"/>
 
-							<TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding LastNameText}"
+							<TextBlock Grid.Row="2" Grid.Column="0" Text="Инициалы:"
                                        FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
                                        VerticalAlignment="Center" Margin="0,15,0,0"/>
 							<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding LastName}"
                                      Width="250" Height="36" HorizontalAlignment="Left" Margin="0,15,0,0"/>
 
-							<TextBlock Grid.Row="3" Grid.Column="0" Text="{Binding EmailText}"
+							<TextBlock Grid.Row="3" Grid.Column="0" Text="Email:"
                                        FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
                                        VerticalAlignment="Center" Margin="0,15,0,0"/>
 							<TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Email}"
                                      Width="250" Height="36" HorizontalAlignment="Left" Margin="0,15,0,0"/>
 						</Grid>
 
-						<Button Content="{Binding SaveChangesText}" Width="200" Height="36"
+						<Button Content="Сохранить изменения" Width="200" Height="36"
                                 Background="{DynamicResource PrimaryBrush}" Foreground="{DynamicResource SurfaceBrush}"
                                 HorizontalAlignment="Left" CornerRadius="18"
                                 Command="{Binding SaveProfileCommand}"/>
@@ -103,32 +103,32 @@
 				<!-- Категория: Изменение пароля -->
 				<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8">
 					<StackPanel Margin="20">
-						<TextBlock Text="{Binding PasswordSettingsText}"
+						<TextBlock Text="Изменение пароля"
                                    FontSize="16" FontWeight="Medium"
                                    Foreground="{DynamicResource TextPrimaryBrush}"/>
 						<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="0,10,0,20"/>
 
 						<Grid ColumnDefinitions="150,*" RowDefinitions="Auto,Auto,Auto" Margin="0,0,0,10">
-							<TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding CurrentPasswordText}"
+							<TextBlock Grid.Row="0" Grid.Column="0" Text="Текущий пароль"
                                        FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
                                        VerticalAlignment="Center"/>
 							<TextBox Grid.Row="0" Grid.Column="1" PasswordChar="•" Text="{Binding CurrentPassword}"
                                      Width="250" Height="36" HorizontalAlignment="Left"/>
 
-							<TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding NewPasswordText}"
+							<TextBlock Grid.Row="1" Grid.Column="0" Text="Новый пароль:"
                                        FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
                                        VerticalAlignment="Center" Margin="0,15,0,0"/>
 							<TextBox Grid.Row="1" Grid.Column="1" PasswordChar="•" Text="{Binding NewPassword}"
                                      Width="250" Height="36" HorizontalAlignment="Left" Margin="0,15,0,0"/>
 
-							<TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding ConfirmPasswordText}"
+							<TextBlock Grid.Row="2" Grid.Column="0" Text="Подтверждение"
                                        FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
                                        VerticalAlignment="Center" Margin="0,15,0,0"/>
 							<TextBox Grid.Row="2" Grid.Column="1" PasswordChar="•" Text="{Binding ConfirmPassword}"
                                      Width="250" Height="36" HorizontalAlignment="Left" Margin="0,15,0,0"/>
 						</Grid>
 
-						<Button Content="{Binding ChangePasswordText}" Width="200" Height="36"
+						<Button Content="Изменить пароль" Width="200" Height="36"
                                 Background="{DynamicResource PrimaryBrush}" Foreground="{DynamicResource SurfaceBrush}"
                                 HorizontalAlignment="Left" CornerRadius="18"
                                 Command="{Binding ChangePasswordCommand}"/>
@@ -138,27 +138,31 @@
 				<!-- Категория: Настройки уведомлений -->
 				<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8">
 					<StackPanel Margin="20">
-						<TextBlock Text="{Binding NotificationSettingsText}"
+						<TextBlock Text="Настройки уведомлений"
                                    FontSize="16" FontWeight="Medium"
                                    Foreground="{DynamicResource TextPrimaryBrush}"/>
 						<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="0,10,0,20"/>
 
 						<StackPanel Spacing="15">
-							<CheckBox Content="{Binding NotifyNewTasksText}" IsChecked="{Binding NotifyNewTasks}"
+							<CheckBox Content="Уведомления о новых задачах:" IsChecked="{Binding NotifyNewTasks}"
                                       Foreground="{DynamicResource TextPrimaryBrush}"/>
-							<CheckBox Content="{Binding NotifyStatusChangesText}" IsChecked="{Binding NotifyTaskStatusChanges}"
+							<CheckBox Content="Уведомления об изменении статуса задач" IsChecked="{Binding NotifyTaskStatusChanges}"
                                       Foreground="{DynamicResource TextPrimaryBrush}"/>
-							<CheckBox Content="{Binding NotifyCommentsText}" IsChecked="{Binding NotifyComments}"
+							<CheckBox Content="Уведомления о коментариях" IsChecked="{Binding NotifyComments}"
                                       Foreground="{DynamicResource TextPrimaryBrush}"/>
-							<CheckBox Content="{Binding NotifyDeadlinesText}" IsChecked="{Binding NotifyDeadlines}"
+							<CheckBox Content="Уведомления о приближающихся дедлайнах" IsChecked="{Binding NotifyDeadlines}"
                                       Foreground="{DynamicResource TextPrimaryBrush}"/>
-							<CheckBox Content="{Binding NotifyEmailText}" IsChecked="{Binding NotifyEmail}"
+							<CheckBox Content="Уведомления по электронной почте" IsChecked="{Binding NotifyEmail}"
                                       Foreground="{DynamicResource TextPrimaryBrush}"/>
-							<CheckBox Content="{Binding NotifyDesktopText}" IsChecked="{Binding NotifyDesktop}"
+							<CheckBox Content="Уведомления на рабочий стол" IsChecked="{Binding NotifyDesktop}"
                                       Foreground="{DynamicResource TextPrimaryBrush}"/>
 						</StackPanel>
-
-						<Button Content="{Binding SaveNotificationSettingsText}" Width="200" Height="36"
+						<Button Content="Отправить тестовое письмо" Width="200" Height="36"
+								Background="{DynamicResource SuccessColor}" Foreground="{DynamicResource SurfaceBrush}"
+								HorizontalAlignment="Left" CornerRadius="18" Margin="0,10,0,0"
+								Command="{Binding SendTestEmailCommand}"
+								IsEnabled="{Binding NotifyEmail}"/>
+						<Button Content="Сохранить настройки" Width="200" Height="36"
                                 Background="{DynamicResource PrimaryBrush}" Foreground="{DynamicResource SurfaceBrush}"
                                 HorizontalAlignment="Left" CornerRadius="18" Margin="0,15,0,0"
                                 Command="{Binding SaveNotificationSettingsCommand}"/>
@@ -168,33 +172,25 @@
 				<!-- Категория: Интерфейс -->
 				<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8">
 					<StackPanel Margin="20">
-						<TextBlock Text="{Binding InterfaceSettingsText}"
+						<TextBlock Text="Настройки интерфейса"
                                    FontSize="16" FontWeight="Medium"
                                    Foreground="{DynamicResource TextPrimaryBrush}"/>
 						<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="0,10,0,20"/>
 
-						<Grid ColumnDefinitions="150,*" RowDefinitions="Auto,Auto" Margin="0,0,0,10">
-							<TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding LanguageText}"
-                                       FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
-                                       VerticalAlignment="Center"/>
-							<ComboBox Grid.Row="0" Grid.Column="1" Width="250" HorizontalAlignment="Left"
-                                      SelectedIndex="{Binding SelectedLanguage}">
-								<ComboBoxItem>Русский</ComboBoxItem>
-								<ComboBoxItem>English</ComboBoxItem>
-							</ComboBox>
-
-							<TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding ThemeText}"
+						<Grid ColumnDefinitions="150,*" RowDefinitions="Auto" Margin="0,0,0,10">
+							
+							<TextBlock Grid.Row="0" Grid.Column="0" Text="Цветовая тема:"
                                        FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
                                        VerticalAlignment="Center" Margin="0,15,0,0"/>
-							<StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0,15,0,0" Spacing="15">
-								<RadioButton Content="{Binding LightThemeText}" IsChecked="{Binding IsLightTheme}"
+							<StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,15,0,0" Spacing="15">
+								<RadioButton Content="Светлая" IsChecked="{Binding IsLightTheme}"
                                              GroupName="Theme" Foreground="{DynamicResource TextPrimaryBrush}"/>
-								<RadioButton Content="{Binding DarkThemeText}" IsChecked="{Binding !IsLightTheme}"
+								<RadioButton Content="Тёмная" IsChecked="{Binding !IsLightTheme}"
                                              GroupName="Theme" Foreground="{DynamicResource TextPrimaryBrush}"/>
 							</StackPanel>
 						</Grid>
 
-						<Button Content="{Binding ApplyText}" Width="200" Height="36"
+						<Button Content="Применить" Width="200" Height="36"
                                 Background="{DynamicResource PrimaryBrush}" Foreground="{DynamicResource SurfaceBrush}"
                                 HorizontalAlignment="Left" CornerRadius="18"
                                 Command="{Binding ApplyInterfaceSettingsCommand}"/>
@@ -204,23 +200,23 @@
 				<!-- Категория: О программе -->
 				<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8">
 					<StackPanel Margin="20">
-						<TextBlock Text="{Binding AboutAppText}"
+						<TextBlock Text="О программе"
                                    FontSize="16" FontWeight="Medium"
                                    Foreground="{DynamicResource TextPrimaryBrush}"/>
 						<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="0,10,0,20"/>
 
 						<StackPanel Spacing="10">
-							<TextBlock Text="{Binding AppNameText}"
+							<TextBlock Text="ManufactPlanner: Система автоматизации планирования разработки изделий"
                                        FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}"/>
-							<TextBlock Text="{Binding VersionText}"
+							<TextBlock Text="Версия: 1.0.0 (сборка от 17.05.2025)"
                                        FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"/>
-							<TextBlock Text="{Binding CopyrightText}"
+							<TextBlock Text="© 2025 Все права защищены"
                                        FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"/>
 
-							<TextBlock Text="{Binding DevelopedAsText}"
+							<TextBlock Text="Разработано в рамках дипломного проекта"
                                        FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
                                        Margin="0,15,0,0"/>
-							<TextBlock Text="{Binding TechnologiesText}"
+							<TextBlock Text="Используемые технологии: Avalonia UI, .NET 8, PostgreSQL"
                                        FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"/>
 						</StackPanel>
 					</StackPanel>

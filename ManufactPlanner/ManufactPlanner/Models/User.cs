@@ -45,5 +45,7 @@ public partial class User
 
     public virtual ICollection<UserDepartment> UserDepartments { get; set; } = new List<UserDepartment>();
 
+    public virtual ICollection<UserSetting> UserSettings { get; set; } = new List<UserSetting>();
+
     public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
 }

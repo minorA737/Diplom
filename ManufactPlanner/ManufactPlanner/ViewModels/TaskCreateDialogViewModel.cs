@@ -315,26 +315,7 @@ namespace ManufactPlanner.ViewModels
                     _dbContext.SaveChanges();
                 });
 
-                // Создаем уведомление для исполнителя, если он назначен
-                if (_assigneeId.HasValue)
-                {
-                    var notification = new Models.Notification
-                    {
-                        UserId = _assigneeId.Value,
-                        Title = "Новая задача",
-                        Message = $"Вам назначена новая задача: {Name}",
-                        IsRead = false,
-                        CreatedAt = DateTime.Now,
-                        LinkTo = $"/tasks/{task.Id}",
-                        NotificationType = "task_assigned"
-                    };
-
-                    await System.Threading.Tasks.Task.Run(() =>
-                    {
-                        _dbContext.Notifications.Add(notification);
-                        _dbContext.SaveChanges();
-                    });
-                }
+                // Удаляем создание уведомления здесь, так как это уже делает триггер в БД
 
                 return (true, task);
             }

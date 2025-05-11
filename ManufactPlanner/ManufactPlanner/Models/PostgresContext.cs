@@ -14,7 +14,7 @@ public partial class PostgresContext : DbContext
         : base(options)
     {
     }
-    public virtual DbSet<UserSettings> UserSettings { get; set; }
+
     public virtual DbSet<Attachment> Attachments { get; set; }
 
     public virtual DbSet<Comment> Comments { get; set; }
@@ -57,6 +57,8 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<UserDepartment> UserDepartments { get; set; }
 
+    public virtual DbSet<UserSetting> UserSettings { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=123");
@@ -66,27 +68,7 @@ public partial class PostgresContext : DbContext
         modelBuilder
             .HasPostgresExtension("pg_catalog", "adminpack")
             .HasPostgresExtension("uuid-ossp");
-        modelBuilder.Entity<UserSettings>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("user_settings_pkey");
-            entity.ToTable("user_settings");
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
-            entity.Property(e => e.NotifyNewTasks).HasColumnName("notify_new_tasks").HasDefaultValue(true);
-            entity.Property(e => e.NotifyTaskStatusChanges).HasColumnName("notify_status_changes").HasDefaultValue(true);
-            entity.Property(e => e.NotifyComments).HasColumnName("notify_comments").HasDefaultValue(true);
-            entity.Property(e => e.NotifyDeadlines).HasColumnName("notify_deadlines").HasDefaultValue(true);
-            entity.Property(e => e.NotifyEmail).HasColumnName("notify_email").HasDefaultValue(true);
-            entity.Property(e => e.NotifyDesktop).HasColumnName("notify_desktop").HasDefaultValue(true);
-            entity.Property(e => e.AutoStartEnabled).HasColumnName("auto_start_enabled").HasDefaultValue(false);
-            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-            entity.HasOne(d => d.User)
-                .WithMany()
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("user_settings_user_id_fkey");
-        });
         modelBuilder.Entity<Attachment>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("attachments_pkey");
@@ -850,6 +832,50 @@ public partial class PostgresContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.UserDepartments)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("user_departments_user_id_fkey");
+        });
+
+        modelBuilder.Entity<UserSetting>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("user_settings_pkey");
+
+            entity.ToTable("user_settings");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.AutoStartEnabled)
+                .HasDefaultValue(false)
+                .HasColumnName("auto_start_enabled");
+            entity.Property(e => e.Islighttheme).HasColumnName("islighttheme");
+            entity.Property(e => e.Language)
+                .HasColumnType("character varying")
+                .HasColumnName("language");
+            entity.Property(e => e.NotifyComments)
+                .HasDefaultValue(true)
+                .HasColumnName("notify_comments");
+            entity.Property(e => e.NotifyDeadlines)
+                .HasDefaultValue(true)
+                .HasColumnName("notify_deadlines");
+            entity.Property(e => e.NotifyDesktop)
+                .HasDefaultValue(true)
+                .HasColumnName("notify_desktop");
+            entity.Property(e => e.NotifyEmail)
+                .HasDefaultValue(true)
+                .HasColumnName("notify_email");
+            entity.Property(e => e.NotifyNewTasks)
+                .HasDefaultValue(true)
+                .HasColumnName("notify_new_tasks");
+            entity.Property(e => e.NotifyStatusChanges)
+                .HasDefaultValue(true)
+                .HasColumnName("notify_status_changes");
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("updated_at");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserSettings)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("user_settings_user_id_fkey");
         });
 
         OnModelCreatingPartial(modelBuilder);

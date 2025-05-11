@@ -1,0 +1,38 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="200"
+        x:Class="ManufactPlanner.Views.Dialogs.MessageBoxDialog"
+        x:DataType="vm:MessageBoxDialogViewModel"
+        xmlns:vm="using:ManufactPlanner.ViewModels.Dialogs"
+        Title="{Binding Title}"
+        Width="400" Height="200"
+        Background="{DynamicResource SurfaceBrush}"
+        WindowStartupLocation="CenterOwner">
+
+	<Grid RowDefinitions="Auto,*,Auto" Margin="20">
+		<!-- Заголовок -->
+		<TextBlock Grid.Row="0" Text="{Binding Title}" FontSize="18" FontWeight="SemiBold"
+                   Foreground="{DynamicResource TextPrimaryBrush}"
+                   Margin="0,0,0,20"/>
+
+		<!-- Сообщение -->
+		<TextBlock Grid.Row="1" Text="{Binding Message}" FontSize="14"
+                   Foreground="{DynamicResource TextPrimaryBrush}"
+                   TextWrapping="Wrap" VerticalAlignment="Center"/>
+
+		<!-- Кнопки -->
+		<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0" Spacing="10">
+			<Button Content="{Binding CancelButtonText}" Width="100"
+                    Background="{DynamicResource SurfaceBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    Command="{Binding CancelCommand}"/>
+			<Button Content="{Binding OkButtonText}" Width="100"
+                    Background="{DynamicResource ErrorBrush}"
+                    Foreground="{DynamicResource SurfaceBrush}"
+                    Command="{Binding OkCommand}"/>
+		</StackPanel>
+	</Grid>
+</Window>

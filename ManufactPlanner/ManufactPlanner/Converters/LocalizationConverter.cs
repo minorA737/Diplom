@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ManufactPlanner.Services
+namespace ManufactPlanner.Converters
 {
-    internal class LocalizationService
+    internal class LocalizationConverter
     {
     }
 }

@@ -1,0 +1,51 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="180"
+        x:Class="ManufactPlanner.Views.DesktopNotificationDialog"
+        x:DataType="vm:NotificationDialogViewModel"
+        xmlns:vm="using:ManufactPlanner.ViewModels"
+        Title="Уведомление"
+        Width="350" Height="180"
+        WindowStartupLocation="CenterScreen"
+        CanResize="False"
+        SystemDecorations="BorderOnly"
+        Background="{DynamicResource BackgroundBrush}"
+        Topmost="True">
+
+	<Grid RowDefinitions="Auto,*,Auto">
+		<!-- Заголовок -->
+		<Border Grid.Row="0" Background="{DynamicResource PrimaryBrush}" Height="40">
+			<Grid ColumnDefinitions="*,Auto">
+				<TextBlock Grid.Column="0" Text="{Binding Notification.Title}" FontSize="16" Foreground="{DynamicResource SurfaceBrush}"
+                           VerticalAlignment="Center" Margin="15,0,0,0"/>
+				<Button Grid.Column="1" Background="Transparent" BorderThickness="0" Margin="5,0,5,0"
+                        Command="{Binding CloseCommand}" VerticalAlignment="Center" HorizontalAlignment="Right">
+					<TextBlock Text="✕" FontSize="16" Foreground="{DynamicResource SurfaceBrush}"/>
+				</Button>
+			</Grid>
+		</Border>
+
+		<!-- Содержимое -->
+		<Grid Grid.Row="1" Margin="15,10">
+			<!-- Иконка уведомления (можно заменить на свою) -->
+			<Grid ColumnDefinitions="Auto,*">
+				<TextBlock Grid.Column="0" Text="🔔" FontSize="24" VerticalAlignment="Top" Margin="0,0,10,0"/>
+				<TextBlock Grid.Column="1" Text="{Binding Notification.Message}" TextWrapping="Wrap"
+                           Foreground="{DynamicResource TextPrimaryBrush}"
+                           VerticalAlignment="Center" Margin="0,0,0,0"/>
+			</Grid>
+		</Grid>
+
+		<!-- Кнопки -->
+		<Grid Grid.Row="2" ColumnDefinitions="*,*,*" Margin="15,0,15,15">
+			<Button Grid.Column="0" Content="Прочитать" HorizontalAlignment="Center" Width="100" Height="30"
+                    Background="{DynamicResource SuccessBrush}" Foreground="{DynamicResource SurfaceBrush}" Command="{Binding ReadCommand}"/>
+			<Button Grid.Column="1" Content="Отложить" HorizontalAlignment="Center" Width="100" Height="30"
+                    Background="{DynamicResource WarningBrush}" Foreground="{DynamicResource SurfaceBrush}" Command="{Binding PostponeCommand}"/>
+			<Button Grid.Column="2" Content="Открыть" HorizontalAlignment="Center" Width="100" Height="30"
+                    Background="{DynamicResource PrimaryBrush}" Foreground="{DynamicResource SurfaceBrush}" Command="{Binding OpenCommand}"/>
+		</Grid>
+	</Grid>
+</Window>

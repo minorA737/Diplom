@@ -55,4 +55,7 @@
 		<PackageReference Include="System.Windows.Forms" Version="4.0.0" />
 		<PackageReference Include="Xamarin.Forms" Version="5.0.0.2662" />
 	</ItemGroup>
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Views\Dialogs\MessageBoxDialog.axaml" />
+	</ItemGroup>
 </Project>

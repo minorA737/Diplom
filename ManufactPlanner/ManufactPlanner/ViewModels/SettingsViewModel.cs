@@ -17,7 +17,6 @@ namespace ManufactPlanner.ViewModels
         private readonly PostgresContext _dbContext;
         private readonly UserSettingsService _userSettingsService;
         private readonly ThemeService _themeService;
-        private readonly LocalizationService _localizationService;
 
         // Профиль пользователя
         private string _username;
@@ -164,42 +163,7 @@ namespace ManufactPlanner.ViewModels
             set => this.RaiseAndSetIfChanged(ref _isStatusSuccess, value);
         }
 
-        // Локализированные строки
-        public string ProfileSettingsText => _localizationService.GetString("ProfileSettings");
-        public string UsernameText => _localizationService.GetString("Username");
-        public string FirstNameText => _localizationService.GetString("FirstName");
-        public string LastNameText => _localizationService.GetString("LastName");
-        public string EmailText => _localizationService.GetString("Email");
-        public string SaveChangesText => _localizationService.GetString("SaveChanges");
-
-        public string PasswordSettingsText => _localizationService.GetString("PasswordSettings");
-        public string CurrentPasswordText => _localizationService.GetString("CurrentPassword");
-        public string NewPasswordText => _localizationService.GetString("NewPassword");
-        public string ConfirmPasswordText => _localizationService.GetString("ConfirmPassword");
-        public string ChangePasswordText => _localizationService.GetString("ChangePassword");
-
-        public string NotificationSettingsText => _localizationService.GetString("NotificationSettings");
-        public string NotifyNewTasksText => _localizationService.GetString("NotifyNewTasks");
-        public string NotifyStatusChangesText => _localizationService.GetString("NotifyStatusChanges");
-        public string NotifyCommentsText => _localizationService.GetString("NotifyComments");
-        public string NotifyDeadlinesText => _localizationService.GetString("NotifyDeadlines");
-        public string NotifyEmailText => _localizationService.GetString("NotifyEmail");
-        public string NotifyDesktopText => _localizationService.GetString("NotifyDesktop");
-        public string SaveNotificationSettingsText => _localizationService.GetString("SaveNotificationSettings");
-
-        public string InterfaceSettingsText => _localizationService.GetString("InterfaceSettings");
-        public string LanguageText => _localizationService.GetString("Language");
-        public string ThemeText => _localizationService.GetString("Theme");
-        public string LightThemeText => _localizationService.GetString("LightTheme");
-        public string DarkThemeText => _localizationService.GetString("DarkTheme");
-        public string ApplyText => _localizationService.GetString("Apply");
-
-        public string AboutAppText => _localizationService.GetString("AboutApp");
-        public string AppNameText => _localizationService.GetString("AppName");
-        public string VersionText => _localizationService.GetString("Version");
-        public string CopyrightText => _localizationService.GetString("Copyright");
-        public string DevelopedAsText => _localizationService.GetString("DevelopedAs");
-        public string TechnologiesText => _localizationService.GetString("Technologies");
+        
 
         // Команды
         public ReactiveCommand<Unit, bool> SaveProfileCommand { get; }
@@ -216,20 +180,17 @@ namespace ManufactPlanner.ViewModels
             set => this.RaiseAndSetIfChanged(ref _autoStartEnabled, value);
         }
         // В начале класса добавьте новую команду:
+        public ReactiveCommand<Unit, Unit> SendTestEmailCommand { get; }
         public ReactiveCommand<Unit, Unit> ApplyAutoStartCommand { get; }
+
         public SettingsViewModel(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext)
         {
             _mainWindowViewModel = mainWindowViewModel;
             _dbContext = dbContext;
             _userSettingsService = new UserSettingsService(dbContext);
-            _localizationService = LocalizationService.Instance;
-
-            // Подписываемся на изменение языка
-            _localizationService.TranslationsChanged += (sender, args) => UpdateLocalizedProperties();
+            
 
             // Инициализируем состояние UI из сервисов
-            //IsLightTheme = _themeService.IsLightTheme;
-            SelectedLanguage = _localizationService.CurrentLanguage == "ru" ? 0 : 1;
             ApplyAutoStartCommand = ReactiveCommand.Create(ApplyAutoStartSettings);
 
             SaveProfileCommand = ReactiveCommand.CreateFromTask(SaveProfile);
@@ -237,6 +198,7 @@ namespace ManufactPlanner.ViewModels
             SaveNotificationSettingsCommand = ReactiveCommand.Create(SaveNotificationSettings);
             ApplyInterfaceSettingsCommand = ReactiveCommand.Create(ApplyInterfaceSettings);
             AutoStartEnabled = AutoStartService.IsAutoStartEnabled();
+            SendTestEmailCommand = ReactiveCommand.CreateFromTask(SendTestEmail);
             LoadUserSettings();
 
             SaveNotificationSettingsCommand = ReactiveCommand.Create(SaveNotificationSettings);
@@ -245,6 +207,36 @@ namespace ManufactPlanner.ViewModels
             // Загрузка настроек пользователя
             _ = LoadUserSettingsAsync();
 
+        }
+        // Добавьте метод для тестирования email:
+        private async System.Threading.Tasks.Task SendTestEmail()
+        {
+            if (string.IsNullOrWhiteSpace(Email) || !EmailService.Instance.IsValidEmail(Email))
+            {
+                StatusMessage = "Пожалуйста, укажите корректный email в профиле";
+                IsStatusSuccess = false;
+                HasStatusMessage = true;
+                return;
+            }
+
+            IsStatusSuccess = true;
+            StatusMessage = "Отправка тестового письма...";
+            HasStatusMessage = true;
+
+            var result = await EmailService.Instance.SendTestEmailAsync(Email);
+
+            if (result.Success)
+            {
+                StatusMessage = "Тестовое письмо успешно отправлено";
+                IsStatusSuccess = true;
+            }
+            else
+            {
+                StatusMessage = result.Message;
+                IsStatusSuccess = false;
+            }
+
+            HasStatusMessage = true;
         }
         private void ApplyAutoStartSettings()
         {
@@ -268,7 +260,7 @@ namespace ManufactPlanner.ViewModels
         public SettingsViewModel()
         {
             // Конструктор для дизайнера
-            _localizationService = LocalizationService.Instance;
+            
 
             SaveProfileCommand = ReactiveCommand.CreateFromTask(SaveProfile);
             ChangePasswordCommand = ReactiveCommand.CreateFromTask(ChangePassword);
@@ -302,7 +294,7 @@ namespace ManufactPlanner.ViewModels
             if (_mainWindowViewModel == null || _mainWindowViewModel.CurrentUserId == Guid.Empty)
             {
                 IsStatusSuccess = false;
-                StatusMessage = _localizationService.GetString("ProfileSavedError");
+               
                 return false;
             }
 
@@ -310,7 +302,6 @@ namespace ManufactPlanner.ViewModels
             if (user == null)
             {
                 IsStatusSuccess = false;
-                StatusMessage = _localizationService.GetString("ProfileSavedError");
                 return false;
             }
 
@@ -325,13 +316,11 @@ namespace ManufactPlanner.ViewModels
                 _mainWindowViewModel.CurrentUserName = $"{FirstName} {LastName}";
 
                 IsStatusSuccess = true;
-                StatusMessage = _localizationService.GetString("ProfileSavedSuccess");
                 return true;
             }
             else
             {
                 IsStatusSuccess = false;
-                StatusMessage = _localizationService.GetString("ProfileSavedError");
                 return false;
             }
         }
@@ -342,14 +331,12 @@ namespace ManufactPlanner.ViewModels
             if (NewPassword != ConfirmPassword)
             {
                 IsStatusSuccess = false;
-                StatusMessage = _localizationService.GetString("PasswordMismatch");
                 return false;
             }
 
             if (_mainWindowViewModel == null || _mainWindowViewModel.CurrentUserId == Guid.Empty)
             {
                 IsStatusSuccess = false;
-                StatusMessage = _localizationService.GetString("PasswordChangedError");
                 return false;
             }
 
@@ -366,17 +353,15 @@ namespace ManufactPlanner.ViewModels
                 ConfirmPassword = string.Empty;
 
                 IsStatusSuccess = true;
-                StatusMessage = _localizationService.GetString("PasswordChangedSuccess");
                 return true;
             }
             else
             {
                 IsStatusSuccess = false;
-                StatusMessage = _localizationService.GetString("PasswordChangedError");
                 return false;
             }
         }
-
+        
         public async System.Threading.Tasks.Task LoadUserSettingsAsync()
         {
             if (_mainWindowViewModel?.CurrentUserId == null || _mainWindowViewModel.CurrentUserId == Guid.Empty)
@@ -390,16 +375,16 @@ namespace ManufactPlanner.ViewModels
 
                 if (settings != null)
                 {
-                    // Настройки уведомлений
-                    NotifyNewTasks = settings.NotifyNewTasks;
-                    NotifyTaskStatusChanges = settings.NotifyTaskStatusChanges;
-                    NotifyComments = settings.NotifyComments;
-                    NotifyDeadlines = settings.NotifyDeadlines;
-                    NotifyEmail = settings.NotifyEmail;
-                    NotifyDesktop = settings.NotifyDesktop;
-
+                    // Настройки уведомлений - преобразуем nullable bool в bool
+                    NotifyNewTasks = settings.NotifyNewTasks ?? true;
+                    NotifyTaskStatusChanges = settings.NotifyStatusChanges ?? true;
+                    NotifyComments = settings.NotifyComments ?? true;
+                    NotifyDeadlines = settings.NotifyDeadlines ?? true;
+                    NotifyEmail = settings.NotifyEmail ?? true;
+                    NotifyDesktop = settings.NotifyDesktop ?? true;
+                    _mainWindowViewModel.NotifyDesktopEnabled = settings.NotifyDesktop ?? true;
                     // Автозапуск
-                    AutoStartEnabled = settings.AutoStartEnabled;
+                    AutoStartEnabled = settings.AutoStartEnabled ?? false;
                 }
             }
             catch (Exception ex)
@@ -424,7 +409,7 @@ namespace ManufactPlanner.ViewModels
 
                 if (settings == null)
                 {
-                    settings = new UserSettings
+                    settings = new UserSetting // Обратите внимание на использование UserSetting, а не UserSettings
                     {
                         UserId = _mainWindowViewModel.CurrentUserId
                     };
@@ -433,11 +418,12 @@ namespace ManufactPlanner.ViewModels
 
                 // Обновляем настройки
                 settings.NotifyNewTasks = NotifyNewTasks;
-                settings.NotifyTaskStatusChanges = NotifyTaskStatusChanges;
+                settings.NotifyStatusChanges = NotifyTaskStatusChanges; // Изменено имя поля
                 settings.NotifyComments = NotifyComments;
                 settings.NotifyDeadlines = NotifyDeadlines;
                 settings.NotifyEmail = NotifyEmail;
                 settings.NotifyDesktop = NotifyDesktop;
+                settings.AutoStartEnabled = AutoStartEnabled;
                 settings.UpdatedAt = DateTime.Now;
 
                 await _dbContext.SaveChangesAsync();
@@ -449,17 +435,55 @@ namespace ManufactPlanner.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine($"Ошибка при сохранении настроек: {ex.Message}");
-                StatusMessage = "Ошибка при сохранении настроек";
+                StatusMessage = $"Ошибка при сохранении настроек: {ex.Message}";
                 IsStatusSuccess = false;
                 HasStatusMessage = true;
             }
         }
+        // Модифицируйте метод SaveNotificationSettings:
         private async void SaveNotificationSettings()
         {
+            // Проверяем валидность настроек email
+            if (!ValidateEmailSettings())
+                return;
+
             await SaveUserSettingsAsync();
+
+            // Обновляем настройку в MainViewModel
+            if (_mainWindowViewModel != null)
+            {
+                _mainWindowViewModel.NotifyDesktopEnabled = NotifyDesktop;
+                _mainWindowViewModel.NotifyEmailEnabled = NotifyEmail;
+            }
+
+            // Показываем сообщение об успехе
+            IsStatusSuccess = true;
+            StatusMessage = "Настройки уведомлений сохранены";
+            HasStatusMessage = true;
         }
 
+        private bool ValidateEmailSettings()
+        {
+            if (NotifyEmail && string.IsNullOrWhiteSpace(Email))
+            {
+                IsStatusSuccess = false;
+                StatusMessage = "Для включения email-уведомлений необходимо указать адрес электронной почты";
+                HasStatusMessage = true;
+                NotifyEmail = false; // Отключаем настройку
+                return false;
+            }
 
+            if (NotifyEmail && !EmailService.Instance.IsValidEmail(Email))
+            {
+                IsStatusSuccess = false;
+                StatusMessage = "Указан некорректный формат email-адреса";
+                HasStatusMessage = true;
+                NotifyEmail = false; // Отключаем настройку
+                return false;
+            }
+
+            return true;
+        }
         private void ApplyInterfaceSettings()
         {
             // Применяем настройки автозапуска
@@ -468,8 +492,6 @@ namespace ManufactPlanner.ViewModels
             // Применяем другие настройки интерфейса
             ThemeService.Instance.IsLightTheme = IsLightTheme;
 
-            var language = SelectedLanguage == 0 ? "ru" : "en";
-            _localizationService.SetLanguage(language);
 
             // Показываем сообщение об успешном применении
             StatusMessage = "Настройки интерфейса успешно применены";
@@ -477,44 +499,6 @@ namespace ManufactPlanner.ViewModels
             HasStatusMessage = true;
         }
 
-        private void UpdateLocalizedProperties()
-        {
-            // Вызываем RaisePropertyChanged для всех локализованных свойств
-            this.RaisePropertyChanged(nameof(ProfileSettingsText));
-            this.RaisePropertyChanged(nameof(UsernameText));
-            this.RaisePropertyChanged(nameof(FirstNameText));
-            this.RaisePropertyChanged(nameof(LastNameText));
-            this.RaisePropertyChanged(nameof(EmailText));
-            this.RaisePropertyChanged(nameof(SaveChangesText));
-
-            this.RaisePropertyChanged(nameof(PasswordSettingsText));
-            this.RaisePropertyChanged(nameof(CurrentPasswordText));
-            this.RaisePropertyChanged(nameof(NewPasswordText));
-            this.RaisePropertyChanged(nameof(ConfirmPasswordText));
-            this.RaisePropertyChanged(nameof(ChangePasswordText));
-
-            this.RaisePropertyChanged(nameof(NotificationSettingsText));
-            this.RaisePropertyChanged(nameof(NotifyNewTasksText));
-            this.RaisePropertyChanged(nameof(NotifyStatusChangesText));
-            this.RaisePropertyChanged(nameof(NotifyCommentsText));
-            this.RaisePropertyChanged(nameof(NotifyDeadlinesText));
-            this.RaisePropertyChanged(nameof(NotifyEmailText));
-            this.RaisePropertyChanged(nameof(NotifyDesktopText));
-            this.RaisePropertyChanged(nameof(SaveNotificationSettingsText));
-
-            this.RaisePropertyChanged(nameof(InterfaceSettingsText));
-            this.RaisePropertyChanged(nameof(LanguageText));
-            this.RaisePropertyChanged(nameof(ThemeText));
-            this.RaisePropertyChanged(nameof(LightThemeText));
-            this.RaisePropertyChanged(nameof(DarkThemeText));
-            this.RaisePropertyChanged(nameof(ApplyText));
-
-            this.RaisePropertyChanged(nameof(AboutAppText));
-            this.RaisePropertyChanged(nameof(AppNameText));
-            this.RaisePropertyChanged(nameof(VersionText));
-            this.RaisePropertyChanged(nameof(CopyrightText));
-            this.RaisePropertyChanged(nameof(DevelopedAsText));
-            this.RaisePropertyChanged(nameof(TechnologiesText));
-        }
+       
     }
 }
