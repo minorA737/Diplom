@@ -845,9 +845,6 @@ public partial class PostgresContext : DbContext
                 .HasDefaultValue(false)
                 .HasColumnName("auto_start_enabled");
             entity.Property(e => e.Islighttheme).HasColumnName("islighttheme");
-            entity.Property(e => e.Language)
-                .HasColumnType("character varying")
-                .HasColumnName("language");
             entity.Property(e => e.NotifyComments)
                 .HasDefaultValue(true)
                 .HasColumnName("notify_comments");

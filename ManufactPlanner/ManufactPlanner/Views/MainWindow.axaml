@@ -200,6 +200,7 @@
 								Tag="{Binding CurrentMenuItem, Converter={StaticResource StringEqualsValue}, ConverterParameter='production'}"
 								Width="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToValue}, ConverterParameter='50,180'}"
 								HorizontalAlignment="Left"
+								IsVisible="{Binding IsAdministratorOrManager}"
 								Margin="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToValue}, ConverterParameter='5 5,10 5'}">
 							<StackPanel Orientation="Horizontal">
 								<TextBlock Text="🏭" FontSize="14" VerticalAlignment="Center"
@@ -214,6 +215,7 @@
 								Tag="{Binding CurrentMenuItem, Converter={StaticResource StringEqualsValue}, ConverterParameter='analytics'}"
 								Width="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToValue}, ConverterParameter='50,180'}"
 								HorizontalAlignment="Left"
+								IsVisible="{Binding IsAdministratorOrManager}"
 								Margin="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToValue}, ConverterParameter='5 5,10 5'}">
 							<StackPanel Orientation="Horizontal">
 								<TextBlock Text="📊" FontSize="14" VerticalAlignment="Center"

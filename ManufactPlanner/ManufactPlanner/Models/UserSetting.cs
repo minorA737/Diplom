@@ -25,8 +25,6 @@ public partial class UserSetting
 
     public DateTime? UpdatedAt { get; set; }
 
-    public string? Language { get; set; }
-
     public bool? Islighttheme { get; set; }
 
     public virtual User? User { get; set; }

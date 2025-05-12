@@ -6,6 +6,7 @@ using ManufactPlanner.Views;
 using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Input;
 
@@ -22,6 +23,7 @@ namespace ManufactPlanner.ViewModels
         private int _unreadNotificationsCount;
 
         private bool _isAuthenticated = false;
+
 
         // Текущее отображаемое представление
         public UserControl CurrentView
@@ -40,6 +42,29 @@ namespace ManufactPlanner.ViewModels
             get => _dbContext;
             set => this.RaiseAndSetIfChanged(ref _dbContext, value);
         }
+
+
+        private readonly RoleService _roleService = RoleService.Instance;
+        private List<string> _userRoles = new List<string>();
+        public List<string> UserRoles
+        {
+            get => _userRoles;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _userRoles, value);
+                this.RaisePropertyChanged(nameof(IsAdministrator));
+                this.RaisePropertyChanged(nameof(IsManager));
+                this.RaisePropertyChanged(nameof(IsExecutor));
+                this.RaisePropertyChanged(nameof(IsAdministratorOrManager));
+            }
+        }
+
+        // Свойства для быстрой проверки роли
+        public bool IsAdministrator => _userRoles.Contains(RoleService.ROLE_ADMINISTRATOR);
+        public bool IsManager => _userRoles.Contains(RoleService.ROLE_MANAGER);
+        public bool IsExecutor => _userRoles.Contains(RoleService.ROLE_EXECUTOR);
+
+        
 
         // Возможность свернуть боковую панель
         public bool IsSidebarCollapsed
@@ -115,6 +140,14 @@ namespace ManufactPlanner.ViewModels
             get => _notifyEmailEnabled;
             set => this.RaiseAndSetIfChanged(ref _notifyEmailEnabled, value);
         }
+        public bool IsAdministratorOrManager => IsAdministrator || IsManager;
+        private void NotifyRolePropertiesChanged()
+        {
+            this.RaisePropertyChanged(nameof(IsAdministrator));
+            this.RaisePropertyChanged(nameof(IsManager));
+            this.RaisePropertyChanged(nameof(IsExecutor));
+            this.RaisePropertyChanged(nameof(IsAdministratorOrManager));
+        }
 
         public MainWindowViewModel _mainViewModel;
         public MainWindowViewModel()
@@ -145,7 +178,32 @@ namespace ManufactPlanner.ViewModels
                 NavigateToNotifications();
             });
         }
+        public async System.Threading.Tasks.Task LoadAndApplyUserSettingsAsync(Guid userId)
+        {
+            if (userId == Guid.Empty || DbContext == null)
+                return;
 
+            try
+            {
+                // Загружаем настройки пользователя из базы данных
+                var settings = await DbContext.UserSettings
+                    .FirstOrDefaultAsync(s => s.UserId == userId);
+
+                if (settings != null)
+                {
+                    // Применяем настройки темы
+                    _themeService.IsLightTheme = settings.Islighttheme ?? true;
+
+                    // Кэшируем настройки уведомлений
+                    NotifyDesktopEnabled = settings.NotifyDesktop ?? true;
+                    NotifyEmailEnabled = settings.NotifyEmail ?? false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ошибка при загрузке настроек пользователя: {ex.Message}");
+            }
+        }
         public async System.Threading.Tasks.Task CacheUserNotificationSettingsAsync(Guid userId)
         {
             try
@@ -192,6 +250,8 @@ namespace ManufactPlanner.ViewModels
             {
                 _notificationService.Initialize(DbContext, this).ConfigureAwait(false);
                 _notificationService.Start();
+
+                // Загрузка и применение настроек пользователя уже произошли в AuthViewModel
             }
         }
 
@@ -221,18 +281,28 @@ namespace ManufactPlanner.ViewModels
             CurrentView = new Views.DocumentationPage(this, DbContext);
         }
 
-        public void NavigateToProduction()
-        {
-            CurrentMenuItem = "production";
-            //CurrentView = new Views.Production.ProductionPage(this, DbContext);
-            CurrentView = new Views.ProductionPage(this, DbContext);
-        }
-
         public void NavigateToAnalytics()
         {
+            if (!IsAdministratorOrManager)
+            {
+                // Можно добавить уведомление о недостаточных правах
+                return;
+            }
+
             CurrentMenuItem = "analytics";
-            //CurrentView = new Views.Analytics.AnalyticsPage(this, DbContext);
             CurrentView = new Views.AnalyticsPage(this, DbContext);
+        }
+
+        public void NavigateToProduction()
+        {
+            if (!IsAdministratorOrManager)
+            {
+                // Можно добавить уведомление о недостаточных правах
+                return;
+            }
+
+            CurrentMenuItem = "production";
+            CurrentView = new Views.ProductionPage(this, DbContext);
         }
 
         public void NavigateToSettings()
@@ -284,7 +354,8 @@ namespace ManufactPlanner.ViewModels
             // Удаляем сохраненные учетные данные
             var credentialService = new UserCredentialService();
             credentialService.ClearCredentials();
-
+            UserRoles.Clear();
+            _roleService.ClearCache(CurrentUserId);
 
             // Переходим обратно на страницу авторизации
             CurrentView = new AuthPage(this, DbContext);

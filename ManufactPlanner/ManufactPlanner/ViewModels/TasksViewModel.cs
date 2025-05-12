@@ -262,6 +262,8 @@ namespace ManufactPlanner.ViewModels
         }
         // Обновленная реализация метода CreateTask в классе TasksViewModel
 
+        // Обновленная реализация метода CreateTask в классе TasksViewModel
+
         private async void CreateTask()
         {
             try
@@ -276,6 +278,8 @@ namespace ManufactPlanner.ViewModels
 
                 // Получаем текущего пользователя из MainWindowViewModel
                 Guid currentUserId = _mainWindowViewModel.CurrentUserId;
+
+                IsLoading = true; // Показываем индикатор загрузки
 
                 // Показываем диалог создания задачи
                 var task = await TaskCreateDialog.ShowDialog(mainWindow, _dbContext, currentUserId);
@@ -294,6 +298,10 @@ namespace ManufactPlanner.ViewModels
             {
                 Console.WriteLine($"Ошибка при создании задачи: {ex.Message}");
                 // Обработка ошибок
+            }
+            finally
+            {
+                IsLoading = false; // Скрываем индикатор загрузки
             }
         }
 

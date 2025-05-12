@@ -160,6 +160,14 @@ namespace ManufactPlanner.ViewModels
                     _mainWindowViewModel.DbContext = _dbContext;
 
                     _mainWindowViewModel.CurrentUserId = user.Id ; // Сохраняем ID текущего пользователя
+                    await _mainWindowViewModel.LoadAndApplyUserSettingsAsync(user.Id);
+
+                    var roleService = RoleService.Instance;
+                    _mainWindowViewModel.UserRoles = await roleService.GetUserRolesAsync(_dbContext, user.Id);
+                    _mainWindowViewModel.RaisePropertyChanged(nameof(_mainWindowViewModel.IsAdministrator));
+                    _mainWindowViewModel.RaisePropertyChanged(nameof(_mainWindowViewModel.IsManager));
+                    _mainWindowViewModel.RaisePropertyChanged(nameof(_mainWindowViewModel.IsExecutor));
+                    _mainWindowViewModel.RaisePropertyChanged(nameof(_mainWindowViewModel.IsAdministratorOrManager));
 
                     // Загружаем количество непрочитанных уведомлений
                     var unreadNotifications = _dbContext.Notifications

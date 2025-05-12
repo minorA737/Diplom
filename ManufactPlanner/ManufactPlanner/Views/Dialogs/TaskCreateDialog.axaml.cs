@@ -16,15 +16,12 @@ namespace ManufactPlanner.Views.Dialogs
         public TaskCreateDialog()
         {
             InitializeComponent();
-
             this.AttachDevTools();
-
         }
 
         public TaskCreateDialog(PostgresContext dbContext, Guid currentUserId)
         {
             InitializeComponent();
-
             this.AttachDevTools();
 
             // Устанавливаем ViewModel
@@ -45,6 +42,7 @@ namespace ManufactPlanner.Views.Dialogs
         /// <returns>Созданная задача или null, если диалог был отменен</returns>
         public static async Task<Task> ShowDialog(Window parent, PostgresContext dbContext, Guid currentUserId)
         {
+            // При каждом вызове создаем новый экземпляр диалогового окна
             var dialog = new TaskCreateDialog(dbContext, currentUserId);
             var viewModel = dialog.DataContext as TaskCreateDialogViewModel;
 
@@ -73,6 +71,10 @@ namespace ManufactPlanner.Views.Dialogs
 
             // Ожидаем результат
             var result = await tcs.Task;
+
+            // Освобождаем ресурсы ViewModel
+            viewModel = null;
+
             return result.Success ? result.Task : null;
         }
     }

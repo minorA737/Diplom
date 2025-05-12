@@ -22,15 +22,32 @@ namespace ManufactPlanner.Services
         /// <summary>
         /// Получает список документов из таблицы Attachment
         /// </summary>
-        public async Task<List<Attachment>> GetDocumentsAsync()
+        public async Task<List<Attachment>> GetDocumentsAsync(Guid? filterByUserId = null)
         {
-            return await _dbContext.Attachments
-                .Include(a => a.Task)
-                    .ThenInclude(t => t.OrderPosition)
-                        .ThenInclude(op => op.Order)
-                .Include(a => a.UploadedByNavigation)
-                .OrderByDescending(a => a.UploadedAt)
-                .ToListAsync();
+            try
+            {
+                // Начинаем с базового запроса
+                var query = _dbContext.Attachments
+                    .Include(a => a.Task)
+                        .ThenInclude(t => t.OrderPosition)
+                            .ThenInclude(op => op.Order)
+                    .Include(a => a.UploadedByNavigation)
+                    .AsQueryable();
+
+                // Если указан ID пользователя для фильтрации
+                if (filterByUserId.HasValue)
+                {
+                    query = query.Where(a => a.UploadedBy == filterByUserId);
+                }
+
+                // Выполняем запрос и возвращаем результаты
+                return await query.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при получении документов: {ex.Message}");
+                return new List<Attachment>();
+            }
         }
 
         /// <summary>
@@ -198,21 +215,25 @@ namespace ManufactPlanner.Services
         /// <summary>
         /// Удаляет документ из базы данных
         /// </summary>
-        public async Task<bool> DeleteDocumentAsync(int id)
+        public async Task<bool> DeleteDocumentAsync(int documentId, bool isAdminOrManager)
         {
             try
             {
-                var document = await _dbContext.Attachments.FindAsync(id);
-                if (document != null)
-                {
-                    _dbContext.Attachments.Remove(document);
-                    await _dbContext.SaveChangesAsync();
-                    return true;
-                }
-                return false;
+                var attachment = await _dbContext.Attachments.FindAsync(documentId);
+                if (attachment == null)
+                    return false;
+
+                // Проверяем права на удаление - только администратор или менеджер
+                if (!isAdminOrManager)
+                    return false;
+
+                _dbContext.Attachments.Remove(attachment);
+                await _dbContext.SaveChangesAsync();
+                return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine($"Ошибка при удалении документа: {ex.Message}");
                 return false;
             }
         }

@@ -48,12 +48,6 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/CalendarPage.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Components/NavigationMenu.axaml]
-build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
-
-[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Components/NotificationComponent.axaml]
-build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
-
 [D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Controls/EmbeddedDashboardControl.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 

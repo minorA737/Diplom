@@ -16,7 +16,6 @@ namespace ManufactPlanner.ViewModels
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
         private readonly PostgresContext _dbContext;
-        private readonly DataLensService _dataLensService;
 
         #region Свойства для фильтрации данных
         private DateTime _startDate = DateTime.Now.AddMonths(-6);
@@ -134,7 +133,6 @@ namespace ManufactPlanner.ViewModels
 
         #region Команды
         public ICommand RefreshDataCommand { get; }
-        public ICommand ExportToDataLensCommand { get; }
         public ICommand ToggleDashboardCommand { get; }
         #endregion
 
@@ -142,21 +140,17 @@ namespace ManufactPlanner.ViewModels
         {
             _mainWindowViewModel = mainWindowViewModel;
             _dbContext = dbContext;
-            _dataLensService = DataLensService.Instance;
 
             // Инициализация коллекции для сотрудников
             //_topEmployeesList = new ObservableCollection<EmployeeLoadViewModel>();
 
             // Инициализация команд
             RefreshDataCommand = ReactiveCommand.CreateFromTask(RefreshAnalyticsDataAsync);
-            ExportToDataLensCommand = ReactiveCommand.CreateFromTask(ExportToDataLensAsync);
             ToggleDashboardCommand = ReactiveCommand.Create(() =>
             {
                 IsEmbeddedDashboardVisible = !IsEmbeddedDashboardVisible;
             });
 
-            // Получаем URL дашборда из сервиса
-            CurrentDashboardUrl = _dataLensService.GetDashboardUrl();
 
             // Загружаем начальные данные
             _ = RefreshAnalyticsDataAsync();
@@ -181,9 +175,6 @@ namespace ManufactPlanner.ViewModels
             {
                 IsRefreshing = true;
 
-                // Получаем данные от сервиса
-                _analyticsData = _dataLensService.GetAnalyticsData(StartDate, EndDate);
-
                 // Обновляем свойства для графиков
                 UpdatePropertiesFromAnalyticsData();
 
@@ -201,32 +192,7 @@ namespace ManufactPlanner.ViewModels
             }
         }
 
-        private async System.Threading.Tasks.Task ExportToDataLensAsync()
-        {
-            try
-            {
-                IsRefreshing = true;
-
-                string reportType = GetReportTypeString();
-
-                // Вызываем сервис для экспорта данных
-                await _dataLensService.ExportDataToCsv(StartDate, EndDate, reportType);
-
-                // Обновляем URL дашборда (т.к. он мог измениться после обновления данных)
-                CurrentDashboardUrl = _dataLensService.GetDashboardUrl();
-
-                IsRefreshing = false;
-
-                // После экспорта автоматически показываем дашборд
-                IsEmbeddedDashboardVisible = true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error exporting to DataLens: {ex.Message}");
-                IsRefreshing = false;
-            }
-        }
-
+        
         private string GetReportTypeString()
         {
             switch (SelectedReportType)

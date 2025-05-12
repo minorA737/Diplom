@@ -27,8 +27,6 @@ public partial class EmbeddedDashboardControl : UserControl
         _errorPanel = this.FindControl<Border>("ErrorPanel");
         _errorMessage = this.FindControl<TextBlock>("ErrorMessage");
 
-        // Устанавливаем URL из сервиса DataLens
-        DashboardUrl = DataLensService.Instance.GetDashboardUrl();
 
         // При загрузке компонента загружаем дашборд
         this.Loaded += (s, e) => LoadDashboard();

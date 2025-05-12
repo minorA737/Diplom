@@ -140,7 +140,7 @@ namespace ManufactPlanner.ViewModels
         public ICommand SwitchToPositionsTabCommand { get; }
         public ICommand SwitchToDocumentationTabCommand { get; }
         public ICommand SwitchToDeadlinesTabCommand { get; }
-
+        public ICommand DeleteOrderCommand { get; }
 
         private int _selectedTabIndex = 0;
 
@@ -197,11 +197,48 @@ namespace ManufactPlanner.ViewModels
                     System.Threading.Tasks.Task.Run(() => LoadDeadlinesAsync());
                 }
             });
-
+            DeleteOrderCommand = ReactiveCommand.CreateFromTask(DeleteOrderAsync);
             // Асинхронная загрузка данных заказа
             System.Threading.Tasks.Task.Run(() => LoadOrderDetailsAsync(_orderId));
         }
+        private async Task<bool> DeleteOrderAsync()
+        {
+            try
+            {
+                // Показываем диалог подтверждения удаления
+                bool result = await MessageBoxDialog.ShowDialog(
+                    _parentWindow,
+                    "Подтверждение удаления",
+                    "Вы действительно хотите удалить этот заказ? Это действие нельзя отменить. Все позиции заказа также будут удалены.",
+                    "Удалить",
+                    "Отмена");
 
+                if (result)
+                {
+                    // Получаем заказ из БД
+                    var order = await _dbContext.Orders.FindAsync(_orderId);
+                    if (order == null)
+                    {
+                        Console.WriteLine($"Заказ с идентификатором {_orderId} не найден.");
+                        return false;
+                    }
+
+                    // Удаляем заказ
+                    _dbContext.Orders.Remove(order);
+                    await _dbContext.SaveChangesAsync();
+
+                    // Возвращаемся к списку заказов
+                    _mainWindowViewModel.NavigateToOrders();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при удалении заказа: {ex.Message}");
+                return false;
+            }
+        }
         // Метод для установки родительского окна
         public void SetParentWindow(Window parentWindow)
         {

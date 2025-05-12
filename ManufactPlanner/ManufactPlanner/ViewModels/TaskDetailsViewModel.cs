@@ -193,7 +193,7 @@ namespace ManufactPlanner.ViewModels
         public ICommand AddCommentCommand { get; }
         public ICommand DownloadAttachmentCommand { get; }
         public ICommand ViewAttachmentCommand { get; }
-
+        public ICommand DeleteTaskCommand { get; }
         public TaskDetailsViewModel(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext, int taskId, Window parentWindow, Guid currentUserId)
         {
             _mainWindowViewModel = mainWindowViewModel;
@@ -206,11 +206,52 @@ namespace ManufactPlanner.ViewModels
             AddCommentCommand = ReactiveCommand.CreateFromTask(AddCommentAsync);
             DownloadAttachmentCommand = ReactiveCommand.Create<int>(DownloadAttachment);
             ViewAttachmentCommand = ReactiveCommand.Create<int>(ViewAttachment);
-
+            DeleteTaskCommand = ReactiveCommand.CreateFromTask(DeleteTaskAsync);
             // Загружаем данные асинхронно
             LoadTaskDetailsAsync(taskId);
         }
+        private async System.Threading.Tasks.Task DeleteTaskAsync()
+        {
+            try
+            {
+                IsLoading = true;
 
+                // Показываем диалог подтверждения удаления
+                var parentWindow = _parentWindow ?? AppWindows.MainWindow;
+                bool result = await MessageBoxDialog.ShowDialog(
+                    parentWindow,
+                    "Подтверждение удаления",
+                    "Вы действительно хотите удалить эту задачу? Это действие нельзя отменить.",
+                    "Удалить",
+                    "Отмена");
+
+                if (result)
+                {
+                    // Получаем задачу из БД
+                    var task = await _dbContext.Tasks.FindAsync(TaskDbId);
+                    if (task == null)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Задача с идентификатором {TaskDbId} не найдена.");
+                        return;
+                    }
+
+                    // Удаляем задачу
+                    _dbContext.Tasks.Remove(task);
+                    await _dbContext.SaveChangesAsync();
+
+                    // Возвращаемся к списку задач
+                    _mainWindowViewModel.NavigateToTasks();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка при удалении задачи: {ex.Message}");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
         private async void LoadTaskDetailsAsync(int taskId)
         {
             IsLoading = true;

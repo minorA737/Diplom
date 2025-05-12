@@ -536,17 +536,6 @@
 									</ItemsControl.ItemTemplate>
 								</ItemsControl>
 							</ScrollViewer>
-
-							<!-- Кнопка создания задачи на выбранную дату -->
-							<Button Grid.Row="2"
-								   Content="+ Создать задачу"
-								   Background="{DynamicResource PrimaryBrush}"
-								   Foreground="White"
-								   HorizontalAlignment="Center"
-								   Margin="0,0,0,10"
-								   Padding="15,8"
-								   CornerRadius="18"
-								   Command="{Binding CreateEventOnSelectedDayCommand}"/>
 						</Grid>
 					</Border>
 				</Grid>
@@ -609,13 +598,6 @@
 				</ScrollViewer>
 			</Border>
 
-			<!-- Кнопка создания события -->
-			<Button Width="56" Height="56" CornerRadius="28" Background="{DynamicResource PrimaryBrush}"
-					VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,20,20"
-					Command="{Binding CreateEventCommand}">
-				<TextBlock Text="+" FontSize="28" Foreground="White"
-						   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-			</Button>
 		</Grid>
 	</Grid>
 </UserControl>

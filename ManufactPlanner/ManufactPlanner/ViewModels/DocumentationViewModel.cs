@@ -93,6 +93,8 @@ namespace ManufactPlanner.ViewModels
         private ObservableCollection<DocumentViewModel> _allDocuments;
 
 
+        public bool CanViewAllDocuments => _mainWindowViewModel.IsAdministrator || _mainWindowViewModel.IsManager;
+        public bool CanDeleteDocuments => _mainWindowViewModel.IsAdministrator || _mainWindowViewModel.IsManager;
 
         public DocumentationViewModel(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext, Window parentWindow)
         {
@@ -139,7 +141,9 @@ namespace ManufactPlanner.ViewModels
                 if (_dbContext != null && _documentationService != null)
                 {
                     // Загрузка данных из таблицы Attachments с включением информации о задаче, позиции заказа и заказе
-                    var attachments = await _documentationService.GetDocumentsAsync();
+                    var attachments = await _documentationService.GetDocumentsAsync(
+                            CanViewAllDocuments ? null : _mainWindowViewModel.CurrentUserId);
+
                     var result = new List<DocumentViewModel>();
 
                     foreach (var attachment in attachments)
@@ -482,7 +486,8 @@ namespace ManufactPlanner.ViewModels
                 IsLoading = true;
                 StatusMessage = "Удаление документа...";
 
-                bool success = await _documentationService.DeleteDocumentAsync(documentId);
+                // Передаем информацию о правах пользователя
+                bool success = await _documentationService.DeleteDocumentAsync(documentId, CanDeleteDocuments);
 
                 if (success)
                 {

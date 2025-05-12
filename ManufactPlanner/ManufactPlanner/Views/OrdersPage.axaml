@@ -55,8 +55,12 @@
 			</Border>
 
 			<!-- Кнопка создания заказа -->
-			<Button Grid.Column="2" Width="80" Height="36" CornerRadius="18" Background="{DynamicResource PrimaryBrush}" Command="{Binding CreateOrderCommand}">
-				<TextBlock Text="+ Заказ" FontSize="12" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			<Button Grid.Column="2" Width="80" Height="36" CornerRadius="18"
+				Background="{DynamicResource PrimaryBrush}"
+				Command="{Binding CreateOrderCommand}"
+				IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsAdministratorOrManager}">
+				<TextBlock Text="+ Заказ" FontSize="12" Foreground="White"
+						  HorizontalAlignment="Center" VerticalAlignment="Center"/>
 				<ToolTip.Tip>
 					<TextBlock Text="Создать новый заказ"/>
 				</ToolTip.Tip>

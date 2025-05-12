@@ -13,6 +13,7 @@ namespace ManufactPlanner.ViewModels
     public class TaskCreateDialogViewModel : ViewModelBase
     {
         private readonly PostgresContext _dbContext;
+        private readonly Guid _currentUserId;
         private string _name;
         private string _description;
         private int _priority = 3; // По умолчанию низкий приоритет
@@ -50,8 +51,6 @@ namespace ManufactPlanner.ViewModels
             set => this.RaiseAndSetIfChanged(ref _endDate, value);
         }
 
-        // В конструкторе замените
-        
         public string Name
         {
             get => _name;
@@ -75,8 +74,6 @@ namespace ManufactPlanner.ViewModels
             get => _status;
             set => this.RaiseAndSetIfChanged(ref _status, value);
         }
-
-        
 
         public string CoAssignees
         {
@@ -181,10 +178,15 @@ namespace ManufactPlanner.ViewModels
         public TaskCreateDialogViewModel(PostgresContext dbContext, Guid currentUserId)
         {
             _dbContext = dbContext;
+            _currentUserId = currentUserId;
 
             // Инициализируем текущую дату как начальную
             _startDate = DateTime.Today;
             _endDate = DateTime.Today.AddDays(7); // По умолчанию неделя на выполнение
+
+            // Инициализация коллекций
+            _orderPositions = new ObservableCollection<OrderPositionViewModel2>();
+            _users = new ObservableCollection<UserViewModel>();
 
             // Загружаем данные для выпадающих списков
             LoadOrderPositions();
@@ -200,8 +202,13 @@ namespace ManufactPlanner.ViewModels
             try
             {
                 IsProcessing = true;
+                ErrorMessage = string.Empty;
+
+                // Очищаем коллекцию перед загрузкой новых данных
+                OrderPositions.Clear();
 
                 var orderPositions = await _dbContext.OrderPositions
+                    .AsNoTracking() // Отключаем отслеживание сущностей
                     .Include(op => op.Order)
                     .OrderByDescending(op => op.Order.CreatedAt)
                     .Select(op => new OrderPositionViewModel2
@@ -211,13 +218,15 @@ namespace ManufactPlanner.ViewModels
                     })
                     .ToListAsync();
 
-                OrderPositions = new ObservableCollection<OrderPositionViewModel2>(orderPositions);
+                foreach (var position in orderPositions)
+                {
+                    OrderPositions.Add(position);
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Ошибка при загрузке позиций заказов: {ex.Message}");
                 ErrorMessage = $"Ошибка при загрузке позиций заказов: {ex.Message}";
-                OrderPositions = new ObservableCollection<OrderPositionViewModel2>();
             }
             finally
             {
@@ -230,8 +239,13 @@ namespace ManufactPlanner.ViewModels
             try
             {
                 IsProcessing = true;
+                ErrorMessage = string.Empty;
+
+                // Очищаем коллекцию перед загрузкой новых данных
+                Users.Clear();
 
                 var users = await _dbContext.Users
+                    .AsNoTracking() // Отключаем отслеживание сущностей
                     .Where(u => u.IsActive == true)
                     .OrderBy(u => u.LastName)
                     .Select(u => new UserViewModel
@@ -241,19 +255,22 @@ namespace ManufactPlanner.ViewModels
                     })
                     .ToListAsync();
 
-                Users = new ObservableCollection<UserViewModel>(users);
+                foreach (var user in users)
+                {
+                    Users.Add(user);
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Ошибка при загрузке пользователей: {ex.Message}");
                 ErrorMessage = $"Ошибка при загрузке пользователей: {ex.Message}";
-                Users = new ObservableCollection<UserViewModel>();
             }
             finally
             {
                 IsProcessing = false;
             }
         }
+
         private bool ValidateInput()
         {
             if (string.IsNullOrWhiteSpace(Name))
@@ -304,6 +321,7 @@ namespace ManufactPlanner.ViewModels
                     Stage = Stage,
                     DebuggingStatus = DebuggingStatus,
                     Notes = Notes,
+                    CreatedBy = _currentUserId, // Используем переданный ID пользователя
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now
                 };
@@ -314,8 +332,6 @@ namespace ManufactPlanner.ViewModels
                     _dbContext.Tasks.Add(task);
                     _dbContext.SaveChanges();
                 });
-
-                // Удаляем создание уведомления здесь, так как это уже делает триггер в БД
 
                 return (true, task);
             }

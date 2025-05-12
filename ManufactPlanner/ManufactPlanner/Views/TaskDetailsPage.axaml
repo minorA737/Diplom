@@ -36,9 +36,18 @@
 						</StackPanel>
 					</StackPanel>
 
-					<Button Grid.Column="1" Width="120" Height="32" CornerRadius="16" Background="#00ACC1" Command="{Binding EditTaskCommand}">
-						<TextBlock Text="Редактировать" FontSize="12" Foreground="White"/>
-					</Button>
+					<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+						<Button Width="120" Height="32"
+					IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsAdministratorOrManager}"
+						 CornerRadius="16" Background="#00ACC1" Command="{Binding EditTaskCommand}">
+							<TextBlock Text="Редактировать" FontSize="12" Foreground="White"/>
+						</Button>
+						<Button Width="90" Height="32"
+					IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsAdministratorOrManager}"
+						 CornerRadius="16" Background="#F44336" Command="{Binding DeleteTaskCommand}">
+							<TextBlock Text="Удалить" FontSize="12" Foreground="White"/>
+						</Button>
+					</StackPanel>
 				</Grid>
 
 				<!-- Статусы задачи -->

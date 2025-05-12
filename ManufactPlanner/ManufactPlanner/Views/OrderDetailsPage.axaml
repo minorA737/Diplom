@@ -31,7 +31,6 @@
 		<Border Grid.Row="1" Margin="20,15,20,0" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000"
                 IsVisible="{Binding !IsLoading}">
 			<Grid RowDefinitions="Auto,Auto" Margin="20">
-				<!-- Заголовок и кнопки действий -->
 				<Grid Grid.Row="0" ColumnDefinitions="*,Auto">
 					<StackPanel>
 						<TextBlock Text="{Binding OrderName}" FontSize="20" FontWeight="SemiBold" Foreground="#333"/>
@@ -39,10 +38,20 @@
 					</StackPanel>
 
 					<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
-						<Button Width="110" Height="36" CornerRadius="18" Background="{DynamicResource PrimaryBrush}" Command="{Binding EditOrderCommand}">
+						<Button Width="110" Height="36"
+					IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsAdministratorOrManager}"
+						 CornerRadius="18" Background="{DynamicResource PrimaryBrush}" Command="{Binding EditOrderCommand}">
 							<TextBlock Text="Редактировать" FontSize="12" Foreground="White"/>
 							<ToolTip.Tip>
 								<TextBlock Text="Редактировать информацию о заказе"/>
+							</ToolTip.Tip>
+						</Button>
+						<Button Width="110" Height="36" 
+					IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsAdministratorOrManager}"
+						CornerRadius="18" Background="{DynamicResource ErrorBrush}" Command="{Binding DeleteOrderCommand}">
+							<TextBlock Text="Удалить" FontSize="12" Foreground="White"/>
+							<ToolTip.Tip>
+								<TextBlock Text="Удалить заказ"/>
 							</ToolTip.Tip>
 						</Button>
 					</StackPanel>
@@ -88,7 +97,9 @@
 		<!-- Вкладки и таблица позиций -->
 		<Grid Grid.Row="2" Margin="20,20,20,20" RowDefinitions="Auto,*">
 			<!-- Кнопка добавления позиции - сначала вынесем ее наверх -->
-			<Button Grid.Row="0" Width="150" Height="36" CornerRadius="18" Background="{DynamicResource PrimaryBrush}"
+			<Button Grid.Row="0" Width="150" Height="36" 
+					IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsAdministratorOrManager}"
+						CornerRadius="18" Background="{DynamicResource PrimaryBrush}"
                     HorizontalAlignment="Right" Command="{Binding AddPositionCommand}">
 				<TextBlock Text="+ Добавить позицию" FontSize="12" Foreground="White"/>
 				<ToolTip.Tip>
@@ -134,7 +145,9 @@
 
 											<!-- Меню действий -->
 											<StackPanel Grid.Column="6" Orientation="Horizontal" Spacing="5" Margin="5,0" VerticalAlignment="Center">
-												<Button Width="24" Height="24" CornerRadius="12" Background="#F1F3F4"
+												<Button Width="24" Height="24"
+					IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsAdministratorOrManager}"
+						 CornerRadius="12" Background="#F1F3F4"
                                                     Command="{Binding $parent[ItemsControl].((vm:OrderDetailsViewModel)DataContext).EditPositionCommand}"
                                                     CommandParameter="{Binding Id}">
 													<TextBlock Text="✎" FontSize="12" Foreground="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -142,7 +155,9 @@
 														<TextBlock Text="Редактировать позицию"/>
 													</ToolTip.Tip>
 												</Button>
-												<Button Width="24" Height="24" CornerRadius="12" Background="#FFEBEE"
+												<Button Width="24" Height="24"
+					IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsAdministratorOrManager}"
+						 CornerRadius="12" Background="#FFEBEE"
                                                     Command="{Binding $parent[ItemsControl].((vm:OrderDetailsViewModel)DataContext).DeletePositionCommand}"
                                                     CommandParameter="{Binding Id}">
 													<TextBlock Text="✕" FontSize="12" Foreground="#D32F2F" HorizontalAlignment="Center" VerticalAlignment="Center"/>

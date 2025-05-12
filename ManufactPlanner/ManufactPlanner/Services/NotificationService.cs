@@ -46,10 +46,35 @@ namespace ManufactPlanner.Services
 
 
         private readonly HashSet<string> _processedNotificationIds = new HashSet<string>();
+
+        private System.Threading.Timer _cleanupTimer;
         private NotificationService()
         {
             // Инициализируем строку подключения из PostgresContext
             _connectionString = "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=123";
+
+            _cleanupTimer = new System.Threading.Timer(CleanupProcessedNotifications, null,
+                    TimeSpan.FromHours(1), TimeSpan.FromHours(1));
+        }
+        // Метод очистки старых обработанных уведомлений
+        private void CleanupProcessedNotifications(object state)
+        {
+            try
+            {
+                // Если коллекция слишком большая, очищаем её
+                if (_processedNotificationIds.Count > 1000)
+                {
+                    lock (_processedNotificationIds)
+                    {
+                        // Оставляем только последние 100 уведомлений
+                        _processedNotificationIds.Clear();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ошибка при очистке обработанных уведомлений: {ex.Message}");
+            }
         }
 
         public async System.Threading.Tasks.Task Initialize(PostgresContext dbContext, MainWindowViewModel mainViewModel)
@@ -130,6 +155,8 @@ namespace ManufactPlanner.Services
                     RETURNS trigger AS $$
                     DECLARE
                         payload TEXT;
+                        task_user_id UUID;
+                        task_user_record RECORD;
                     BEGIN
                         IF (TG_OP = 'INSERT') THEN
                             payload := json_build_object(
@@ -140,7 +167,7 @@ namespace ManufactPlanner.Services
                                 'status', NEW.status,
                                 'timestamp', EXTRACT(EPOCH FROM NOW())
                             )::text;
-                            
+        
                             -- Вставляем уведомление в таблицу notifications
                             IF NEW.assignee_id IS NOT NULL THEN
                                 INSERT INTO notifications(user_id, title, message, is_read, created_at, link_to, notification_type)
@@ -154,7 +181,35 @@ namespace ManufactPlanner.Services
                                     'task_assigned'
                                 );
                             END IF;
-                            
+        
+                            -- Уведомление для создателя задачи, если это не исполнитель
+                            IF NEW.created_by IS NOT NULL AND NEW.created_by <> NEW.assignee_id THEN
+                                INSERT INTO notifications(user_id, title, message, is_read, created_at, link_to, notification_type)
+                                VALUES(
+                                    NEW.created_by, 
+                                    'Создана новая задача', 
+                                    'Создана задача: ' || NEW.name, 
+                                    false, 
+                                    NOW(),
+                                    '/tasks/' || NEW.id,
+                                    'task_created'
+                                );
+                            END IF;
+        
+                            -- Уведомления для соисполнителей из связанной таблицы
+                            FOR task_user_record IN SELECT user_id FROM task_users WHERE task_id = NEW.id AND role = 'co_assignee' LOOP
+                                INSERT INTO notifications(user_id, title, message, is_read, created_at, link_to, notification_type)
+                                VALUES(
+                                    task_user_record.user_id, 
+                                    'Назначена задача как соисполнителю', 
+                                    'Вы назначены соисполнителем задачи: ' || NEW.name, 
+                                    false, 
+                                    NOW(),
+                                    '/tasks/' || NEW.id,
+                                    'task_assigned'
+                                );
+                            END LOOP;
+        
                         ELSIF (TG_OP = 'UPDATE') THEN
                             -- Если изменился статус задачи
                             IF OLD.status <> NEW.status THEN
@@ -167,7 +222,7 @@ namespace ManufactPlanner.Services
                                     'new_status', NEW.status,
                                     'timestamp', EXTRACT(EPOCH FROM NOW())
                                 )::text;
-                                
+            
                                 -- Уведомление для исполнителя
                                 IF NEW.assignee_id IS NOT NULL THEN
                                     INSERT INTO notifications(user_id, title, message, is_read, created_at, link_to, notification_type)
@@ -181,7 +236,7 @@ namespace ManufactPlanner.Services
                                         'status_changed'
                                     );
                                 END IF;
-                                
+            
                                 -- Уведомление для создателя задачи, если это не исполнитель
                                 IF NEW.created_by IS NOT NULL AND NEW.created_by <> NEW.assignee_id THEN
                                     INSERT INTO notifications(user_id, title, message, is_read, created_at, link_to, notification_type)
@@ -195,8 +250,22 @@ namespace ManufactPlanner.Services
                                         'status_changed'
                                     );
                                 END IF;
+            
+                                -- Уведомления для соисполнителей
+                                FOR task_user_record IN SELECT user_id FROM task_users WHERE task_id = NEW.id AND role = 'co_assignee' LOOP
+                                    INSERT INTO notifications(user_id, title, message, is_read, created_at, link_to, notification_type)
+                                    VALUES(
+                                        task_user_record.user_id, 
+                                        'Изменение статуса задачи', 
+                                        'Задача ' || NEW.name || ' изменила статус с ' || OLD.status || ' на ' || NEW.status, 
+                                        false, 
+                                        NOW(),
+                                        '/tasks/' || NEW.id,
+                                        'status_changed'
+                                    );
+                                END LOOP;
                             END IF;
-                            
+        
                             -- Если изменился исполнитель задачи
                             IF OLD.assignee_id IS DISTINCT FROM NEW.assignee_id AND NEW.assignee_id IS NOT NULL THEN
                                 payload := json_build_object(
@@ -207,7 +276,7 @@ namespace ManufactPlanner.Services
                                     'new_assignee_id', NEW.assignee_id,
                                     'timestamp', EXTRACT(EPOCH FROM NOW())
                                 )::text;
-                                
+            
                                 -- Уведомление для нового исполнителя
                                 INSERT INTO notifications(user_id, title, message, is_read, created_at, link_to, notification_type)
                                 VALUES(
@@ -219,14 +288,28 @@ namespace ManufactPlanner.Services
                                     '/tasks/' || NEW.id,
                                     'task_assigned'
                                 );
+            
+                                -- Уведомление для старого исполнителя, если он был
+                                IF OLD.assignee_id IS NOT NULL THEN
+                                    INSERT INTO notifications(user_id, title, message, is_read, created_at, link_to, notification_type)
+                                    VALUES(
+                                        OLD.assignee_id, 
+                                        'Переназначение задачи', 
+                                        'Задача ' || NEW.name || ' переназначена другому исполнителю', 
+                                        false, 
+                                        NOW(),
+                                        '/tasks/' || NEW.id,
+                                        'task_reassigned'
+                                    );
+                                END IF;
                             END IF;
                         END IF;
-                        
+    
                         -- Отправляем уведомление через механизм NOTIFY
                         IF payload IS NOT NULL THEN
                             PERFORM pg_notify('task_changes', payload);
                         END IF;
-                        
+    
                         RETURN NEW;
                     END;
                     $$ LANGUAGE plpgsql;";
@@ -239,15 +322,17 @@ namespace ManufactPlanner.Services
                     RETURNS trigger AS $$
                     DECLARE
                         task_assignee_id UUID;
+                        task_creator_id UUID;
                         task_name TEXT;
                         payload TEXT;
+                        task_user_record RECORD;
                     BEGIN
                         IF (TG_OP = 'INSERT') THEN
-                            -- Получаем информацию о задаче и её исполнителе
-                            SELECT t.assignee_id, t.name INTO task_assignee_id, task_name
+                            -- Получаем информацию о задаче, её исполнителе и создателе
+                            SELECT t.assignee_id, t.name, t.created_by INTO task_assignee_id, task_name, task_creator_id
                             FROM tasks t
                             WHERE t.id = NEW.task_id;
-                            
+        
                             payload := json_build_object(
                                 'operation', 'NEW_COMMENT',
                                 'comment_id', NEW.id,
@@ -255,7 +340,7 @@ namespace ManufactPlanner.Services
                                 'user_id', NEW.user_id,
                                 'timestamp', EXTRACT(EPOCH FROM NOW())
                             )::text;
-                            
+        
                             -- Уведомление для исполнителя задачи, если это не автор комментария
                             IF task_assignee_id IS NOT NULL AND task_assignee_id <> NEW.user_id THEN
                                 INSERT INTO notifications(user_id, title, message, is_read, created_at, link_to, notification_type)
@@ -269,13 +354,41 @@ namespace ManufactPlanner.Services
                                     'new_comment'
                                 );
                             END IF;
+        
+                            -- Уведомление для создателя задачи, если это не автор комментария и не исполнитель
+                            IF task_creator_id IS NOT NULL AND task_creator_id <> NEW.user_id AND task_creator_id <> task_assignee_id THEN
+                                INSERT INTO notifications(user_id, title, message, is_read, created_at, link_to, notification_type)
+                                VALUES(
+                                    task_creator_id, 
+                                    'Новый комментарий', 
+                                    'Новый комментарий в задаче: ' || task_name, 
+                                    false, 
+                                    NOW(),
+                                    '/tasks/' || NEW.task_id,
+                                    'new_comment'
+                                );
+                            END IF;
+        
+                            -- Уведомления для соисполнителей, если они не являются автором комментария
+                            FOR task_user_record IN SELECT user_id FROM task_users WHERE task_id = NEW.task_id AND role = 'co_assignee' AND user_id <> NEW.user_id LOOP
+                                INSERT INTO notifications(user_id, title, message, is_read, created_at, link_to, notification_type)
+                                VALUES(
+                                    task_user_record.user_id, 
+                                    'Новый комментарий', 
+                                    'Новый комментарий в задаче: ' || task_name, 
+                                    false, 
+                                    NOW(),
+                                    '/tasks/' || NEW.task_id,
+                                    'new_comment'
+                                );
+                            END LOOP;
                         END IF;
-                        
+    
                         -- Отправляем уведомление через механизм NOTIFY
                         IF payload IS NOT NULL THEN
                             PERFORM pg_notify('comment_changes', payload);
                         END IF;
-                        
+    
                         RETURN NEW;
                     END;
                     $$ LANGUAGE plpgsql;";
@@ -377,6 +490,13 @@ namespace ManufactPlanner.Services
                 string notificationType = string.Empty;
                 string title = string.Empty;
                 string message = string.Empty;
+                Guid? targetUserId = null;
+
+                // Получаем ID пользователя, которому предназначено уведомление
+                if (payload.ContainsKey("assignee_id") && payload["assignee_id"] != null)
+                {
+                    targetUserId = Guid.Parse(payload["assignee_id"].ToString());
+                }
 
                 // Формируем данные для уведомления в зависимости от операции
                 switch (operation)
@@ -397,6 +517,8 @@ namespace ManufactPlanner.Services
                         title = "Назначен исполнитель";
                         message = $"К задаче {payload["task_name"]} назначен новый исполнитель";
                         notificationType = "assignee_changed";
+                        targetUserId = payload.ContainsKey("new_assignee_id") ?
+                            Guid.Parse(payload["new_assignee_id"].ToString()) : null;
                         break;
 
                     case "NEW_COMMENT":
@@ -411,7 +533,7 @@ namespace ManufactPlanner.Services
                 }
 
                 // Создаем уникальный идентификатор для уведомления
-                string notificationId = $"{operation}_{taskId}_{notificationType}";
+                string notificationId = $"{operation}_{taskId}_{notificationType}_{DateTime.Now.Ticks}";
 
                 // Проверяем, было ли это уведомление уже обработано
                 if (_processedNotificationIds.Contains(notificationId))
@@ -435,17 +557,20 @@ namespace ManufactPlanner.Services
                 // Отправляем уведомление через поток
                 _newNotifications.OnNext(notification);
 
-                // Показываем десктопное уведомление, если включено
-                if (ShouldShowDesktopNotification())
+                // Показываем десктопное уведомление только если текущий пользователь является целевым
+                if (ShouldShowDesktopNotification() &&
+                    _mainViewModel != null &&
+                    _mainViewModel.CurrentUserId != Guid.Empty &&
+                    (targetUserId == null || targetUserId == _mainViewModel.CurrentUserId))
                 {
                     ShowDesktopNotification(notification);
                 }
 
-                // Отправляем уведомление по email, если включено
-                SendEmailNotificationAsync(notification);
-
-                // Обновляем счетчик непрочитанных уведомлений в UI
-                UpdateUnreadNotificationsCount();
+                // Обновляем счетчик непрочитанных уведомлений в UI только для текущего пользователя
+                if (_mainViewModel != null && _mainViewModel.CurrentUserId != Guid.Empty)
+                {
+                    UpdateUnreadNotificationsCount();
+                }
             }
             catch (Exception ex)
             {
@@ -570,43 +695,99 @@ namespace ManufactPlanner.Services
                                       n.CreatedAt >= DateTime.Today)
                             .AnyAsync(token);
 
-                        if (existingNotification)
-                            continue;
-
-                        // Создаем уведомление о приближающемся дедлайне
-                        var notification = new Notification
+                        if (!existingNotification)
                         {
-                            UserId = task.AssigneeId,
-                            Title = "Приближается срок выполнения",
-                            Message = $"Задача '{task.Name}' должна быть выполнена {(task.EndDate == today ? "сегодня" : "завтра")}",
-                            IsRead = false,
-                            CreatedAt = DateTime.Now,
-                            LinkTo = $"/tasks/{task.Id}",
-                            NotificationType = "deadline_approaching"
-                        };
+                            // Создаем уведомление о приближающемся дедлайне для основного исполнителя
+                            var notification = new Notification
+                            {
+                                UserId = task.AssigneeId,
+                                Title = "Приближается срок выполнения",
+                                Message = $"Задача '{task.Name}' должна быть выполнена {(task.EndDate == today ? "сегодня" : "завтра")}",
+                                IsRead = false,
+                                CreatedAt = DateTime.Now,
+                                LinkTo = $"/tasks/{task.Id}",
+                                NotificationType = "deadline_approaching"
+                            };
 
-                        _dbContext.Notifications.Add(notification);
-                        await _dbContext.SaveChangesAsync(token);
+                            _dbContext.Notifications.Add(notification);
 
-                        // Создаем уведомление для UI
-                        var notificationViewModel = new NotificationViewModel
+                            // Создаем уведомление для UI
+                            var notificationViewModel = new NotificationViewModel
+                            {
+                                Title = notification.Title,
+                                Message = notification.Message,
+                                Type = notification.NotificationType,
+                                Timestamp = notification.CreatedAt ?? DateTime.Now,
+                                TaskId = task.Id
+                            };
+
+                            // Отправляем уведомление через поток
+                            _newNotifications.OnNext(notificationViewModel);
+
+                            // Показываем десктопное уведомление для текущего пользователя
+                            if (task.AssigneeId == _mainViewModel?.CurrentUserId)
+                            {
+                                ShowDesktopNotification(notificationViewModel);
+                            }
+                        }
+
+                        // Получаем всех соисполнителей задачи
+                        var coAssignees = await _dbContext.TaskUsers
+                            .Where(tu => tu.TaskId == task.Id && tu.Role == "co_assignee")
+                            .ToListAsync(token);
+
+                        foreach (var coAssignee in coAssignees)
                         {
-                            Title = notification.Title,
-                            Message = notification.Message,
-                            Type = notification.NotificationType,
-                            Timestamp = notification.CreatedAt ?? DateTime.Now,
-                            TaskId = task.Id
-                        };
+                            // Проверяем, было ли уже отправлено уведомление этому соисполнителю
+                            existingNotification = await _dbContext.Notifications
+                                .Where(n => n.UserId == coAssignee.UserId &&
+                                          n.NotificationType == "deadline_approaching" &&
+                                          n.LinkTo == $"/tasks/{task.Id}" &&
+                                          n.CreatedAt >= DateTime.Today)
+                                .AnyAsync(token);
 
-                        // Отправляем уведомление через поток
-                        _newNotifications.OnNext(notificationViewModel);
+                            if (!existingNotification)
+                            {
+                                // Создаем уведомление для соисполнителя
+                                var notification = new Notification
+                                {
+                                    UserId = coAssignee.UserId,
+                                    Title = "Приближается срок выполнения",
+                                    Message = $"Задача '{task.Name}', где вы соисполнитель, должна быть выполнена {(task.EndDate == today ? "сегодня" : "завтра")}",
+                                    IsRead = false,
+                                    CreatedAt = DateTime.Now,
+                                    LinkTo = $"/tasks/{task.Id}",
+                                    NotificationType = "deadline_approaching"
+                                };
 
-                        // Показываем десктопное уведомление
-                        ShowDesktopNotification(notificationViewModel);
+                                _dbContext.Notifications.Add(notification);
+
+                                // Показываем десктопное уведомление для текущего пользователя
+                                if (coAssignee.UserId == _mainViewModel?.CurrentUserId)
+                                {
+                                    var notificationViewModel = new NotificationViewModel
+                                    {
+                                        Title = notification.Title,
+                                        Message = notification.Message,
+                                        Type = notification.NotificationType,
+                                        Timestamp = notification.CreatedAt ?? DateTime.Now,
+                                        TaskId = task.Id
+                                    };
+
+                                    _newNotifications.OnNext(notificationViewModel);
+                                    ShowDesktopNotification(notificationViewModel);
+                                }
+                            }
+                        }
                     }
 
-                    // Обновляем счетчик непрочитанных уведомлений в UI
-                    UpdateUnreadNotificationsCount();
+                    await _dbContext.SaveChangesAsync(token);
+
+                    // Обновляем счетчик непрочитанных уведомлений в UI только для текущего пользователя
+                    if (_mainViewModel?.CurrentUserId != Guid.Empty)
+                    {
+                        await UpdateUnreadCountAsync(_mainViewModel.CurrentUserId);
+                    }
                 }
                 catch (OperationCanceledException)
                 {
@@ -778,6 +959,7 @@ namespace ManufactPlanner.Services
         public void Dispose()
         {
             Stop();
+            _cleanupTimer?.Dispose();
             _disposables.Dispose();
         }
         // В NotificationService добавьте:

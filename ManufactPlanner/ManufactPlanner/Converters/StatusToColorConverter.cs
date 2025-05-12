@@ -9,7 +9,7 @@ namespace ManufactPlanner.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
-                return "#CCCCCC"; // Серый по умолчанию
+                return "#666666"; // Серый по умолчанию
 
             string status = value.ToString();
             bool isBackground = parameter != null && parameter.ToString() == "Background";
@@ -26,16 +26,18 @@ namespace ManufactPlanner.Converters
                 case "отменен":
                     color = "#FF7043"; // Красный
                     break;
+                case "в процессе":
+                    color = "#00ACC1"; // Голубой
+                    break;
+                case "в очереди":
+                    color = "#FFB74D"; // Оранжевый
+                    break;
                 default:
                     color = "#666666"; // Серый
                     break;
             }
 
-            // Для фона делаем полупрозрачный
-            if (isBackground)
-                return color; // Opacity применяется в XAML
-            else
-                return color;
+            return color;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -209,10 +209,10 @@ namespace ManufactPlanner.ViewModels
                 "В прошлом месяце"
             };
 
-            _selectedStatus = _statuses[0];
-            _selectedCustomer = _customers[0];
-            _selectedDeliveryPeriod = _deliveryPeriods[0];
-            _selectedCreationPeriod = _creationPeriods[0];
+            _selectedStatus = "Все статусы";
+            _selectedCustomer = "Все заказчики";
+            _selectedDeliveryPeriod = "Любой период";
+            _selectedCreationPeriod = "Любой период";
 
             // Инициализация списков для предотвращения NullReferenceException
             _orders = new ObservableCollection<OrderItemViewModel>();
@@ -225,18 +225,23 @@ namespace ManufactPlanner.ViewModels
             {
                 IsLoading = true;
 
-                // Получаем текущего пользователя из MainWindowViewModel
-                // Проверяем, что CurrentUserId доступен
-                Guid currentUserId = Guid.Empty;
-                if (_mainWindowViewModel != null)
-                {
-                    currentUserId = _mainWindowViewModel.CurrentUserId;
-                }
-
                 // Проверяем доступность базы данных
                 if (_dbContext == null)
                 {
                     // Если БД недоступна, используем тестовые данные
+                    LoadTestData();
+                    return;
+                }
+
+                // Получаем текущего пользователя из MainWindowViewModel
+                Guid currentUserId = Guid.Empty;
+                if (_mainWindowViewModel != null && _mainWindowViewModel.CurrentUserId != Guid.Empty)
+                {
+                    currentUserId = _mainWindowViewModel.CurrentUserId;
+                }
+                else
+                {
+                    // Если пользователь не определен, используем тестовые данные
                     LoadTestData();
                     return;
                 }
@@ -248,7 +253,7 @@ namespace ManufactPlanner.ViewModels
 
                 if (user == null)
                 {
-                    // Если пользователь не найден, вернуть пустой список заказов или тестовые данные
+                    // Если пользователь не найден, используем тестовые данные
                     LoadTestData();
                     return;
                 }
@@ -401,6 +406,12 @@ namespace ManufactPlanner.ViewModels
             {
                 Customers.Add(customer);
             }
+
+            // Сбрасываем выбранные фильтры к значениям по умолчанию
+            SelectedStatus = "Все статусы";
+            SelectedCustomer = "Все заказчики";
+            SelectedDeliveryPeriod = "Любой период";
+            SelectedCreationPeriod = "Любой период";
         }
 
         private void ApplyFilters()
@@ -411,19 +422,19 @@ namespace ManufactPlanner.ViewModels
             IEnumerable<OrderItemViewModel> filteredOrders = _orders;
 
             // Фильтр по статусу
-            if (_selectedStatus != null && _selectedStatus != "Все статусы")
+            if (!string.IsNullOrEmpty(_selectedStatus) && _selectedStatus != "Все статусы")
             {
                 filteredOrders = filteredOrders.Where(o => o.Status == _selectedStatus);
             }
 
             // Фильтр по заказчику
-            if (_selectedCustomer != null && _selectedCustomer != "Все заказчики")
+            if (!string.IsNullOrEmpty(_selectedCustomer) && _selectedCustomer != "Все заказчики")
             {
                 filteredOrders = filteredOrders.Where(o => o.Customer == _selectedCustomer);
             }
 
             // Фильтр по сроку поставки
-            if (_selectedDeliveryPeriod != null && _selectedDeliveryPeriod != "Любой период")
+            if (!string.IsNullOrEmpty(_selectedDeliveryPeriod) && _selectedDeliveryPeriod != "Любой период")
             {
                 DateTime now = DateTime.Now;
                 DateTime monthStart = new DateTime(now.Year, now.Month, 1);
@@ -482,8 +493,7 @@ namespace ManufactPlanner.ViewModels
             }
 
             // Фильтр по дате создания
-            if (_selectedCreationPeriod != null && _selectedCreationPeriod != "Любой период" &&
-                _selectedCreationPeriod != "Все даты")
+            if (!string.IsNullOrEmpty(_selectedCreationPeriod) && _selectedCreationPeriod != "Любой период")
             {
                 DateTime now = DateTime.Now;
                 DateTime today = now.Date;
@@ -591,8 +601,6 @@ namespace ManufactPlanner.ViewModels
                 CurrentPage = page;
             }
         }
-
-        // Вставьте этот код вместо существующего метода CreateOrder в классе OrdersViewModel
 
         private async void CreateOrder()
         {

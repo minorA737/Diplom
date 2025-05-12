@@ -90,9 +90,10 @@
 												<TextBlock Text="👁" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 											</Button>
 											<Button Width="30" Height="30" CornerRadius="15" Background="{DynamicResource BackgroundBrush}"
-                                                Command="{Binding $parent[ItemsControl].((vm:DocumentationViewModel)DataContext).DeleteDocumentCommand}"
-                                                CommandParameter="{Binding Id}"
-                                                ToolTip.Tip="Удалить документ">
+												Command="{Binding $parent[ItemsControl].((vm:DocumentationViewModel)DataContext).DeleteDocumentCommand}"
+												CommandParameter="{Binding Id}"
+												ToolTip.Tip="Удалить документ"
+												IsVisible="{Binding $parent[ItemsControl].((vm:DocumentationViewModel)DataContext).CanDeleteDocuments}">
 												<TextBlock Text="🗑" FontSize="12" Foreground="{DynamicResource ErrorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 											</Button>
 										</StackPanel>
