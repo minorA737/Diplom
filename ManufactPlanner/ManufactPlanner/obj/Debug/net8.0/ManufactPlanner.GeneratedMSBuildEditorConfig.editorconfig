@@ -111,5 +111,8 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/TasksPage.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/UserManagementPage.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/UsersPage.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

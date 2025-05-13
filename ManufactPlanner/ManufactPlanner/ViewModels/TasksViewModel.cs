@@ -292,6 +292,9 @@ namespace ManufactPlanner.ViewModels
 
                     // Выводим уведомление об успешном создании задачи
                     Console.WriteLine($"Задача {task.Name} успешно создана");
+
+                    // Можно здесь добавить уведомление пользователя через всплывающее окно
+                    // например через отдельный класс NotificationService
                 }
             }
             catch (Exception ex)

@@ -254,7 +254,18 @@ namespace ManufactPlanner.ViewModels
                 // Загрузка и применение настроек пользователя уже произошли в AuthViewModel
             }
         }
+        public void NavigateToUserManagement()
+        {
+            // Проверяем права администратора
+            if (!IsAdministrator)
+            {
+                // Можно добавить уведомление о недостаточных правах
+                return;
+            }
 
+            CurrentMenuItem = "user-management";
+            CurrentView = new Views.UserManagementPage(this, DbContext);
+        }
         public void NavigateToOrders()
         {
             CurrentMenuItem = "orders";

@@ -258,6 +258,20 @@
 								<TextBlock Text="Настройки" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
 							</StackPanel>
 						</Button>
+						<!-- Управление пользователями -->
+						<Button Classes="navButton" Command="{Binding NavigateToUserManagement}"
+								Tag="{Binding CurrentMenuItem, Converter={StaticResource StringEqualsValue}, ConverterParameter='user-management'}"
+								Width="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToValue}, ConverterParameter='50,180'}"
+								HorizontalAlignment="Left"
+								IsVisible="{Binding IsAdministrator}"
+								Margin="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToValue}, ConverterParameter='5 5,10 5'}">
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="👥" FontSize="14" VerticalAlignment="Center"
+										   HorizontalAlignment="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToValue}, ConverterParameter='Center,Left'}"
+										   Margin="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToValue}, ConverterParameter='0,0 0 10 0'}"/>
+								<TextBlock Text="Пользователи" VerticalAlignment="Center" IsVisible="{Binding !IsSidebarCollapsed}"/>
+							</StackPanel>
+						</Button>
 					</StackPanel>
 				</Border>
 			</Grid>

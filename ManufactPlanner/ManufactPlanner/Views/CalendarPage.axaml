@@ -29,7 +29,7 @@
                     HorizontalAlignment="Center" VerticalAlignment="Center">
 				<Grid ColumnDefinitions="*,*,*">
 					<Border Grid.Column="0" Width="66" Height="36" CornerRadius="18"
-                            Background="{Binding IsWeekMode, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush},Transparent'}">
+                            Background="#00ACC1">
 						<Button Command="{Binding SwitchToWeekModeCommand}" Background="Transparent"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 							<TextBlock Text="Неделя" FontSize="12"
@@ -39,7 +39,7 @@
 					</Border>
 
 					<Border Grid.Column="1" Width="66" Height="36" CornerRadius="18"
-                            Background="{Binding IsMonthMode, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush},Transparent'}">
+                            Background="#00ACC1">
 						<Button Command="{Binding SwitchToMonthModeCommand}" Background="Transparent"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 							<TextBlock Text="Месяц" FontSize="12"
@@ -49,7 +49,7 @@
 					</Border>
 
 					<Border Grid.Column="2" Width="66" Height="36" CornerRadius="18"
-                            Background="{Binding IsYearMode, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush},Transparent'}">
+                            Background="#00ACC1">
 						<Button Command="{Binding SwitchToYearModeCommand}" Background="Transparent"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 							<TextBlock Text="Год" FontSize="12"

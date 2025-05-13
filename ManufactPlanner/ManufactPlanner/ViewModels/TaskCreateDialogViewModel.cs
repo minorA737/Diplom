@@ -188,13 +188,17 @@ namespace ManufactPlanner.ViewModels
             _orderPositions = new ObservableCollection<OrderPositionViewModel2>();
             _users = new ObservableCollection<UserViewModel>();
 
-            // Загружаем данные для выпадающих списков
-            LoadOrderPositions();
-            LoadUsers();
-
             // Инициализация команд
             SaveCommand = ReactiveCommand.CreateFromTask(SaveTaskAsync);
             CancelCommand = ReactiveCommand.Create(() => (false, (Task)null));
+
+            // Загружаем данные для выпадающих списков
+            // Запускаем загрузку асинхронно
+            System.Threading.Tasks.Task.Run(async () =>
+            {
+                await LoadOrderPositions();
+                await LoadUsers();
+            });
         }
 
         private async System.Threading.Tasks.Task LoadOrderPositions()
@@ -234,6 +238,7 @@ namespace ManufactPlanner.ViewModels
             }
         }
 
+        // Использование нового экземпляра контекста БД для предотвращения кэширования
         private async System.Threading.Tasks.Task LoadUsers()
         {
             try
@@ -244,20 +249,24 @@ namespace ManufactPlanner.ViewModels
                 // Очищаем коллекцию перед загрузкой новых данных
                 Users.Clear();
 
-                var users = await _dbContext.Users
-                    .AsNoTracking() // Отключаем отслеживание сущностей
-                    .Where(u => u.IsActive == true)
-                    .OrderBy(u => u.LastName)
-                    .Select(u => new UserViewModel
-                    {
-                        Id = u.Id,
-                        Name = $"{u.LastName} {u.FirstName}"
-                    })
-                    .ToListAsync();
-
-                foreach (var user in users)
+                // Используем новый экземпляр контекста для предотвращения проблем с кэшированием
+                using (var freshContext = new PostgresContext())
                 {
-                    Users.Add(user);
+                    var users = await freshContext.Users
+                        .AsNoTracking() // Отключаем отслеживание сущностей
+                        .Where(u => u.IsActive == true)
+                        .OrderBy(u => u.LastName)
+                        .Select(u => new UserViewModel
+                        {
+                            Id = u.Id,
+                            Name = $"{u.LastName} {u.FirstName}"
+                        })
+                        .ToListAsync();
+
+                    foreach (var user in users)
+                    {
+                        Users.Add(user);
+                    }
                 }
             }
             catch (Exception ex)

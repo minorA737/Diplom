@@ -13,11 +13,6 @@ namespace ManufactPlanner.Views.Dialogs
 {
     public partial class TaskCreateDialog : Window
     {
-        public TaskCreateDialog()
-        {
-            InitializeComponent();
-            this.AttachDevTools();
-        }
 
         public TaskCreateDialog(PostgresContext dbContext, Guid currentUserId)
         {

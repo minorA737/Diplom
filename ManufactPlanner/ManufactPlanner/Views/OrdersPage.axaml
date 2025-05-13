@@ -71,7 +71,7 @@
 		<Border Grid.Row="1" Margin="20,20,20,0" Background="{DynamicResource SurfaceBrush}" CornerRadius="8">
 			<StackPanel Orientation="Horizontal" Margin="20,10" Spacing="20" HorizontalAlignment="Center">
 				<!-- Фильтр Статус -->
-				<ComboBox Width="130" ItemsSource="{Binding Statuses}"
+				<ComboBox Width="170" ItemsSource="{Binding Statuses}"
                           SelectedItem="{Binding SelectedStatus}"
                           PlaceholderText="Все статусы">
 					<ToolTip.Tip>
@@ -80,7 +80,7 @@
 				</ComboBox>
 
 				<!-- Фильтр Заказчик -->
-				<ComboBox Width="130" ItemsSource="{Binding Customers}"
+				<ComboBox Width="170" ItemsSource="{Binding Customers}"
                           SelectedItem="{Binding SelectedCustomer}"
                           PlaceholderText="Все заказчики">
 					<ToolTip.Tip>
@@ -89,7 +89,7 @@
 				</ComboBox>
 
 				<!-- Фильтр Срок поставки -->
-				<ComboBox Width="150" ItemsSource="{Binding DeliveryPeriods}"
+				<ComboBox Width="170" ItemsSource="{Binding DeliveryPeriods}"
                           SelectedItem="{Binding SelectedDeliveryPeriod}"
                           PlaceholderText="Все сроки">
 					<ToolTip.Tip>
@@ -98,7 +98,7 @@
 				</ComboBox>
 
 				<!-- Фильтр Дата создания -->
-				<ComboBox Width="130" ItemsSource="{Binding CreationPeriods}"
+				<ComboBox Width="170" ItemsSource="{Binding CreationPeriods}"
                           SelectedItem="{Binding SelectedCreationPeriod}"
                           PlaceholderText="Все даты">
 					<ToolTip.Tip>
