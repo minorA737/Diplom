@@ -16,182 +16,315 @@ namespace ManufactPlanner.Services
             _dbContext = dbContext;
         }
 
-        public async Task<Dictionary<string, object>> GetTaskAnalyticsAsync(DateTime startDate, DateTime endDate)
+        /// <summary>
+        /// Получить данные о выполнении задач за период
+        /// </summary>
+        public async Task<Dictionary<string, object>> GetTaskCompletionAnalyticsAsync(DateTime startDate, DateTime endDate)
+        {
+            Console.WriteLine($"GetTaskCompletionAnalyticsAsync: {startDate} - {endDate}");
+
+            var totalTasks = await _dbContext.Tasks
+                .Where(t => t.CreatedAt >= startDate && t.CreatedAt <= endDate)
+                .CountAsync();
+
+            Console.WriteLine($"Total tasks found: {totalTasks}");
+
+            if (totalTasks == 0)
+            {
+                return new Dictionary<string, object>
+                {
+                    ["completedPercent"] = 0,
+                    ["inProgressPercent"] = 0,
+                    ["pendingPercent"] = 0,
+                    ["waitingProductionPercent"] = 0,
+                    ["otherPercent"] = 0,
+                    ["totalTasks"] = 0
+                };
+            }
+
+            var completedTasks = await _dbContext.Tasks
+                .Where(t => t.CreatedAt >= startDate && t.CreatedAt <= endDate && t.Status == "Готово")
+                .CountAsync();
+
+            var inProgressTasks = await _dbContext.Tasks
+                .Where(t => t.CreatedAt >= startDate && t.CreatedAt <= endDate && t.Status == "В процессе")
+                .CountAsync();
+
+            var pendingTasks = await _dbContext.Tasks
+                .Where(t => t.CreatedAt >= startDate && t.CreatedAt <= endDate && t.Status == "В очереди")
+                .CountAsync();
+
+            var waitingProductionTasks = await _dbContext.Tasks
+                .Where(t => t.CreatedAt >= startDate && t.CreatedAt <= endDate && t.Status == "Ждем производство")
+                .CountAsync();
+
+            var otherTasks = totalTasks - completedTasks - inProgressTasks - pendingTasks - waitingProductionTasks;
+
+            var result = new Dictionary<string, object>
+            {
+                ["completedPercent"] = Math.Round((double)completedTasks / totalTasks * 100, 1),
+                ["inProgressPercent"] = Math.Round((double)inProgressTasks / totalTasks * 100, 1),
+                ["pendingPercent"] = Math.Round((double)pendingTasks / totalTasks * 100, 1),
+                ["waitingProductionPercent"] = Math.Round((double)waitingProductionTasks / totalTasks * 100, 1),
+                ["otherPercent"] = Math.Round((double)otherTasks / totalTasks * 100, 1),
+                ["totalTasks"] = totalTasks
+            };
+
+            return result;
+        }
+
+        /// <summary>
+        /// Получить данные о загрузке сотрудников
+        /// </summary>
+        public async Task<List<Dictionary<string, object>>> GetEmployeeWorkloadAnalyticsAsync(DateTime startDate, DateTime endDate)
+        {
+            // Получаем активных пользователей с их задачами
+            var employeeWorkload = await _dbContext.Users
+                .Include(u => u.TaskAssignees)
+                .Where(u => u.TaskAssignees.Any(t => t.CreatedAt >= startDate && t.CreatedAt <= endDate))
+                .Select(u => new
+                {
+                    UserId = u.Id,
+                    FullName = u.FirstName + " " + u.LastName,
+                    TotalTasks = u.TaskAssignees.Count(t => t.CreatedAt >= startDate && t.CreatedAt <= endDate),
+                    CompletedTasks = u.TaskAssignees.Count(t => t.CreatedAt >= startDate && t.CreatedAt <= endDate && t.Status == "Готово"),
+                    InProgressTasks = u.TaskAssignees.Count(t => t.CreatedAt >= startDate && t.CreatedAt <= endDate && t.Status == "В процессе"),
+                    PendingTasks = u.TaskAssignees.Count(t => t.CreatedAt >= startDate && t.CreatedAt <= endDate && t.Status == "В очереди")
+                })
+                .Where(e => e.TotalTasks > 0)
+                .OrderByDescending(e => e.TotalTasks)
+                .Take(10)
+                .ToListAsync();
+
+            return employeeWorkload.Select(e => new Dictionary<string, object>
+            {
+                ["name"] = e.FullName,
+                ["totalTasks"] = e.TotalTasks,
+                ["completedTasks"] = e.CompletedTasks,
+                ["inProgressTasks"] = e.InProgressTasks,
+                ["pendingTasks"] = e.PendingTasks,
+                ["loadPercent"] = e.TotalTasks > 0 ? Math.Round((double)(e.CompletedTasks + e.InProgressTasks) / e.TotalTasks * 100, 0) : 0
+            }).ToList();
+        }
+
+        /// <summary>
+        /// Получить данные о выполнении задач по времени
+        /// </summary>
+        public async Task<Dictionary<string, object>> GetTasksProgressOverTimeAsync(DateTime startDate, DateTime endDate)
+        {
+            var monthlyData = new Dictionary<string, Dictionary<string, int>>();
+
+            var current = new DateTime(startDate.Year, startDate.Month, 1);
+
+            while (current <= endDate)
+            {
+                var monthStart = current;
+                var monthEnd = monthStart.AddMonths(1).AddDays(-1);
+                var monthName = monthStart.ToString("MMM");
+
+                // Количество задач, завершенных в этом месяце
+                var completedCount = await _dbContext.Tasks
+                    .Where(t => t.UpdatedAt >= monthStart && t.UpdatedAt <= monthEnd && t.Status == "Готово")
+                    .CountAsync();
+
+                // Общее количество задач, созданных в этом месяце
+                var plannedCount = await _dbContext.Tasks
+                    .Where(t => t.CreatedAt >= monthStart && t.CreatedAt <= monthEnd)
+                    .CountAsync();
+
+                monthlyData[monthName] = new Dictionary<string, int>
+                {
+                    ["completed"] = completedCount,
+                    ["planned"] = plannedCount
+                };
+
+                current = current.AddMonths(1);
+            }
+
+            return new Dictionary<string, object>
+            {
+                ["monthlyData"] = monthlyData
+            };
+        }
+
+        /// <summary>
+        /// Получить данные о производстве
+        /// </summary>
+        public async Task<Dictionary<string, object>> GetProductionAnalyticsAsync(DateTime startDate, DateTime endDate)
+        {
+            var productionStats = await _dbContext.ProductionDetails
+                .Include(pd => pd.OrderPosition)
+                .ThenInclude(op => op.Order)
+                .Where(pd => pd.ProductionDate >= DateOnly.FromDateTime(startDate) &&
+                            pd.ProductionDate <= DateOnly.FromDateTime(endDate))
+                .GroupBy(pd => new {
+                    Year = pd.ProductionDate.Value.Year,
+                    Month = pd.ProductionDate.Value.Month
+                })
+                .Select(g => new
+                {
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    InProduction = g.Count(pd => pd.ProductionDate != null && pd.PackagingDate == null),
+                    Debugging = g.Count(pd => pd.DebuggingDate != null && pd.AcceptanceDate == null),
+                    ReadyForPackaging = g.Count(pd => pd.AcceptanceDate != null && pd.PackagingDate == null),
+                    Completed = g.Count(pd => pd.PackagingDate != null)
+                })
+                .OrderBy(g => g.Year).ThenBy(g => g.Month)
+                .ToListAsync();
+
+            // Считаем общие показатели
+            var totalInProduction = await _dbContext.ProductionDetails
+                .Where(pd => pd.ProductionDate != null && pd.PackagingDate == null)
+                .CountAsync();
+
+            var totalDebugging = await _dbContext.ProductionDetails
+                .Where(pd => pd.DebuggingDate != null && pd.AcceptanceDate == null)
+                .CountAsync();
+
+            var totalReadyForPackaging = await _dbContext.ProductionDetails
+                .Where(pd => pd.AcceptanceDate != null && pd.PackagingDate == null)
+                .CountAsync();
+
+            return new Dictionary<string, object>
+            {
+                ["productionStats"] = productionStats.Select(p => new Dictionary<string, object>
+                {
+                    ["month"] = new DateTime(p.Year, p.Month, 1).ToString("MMM yyyy"),
+                    ["inProduction"] = p.InProduction,
+                    ["debugging"] = p.Debugging,
+                    ["readyForPackaging"] = p.ReadyForPackaging,
+                    ["completed"] = p.Completed
+                }).ToList(),
+                ["totalInProduction"] = totalInProduction,
+                ["totalDebugging"] = totalDebugging,
+                ["totalReadyForPackaging"] = totalReadyForPackaging
+            };
+        }
+
+        /// <summary>
+        /// Получить ключевые метрики
+        /// </summary>
+        public async Task<Dictionary<string, object>> GetKeyMetricsAsync(DateTime startDate, DateTime endDate)
+        {
+            // Среднее время выполнения задачи
+            var completedTasks = await _dbContext.Tasks
+                .Where(t => t.Status == "Готово" && t.StartDate != null && t.EndDate != null &&
+                           t.CreatedAt >= startDate && t.CreatedAt <= endDate)
+                .ToListAsync();
+
+            double avgTaskDuration = 0;
+            if (completedTasks.Any())
+            {
+                avgTaskDuration = completedTasks
+                    .Where(t => t.StartDate.HasValue && t.EndDate.HasValue)
+                    .Average(t => (t.EndDate.Value.ToDateTime(TimeOnly.MinValue) -
+                                  t.StartDate.Value.ToDateTime(TimeOnly.MinValue)).TotalDays);
+            }
+
+            // Процент выполненных в срок
+            var totalTasksWithDeadline = await _dbContext.Tasks
+                .Where(t => t.EndDate != null && t.CreatedAt >= startDate && t.CreatedAt <= endDate)
+                .CountAsync();
+
+            var onTimeCompletedTasks = await _dbContext.Tasks
+                .Where(t => t.Status == "Готово" && t.EndDate != null &&
+                           t.UpdatedAt <= t.EndDate.Value.ToDateTime(TimeOnly.MinValue) &&
+                           t.CreatedAt >= startDate && t.CreatedAt <= endDate)
+                .CountAsync();
+
+            double onTimeCompletionRate = totalTasksWithDeadline > 0
+                ? Math.Round((double)onTimeCompletedTasks / totalTasksWithDeadline * 100, 0)
+                : 0;
+
+            // Эффективность сотрудников (средний процент выполненных задач)
+            var employeeEfficiency = await CalculateEmployeeEfficiencyAsync(startDate, endDate);
+
+            return new Dictionary<string, object>
+            {
+                ["avgTaskDuration"] = Math.Round(avgTaskDuration, 1),
+                ["onTimeCompletionRate"] = onTimeCompletionRate,
+                ["employeeEfficiencyRate"] = employeeEfficiency
+            };
+        }
+
+        /// <summary>
+        /// Получить общий набор аналитических данных
+        /// </summary>
+        public async Task<Dictionary<string, object>> GetComprehensiveAnalyticsAsync(DateTime startDate, DateTime endDate, string reportType = "tasks")
         {
             var result = new Dictionary<string, object>();
 
-            try
+            switch (reportType.ToLower())
             {
-                // Конвертируем DateTime в DateOnly для сравнения с полями в БД
-                var startDateOnly = DateOnly.FromDateTime(startDate);
-                var endDateOnly = DateOnly.FromDateTime(endDate);
-
-                // Получаем все задачи в указанном периоде
-                var tasks = await _dbContext.Tasks
-                    .Where(t => (t.StartDate >= startDateOnly && t.StartDate <= endDateOnly) ||
-                               (t.EndDate >= startDateOnly && t.EndDate <= endDateOnly))
-                    .ToListAsync();
-
-                // Рассчитываем статистику
-                int totalTasks = tasks.Count;
-                if (totalTasks == 0)
-                {
-                    result["error"] = "Нет данных для выбранного периода";
-                    return result;
-                }
-
-                // Статусы задач
-                int completedCount = tasks.Count(t => t.Status == "Завершено" || t.Status == "Готово");
-                int inProgressCount = tasks.Count(t => t.Status == "В процессе" || t.Status == "В работе");
-                int pendingCount = tasks.Count(t => t.Status == "В очереди" || t.Status == "Ожидание");
-                int overdueCount = tasks.Count(t =>
-                    (t.EndDate < DateOnly.FromDateTime(DateTime.Now)) &&
-                    (t.Status != "Завершено" && t.Status != "Готово"));
-                int otherCount = totalTasks - completedCount - inProgressCount - pendingCount - overdueCount;
-
-                // Проценты для круговой диаграммы
-                result["completedPercent"] = Convert.ToInt32((double)completedCount / totalTasks * 100);
-                result["inProgressPercent"] = Convert.ToInt32((double)inProgressCount / totalTasks * 100);
-                result["pendingPercent"] = Convert.ToInt32((double)pendingCount / totalTasks * 100);
-                result["overduePercent"] = Convert.ToInt32((double)overdueCount / totalTasks * 100);
-                result["otherPercent"] = Convert.ToInt32((double)otherCount / totalTasks * 100);
-
-                // Среднее время выполнения задач
-                var completedTasks = tasks.Where(t => t.Status == "Завершено" || t.Status == "Готово" && t.StartDate.HasValue && t.EndDate.HasValue);
-                double avgDays = 0;
-                if (completedTasks.Any())
-                {
-                    avgDays = completedTasks.Average(t => (t.EndDate.Value.ToDateTime(TimeOnly.MinValue) - t.StartDate.Value.ToDateTime(TimeOnly.MinValue)).TotalDays);
-                    result["avgTaskDuration"] = Math.Round(avgDays, 1);
-                }
-                else
-                {
-                    result["avgTaskDuration"] = 0;
-                }
-
-                // Процент задач, выполненных в срок
-                int onTimeCount = tasks.Count(t =>
-                    (t.Status == "Завершено" || t.Status == "Готово") &&
-                    t.EndDate.HasValue &&
-                    t.EndDate.Value <= DateOnly.FromDateTime(DateTime.Now));
-                result["onTimeCompletionRate"] = completedCount > 0 ?
-                    Convert.ToInt32((double)onTimeCount / completedCount * 100) : 0;
-
-                // Данные о выполнении задач по месяцам для линейного графика
-                var monthlyData = GetMonthlyTaskCompletion(tasks, startDate, endDate);
-                result["monthlyData"] = monthlyData;
-
-                // Загрузка сотрудников
-                var employeeLoad = await GetEmployeeLoadDataAsync(startDate, endDate);
-                result["employeeData"] = employeeLoad;
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                result["error"] = $"Ошибка при получении аналитики: {ex.Message}";
-                return result;
-            }
-        }
-
-        private List<Dictionary<string, object>> GetMonthlyTaskCompletion(List<Models.Task> tasks, DateTime startDate, DateTime endDate)
-        {
-            var result = new List<Dictionary<string, object>>();
-
-            // Подготавливаем список месяцев в диапазоне
-            var currentDate = new DateTime(startDate.Year, startDate.Month, 1);
-            while (currentDate <= endDate)
-            {
-                var monthData = new Dictionary<string, object>
-                {
-                    ["month"] = currentDate.ToString("MMM"),
-                    ["year"] = currentDate.Year,
-                    ["completed"] = 0,
-                    ["planned"] = 0
-                };
-
-                result.Add(monthData);
-                currentDate = currentDate.AddMonths(1);
-            }
-
-            // Заполняем данными по задачам
-            foreach (var task in tasks)
-            {
-                if (task.EndDate.HasValue)
-                {
-                    var taskEndDate = task.EndDate.Value.ToDateTime(TimeOnly.MinValue);
-                    var monthIndex = ((taskEndDate.Year - startDate.Year) * 12) + taskEndDate.Month - startDate.Month;
-
-                    if (monthIndex >= 0 && monthIndex < result.Count)
+                case "tasks":
+                    // Базовые данные о задачах
+                    var taskAnalytics = await GetTaskCompletionAnalyticsAsync(startDate, endDate);
+                    foreach (var item in taskAnalytics)
                     {
-                        if (task.Status == "Завершено" || task.Status == "Готово")
-                        {
-                            result[monthIndex]["completed"] = (int)result[monthIndex]["completed"] + 1;
-                        }
-                        result[monthIndex]["planned"] = (int)result[monthIndex]["planned"] + 1;
+                        result[item.Key] = item.Value;
                     }
-                }
+
+                    // Данные о выполнении по времени
+                    var progressData = await GetTasksProgressOverTimeAsync(startDate, endDate);
+                    result["progressData"] = progressData;
+
+                    // Ключевые метрики
+                    var keyMetrics = await GetKeyMetricsAsync(startDate, endDate);
+                    foreach (var item in keyMetrics)
+                    {
+                        result[item.Key] = item.Value;
+                    }
+                    break;
+
+                case "employees":
+                    // Данные о сотрудниках
+                    var employeeData = await GetEmployeeWorkloadAnalyticsAsync(startDate, endDate);
+                    result["employeeData"] = employeeData;
+
+                    // Ключевые метрики
+                    var keyMetricsEmployees = await GetKeyMetricsAsync(startDate, endDate);
+                    foreach (var item in keyMetricsEmployees)
+                    {
+                        result[item.Key] = item.Value;
+                    }
+                    break;
+
+                case "production":
+                    // Данные о производстве
+                    var productionData = await GetProductionAnalyticsAsync(startDate, endDate);
+                    result["productionData"] = productionData;
+                    break;
             }
 
             return result;
         }
 
-        public async Task<List<Dictionary<string, object>>> GetEmployeeLoadDataAsync(DateTime startDate, DateTime endDate)
+        private async Task<double> CalculateEmployeeEfficiencyAsync(DateTime startDate, DateTime endDate)
         {
-            var result = new List<Dictionary<string, object>>();
-
-            try
-            {
-                // Получаем данные о задачах с их исполнителями
-                var tasks = await _dbContext.Tasks
-                    .Include(t => t.Assignee)
-                    .Where(t => t.AssigneeId != null &&
-                               ((t.StartDate != null && t.StartDate >= DateOnly.FromDateTime(startDate)) ||
-                                (t.EndDate != null && t.EndDate <= DateOnly.FromDateTime(endDate))))
-                    .ToListAsync();
-
-                // Группируем по исполнителям
-                var employeeGroups = tasks
-                    .GroupBy(t => new { t.AssigneeId, FullName = $"{t.Assignee?.LastName} {t.Assignee?.FirstName}" })
-                    .Where(g => g.Key.AssigneeId != null)
-                    .Select(g => new
-                    {
-                        EmployeeId = g.Key.AssigneeId,
-                        EmployeeName = g.Key.FullName,
-                        TotalTasks = g.Count(),
-                        InProgressTasks = g.Count(t => t.Status == "В процессе" || t.Status == "В работе"),
-                        CompletedTasks = g.Count(t => t.Status == "Завершено" || t.Status == "Готово")
-                    })
-                    .OrderByDescending(e => e.InProgressTasks)
-                    .Take(10)
-                    .ToList();
-
-                // Рассчитываем загрузку (в процентах)
-                foreach (var employee in employeeGroups)
+            var employeeEfficiencies = await _dbContext.Users
+                .Include(u => u.TaskAssignees)
+                .Where(u => u.TaskAssignees.Any(t => t.CreatedAt >= startDate && t.CreatedAt <= endDate))
+                .Select(u => new
                 {
-                    // Максимальное количество активных задач, которое считается 100% загрузкой
-                    const int maxActiveTasks = 5;
+                    UserId = u.Id,
+                    TotalTasks = u.TaskAssignees.Count(t => t.CreatedAt >= startDate && t.CreatedAt <= endDate),
+                    CompletedOnTime = u.TaskAssignees.Count(t =>
+                        t.CreatedAt >= startDate && t.CreatedAt <= endDate &&
+                        t.Status == "Готово" &&
+                        t.EndDate != null &&
+                        t.UpdatedAt <= t.EndDate.Value.ToDateTime(TimeOnly.MinValue))
+                })
+                .Where(e => e.TotalTasks > 0)
+                .ToListAsync();
 
-                    int loadPercent = Math.Min(Convert.ToInt32((double)employee.InProgressTasks / maxActiveTasks * 100), 100);
+            if (!employeeEfficiencies.Any())
+                return 0;
 
-                    result.Add(new Dictionary<string, object>
-                    {
-                        ["employeeId"] = employee.EmployeeId,
-                        ["name"] = employee.EmployeeName,
-                        ["totalTasks"] = employee.TotalTasks,
-                        ["inProgressTasks"] = employee.InProgressTasks,
-                        ["completedTasks"] = employee.CompletedTasks,
-                        ["loadPercent"] = loadPercent
-                    });
-                }
+            var averageEfficiency = employeeEfficiencies
+                .Average(e => (double)e.CompletedOnTime / e.TotalTasks * 100);
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error getting employee load data: {ex.Message}");
-                return new List<Dictionary<string, object>>();
-            }
+            return Math.Round(averageEfficiency, 0);
         }
     }
 }

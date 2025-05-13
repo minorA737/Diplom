@@ -7,6 +7,9 @@ using System.Diagnostics;
 using ReactiveUI;
 using ManufactPlanner.Models;
 using Microsoft.EntityFrameworkCore;
+using Avalonia;
+using Avalonia.Input.Platform;
+using Avalonia.Controls;
 
 namespace ManufactPlanner.ViewModels
 {
@@ -65,7 +68,7 @@ namespace ManufactPlanner.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref _selectedUser, value);
                 LoadUserForEdit(value);
-                
+
             }
         }
 
@@ -221,6 +224,7 @@ namespace ManufactPlanner.ViewModels
         public ICommand ShowDeleteConfirmationCommand { get; }
         public ICommand ConfirmDeleteCommand { get; }
         public ICommand CancelDeleteCommand { get; }
+        public ICommand CopyUserIdCommand { get; } // Новая команда для копирования ID
 
         private ObservableCollection<UserViewModel2> _allUsers;
         private bool _isConfirmDeleteDialogOpen = false;
@@ -231,7 +235,6 @@ namespace ManufactPlanner.ViewModels
             get => _isConfirmDeleteDialogOpen;
             set => this.RaiseAndSetIfChanged(ref _isConfirmDeleteDialogOpen, value);
         }
-
 
         public UserManagementViewModel(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext)
         {
@@ -255,9 +258,12 @@ namespace ManufactPlanner.ViewModels
             ShowDeleteConfirmationCommand = ReactiveCommand.Create<UserViewModel2>(ShowDeleteConfirmation);
             ConfirmDeleteCommand = ReactiveCommand.CreateFromTask(ConfirmDeleteAsync);
             CancelDeleteCommand = ReactiveCommand.Create(CancelDelete);
+            CopyUserIdCommand = ReactiveCommand.CreateFromTask<UserViewModel2>(CopyUserIdAsync); // Новая команда
+
             // Загрузка данных
             _ = InitializeAsync();
         }
+
         private async System.Threading.Tasks.Task InitializeAsync()
         {
             await LoadDataAsync();
@@ -265,6 +271,7 @@ namespace ManufactPlanner.ViewModels
             SelectedRoleFilter = "Все";
             SelectedDepartmentFilter = "Все";
         }
+
         private void ShowDeleteConfirmation(UserViewModel2 user)
         {
             _userToDelete = user;
@@ -286,6 +293,7 @@ namespace ManufactPlanner.ViewModels
             IsConfirmDeleteDialogOpen = false;
             _userToDelete = null;
         }
+
         private async System.Threading.Tasks.Task LoadDataAsync()
         {
             try
@@ -314,13 +322,14 @@ namespace ManufactPlanner.ViewModels
                         Role = user.Roles.FirstOrDefault()?.Name ?? "Не назначена",
                         Department = user.UserDepartments
                             .Select(ud => ud.Department?.Name)
-                            .FirstOrDefault() ?? "Не назначен"
+                            .FirstOrDefault() ?? "Не назначен",
+                        // Добавляем сокращенный ID
+                        ShortId = user.Id.ToString().Substring(0, 8) + "..."
                     };
 
                     Users.Add(userViewModel);
-
                 }
-                
+
                 // Загрузка опций для фильтров
                 await LoadFilterOptionsAsync();
                 _allUsers = new ObservableCollection<UserViewModel2>(Users);
@@ -450,6 +459,36 @@ namespace ManufactPlanner.ViewModels
             // Установка выбранной роли и отдела
             EditSelectedRole = Math.Max(0, RoleOptions.IndexOf(user.Role));
             EditSelectedDepartment = Math.Max(0, DepartmentOptions.IndexOf(user.Department));
+        }
+
+        // Новый метод для копирования ID пользователя
+        // Исправленный метод CopyUserIdAsync в UserManagementViewModel.cs
+        private async System.Threading.Tasks.Task CopyUserIdAsync(UserViewModel2 user)
+        {
+            try
+            {
+                if (user == null) return;
+
+                var topLevel = TopLevel.GetTopLevel(_mainWindowViewModel.CurrentView);
+                var clipboard = topLevel?.Clipboard;
+
+                if (clipboard != null)
+                {
+                    await clipboard.SetTextAsync(user.Id.ToString());
+                    StatusMessage = $"ID пользователя скопирован в буфер обмена";
+
+                    // Очищаем сообщение через 3 секунды
+                    _ = System.Threading.Tasks.Task.Delay(3000).ContinueWith(_ =>
+                    {
+                        StatusMessage = string.Empty;
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ошибка при копировании ID: {ex.Message}");
+                StatusMessage = "Ошибка при копировании ID";
+            }
         }
 
         private async System.Threading.Tasks.Task CreateUserAsync()
@@ -626,6 +665,7 @@ namespace ManufactPlanner.ViewModels
     public class UserViewModel2 : ViewModelBase
     {
         public Guid Id { get; set; }
+        public string ShortId { get; set; } // Новое свойство для сокращенного ID
         public string Username { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

@@ -1,6 +1,4 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using ManufactPlanner.Models;
 using ManufactPlanner.ViewModels;
 
@@ -11,6 +9,18 @@ public partial class AnalyticsPage : UserControl
     public AnalyticsPage(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext)
     {
         InitializeComponent();
-        DataContext = new AnalyticsViewModel(mainWindowViewModel, dbContext);
+
+        var viewModel = new AnalyticsViewModel(mainWindowViewModel, dbContext);
+
+        // Инициализируем ссылки на графики в ViewModel
+        viewModel.TasksProgressPlot = TasksProgressPlot;
+        viewModel.TasksStatusPiePlot = StatusPieChart;
+        viewModel.EmployeeLoadPlot = EmployeeLoadChart;
+        viewModel.ProductionStagesPlot = ProductionStagesPlot;
+        viewModel.ProductionTimeline = ProductionTimeline;
+
+        DataContext = viewModel;
+
+        viewModel.InitializeAfterViewsReady();
     }
 }

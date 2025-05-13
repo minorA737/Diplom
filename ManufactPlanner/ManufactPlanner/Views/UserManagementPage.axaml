@@ -20,7 +20,8 @@
                    Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,0"/>
 
 		<!-- Панель управления -->
-		<Border Grid.Row="1" Margin="20,15,20,0" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+		<Border Grid.Row="1" Margin="20,15,20,0" Background="{DynamicResource SurfaceBrush}"
+                CornerRadius="8" >
 			<Grid Margin="15" RowDefinitions="Auto,Auto">
 				<!-- Кнопки действий -->
 				<StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10">
@@ -58,27 +59,28 @@
 		</Border>
 
 		<!-- Основная таблица пользователей -->
-		<Border Grid.Row="2" Margin="20,15,20,20" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+		<Border Grid.Row="2" Margin="20,15,20,20" Background="{DynamicResource SurfaceBrush}"
+                CornerRadius="8" >
 			<Grid RowDefinitions="Auto,*">
 				<!-- Заголовки таблицы -->
-				<Border Grid.Row="0" Background="#F8F9FA" Height="45" CornerRadius="8,8,0,0">
-					<Grid ColumnDefinitions="50,120,*,200,100,120,120,80">
-						<TextBlock Grid.Column="0" Text="№" FontSize="12" FontWeight="SemiBold"
-                                   Foreground="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+				<Border Grid.Row="0" Background="{DynamicResource TableHeaderBrush}" Height="45" CornerRadius="8,8,0,0">
+					<Grid ColumnDefinitions="100,150,200,200,100,200,150,100">
+						<TextBlock Grid.Column="0" Text="ID" FontSize="12" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						<TextBlock Grid.Column="1" Text="Имя пользователя" FontSize="12" FontWeight="SemiBold"
-                                   Foreground="#666" VerticalAlignment="Center" Margin="10,0"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="10,0"/>
 						<TextBlock Grid.Column="2" Text="Полное имя" FontSize="12" FontWeight="SemiBold"
-                                   Foreground="#666" VerticalAlignment="Center" Margin="10,0"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="10,0"/>
 						<TextBlock Grid.Column="3" Text="Email" FontSize="12" FontWeight="SemiBold"
-                                   Foreground="#666" VerticalAlignment="Center" Margin="10,0"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="10,0"/>
 						<TextBlock Grid.Column="4" Text="Роль" FontSize="12" FontWeight="SemiBold"
-                                   Foreground="#666" VerticalAlignment="Center" Margin="10,0"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="10,0"/>
 						<TextBlock Grid.Column="5" Text="Отдел" FontSize="12" FontWeight="SemiBold"
-                                   Foreground="#666" VerticalAlignment="Center" Margin="10,0"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="10,0"/>
 						<TextBlock Grid.Column="6" Text="Последний вход" FontSize="12" FontWeight="SemiBold"
-                                   Foreground="#666" VerticalAlignment="Center" Margin="10,0"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="10,0"/>
 						<TextBlock Grid.Column="7" Text="Действия" FontSize="12" FontWeight="SemiBold"
-                                   Foreground="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 					</Grid>
 				</Border>
 
@@ -87,50 +89,70 @@
 					<ItemsControl ItemsSource="{Binding Users}">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
-								<Border Height="60" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
-									<Grid ColumnDefinitions="50,120,*,200,100,120,120,80">
-										<!-- Порядковый номер -->
-										<TextBlock Grid.Column="0" Text="{Binding Id}" FontSize="13"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                   Foreground="#333"/>
+								<Border Height="60" Background="{DynamicResource SurfaceBrush}"
+                                        BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1">
+									<Grid ColumnDefinitions="100,150,200,200,100,200,150,100">
+										<!-- ID пользователя (кликабельный) -->
+										<Button Grid.Column="0" Background="Transparent" BorderThickness="0"
+                                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                                Command="{Binding $parent[ItemsControl].((vm:UserManagementViewModel)DataContext).CopyUserIdCommand}"
+                                                CommandParameter="{Binding}"
+                                                ToolTip.Tip="Нажмите чтобы скопировать полный ID">
+											<Grid>
+												<TextBlock Text="{Binding ShortId}" FontSize="12"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                           Foreground="{DynamicResource TextPrimaryBrush}"/>
+												<!-- Индикатор клика -->
+												<Border Background="{DynamicResource PrimaryBrush}" Opacity="0.1"
+                                                        CornerRadius="4" IsHitTestVisible="False"/>
+											</Grid>
+										</Button>
 
 										<!-- Имя пользователя -->
 										<TextBlock Grid.Column="1" Text="{Binding Username}" FontSize="13"
-                                                   VerticalAlignment="Center" Margin="10,0" Foreground="#333"/>
+                                                   VerticalAlignment="Center" Margin="10,0"
+                                                   Foreground="{DynamicResource TextPrimaryBrush}"/>
 
 										<!-- Полное имя -->
 										<TextBlock Grid.Column="2" Text="{Binding FullName}" FontSize="13"
-                                                   VerticalAlignment="Center" Margin="10,0" Foreground="#333"/>
+                                                   VerticalAlignment="Center" Margin="10,0"
+                                                   Foreground="{DynamicResource TextPrimaryBrush}"/>
 
 										<!-- Email -->
 										<TextBlock Grid.Column="3" Text="{Binding Email}" FontSize="13"
-                                                   VerticalAlignment="Center" Margin="10,0" Foreground="#666"/>
+                                                   VerticalAlignment="Center" Margin="10,0"
+                                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
 
 										<!-- Роль -->
 										<TextBlock Grid.Column="4" Text="{Binding Role}" FontSize="13"
-                                                   VerticalAlignment="Center" Margin="10,0" Foreground="#333"/>
+                                                   VerticalAlignment="Center" Margin="10,0"
+                                                   Foreground="{DynamicResource TextPrimaryBrush}"/>
 
 										<!-- Отдел -->
 										<TextBlock Grid.Column="5" Text="{Binding Department}" FontSize="13"
-                                                   VerticalAlignment="Center" Margin="10,0" Foreground="#333"/>
+                                                   VerticalAlignment="Center" Margin="10,0"
+                                                   Foreground="{DynamicResource TextPrimaryBrush}"/>
 
 										<!-- Последний вход -->
 										<TextBlock Grid.Column="6" Text="{Binding LastLogin}" FontSize="12"
-                                                   VerticalAlignment="Center" Margin="10,0" Foreground="#666"/>
+                                                   VerticalAlignment="Center" Margin="10,0"
+                                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
 
 										<!-- Кнопки действий -->
 										<StackPanel Grid.Column="7" Orientation="Horizontal" HorizontalAlignment="Center"
                                                     VerticalAlignment="Center" Spacing="5">
-											<Button Width="28" Height="28" CornerRadius="14" Background="#4CAF50"
+											<Button Width="28" Height="28" CornerRadius="14" Background="{DynamicResource SuccessBrush}"
                                                     Command="{Binding $parent[ItemsControl].((vm:UserManagementViewModel)DataContext).OpenEditDialogCommand}"
-                                                    CommandParameter="{Binding}">
+                                                    CommandParameter="{Binding}"
+                                                    ToolTip.Tip="Редактировать пользователя">
 												<TextBlock Text="✎" FontSize="13" Foreground="White"
                                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
 											</Button>
-											<Button Width="28" Height="28" CornerRadius="14" Background="#F44336"
+											<Button Width="28" Height="28" CornerRadius="14" Background="{DynamicResource ErrorBrush}"
 													Command="{Binding $parent[ItemsControl].((vm:UserManagementViewModel)DataContext).ShowDeleteConfirmationCommand}"
 													CommandParameter="{Binding}"
-													IsEnabled="{Binding IsActive}">
+													IsEnabled="{Binding IsActive}"
+													ToolTip.Tip="Удалить пользователя">
 												<TextBlock Text="✕" FontSize="13" Foreground="White"
 														   HorizontalAlignment="Center" VerticalAlignment="Center"/>
 											</Button>
@@ -145,64 +167,75 @@
 		</Border>
 
 		<!-- Строка состояния -->
-		<TextBlock Grid.Row="2" Text="{Binding StatusMessage}" FontSize="12" Foreground="#666"
+		<TextBlock Grid.Row="2" Text="{Binding StatusMessage}" FontSize="12"
+                   Foreground="{DynamicResource TextSecondaryBrush}"
                    HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10"/>
+
 		<!-- Диалог подтверждения удаления -->
-		<Border IsVisible="{Binding IsConfirmDeleteDialogOpen}" Background="#80000000"
+		<Border IsVisible="{Binding IsConfirmDeleteDialogOpen}"
+                Background="#80000000"
 				Grid.Row="0" Grid.RowSpan="3" ZIndex="100">
-			<Border Width="350" Height="200" Background="White" CornerRadius="8"
+			<Border Width="350" Height="200" Background="{DynamicResource DialogBackgroundBrush}" CornerRadius="8"
 					HorizontalAlignment="Center" VerticalAlignment="Center"
-					BoxShadow="0 4 10 #20000000">
+					>
 				<StackPanel Margin="30" VerticalAlignment="Center">
 					<TextBlock Text="Подтверждение удаления" FontSize="16" FontWeight="SemiBold"
-							   Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+							   Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
 					<TextBlock Text="Вы действительно хотите удалить этого пользователя?"
-							   FontSize="13" Foreground="#666" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+							   FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
+                               HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="15">
-						<Button Content="Удалить" Width="100" Height="36" Background="#F44336"
+						<Button Content="Удалить" Width="100" Height="36" Background="{DynamicResource ConfirmDeleteButtonBrush}"
 								Foreground="White" CornerRadius="18" Command="{Binding ConfirmDeleteCommand}"/>
-						<Button Content="Отмена" Width="100" Height="36" Background="#E0E0E0"
-								Foreground="#333" CornerRadius="18" Command="{Binding CancelDeleteCommand}"/>
+						<Button Content="Отмена" Width="100" Height="36" Background="{DynamicResource CancelButtonBrush}"
+								Foreground="{DynamicResource TextPrimaryBrush}" CornerRadius="18" Command="{Binding CancelDeleteCommand}"/>
 					</StackPanel>
 				</StackPanel>
 			</Border>
 		</Border>
+
 		<!-- Диалог создания пользователя -->
-		<Border IsVisible="{Binding IsCreateUserDialogOpen}" Background="#80000000"
+		<Border IsVisible="{Binding IsCreateUserDialogOpen}"
+                Background="#80000000"
                 Grid.Row="0" Grid.RowSpan="3" ZIndex="100">
-			<Border Width="400" Height="500" Background="White" CornerRadius="8"
+			<Border Width="400" Height="500" Background="{DynamicResource DialogBackgroundBrush}" CornerRadius="8"
                     HorizontalAlignment="Center" VerticalAlignment="Center"
-                    BoxShadow="0 4 10 #20000000">
+                    >
 				<StackPanel Margin="30">
 					<TextBlock Text="Создание пользователя" FontSize="18" FontWeight="SemiBold"
-                               Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                               Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
 					<!-- Поля ввода -->
 					<StackPanel Spacing="15">
 						<StackPanel>
-							<TextBlock Text="Имя пользователя*" FontSize="12" Foreground="#666" Margin="0,0,0,5"/>
+							<TextBlock Text="Имя пользователя*" FontSize="12"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
 							<TextBox Text="{Binding NewUserName}" Height="36" CornerRadius="4"/>
 						</StackPanel>
 
 						<StackPanel>
-							<TextBlock Text="Пароль*" FontSize="12" Foreground="#666" Margin="0,0,0,5"/>
+							<TextBlock Text="Пароль*" FontSize="12"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
 							<TextBox Text="{Binding NewPassword}" PasswordChar="•" Height="36" CornerRadius="4"/>
 						</StackPanel>
 
 						<StackPanel>
-							<TextBlock Text="Имя*" FontSize="12" Foreground="#666" Margin="0,0,0,5"/>
+							<TextBlock Text="Имя*" FontSize="12"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
 							<TextBox Text="{Binding NewFirstName}" Height="36" CornerRadius="4"/>
 						</StackPanel>
 
 						<StackPanel>
-							<TextBlock Text="Фамилия*" FontSize="12" Foreground="#666" Margin="0,0,0,5"/>
+							<TextBlock Text="Фамилия*" FontSize="12"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
 							<TextBox Text="{Binding NewLastName}" Height="36" CornerRadius="4"/>
 						</StackPanel>
 
 						<StackPanel>
-							<TextBlock Text="Email" FontSize="12" Foreground="#666" Margin="0,0,0,5"/>
+							<TextBlock Text="Email" FontSize="12"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
 							<TextBox Text="{Binding NewEmail}" Height="36" CornerRadius="4"/>
 						</StackPanel>
 					</StackPanel>
@@ -211,55 +244,62 @@
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="15" Margin="0,30,0,0">
 						<Button Content="Создать" Width="100" Height="36" Background="{DynamicResource PrimaryBrush}"
                                 Foreground="White" CornerRadius="18" Command="{Binding CreateUserCommand}"/>
-						<Button Content="Отмена" Width="100" Height="36" Background="#E0E0E0"
-                                Foreground="#333" CornerRadius="18" Command="{Binding CancelEditCommand}"/>
+						<Button Content="Отмена" Width="100" Height="36" Background="{DynamicResource CancelButtonBrush}"
+                                Foreground="{DynamicResource TextPrimaryBrush}" CornerRadius="18" Command="{Binding CancelEditCommand}"/>
 					</StackPanel>
 				</StackPanel>
 			</Border>
 		</Border>
 
 		<!-- Диалог редактирования пользователя -->
-		<Border IsVisible="{Binding IsEditUserDialogOpen}" Background="#80000000"
+		<Border IsVisible="{Binding IsEditUserDialogOpen}"
+                Background="#80000000"
                 Grid.Row="0" Grid.RowSpan="3" ZIndex="100">
-			<Border Width="450" Height="650" Background="White" CornerRadius="8"
+			<Border Width="450" Height="650" Background="{DynamicResource DialogBackgroundBrush}" CornerRadius="8"
                     HorizontalAlignment="Center" VerticalAlignment="Center"
-                    BoxShadow="0 4 10 #20000000">
+                    >
 				<ScrollViewer>
 					<StackPanel Margin="30">
 						<TextBlock Text="Редактирование пользователя" FontSize="18" FontWeight="SemiBold"
-                                   Foreground="#333" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                                   Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
 						<!-- Поля редактирования -->
 						<StackPanel Spacing="15">
 							<StackPanel>
-								<TextBlock Text="Имя пользователя*" FontSize="12" Foreground="#666" Margin="0,0,0,5"/>
+								<TextBlock Text="Имя пользователя*" FontSize="12"
+                                           Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
 								<TextBox Text="{Binding EditUserName}" Height="36" CornerRadius="4"/>
 							</StackPanel>
 
 							<StackPanel>
-								<TextBlock Text="Имя*" FontSize="12" Foreground="#666" Margin="0,0,0,5"/>
+								<TextBlock Text="Имя*" FontSize="12"
+                                           Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
 								<TextBox Text="{Binding EditFirstName}" Height="36" CornerRadius="4"/>
 							</StackPanel>
 
 							<StackPanel>
-								<TextBlock Text="Фамилия*" FontSize="12" Foreground="#666" Margin="0,0,0,5"/>
+								<TextBlock Text="Фамилия*" FontSize="12"
+                                           Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
 								<TextBox Text="{Binding EditLastName}" Height="36" CornerRadius="4"/>
 							</StackPanel>
 
 							<StackPanel>
-								<TextBlock Text="Email" FontSize="12" Foreground="#666" Margin="0,0,0,5"/>
+								<TextBlock Text="Email" FontSize="12"
+                                           Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
 								<TextBox Text="{Binding EditEmail}" Height="36" CornerRadius="4"/>
 							</StackPanel>
 
 							<StackPanel>
-								<TextBlock Text="Роль" FontSize="12" Foreground="#666" Margin="0,0,0,5"/>
+								<TextBlock Text="Роль" FontSize="12"
+                                           Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
 								<ComboBox ItemsSource="{Binding RoleOptions}"
                                           SelectedIndex="{Binding EditSelectedRole}"
                                           Height="36"/>
 							</StackPanel>
 
 							<StackPanel>
-								<TextBlock Text="Отдел" FontSize="12" Foreground="#666" Margin="0,0,0,5"/>
+								<TextBlock Text="Отдел" FontSize="12"
+                                           Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,5"/>
 								<ComboBox ItemsSource="{Binding DepartmentOptions}"
                                           SelectedIndex="{Binding EditSelectedDepartment}"
                                           Height="36"/>
@@ -275,8 +315,8 @@
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="15" Margin="0,30,0,0">
 							<Button Content="Сохранить" Width="120" Height="36" Background="{DynamicResource PrimaryBrush}"
                                     Foreground="White" CornerRadius="18" Command="{Binding SaveUserCommand}"/>
-							<Button Content="Отмена" Width="100" Height="36" Background="#E0E0E0"
-                                    Foreground="#333" CornerRadius="18" Command="{Binding CancelEditCommand}"/>
+							<Button Content="Отмена" Width="100" Height="36" Background="{DynamicResource CancelButtonBrush}"
+                                    Foreground="{DynamicResource TextPrimaryBrush}" CornerRadius="18" Command="{Binding CancelEditCommand}"/>
 						</StackPanel>
 					</StackPanel>
 				</ScrollViewer>

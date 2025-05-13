@@ -12,7 +12,6 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Task = System.Threading.Tasks.Task;
 using Avalonia;
 
 namespace ManufactPlanner.ViewModels
@@ -175,7 +174,7 @@ namespace ManufactPlanner.ViewModels
             InitializeFilterOptions();
 
             // Асинхронная загрузка заказов при создании ViewModel
-            Task.Run(() => LoadOrdersAsync().ConfigureAwait(false));
+            System.Threading.Tasks.Task.Run(() => LoadOrdersAsync().ConfigureAwait(false));
         }
 
         private void InitializeFilterOptions()

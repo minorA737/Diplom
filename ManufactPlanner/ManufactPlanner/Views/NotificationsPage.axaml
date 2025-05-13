@@ -33,7 +33,7 @@
                 BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
 			<Grid RowDefinitions="Auto,*">
 				<!-- Заголовок списка -->
-				<Grid Grid.Row="0" Height="40" Background="{DynamicResource BackgroundBrush}" ColumnDefinitions="*,150,100,Auto">
+				<Grid Grid.Row="0" Height="40" Background="{DynamicResource BackgroundBrush}" ColumnDefinitions="*,150,150,150">
 					<TextBlock Grid.Column="0" Text="Сообщение" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
                                VerticalAlignment="Center" Margin="20,0,0,0"/>
 					<TextBlock Grid.Column="1" Text="Дата" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
@@ -50,7 +50,7 @@
 					<ItemsControl ItemsSource="{Binding Notifications}">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
-								<Grid Height="60" ColumnDefinitions="*,150,100,Auto"
+								<Grid Height="60" ColumnDefinitions="*,150,150,150"
                                       Background="{Binding IsRead, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource SurfaceBrush},{DynamicResource BackgroundBrush}'}">
 
 									<!-- Сообщение и заголовок -->

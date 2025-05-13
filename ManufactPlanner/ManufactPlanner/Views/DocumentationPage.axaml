@@ -46,7 +46,7 @@
 		<Border Grid.Row="1" Margin="20,20,20,20" Background="{DynamicResource SurfaceBrush}" CornerRadius="8">
 			<Grid RowDefinitions="Auto,*,Auto">
 				<!-- Заголовок таблицы -->
-				<Grid Grid.Row="0" Background="{DynamicResource BackgroundBrush}" Height="40" ColumnDefinitions="*,150,150,120,100,Auto">
+				<Grid Grid.Row="0" Background="{DynamicResource BackgroundBrush}" Height="40" ColumnDefinitions="*,150,150,120,100,300">
 					<TextBlock Grid.Column="0" Text="Название документа" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium" Margin="20,0,0,0" VerticalAlignment="Center"/>
 					<TextBlock Grid.Column="1" Text="Тип" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium" VerticalAlignment="Center"/>
 					<TextBlock Grid.Column="2" Text="Заказ" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium" VerticalAlignment="Center"/>
@@ -64,7 +64,7 @@
 						<ItemsControl ItemsSource="{Binding Documents}">
 							<ItemsControl.ItemTemplate>
 								<DataTemplate>
-									<Grid Height="60" ColumnDefinitions="*,150,150,120,100,Auto" Background="{Binding IsAlternate, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource SurfaceBrush},{DynamicResource BackgroundBrush}'}">
+									<Grid Height="60" ColumnDefinitions="*,150,150,120,100,300" Background="{Binding IsAlternate, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource SurfaceBrush},{DynamicResource BackgroundBrush}'}">
 										<StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="20,0,0,0">
 											<TextBlock Text="{Binding Name}" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap"/>
 											<TextBlock Text="{Binding Description}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"/>

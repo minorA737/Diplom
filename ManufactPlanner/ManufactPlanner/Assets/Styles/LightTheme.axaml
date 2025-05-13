@@ -19,4 +19,18 @@
 		<GradientStop Offset="0" Color="#00ACC1"/>
 		<GradientStop Offset="1" Color="#008999"/>
 	</LinearGradientBrush>
+
+	<Color x:Key="AvatarBackgroundColor">#9575CD</Color>
+	<Color x:Key="DialogBackgroundColor">#FFFFFF</Color>
+	<Color x:Key="DialogBorderColor">#E0E0E0</Color>
+	<Color x:Key="ConfirmDeleteButtonColor">#F44336</Color>
+	<Color x:Key="CancelButtonColor">#E0E0E0</Color>
+	<Color x:Key="HoverBrushColor">#F5F5F5</Color>
+
+	<SolidColorBrush x:Key="AvatarBackgroundBrush" Color="{StaticResource AvatarBackgroundColor}"/>
+	<SolidColorBrush x:Key="DialogBackgroundBrush" Color="{StaticResource DialogBackgroundColor}"/>
+	<SolidColorBrush x:Key="DialogBorderBrush" Color="{StaticResource DialogBorderColor}"/>
+	<SolidColorBrush x:Key="ConfirmDeleteButtonBrush" Color="{StaticResource ConfirmDeleteButtonColor}"/>
+	<SolidColorBrush x:Key="CancelButtonBrush" Color="{StaticResource CancelButtonColor}"/>
+	<SolidColorBrush x:Key="HoverBrush" Color="{StaticResource HoverBrushColor}"/>
 </ResourceDictionary>

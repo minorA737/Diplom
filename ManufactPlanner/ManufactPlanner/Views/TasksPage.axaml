@@ -179,11 +179,9 @@
                                       VerticalAlignment="Center"/>
 							<TextBlock Grid.Column="3" Text="Исполнитель" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
                                       VerticalAlignment="Center"/>
-							<TextBlock Grid.Column="4" Text="Срок" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
+							<TextBlock Grid.Column="4" Text="Статус" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
                                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="5" Text="Статус" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
-                                      VerticalAlignment="Center" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="6" Text="Действия" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
+							<TextBlock Grid.Column="5" Text="Действия" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
                                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
 						</Grid>
 					</Grid>
@@ -207,12 +205,9 @@
                                                         VerticalAlignment="Center" TextWrapping="Wrap"/>
 												<TextBlock Grid.Column="3" Text="{Binding Assignee}" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}"
                                                         VerticalAlignment="Center" TextWrapping="Wrap"/>
-												<TextBlock Grid.Column="4" Text="{Binding Deadline}"
-                                                        FontSize="12" Foreground="{Binding IsDateCritical, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource ErrorBrush},{DynamicResource TextPrimaryBrush}'}"
-                                                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
-
+												
 												<!-- Статус задачи -->
-												<Border Grid.Column="5" Height="24" CornerRadius="12"
+												<Border Grid.Column="4" Height="24" CornerRadius="12"
                                                         Background="{Binding Status, Converter={StaticResource StatusToColor}, ConverterParameter=Background}"
                                                         Opacity="0.2" Padding="8,0"
                                                         VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -222,7 +217,7 @@
 												</Border>
 
 												<!-- Кнопка действий -->
-												<Button Grid.Column="6" Width="30" Height="30" CornerRadius="15" Background="{DynamicResource BackgroundBrush}"
+												<Button Grid.Column="5" Width="30" Height="30" CornerRadius="15" Background="{DynamicResource BackgroundBrush}"
                                                         VerticalAlignment="Center" HorizontalAlignment="Center"
                                                         Command="{Binding $parent[ItemsControl].((vm:TasksViewModel)DataContext).OpenTaskDetailsCommand}"
                                                         CommandParameter="{Binding Id}">

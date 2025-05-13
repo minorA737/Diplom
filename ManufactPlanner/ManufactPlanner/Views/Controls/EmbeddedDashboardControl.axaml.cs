@@ -11,7 +11,6 @@ namespace ManufactPlanner.Views.Components;
 
 public partial class EmbeddedDashboardControl : UserControl
 {
-    private Xamarin.Forms.WebView _dashboardWebView;
     private ProgressBar _loadingIndicator;
     private Border _errorPanel;
     private TextBlock _errorMessage;

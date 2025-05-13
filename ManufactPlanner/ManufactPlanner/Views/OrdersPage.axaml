@@ -136,13 +136,11 @@
                                        VerticalAlignment="Center"/>
 							<TextBlock Grid.Column="2" Text="Заказчик" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
                                        VerticalAlignment="Center"/>
-							<TextBlock Grid.Column="3" Text="Срок" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
+							<TextBlock Grid.Column="3" Text="Кол-во позиций" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
-							<TextBlock Grid.Column="4" Text="Кол-во позиций" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
+							<TextBlock Grid.Column="4" Text="Статус" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
-							<TextBlock Grid.Column="5" Text="Статус" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
-                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
-							<TextBlock Grid.Column="6" Text="Действия" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
+							<TextBlock Grid.Column="5" Text="Действия" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</Grid>
 					</Grid>
@@ -171,17 +169,12 @@
 												<TextBlock Grid.Column="2" Text="{Binding Customer}" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}"
                                                            VerticalAlignment="Center" TextWrapping="Wrap"/>
 
-												<!-- Срок - выравнивание по центру -->
-												<TextBlock Grid.Column="3" Text="{Binding Deadline}" FontSize="12"
-                                                           Foreground="{Binding IsDateCritical, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource ErrorBrush},{DynamicResource TextPrimaryBrush}'}"
-                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
 												<!-- Кол-во позиций - выравнивание по центру -->
-												<TextBlock Grid.Column="4" Text="{Binding PositionsCount}" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}"
+												<TextBlock Grid.Column="3" Text="{Binding PositionsCount}" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}"
                                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
 												<!-- Статус заказа - выравнивание по центру -->
-												<Border Grid.Column="5" Height="24" CornerRadius="12" VerticalAlignment="Center"
+												<Border Grid.Column="4" Height="24" CornerRadius="12" VerticalAlignment="Center"
                                                         HorizontalAlignment="Center"
                                                         Background="{Binding Status, Converter={StaticResource StatusToColor}, ConverterParameter=Background}"
                                                         Opacity="0.2"
@@ -192,7 +185,7 @@
 												</Border>
 
 												<!-- Меню действий - выравнивание по центру -->
-												<Button Grid.Column="6" Width="30" Height="30" CornerRadius="15" Background="{DynamicResource BackgroundBrush}"
+												<Button Grid.Column="5" Width="30" Height="30" CornerRadius="15" Background="{DynamicResource BackgroundBrush}"
                                                         VerticalAlignment="Center" HorizontalAlignment="Center"
                                                         Command="{Binding $parent[ItemsControl].((vm:OrdersViewModel)DataContext).ShowOrderDetailsCommand}"
                                                         CommandParameter="{Binding Id}">

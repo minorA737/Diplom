@@ -25,7 +25,7 @@ C:\Users\Admin\.nuget\packages\avalonia.win32\11.2.1\lib\net8.0\Avalonia.Win32.d
 C:\Users\Admin\.nuget\packages\avalonia.x11\11.2.1\lib\net8.0\Avalonia.X11.dll
 C:\Users\Admin\.nuget\packages\bouncycastle.cryptography\2.5.1\lib\net6.0\BouncyCastle.Cryptography.dll
 C:\Users\Admin\.nuget\packages\dynamicdata\8.4.1\lib\net8.0\DynamicData.dll
-C:\Users\Admin\.nuget\packages\harfbuzzsharp\7.3.0.2\lib\net6.0\HarfBuzzSharp.dll
+C:\Users\Admin\.nuget\packages\harfbuzzsharp\7.3.0.3\lib\net6.0\HarfBuzzSharp.dll
 C:\Users\Admin\.nuget\packages\mailkit\4.12.0\lib\net8.0\MailKit.dll
 C:\Users\Admin\.nuget\packages\microcom.runtime\0.11.0\lib\net5.0\MicroCom.Runtime.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\8.0.6\ref\net8.0\Microsoft.CSharp.dll
@@ -60,7 +60,10 @@ C:\Users\Admin\.nuget\packages\nunittestadapter.withframework\2.0.0\lib\nunit.ut
 C:\Users\Admin\.nuget\packages\nunittestadapter.withframework\2.0.0\lib\NUnit.VisualStudio.TestAdapter.dll
 C:\Users\Admin\.nuget\packages\questpdf\2025.4.2\lib\net8.0\QuestPDF.dll
 C:\Users\Admin\.nuget\packages\reactiveui\20.1.1\lib\net8.0\ReactiveUI.dll
-C:\Users\Admin\.nuget\packages\skiasharp\2.88.8\lib\net6.0\SkiaSharp.dll
+C:\Users\Admin\.nuget\packages\scottplot.avalonia\5.0.55\lib\net8.0\ScottPlot.Avalonia.dll
+C:\Users\Admin\.nuget\packages\scottplot\5.0.55\lib\net8.0\ScottPlot.dll
+C:\Users\Admin\.nuget\packages\skiasharp\2.88.9\lib\net6.0\SkiaSharp.dll
+C:\Users\Admin\.nuget\packages\skiasharp.harfbuzz\2.88.9\lib\net6.0\SkiaSharp.HarfBuzz.dll
 C:\Users\Admin\.nuget\packages\splat\15.1.1\lib\net8.0\Splat.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\8.0.6\ref\net8.0\System.AppContext.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\8.0.6\ref\net8.0\System.Buffers.dll
@@ -227,6 +230,3 @@ C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\8.0.6\ref\net8.0\System.
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\8.0.6\ref\net8.0\System.Xml.XPath.XDocument.dll
 C:\Users\Admin\.nuget\packages\tmds.dbus.protocol\0.20.0\lib\net8.0\Tmds.DBus.Protocol.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\8.0.6\ref\net8.0\WindowsBase.dll
-C:\Users\Admin\.nuget\packages\xamarin.forms\5.0.0.2662\lib\netstandard2.0\Xamarin.Forms.Core.dll
-C:\Users\Admin\.nuget\packages\xamarin.forms\5.0.0.2662\lib\netstandard2.0\Xamarin.Forms.Platform.dll
-C:\Users\Admin\.nuget\packages\xamarin.forms\5.0.0.2662\lib\netstandard2.0\Xamarin.Forms.Xaml.dll
