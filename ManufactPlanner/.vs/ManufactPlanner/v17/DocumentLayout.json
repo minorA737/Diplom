@@ -3,20 +3,16 @@
   "WorkspaceRootPath": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\taskspage.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\taskspage.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\viewmodels\\documentationviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\viewmodels\\documentationviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\orderspage.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\orderspage.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\documentationpage.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\documentationpage.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\converters\\invertboolconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\converters\\invertboolconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\viewmodels\\ordersviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\viewmodels\\ordersviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\services\\documentationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\services\\documentationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,50 +34,41 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "TasksPage.axaml",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\TasksPage.axaml",
-              "RelativeDocumentMoniker": "ManufactPlanner\\Views\\TasksPage.axaml",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\TasksPage.axaml",
-              "RelativeToolTip": "ManufactPlanner\\Views\\TasksPage.axaml",
+              "DocumentIndex": 1,
+              "Title": "DocumentationPage.axaml",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\DocumentationPage.axaml",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Views\\DocumentationPage.axaml",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\DocumentationPage.axaml",
+              "RelativeToolTip": "ManufactPlanner\\Views\\DocumentationPage.axaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-05-13T14:51:29.307Z",
+              "WhenOpened": "2025-05-13T15:14:19.601Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "OrdersViewModel.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\OrdersViewModel.cs",
-              "RelativeDocumentMoniker": "ManufactPlanner\\ViewModels\\OrdersViewModel.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\OrdersViewModel.cs",
-              "RelativeToolTip": "ManufactPlanner\\ViewModels\\OrdersViewModel.cs",
-              "ViewState": "AQIAAMwAAAAAAAAAAAAtwNkAAABNAAAA",
+              "DocumentIndex": 0,
+              "Title": "DocumentationViewModel.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\DocumentationViewModel.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\ViewModels\\DocumentationViewModel.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\DocumentationViewModel.cs",
+              "RelativeToolTip": "ManufactPlanner\\ViewModels\\DocumentationViewModel.cs",
+              "ViewState": "AQIAAP0AAAAAAAAAAAAowBcBAAAOAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-13T14:42:32.342Z"
+              "WhenOpened": "2025-05-13T15:13:56.985Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "InvertBoolConverter.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Converters\\InvertBoolConverter.cs",
-              "RelativeDocumentMoniker": "ManufactPlanner\\Converters\\InvertBoolConverter.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Converters\\InvertBoolConverter.cs",
-              "RelativeToolTip": "ManufactPlanner\\Converters\\InvertBoolConverter.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAmAAAA",
+              "Title": "DocumentationService.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Services\\DocumentationService.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Services\\DocumentationService.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Services\\DocumentationService.cs",
+              "RelativeToolTip": "ManufactPlanner\\Services\\DocumentationService.cs",
+              "ViewState": "AQIAABIBAAAAAAAAAAAmwCgBAAAVAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-13T14:45:13.03Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "OrdersPage.axaml",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\OrdersPage.axaml",
-              "RelativeDocumentMoniker": "ManufactPlanner\\Views\\OrdersPage.axaml",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\OrdersPage.axaml",
-              "RelativeToolTip": "ManufactPlanner\\Views\\OrdersPage.axaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-05-13T14:43:35.46Z"
+              "WhenOpened": "2025-05-13T15:12:50.202Z",
+              "EditorCaption": ""
             }
           ]
         }

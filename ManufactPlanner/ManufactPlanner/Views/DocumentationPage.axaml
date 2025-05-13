@@ -27,13 +27,21 @@
 			<!-- Кнопки действий -->
 			<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
 				<TextBox Width="180" Watermark="Поиск..." Text="{Binding SearchText}" VerticalAlignment="Center"/>
-				<ComboBox Width="150" SelectedIndex="{Binding SelectedTypeIndex}" VerticalAlignment="Center" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}">
+				<ComboBox Width="180" SelectedIndex="{Binding SelectedTypeIndex}" VerticalAlignment="Center" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}">
 					<ComboBoxItem>Все типы</ComboBoxItem>
 					<ComboBoxItem>Техническое задание</ComboBoxItem>
 					<ComboBoxItem>Спецификация</ComboBoxItem>
 					<ComboBoxItem>Руководство</ComboBoxItem>
 					<ComboBoxItem>Чертеж</ComboBoxItem>
 					<ComboBoxItem>Схема</ComboBoxItem>
+					<ComboBoxItem>PDF документ</ComboBoxItem>
+					<ComboBoxItem>Word документ</ComboBoxItem>
+					<ComboBoxItem>Excel документ</ComboBoxItem>
+					<ComboBoxItem>Изображение</ComboBoxItem>
+					<ComboBoxItem>Текстовый файл</ComboBoxItem>
+					<ComboBoxItem>RTF документ</ComboBoxItem>
+					<ComboBoxItem>Архив</ComboBoxItem>
+					<ComboBoxItem>Чертеж CAD</ComboBoxItem>
 				</ComboBox>
 
 				<Button Width="140" Height="36" CornerRadius="18" Background="{DynamicResource PrimaryBrush}" Command="{Binding AddDocumentCommand}">

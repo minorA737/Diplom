@@ -164,16 +164,46 @@ namespace ManufactPlanner.Services
                 AllowMultiple = false,
                 FileTypeFilter = new[]
                 {
-                    new FilePickerFileType("PDF Документы")
-                    {
-                        Patterns = new[] { "*.pdf" },
-                        MimeTypes = new[] { "application/pdf" }
-                    },
-                    new FilePickerFileType("Все файлы")
-                    {
-                        Patterns = new[] { "*.*" }
-                    }
-                }
+            new FilePickerFileType("PDF Документы")
+            {
+                Patterns = new[] { "*.pdf" },
+                MimeTypes = new[] { "application/pdf" }
+            },
+            new FilePickerFileType("Microsoft Word")
+            {
+                Patterns = new[] { "*.docx", "*.doc" },
+                MimeTypes = new[] { "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword" }
+            },
+            new FilePickerFileType("Microsoft Excel")
+            {
+                Patterns = new[] { "*.xlsx", "*.xls" },
+                MimeTypes = new[] { "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel" }
+            },
+            new FilePickerFileType("Изображения")
+            {
+                Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif", "*.tiff" },
+                MimeTypes = new[] { "image/png", "image/jpeg", "image/bmp", "image/gif", "image/tiff" }
+            },
+            new FilePickerFileType("Текстовые файлы")
+            {
+                Patterns = new[] { "*.txt", "*.rtf" },
+                MimeTypes = new[] { "text/plain", "application/rtf" }
+            },
+            new FilePickerFileType("Архивы")
+            {
+                Patterns = new[] { "*.zip", "*.rar", "*.7z" },
+                MimeTypes = new[] { "application/zip", "application/x-rar-compressed", "application/x-7z-compressed" }
+            },
+            new FilePickerFileType("AutoCAD")
+            {
+                Patterns = new[] { "*.dwg", "*.dxf" },
+                MimeTypes = new[] { "application/acad", "image/vnd.dxf" }
+            },
+            new FilePickerFileType("Все файлы")
+            {
+                Patterns = new[] { "*.*" }
+            }
+        }
             });
 
             if (files.Count > 0)
@@ -183,30 +213,107 @@ namespace ManufactPlanner.Services
                 using var ms = new MemoryStream();
                 await stream.CopyToAsync(ms);
 
-                return (file.Name, ms.ToArray(), "application/pdf");
+                // Определяем тип файла по расширению
+                string fileType = DetermineFileTypeByExtension(file.Name);
+
+                return (file.Name, ms.ToArray(), fileType);
             }
 
             return (null, null, null);
         }
+        /// <summary>
+        /// Определяет MIME-тип файла по расширению
+        /// </summary>
+        private string DetermineFileTypeByExtension(string fileName)
+        {
+            var extension = Path.GetExtension(fileName).ToLowerInvariant();
 
+            return extension switch
+            {
+                ".pdf" => "application/pdf",
+                ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                ".doc" => "application/msword",
+                ".xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                ".xls" => "application/vnd.ms-excel",
+                ".png" => "image/png",
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".bmp" => "image/bmp",
+                ".gif" => "image/gif",
+                ".tiff" => "image/tiff",
+                ".txt" => "text/plain",
+                ".rtf" => "application/rtf",
+                ".zip" => "application/zip",
+                ".rar" => "application/x-rar-compressed",
+                ".7z" => "application/x-7z-compressed",
+                ".dwg" => "application/acad",
+                ".dxf" => "image/vnd.dxf",
+                _ => "application/octet-stream"
+            };
+        }
         /// <summary>
         /// Открывает диалог сохранения файла
         /// </summary>
         public async Task<string> SaveFilePickerAsync(Window parent, string defaultFileName)
         {
-            var file = await parent.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+            var extension = Path.GetExtension(defaultFileName).ToLowerInvariant();
+
+            var fileTypeChoices = extension switch
             {
-                Title = "Сохранить документ",
-                DefaultExtension = ".pdf",
-                SuggestedFileName = defaultFileName,
-                FileTypeChoices = new[]
+                ".pdf" => new[]
                 {
                     new FilePickerFileType("PDF Документ")
                     {
                         Patterns = new[] { "*.pdf" },
                         MimeTypes = new[] { "application/pdf" }
                     }
+                },
+                        ".docx" => new[]
+                        {
+                    new FilePickerFileType("Word Документ")
+                    {
+                        Patterns = new[] { "*.docx" },
+                        MimeTypes = new[] { "application/vnd.openxmlformats-officedocument.wordprocessingml.document" }
+                    }
+                },
+                        ".xlsx" => new[]
+                        {
+                    new FilePickerFileType("Excel Документ")
+                    {
+                        Patterns = new[] { "*.xlsx" },
+                        MimeTypes = new[] { "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }
+                    }
+                },
+                        ".png" => new[]
+                        {
+                    new FilePickerFileType("PNG Изображение")
+                    {
+                        Patterns = new[] { "*.png" },
+                        MimeTypes = new[] { "image/png" }
+                    }
+                },
+                        ".txt" => new[]
+                        {
+                    new FilePickerFileType("Текстовый файл")
+                    {
+                        Patterns = new[] { "*.txt" },
+                        MimeTypes = new[] { "text/plain" }
+                    }
+                },
+                        _ => new[]
+                        {
+                    new FilePickerFileType("Все файлы")
+                    {
+                        Patterns = new[] { "*.*" }
+                    }
                 }
+            };
+
+            var file = await parent.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+            {
+                Title = "Сохранить документ",
+                DefaultExtension = extension,
+                SuggestedFileName = defaultFileName,
+                FileTypeChoices = fileTypeChoices
             });
 
             return file?.Path.LocalPath;

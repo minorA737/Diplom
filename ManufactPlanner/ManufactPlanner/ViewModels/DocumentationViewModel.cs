@@ -199,38 +199,84 @@ namespace ManufactPlanner.ViewModels
         }
         private string DetermineDocumentType(string fileName, string fileType)
         {
-            // Определение типа документа по расширению или MIME-типу
-            if (fileType?.Contains("pdf", StringComparison.OrdinalIgnoreCase) == true ||
-                fileName?.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase) == true)
-            {
-                // Анализируем имя файла для определения типа документа
-                string lowerFileName = fileName.ToLower();
-                if (lowerFileName.Contains("тз") || lowerFileName.Contains("техническое задание") || lowerFileName.Contains("technical"))
-                    return "Техническое задание";
-                else if (lowerFileName.Contains("спецификац") || lowerFileName.Contains("специф") || lowerFileName.Contains("specification"))
-                    return "Спецификация";
-                else if (lowerFileName.Contains("руководство") || lowerFileName.Contains("manual") || lowerFileName.Contains("инструкц"))
-                    return "Руководство";
-                else if (lowerFileName.Contains("чертеж") || lowerFileName.Contains("drawing"))
-                    return "Чертеж";
-                else if (lowerFileName.Contains("схем") || lowerFileName.Contains("scheme") || lowerFileName.Contains("diagram"))
-                    return "Схема";
-                else
-                    return "PDF документ";
-            }
+            // Анализируем расширение файла
+            var extension = Path.GetExtension(fileName).ToLowerInvariant();
 
-            return "Документ";
+            // Определение типа по расширению
+            switch (extension)
+            {
+                case ".pdf":
+                    // Дополнительно анализируем имя файла для более точного определения
+                    string lowerFileName = fileName.ToLower();
+                    if (lowerFileName.Contains("тз") || lowerFileName.Contains("техническое задание") || lowerFileName.Contains("technical"))
+                        return "Техническое задание";
+                    else if (lowerFileName.Contains("спецификац") || lowerFileName.Contains("специф") || lowerFileName.Contains("specification"))
+                        return "Спецификация";
+                    else if (lowerFileName.Contains("руководство") || lowerFileName.Contains("manual") || lowerFileName.Contains("инструкц"))
+                        return "Руководство";
+                    else if (lowerFileName.Contains("чертеж") || lowerFileName.Contains("drawing"))
+                        return "Чертеж";
+                    else if (lowerFileName.Contains("схем") || lowerFileName.Contains("scheme") || lowerFileName.Contains("diagram"))
+                        return "Схема";
+                    else
+                        return "PDF документ";
+
+                case ".docx":
+                case ".doc":
+                    return "Word документ";
+
+                case ".xlsx":
+                case ".xls":
+                    return "Excel документ";
+
+                case ".png":
+                case ".jpg":
+                case ".jpeg":
+                case ".bmp":
+                case ".gif":
+                case ".tiff":
+                    return "Изображение";
+
+                case ".txt":
+                    return "Текстовый файл";
+
+                case ".rtf":
+                    return "RTF документ";
+
+                case ".zip":
+                case ".rar":
+                case ".7z":
+                    return "Архив";
+
+                case ".dwg":
+                case ".dxf":
+                    return "Чертеж CAD";
+
+                default:
+                    // Анализируем MIME-тип как запасной вариант
+                    if (fileType?.Contains("pdf", StringComparison.OrdinalIgnoreCase) == true)
+                        return "PDF документ";
+                    else if (fileType?.Contains("word", StringComparison.OrdinalIgnoreCase) == true)
+                        return "Word документ";
+                    else if (fileType?.Contains("excel", StringComparison.OrdinalIgnoreCase) == true)
+                        return "Excel документ";
+                    else if (fileType?.Contains("image", StringComparison.OrdinalIgnoreCase) == true)
+                        return "Изображение";
+                    else
+                        return "Документ";
+            }
         }
 
         private void LoadSampleData()
         {
             var sampleData = new List<DocumentViewModel>
             {
-                new DocumentViewModel { Id = 1, Name = "Техническое задание на разработку стенда", Description = "Версия 1.2", Type = "Техническое задание", OrderNumber = "ОП-113/24", CreatedDate = "12.03.2025", Author = "Конев Т.У.", IsAlternate = false },
-                new DocumentViewModel { Id = 2, Name = "Спецификация компонентов", Description = "Схема электрическая", Type = "Спецификация", OrderNumber = "ОП-136/24", CreatedDate = "15.03.2025", Author = "Вяткин А.И.", IsAlternate = true },
-                new DocumentViewModel { Id = 3, Name = "Руководство по эксплуатации", Description = "Финальная версия", Type = "Руководство", OrderNumber = "ОП-136/24", CreatedDate = "20.03.2025", Author = "Теплов В.Ф.", IsAlternate = false },
-                new DocumentViewModel { Id = 4, Name = "Сборочный чертеж", Description = "Версия 2.0", Type = "Чертеж", OrderNumber = "ОП-168/24", CreatedDate = "25.03.2025", Author = "Еретин Д.К.", IsAlternate = true },
-                new DocumentViewModel { Id = 5, Name = "Монтажная схема", Description = "Финальная версия", Type = "Схема", OrderNumber = "ОП-168/24", CreatedDate = "28.03.2025", Author = "Турушев С.М.", IsAlternate = false }
+                new DocumentViewModel { Id = 1, Name = "Техническое задание.pdf", Description = "Версия 1.2", Type = "Техническое задание", OrderNumber = "ОП-113/24", CreatedDate = "12.03.2025", Author = "Конев Т.У.", IsAlternate = false },
+                new DocumentViewModel { Id = 2, Name = "Спецификация.xlsx", Description = "Схема электрическая", Type = "Excel документ", OrderNumber = "ОП-136/24", CreatedDate = "15.03.2025", Author = "Вяткин А.И.", IsAlternate = true },
+                new DocumentViewModel { Id = 3, Name = "Руководство.docx", Description = "Финальная версия", Type = "Word документ", OrderNumber = "ОП-136/24", CreatedDate = "20.03.2025", Author = "Теплов В.Ф.", IsAlternate = false },
+                new DocumentViewModel { Id = 4, Name = "Чертеж.dwg", Description = "Версия 2.0", Type = "Чертеж CAD", OrderNumber = "ОП-168/24", CreatedDate = "25.03.2025", Author = "Еретин Д.К.", IsAlternate = true },
+                new DocumentViewModel { Id = 5, Name = "Схема.png", Description = "Принципиальная схема", Type = "Изображение", OrderNumber = "ОП-168/24", CreatedDate = "28.03.2025", Author = "Турушев С.М.", IsAlternate = false },
+                new DocumentViewModel { Id = 6, Name = "Инструкция.txt", Description = "Пошаговая инструкция", Type = "Текстовый файл", OrderNumber = "ОП-169/24", CreatedDate = "30.03.2025", Author = "Лукин А.Б.", IsAlternate = true }
             };
 
             _allDocuments = new ObservableCollection<DocumentViewModel>(sampleData);
@@ -278,6 +324,14 @@ namespace ManufactPlanner.ViewModels
                 3 => "Руководство",
                 4 => "Чертеж",
                 5 => "Схема",
+                6 => "PDF документ",
+                7 => "Word документ",
+                8 => "Excel документ",
+                9 => "Изображение",
+                10 => "Текстовый файл",
+                11 => "RTF документ",
+                12 => "Архив",
+                13 => "Чертеж CAD",
                 _ => string.Empty
             };
         }
@@ -338,10 +392,10 @@ namespace ManufactPlanner.ViewModels
                 }
 
                 // Сохраняем во временный файл и открываем его
-                string tempPath = Path.Combine(Path.GetTempPath(), attachment.FileName ?? $"document_{documentId}.pdf");
+                string tempPath = Path.Combine(Path.GetTempPath(), attachment.FileName ?? $"document_{documentId}");
                 await _documentationService.SaveDocumentToFileAsync(attachment, tempPath);
 
-                // Открываем файл через системную программу просмотра PDF
+                // Открываем файл через системную программу по умолчанию
                 var psi = new System.Diagnostics.ProcessStartInfo
                 {
                     FileName = tempPath,
