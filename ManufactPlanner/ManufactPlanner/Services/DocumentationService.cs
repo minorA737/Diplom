@@ -156,6 +156,9 @@ namespace ManufactPlanner.Services
         /// <summary>
         /// Открывает диалог выбора файла для загрузки
         /// </summary>
+        /// <summary>
+        /// Открывает диалог выбора файла для загрузки (с группировкой типов)
+        /// </summary>
         public async Task<(string fileName, byte[] content, string fileType)> OpenFilePickerAsync(Window parent)
         {
             var files = await parent.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
@@ -164,44 +167,37 @@ namespace ManufactPlanner.Services
                 AllowMultiple = false,
                 FileTypeFilter = new[]
                 {
-            new FilePickerFileType("PDF Документы")
+            new FilePickerFileType("Все файлы (*.*)")
             {
-                Patterns = new[] { "*.pdf" },
-                MimeTypes = new[] { "application/pdf" }
+                Patterns = new[] { "*.*" }
             },
-            new FilePickerFileType("Microsoft Word")
+            new FilePickerFileType("Документы")
             {
-                Patterns = new[] { "*.docx", "*.doc" },
-                MimeTypes = new[] { "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword" }
-            },
-            new FilePickerFileType("Microsoft Excel")
-            {
-                Patterns = new[] { "*.xlsx", "*.xls" },
-                MimeTypes = new[] { "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel" }
+                Patterns = new[] { "*.pdf", "*.docx", "*.doc", "*.xlsx", "*.xls", "*.txt", "*.rtf" },
+                MimeTypes = new[] {
+                    "application/pdf",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    "application/msword",
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "application/vnd.ms-excel",
+                    "text/plain",
+                    "application/rtf"
+                }
             },
             new FilePickerFileType("Изображения")
             {
                 Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif", "*.tiff" },
                 MimeTypes = new[] { "image/png", "image/jpeg", "image/bmp", "image/gif", "image/tiff" }
             },
-            new FilePickerFileType("Текстовые файлы")
+            new FilePickerFileType("Чертежи и схемы")
             {
-                Patterns = new[] { "*.txt", "*.rtf" },
-                MimeTypes = new[] { "text/plain", "application/rtf" }
+                Patterns = new[] { "*.dwg", "*.dxf" },
+                MimeTypes = new[] { "application/acad", "image/vnd.dxf" }
             },
             new FilePickerFileType("Архивы")
             {
                 Patterns = new[] { "*.zip", "*.rar", "*.7z" },
                 MimeTypes = new[] { "application/zip", "application/x-rar-compressed", "application/x-7z-compressed" }
-            },
-            new FilePickerFileType("AutoCAD")
-            {
-                Patterns = new[] { "*.dwg", "*.dxf" },
-                MimeTypes = new[] { "application/acad", "image/vnd.dxf" }
-            },
-            new FilePickerFileType("Все файлы")
-            {
-                Patterns = new[] { "*.*" }
             }
         }
             });
