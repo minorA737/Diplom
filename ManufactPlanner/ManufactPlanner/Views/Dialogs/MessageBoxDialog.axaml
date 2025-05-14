@@ -24,12 +24,12 @@
 
 		<!-- Кнопки -->
 		<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0" Spacing="10">
-			<Button Content="{Binding CancelButtonText}" Width="100"
+			<Button Content="{Binding CancelButtonText}" Width="180"
                     Background="{DynamicResource SurfaceBrush}"
                     BorderBrush="{DynamicResource BorderBrush}"
                     Foreground="{DynamicResource TextPrimaryBrush}"
                     Command="{Binding CancelCommand}"/>
-			<Button Content="{Binding OkButtonText}" Width="100"
+			<Button Content="{Binding OkButtonText}" Width="180"
                     Background="{DynamicResource ErrorBrush}"
                     Foreground="{DynamicResource SurfaceBrush}"
                     Command="{Binding OkCommand}"/>

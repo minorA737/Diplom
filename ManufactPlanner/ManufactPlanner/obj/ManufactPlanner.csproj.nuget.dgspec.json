@@ -98,6 +98,10 @@
               "target": "Package",
               "version": "[7.1.3, )"
             },
+            "Microsoft.Toolkit.Win32.UI.Controls": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
             "NUnitTestAdapter.WithFramework": {
               "target": "Package",
               "version": "[2.0.0, )"

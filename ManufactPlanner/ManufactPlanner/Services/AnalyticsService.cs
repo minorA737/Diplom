@@ -78,10 +78,9 @@ namespace ManufactPlanner.Services
         /// </summary>
         public async Task<List<Dictionary<string, object>>> GetEmployeeWorkloadAnalyticsAsync(DateTime startDate, DateTime endDate)
         {
-            // Получаем активных пользователей с их задачами
+            // Получаем всех пользователей из БД с их задачами
             var employeeWorkload = await _dbContext.Users
-                .Include(u => u.TaskAssignees)
-                .Where(u => u.TaskAssignees.Any(t => t.CreatedAt >= startDate && t.CreatedAt <= endDate))
+                .Where(u => u.IsActive == true)
                 .Select(u => new
                 {
                     UserId = u.Id,
@@ -91,9 +90,7 @@ namespace ManufactPlanner.Services
                     InProgressTasks = u.TaskAssignees.Count(t => t.CreatedAt >= startDate && t.CreatedAt <= endDate && t.Status == "В процессе"),
                     PendingTasks = u.TaskAssignees.Count(t => t.CreatedAt >= startDate && t.CreatedAt <= endDate && t.Status == "В очереди")
                 })
-                .Where(e => e.TotalTasks > 0)
                 .OrderByDescending(e => e.TotalTasks)
-                .Take(10)
                 .ToListAsync();
 
             return employeeWorkload.Select(e => new Dictionary<string, object>
@@ -186,7 +183,10 @@ namespace ManufactPlanner.Services
                 .Where(pd => pd.AcceptanceDate != null && pd.PackagingDate == null)
                 .CountAsync();
 
-            return new Dictionary<string, object>
+            // Добавьте получение временных данных
+            var timelineData = await GetProductionTimelineAsync(startDate, endDate);
+
+            var result = new Dictionary<string, object>
             {
                 ["productionStats"] = productionStats.Select(p => new Dictionary<string, object>
                 {
@@ -198,8 +198,11 @@ namespace ManufactPlanner.Services
                 }).ToList(),
                 ["totalInProduction"] = totalInProduction,
                 ["totalDebugging"] = totalDebugging,
-                ["totalReadyForPackaging"] = totalReadyForPackaging
+                ["totalReadyForPackaging"] = totalReadyForPackaging,
+                ["timelineData"] = timelineData["timelineData"] // Добавить временные данные
             };
+
+            return result;
         }
 
         /// <summary>
@@ -325,6 +328,41 @@ namespace ManufactPlanner.Services
                 .Average(e => (double)e.CompletedOnTime / e.TotalTasks * 100);
 
             return Math.Round(averageEfficiency, 0);
+        }
+        /// <summary>
+        /// Получить данные для временной линии производства
+        /// </summary>
+        public async Task<Dictionary<string, object>> GetProductionTimelineAsync(DateTime startDate, DateTime endDate)
+        {
+            var timelineData = await _dbContext.ProductionDetails
+                .Include(pd => pd.OrderPosition)
+                .ThenInclude(op => op.Order)
+                .Where(pd => pd.ProductionDate >= DateOnly.FromDateTime(startDate) &&
+                            pd.ProductionDate <= DateOnly.FromDateTime(endDate))
+                .OrderBy(pd => pd.ProductionDate)
+                .Select(pd => new
+                {
+                    OrderNumber = pd.OrderNumber,
+                    ProductionDate = pd.ProductionDate,
+                    DebuggingDate = pd.DebuggingDate,
+                    AcceptanceDate = pd.AcceptanceDate,
+                    PackagingDate = pd.PackagingDate,
+                    ProductName = pd.OrderPosition.ProductName
+                })
+                .ToListAsync();
+
+            return new Dictionary<string, object>
+            {
+                ["timelineData"] = timelineData.Select(pd => new Dictionary<string, object>
+                {
+                    ["orderNumber"] = pd.OrderNumber,
+                    ["productName"] = pd.ProductName,
+                    ["productionDate"] = pd.ProductionDate?.ToDateTime(TimeOnly.MinValue).ToOADate(),
+                    ["debuggingDate"] = pd.DebuggingDate?.ToDateTime(TimeOnly.MinValue).ToOADate(),
+                    ["acceptanceDate"] = pd.AcceptanceDate?.ToDateTime(TimeOnly.MinValue).ToOADate(),
+                    ["packagingDate"] = pd.PackagingDate?.ToDateTime(TimeOnly.MinValue).ToOADate()
+                }).ToList()
+            };
         }
     }
 }

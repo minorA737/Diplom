@@ -78,6 +78,13 @@ namespace ManufactPlanner.ViewModels
             set => this.RaiseAndSetIfChanged(ref _taskCompletionGraphPoints, value);
         }
 
+        private List<GraphPoint> _taskPlanGraphPoints;
+
+        public List<GraphPoint> TaskPlanGraphPoints
+        {
+            get => _taskPlanGraphPoints;
+            set => this.RaiseAndSetIfChanged(ref _taskPlanGraphPoints, value);
+        }
         public string TaskCompletionGraphPointsString =>
             string.Join(" ", TaskCompletionGraphPoints.Select(p => $"{p.X},{p.Y}"));
 
@@ -398,7 +405,7 @@ namespace ManufactPlanner.ViewModels
             var today = DateTime.Today;
             var startDate = today.AddMonths(-6);
 
-            // Запрос задач по периодам в зависимости от роли
+            // Подготавливаем данные за последние 6 месяцев
             var tasksByMonth = new Dictionary<DateTime, int>();
             var plansByMonth = new Dictionary<DateTime, int>();
 
@@ -463,26 +470,17 @@ namespace ManufactPlanner.ViewModels
             var graphPoints = new List<GraphPoint>();
             var planPoints = new List<GraphPoint>();
 
-            double xStep = 180.0 / (tasksByMonth.Count - 1);
-            double maxTasks = Math.Max(tasksByMonth.Values.DefaultIfEmpty(0).Max(), plansByMonth.Values.DefaultIfEmpty(0).Max());
-            maxTasks = Math.Max(maxTasks, 1); // Избегаем деления на ноль
-
             int i = 0;
             foreach (var month in tasksByMonth.Keys.OrderBy(d => d))
             {
-                double x = i * xStep;
-
-                // Инвертируем Y, так как в графике (0,0) - левый верхний угол
-                double yCompleted = 130 - (tasksByMonth[month] / maxTasks * 130);
-                double yPlanned = 130 - (plansByMonth[month] / maxTasks * 130);
-
-                graphPoints.Add(new GraphPoint { X = x, Y = yCompleted });
-                planPoints.Add(new GraphPoint { X = x, Y = yPlanned });
-
+                // Для ScottPlot 5.x просто используем индекс как X
+                graphPoints.Add(new GraphPoint { X = i, Y = tasksByMonth[month] });
+                planPoints.Add(new GraphPoint { X = i, Y = plansByMonth[month] });
                 i++;
             }
 
             TaskCompletionGraphPoints = graphPoints;
+            TaskPlanGraphPoints = planPoints;
         }
 
         private void InitializeCalendar()

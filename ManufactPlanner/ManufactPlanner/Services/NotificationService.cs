@@ -650,7 +650,15 @@ namespace ManufactPlanner.Services
         {
             try
             {
-                // Используем новый сервис диалоговых окон для отображения уведомления
+                // Показываем уведомление через трэй если окно скрыто
+                if (_mainViewModel?.MainWindow?.IsVisible == false)
+                {
+                    _mainViewModel?.TrayService?.ShowTrayNotification(
+                        notification.Title,
+                        notification.Message);
+                }
+
+                // Показываем диалог уведомления если окно видимо
                 Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     NotificationDialogService.ShowNotificationDialog(notification, _mainViewModel, this);

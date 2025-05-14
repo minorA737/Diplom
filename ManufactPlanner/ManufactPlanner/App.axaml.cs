@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Splat;
 using System;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace ManufactPlanner
 {
@@ -22,9 +23,10 @@ namespace ManufactPlanner
             AvaloniaXamlLoader.Load(this);
         }
 
-        // Модифицируем App.axaml.cs
         public override void OnFrameworkInitializationCompleted()
         {
+            Debug.WriteLine("Инициализация приложения...");
+
             // Удаляем DataAnnotations validator для улучшения производительности
             BindingPlugins.DataValidators.RemoveAt(0);
 
@@ -42,26 +44,52 @@ namespace ManufactPlanner
                 // Создаем MainWindow с AuthPage в качестве начального контента
                 var mainViewModel = new MainWindowViewModel();
 
-                // Создаем главное окно и устанавливаем DataContext
+                // Устанавливаем ссылку на MainWindow в AppWindows
                 var mainWindow = new MainWindow
                 {
                     DataContext = mainViewModel
                 };
 
+                // Важно: устанавливаем ссылку на главное окно в mainViewModel
+                mainViewModel.MainWindow = mainWindow;
+
                 // Устанавливаем AuthPage как начальное представление
                 mainViewModel.CurrentView = new AuthPage(mainViewModel, dbContext);
 
                 desktop.MainWindow = mainWindow;
+                AppWindows.MainWindow = mainWindow;
+
+                Debug.WriteLine("Главное окно создано и настроено");
 
                 // Обрабатываем событие закрытия приложения для корректной остановки сервисов
                 desktop.ShutdownRequested += (sender, e) =>
                 {
+                    Debug.WriteLine("Получен запрос на завершение работы приложения");
+
+                    // Только если это принудительное закрытие
+                    var mainViewModel = desktop.MainWindow?.DataContext as MainWindowViewModel;
+                    if (mainViewModel != null && !mainViewModel._forceClose)
+                    {
+                        Debug.WriteLine("Отменяем закрытие приложения (оно будет скрыто в трей)");
+                        e.Cancel = true;
+                        return;
+                    }
+
+                    Debug.WriteLine("Принудительное закрытие приложения...");
                     notificationService.Stop();
                     notificationService.Dispose();
+                };
+
+                // Добавляем обработчик события Closing для MainWindow
+                mainWindow.Closing += (sender, e) =>
+                {
+                    Debug.WriteLine("Попытка закрыть главное окно");
+                    // Это событие будет обработано в MainWindow.axaml.cs
                 };
             }
 
             base.OnFrameworkInitializationCompleted();
+            Debug.WriteLine("Инициализация приложения завершена");
         }
     }
 }

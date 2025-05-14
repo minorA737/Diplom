@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManufactPlanner.Models;
@@ -60,9 +61,75 @@ public partial class PostgresContext : DbContext
     public virtual DbSet<UserSetting> UserSettings { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=123");
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            // Сначала пытаемся загрузить настройки из файла
+            var connectionString = LoadConnectionStringFromFile();
+            optionsBuilder.UseNpgsql(connectionString);
+        }
+    }
 
+    // В файле Models/PostgresContext.cs изменить метод LoadConnectionStringFromFile:
+
+    private string LoadConnectionStringFromFile()
+    {
+        string defaultConnectionString = "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=123";
+
+        try
+        {
+            var settingsPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "ManufactPlanner",
+                "database-settings.json"
+            );
+
+            if (File.Exists(settingsPath))
+            {
+                var settingsText = File.ReadAllText(settingsPath);
+                var settings = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(settingsText);
+
+                var customConnectionString = $"Host={settings["Host"]};Port={settings["Port"]};Database={settings["Database"]};Username={settings["Username"]};Password={settings["Password"]}";
+
+                // Тестируем подключение с пользовательскими настройками
+                try
+                {
+                    using var testContext = new PostgresContext();
+                    using var connection = new Npgsql.NpgsqlConnection(customConnectionString);
+                    connection.Open();
+                    connection.Close();
+
+                    return customConnectionString;
+                }
+                catch (Exception ex)
+                {
+                    // Если подключение неудачно, логируем ошибку и используем значения по умолчанию
+                    System.Diagnostics.Debug.WriteLine($"Ошибка подключения с пользовательскими настройками: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine("Переключение на настройки по умолчанию");
+
+                    // Опционально: можно удалить файл с неверными настройками
+                    try
+                    {
+                        File.Delete(settingsPath);
+                        System.Diagnostics.Debug.WriteLine("Файл с неверными настройками удален");
+                    }
+                    catch
+                    {
+                        // Игнорируем ошибки удаления
+                    }
+
+                    return defaultConnectionString;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Ошибка при загрузке настроек подключения: {ex.Message}");
+        }
+
+        // Возвращаем значения по умолчанию
+        return defaultConnectionString;
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder

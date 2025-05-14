@@ -90,6 +90,9 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/NotificationManagementPage.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/NotificationsPage.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 

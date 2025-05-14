@@ -1,0 +1,8 @@
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\ManufactPlanner.csproj.AssemblyReference.cache
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\Avalonia\Resources.Inputs.cache
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\Avalonia\resources
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\ManufactPlanner.GeneratedMSBuildEditorConfig.editorconfig
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\ManufactPlanner.AssemblyInfoInputs.cache
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\ManufactPlanner.AssemblyInfo.cs
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\ManufactPlanner.csproj.CoreCompileInputs.cache
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\ManufactPlanner.sourcelink.json

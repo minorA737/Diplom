@@ -20,8 +20,9 @@ namespace ManufactPlanner.ViewModels
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
         private readonly PostgresContext _dbContext;
-        private ObservableCollection<OrderItemViewModel> _orders;
+        private ObservableCollection<OrderItemViewModel> _allOrders;
         private ObservableCollection<OrderItemViewModel> _filteredOrders;
+        private ObservableCollection<OrderItemViewModel> _displayedOrders;
         private ObservableCollection<string> _statuses;
         private ObservableCollection<string> _customers;
         private ObservableCollection<string> _deliveryPeriods;
@@ -38,8 +39,8 @@ namespace ManufactPlanner.ViewModels
 
         public ObservableCollection<OrderItemViewModel> Orders
         {
-            get => _filteredOrders;
-            set => this.RaiseAndSetIfChanged(ref _filteredOrders, value);
+            get => _displayedOrders ?? new ObservableCollection<OrderItemViewModel>();
+            set => this.RaiseAndSetIfChanged(ref _displayedOrders, value);
         }
 
         public ObservableCollection<string> Statuses
@@ -109,13 +110,7 @@ namespace ManufactPlanner.ViewModels
         public int CurrentPage
         {
             get => _currentPage;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _currentPage, value);
-                UpdatePaginatedOrders();
-                this.RaisePropertyChanged(nameof(CanGoToPreviousPage));
-                this.RaisePropertyChanged(nameof(CanGoToNextPage));
-            }
+            set => this.RaiseAndSetIfChanged(ref _currentPage, value);
         }
 
         public int TotalPages
@@ -125,7 +120,7 @@ namespace ManufactPlanner.ViewModels
         }
 
         public bool CanGoToPreviousPage => CurrentPage > 1;
-        public bool CanGoToNextPage => CurrentPage < TotalPages;
+        public bool CanGoToNextPage => CurrentPage < TotalPages && TotalPages > 1;
 
         public string SearchText
         {
@@ -154,24 +149,20 @@ namespace ManufactPlanner.ViewModels
         {
             _mainWindowViewModel = mainWindowViewModel;
             _dbContext = dbContext;
-
+            InitializeFilterOptions();
             // Инициализация команд с проверками CanExecute
             CreateOrderCommand = ReactiveCommand.Create(CreateOrder);
             ShowOrderDetailsCommand = ReactiveCommand.Create<int>(ShowOrderDetails);
 
             // Создаем команды с привязкой к CanGoToPreviousPage и CanGoToNextPage
-            NextPageCommand = ReactiveCommand.Create(
-                NextPage,
-                this.WhenAnyValue(x => x.CanGoToNextPage));
-
-            PreviousPageCommand = ReactiveCommand.Create(
-                PreviousPage,
-                this.WhenAnyValue(x => x.CanGoToPreviousPage));
+            NextPageCommand = ReactiveCommand.Create(NextPage);
+            PreviousPageCommand = ReactiveCommand.Create(PreviousPage);
 
             GoToPageCommand = ReactiveCommand.Create<int>(GoToPage);
-            RefreshCommand = ReactiveCommand.CreateFromTask(LoadOrdersAsync);
+            RefreshCommand = ReactiveCommand.Create(() => {
+                System.Threading.Tasks.Task.Run(() => LoadOrdersAsync().ConfigureAwait(false));
+            });
 
-            InitializeFilterOptions();
 
             // Асинхронная загрузка заказов при создании ViewModel
             System.Threading.Tasks.Task.Run(() => LoadOrdersAsync().ConfigureAwait(false));
@@ -184,12 +175,12 @@ namespace ManufactPlanner.ViewModels
                 "Все статусы"
             };
 
-            _customers = new ObservableCollection<string>
+                    _customers = new ObservableCollection<string>
             {
                 "Все заказчики"
             };
 
-            _deliveryPeriods = new ObservableCollection<string>
+                    _deliveryPeriods = new ObservableCollection<string>
             {
                 "Любой период",
                 "Этот месяц",
@@ -199,7 +190,7 @@ namespace ManufactPlanner.ViewModels
                 "Просроченные"
             };
 
-            _creationPeriods = new ObservableCollection<string>
+                    _creationPeriods = new ObservableCollection<string>
             {
                 "Любой период",
                 "Сегодня",
@@ -213,9 +204,10 @@ namespace ManufactPlanner.ViewModels
             _selectedDeliveryPeriod = "Любой период";
             _selectedCreationPeriod = "Любой период";
 
-            // Инициализация списков для предотвращения NullReferenceException
-            _orders = new ObservableCollection<OrderItemViewModel>();
+            // Инициализация всех коллекций для предотвращения NullReferenceException
+            _allOrders = new ObservableCollection<OrderItemViewModel>();
             _filteredOrders = new ObservableCollection<OrderItemViewModel>();
+            _displayedOrders = new ObservableCollection<OrderItemViewModel>();
         }
 
         private async System.Threading.Tasks.Task LoadOrdersAsync()
@@ -347,7 +339,7 @@ namespace ManufactPlanner.ViewModels
                     })
                     .ToListAsync();
 
-                _orders = new ObservableCollection<OrderItemViewModel>(orders);
+                _allOrders = new ObservableCollection<OrderItemViewModel>(orders); // Изменить с _orders на _allOrders
                 ApplyFilters();
             }
             catch (Exception ex)
@@ -378,18 +370,24 @@ namespace ManufactPlanner.ViewModels
                 new OrderItemViewModel { Id = 8, OrderNumber = "ОП-171/24", Name = "Тестовый заказ 2", Customer = "КСТ", Deadline = "15.06.2025", PositionsCount = "2", Status = "Отменен", CreatedAt = DateTime.Now.AddDays(-1) }
             };
 
-            _orders = new ObservableCollection<OrderItemViewModel>(testOrders);
+            _allOrders = new ObservableCollection<OrderItemViewModel>(testOrders); // Изменить с _orders на _allOrders
 
             // Заполняем фильтры на основе тестовых данных
             UpdateFilterOptionsFromTestData();
 
             ApplyFilters();
         }
-
+        private void RefreshOrders()
+        {
+            // Сбрасываем на первую страницу при обновлении списка
+            _currentPage = 1;
+            this.RaisePropertyChanged(nameof(CurrentPage));
+            ApplyFilters();
+        }
         private void UpdateFilterOptionsFromTestData()
         {
             // Обновляем статусы
-            var statuses = _orders.Select(o => o.Status).Distinct().ToList();
+            var statuses = _allOrders.Select(o => o.Status).Distinct().ToList();
             Statuses.Clear();
             Statuses.Add("Все статусы");
             foreach (var status in statuses)
@@ -398,7 +396,7 @@ namespace ManufactPlanner.ViewModels
             }
 
             // Обновляем заказчиков
-            var customers = _orders.Select(o => o.Customer).Distinct().ToList();
+            var customers = _allOrders.Select(o => o.Customer).Distinct().ToList();
             Customers.Clear();
             Customers.Add("Все заказчики");
             foreach (var customer in customers)
@@ -415,10 +413,10 @@ namespace ManufactPlanner.ViewModels
 
         private void ApplyFilters()
         {
-            if (_orders == null)
+            if (_allOrders == null) // Изменить с _orders на _allOrders
                 return;
 
-            IEnumerable<OrderItemViewModel> filteredOrders = _orders;
+            IEnumerable<OrderItemViewModel> filteredOrders = _allOrders; // Изменить с _orders на _allOrders
 
             // Фильтр по статусу
             if (!string.IsNullOrEmpty(_selectedStatus) && _selectedStatus != "Все статусы")
@@ -532,32 +530,54 @@ namespace ManufactPlanner.ViewModels
                     o.Customer.ToLower().Contains(search));
             }
 
-            // Обновляем список и пагинацию
+            // В конце метода:
             _filteredOrders = new ObservableCollection<OrderItemViewModel>(filteredOrders);
+
+            // Сбрасываем на первую страницу при применении фильтров (оставляем как есть)
+            if (_filteredOrders.Count > 0 && CurrentPage > 1)
+            {
+                _currentPage = 1;
+                this.RaisePropertyChanged(nameof(CurrentPage));
+                this.RaisePropertyChanged(nameof(CanGoToNextPage));
+                this.RaisePropertyChanged(nameof(CanGoToPreviousPage));
+            }
             UpdatePagination();
         }
 
         private void UpdatePagination()
         {
-            // Вычисляем общее количество страниц
-            TotalPages = Math.Max(1, (_filteredOrders.Count + PageSize - 1) / PageSize);
+            // Вычисляем общее количество страниц с правильным округлением
+            TotalPages = _filteredOrders.Count == 0 ? 1 : (int)Math.Ceiling((double)_filteredOrders.Count / PageSize);
 
-            // Корректируем текущую страницу, если она выходит за пределы
+            // Проверяем и корректируем текущую страницу
             if (CurrentPage > TotalPages)
-                CurrentPage = TotalPages;
+            {
+                _currentPage = Math.Max(1, TotalPages);
+                this.RaisePropertyChanged(nameof(CurrentPage));
+            }
             else if (CurrentPage < 1)
-                CurrentPage = 1;
+            {
+                _currentPage = 1;
+                this.RaisePropertyChanged(nameof(CurrentPage));
+            }
 
-            // Обновляем состояние кнопок пагинации
-            this.RaisePropertyChanged(nameof(CanGoToPreviousPage));
+            // Обновляем свойства пагинации
             this.RaisePropertyChanged(nameof(CanGoToNextPage));
+            this.RaisePropertyChanged(nameof(CanGoToPreviousPage));
 
-            // Применяем пагинацию
+            // Обновляем отображение
             UpdatePaginatedOrders();
         }
 
+
         private void UpdatePaginatedOrders()
         {
+            if (_filteredOrders == null)
+            {
+                Orders = new ObservableCollection<OrderItemViewModel>();
+                return;
+            }
+
             // Получаем только элементы для текущей страницы
             var paginatedOrders = _filteredOrders
                 .Skip((CurrentPage - 1) * PageSize)
@@ -579,25 +599,35 @@ namespace ManufactPlanner.ViewModels
 
         private void NextPage()
         {
-            if (CurrentPage < TotalPages)
+            if (CanGoToNextPage)
             {
                 CurrentPage++;
+                this.RaisePropertyChanged(nameof(CanGoToNextPage));
+                this.RaisePropertyChanged(nameof(CanGoToPreviousPage));
+                UpdatePaginatedOrders(); // Добавить этот вызов обратно
             }
         }
 
         private void PreviousPage()
         {
-            if (CurrentPage > 1)
+            if (CanGoToPreviousPage)
             {
                 CurrentPage--;
+                this.RaisePropertyChanged(nameof(CanGoToNextPage));
+                this.RaisePropertyChanged(nameof(CanGoToPreviousPage));
+                UpdatePaginatedOrders(); // Добавить этот вызов обратно
             }
         }
 
         private void GoToPage(int page)
         {
-            if (page >= 1 && page <= TotalPages)
+            if (page >= 1 && page <= TotalPages && page != CurrentPage)
             {
-                CurrentPage = page;
+                _currentPage = page; // Используем backing field
+                this.RaisePropertyChanged(nameof(CurrentPage));
+                this.RaisePropertyChanged(nameof(CanGoToNextPage));
+                this.RaisePropertyChanged(nameof(CanGoToPreviousPage));
+                UpdatePaginatedOrders();
             }
         }
 
@@ -637,7 +667,7 @@ namespace ManufactPlanner.ViewModels
                     };
 
                     // Добавляем новый заказ в начало списка
-                    _orders.Insert(0, newOrderVm);
+                    _allOrders.Insert(0, newOrderVm);
 
                     // Обновляем фильтры и пагинацию
                     ApplyFilters();

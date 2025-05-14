@@ -22,6 +22,8 @@
 	<Color x:Key="SuccessColorDark">#5BBCAC</Color>
 	<Color x:Key="WarningColorDark">#FFC266</Color>
 	<Color x:Key="ErrorColorDark">#FF8566</Color>
+	<Color x:Key="AlternateRowColor">#323842</Color>
+	<SolidColorBrush x:Key="AlternateRowBrush" Color="{StaticResource AlternateRowColor}"/>
 
 	<SolidColorBrush x:Key="PrimaryBrushDark" Color="{StaticResource PrimaryColorDark}"/>
 	<SolidColorBrush x:Key="SecondaryBrushDark" Color="{StaticResource SecondaryColorDark}"/>

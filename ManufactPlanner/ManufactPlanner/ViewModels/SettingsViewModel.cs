@@ -4,8 +4,11 @@ using ManufactPlanner.Services;
 using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Reactive;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -45,6 +48,55 @@ namespace ManufactPlanner.ViewModels
         private string _statusMessage = "";
         private bool _hasStatusMessage = false; // Изначально false, показываем сообщение только после действий
         private bool _isStatusSuccess = true;
+
+        // Настройки подключения к БД
+        private string _databaseHost = "localhost";
+        private int _databasePort = 5432;
+        private string _databaseName = "postgres";
+        private string _databaseUsername = "postgres";
+        private string _databasePassword = "";
+        private bool _isConnectionValid = false;
+
+        // Свойства подключения к БД
+        public string DatabaseHost
+        {
+            get => _databaseHost;
+            set => this.RaiseAndSetIfChanged(ref _databaseHost, value);
+        }
+
+        public int DatabasePort
+        {
+            get => _databasePort;
+            set => this.RaiseAndSetIfChanged(ref _databasePort, value);
+        }
+
+        public string DatabaseName
+        {
+            get => _databaseName;
+            set => this.RaiseAndSetIfChanged(ref _databaseName, value);
+        }
+
+        public string DatabaseUsername
+        {
+            get => _databaseUsername;
+            set => this.RaiseAndSetIfChanged(ref _databaseUsername, value);
+        }
+
+        public string DatabasePassword
+        {
+            get => _databasePassword;
+            set => this.RaiseAndSetIfChanged(ref _databasePassword, value);
+        }
+
+        public bool IsConnectionValid
+        {
+            get => _isConnectionValid;
+            set => this.RaiseAndSetIfChanged(ref _isConnectionValid, value);
+        }
+
+        // Добавить команды
+        public ReactiveCommand<Unit, Unit> TestConnectionCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveConnectionSettingsCommand { get; }
 
         // Свойства профиля
         public string Username
@@ -177,6 +229,8 @@ namespace ManufactPlanner.ViewModels
         public ReactiveCommand<Unit, Unit> SendTestEmailCommand { get; }
         public ReactiveCommand<Unit, Unit> ApplyAutoStartCommand { get; }
 
+        public ReactiveCommand<Unit, Unit> ResetToDefaultCommand { get; }
+
         public SettingsViewModel(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext)
         {
             _mainWindowViewModel = mainWindowViewModel;
@@ -190,7 +244,7 @@ namespace ManufactPlanner.ViewModels
             ApplyInterfaceSettingsCommand = ReactiveCommand.Create(ApplyInterfaceSettings);
             SendTestEmailCommand = ReactiveCommand.CreateFromTask(SendTestEmail);
             ApplyAutoStartCommand = ReactiveCommand.Create(ApplyAutoStartSettings);
-
+            ResetToDefaultCommand = ReactiveCommand.Create(ResetToDefault);
             // Загрузка настроек пользователя
             _ = LoadUserSettingsAsync();
 
@@ -204,11 +258,139 @@ namespace ManufactPlanner.ViewModels
                 Debug.WriteLine($"Ошибка при проверке автозапуска: {ex.Message}");
                 AutoStartEnabled = false;
             }
+            TestConnectionCommand = ReactiveCommand.CreateFromTask(TestConnection);
+            SaveConnectionSettingsCommand = ReactiveCommand.CreateFromTask(SaveConnectionSettings);
 
+            // Загружаем настройки подключения
+            LoadConnectionSettings();
             // Очищаем сообщение о статусе при инициализации
             HasStatusMessage = false;
         }
 
+        private void ResetToDefault()
+        {
+            SetDefaultConnectionSettings();
+            StatusMessage = "Настройки сброшены к значениям по умолчанию";
+            IsStatusSuccess = true;
+        }
+        // Модификация метода LoadConnectionSettings
+        private void LoadConnectionSettings()
+        {
+            try
+            {
+                var appSettings = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(
+                    File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                        "ManufactPlanner", "database-settings.json"))
+                );
+
+                if (appSettings.TryGetValue("Host", out var host)) DatabaseHost = host.ToString();
+                if (appSettings.TryGetValue("Port", out var port)) DatabasePort = int.Parse(port.ToString());
+                if (appSettings.TryGetValue("Database", out var database)) DatabaseName = database.ToString();
+                if (appSettings.TryGetValue("Username", out var username)) DatabaseUsername = username.ToString();
+                if (appSettings.TryGetValue("Password", out var password)) DatabasePassword = password.ToString();
+
+                // Проверяем, действительны ли загруженные настройки
+                var connectionString = $"Host={DatabaseHost};Port={DatabasePort};Database={DatabaseName};Username={DatabaseUsername};Password={DatabasePassword}";
+                IsConnectionValid = IsConnectionStringValid(connectionString);
+
+                if (!IsConnectionValid)
+                {
+                    StatusMessage = "Сохраненные настройки подключения недействительны. Проверьте настройки.";
+                    IsStatusSuccess = false;
+                }
+            }
+            catch
+            {
+                // Если файл не существует или не читается, используем значения по умолчанию
+                SetDefaultConnectionSettings();
+            }
+        }
+
+        // Новый метод для установки значений по умолчанию
+        private void SetDefaultConnectionSettings()
+        {
+            DatabaseHost = "localhost";
+            DatabasePort = 5432;
+            DatabaseName = "postgres";
+            DatabaseUsername = "postgres";
+            DatabasePassword = "";
+            IsConnectionValid = false;
+        }
+        private async System.Threading.Tasks.Task SaveConnectionSettings()
+        {
+            try
+            {
+                var settingsPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "ManufactPlanner"
+                );
+
+                if (!Directory.Exists(settingsPath))
+                    Directory.CreateDirectory(settingsPath);
+
+                var settings = new Dictionary<string, object>
+        {
+            {"Host", DatabaseHost},
+            {"Port", DatabasePort},
+            {"Database", DatabaseName},
+            {"Username", DatabaseUsername},
+            {"Password", DatabasePassword}
+        };
+
+                await File.WriteAllTextAsync(
+                    Path.Combine(settingsPath, "database-settings.json"),
+                    System.Text.Json.JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true })
+                );
+
+                StatusMessage = "Настройки подключения к БД сохранены. Перезапустите приложение для применения изменений.";
+                IsStatusSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Ошибка при сохранении настроек: {ex.Message}";
+                IsStatusSuccess = false;
+            }
+        }
+        private bool IsConnectionStringValid(string connectionString)
+        {
+            try
+            {
+                using var connection = new Npgsql.NpgsqlConnection(connectionString);
+                connection.Open();
+                connection.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        private async System.Threading.Tasks.Task TestConnection()
+        {
+            try
+            {
+                var connectionString = $"Host={DatabaseHost};Port={DatabasePort};Database={DatabaseName};Username={DatabaseUsername};Password={DatabasePassword}";
+
+                using var context = new PostgresContext(
+                    new DbContextOptionsBuilder<PostgresContext>()
+                        .UseNpgsql(connectionString)
+                        .Options
+                );
+
+                // Простой тест подключения
+                await context.Database.CanConnectAsync();
+
+                IsConnectionValid = true;
+                StatusMessage = "Подключение к базе данных успешно установлено";
+                IsStatusSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                IsConnectionValid = false;
+                StatusMessage = $"Ошибка подключения к БД: {ex.Message}";
+                IsStatusSuccess = false;
+            }
+        }
         public SettingsViewModel()
         {
             // Конструктор для дизайнера

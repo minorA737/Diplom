@@ -341,29 +341,28 @@
 
 		<!-- Пагинация - только для табличного представления -->
 		<StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center"
-                   Margin="0,20,0,20" IsVisible="{Binding IsTableViewActive}">
+				   Margin="0,20,0,20" IsVisible="{Binding IsTableViewActive}">
 			<Button Command="{Binding PreviousPageCommand}" Background="Transparent" BorderThickness="0"
-                   IsEnabled="{Binding CanGoToPreviousPage}">
+				   IsEnabled="{Binding CanGoToPreviousPage}">
 				<TextBlock Text="◀ Пред." FontSize="13"
-                          Foreground="{Binding CanGoToPreviousPage, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource TextSecondaryBrush},#CCC'}"
-                          VerticalAlignment="Center"/>
+						  Foreground="{DynamicResource TextSecondaryBrush}"
+						  Opacity="{Binding CanGoToPreviousPage, Converter={StaticResource BoolToValue}, ConverterParameter='1,0.5'}"
+						  VerticalAlignment="Center"/>
 			</Button>
-
 			<!-- Текущая страница -->
 			<Border Width="30" Height="30" CornerRadius="15" Background="{DynamicResource PrimaryBrush}" VerticalAlignment="Center" Margin="15,0">
-				<TextBlock Text="{Binding CurrentPage}" FontSize="13" Foreground="{DynamicResource SurfaceBrush}"
-                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+				<TextBlock Text="{Binding CurrentPage}" FontSize="13" Foreground="White"
+						  HorizontalAlignment="Center" VerticalAlignment="Center"/>
 			</Border>
-
 			<!-- Индикатор количества страниц -->
 			<TextBlock Text="из" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="5,0"/>
 			<TextBlock Text="{Binding TotalPages}" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="5,0"/>
-
 			<Button Command="{Binding NextPageCommand}" Background="Transparent" BorderThickness="0"
-                   IsEnabled="{Binding CanGoToNextPage}" Margin="15,0,0,0">
+				   IsEnabled="{Binding CanGoToNextPage}" Margin="15,0,0,0">
 				<TextBlock Text="След. ▶" FontSize="13"
-                          Foreground="{Binding CanGoToNextPage, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource TextSecondaryBrush},#CCC'}"
-                          VerticalAlignment="Center"/>
+						  Foreground="{DynamicResource TextSecondaryBrush}"
+						  Opacity="{Binding CanGoToNextPage, Converter={StaticResource BoolToValue}, ConverterParameter='1,0.5'}"
+						  VerticalAlignment="Center"/>
 			</Button>
 		</StackPanel>
 	</Grid>

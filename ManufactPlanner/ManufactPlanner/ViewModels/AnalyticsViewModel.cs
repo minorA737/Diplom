@@ -289,13 +289,118 @@ namespace ManufactPlanner.ViewModels
             // Обновляем временную диаграмму
             UpdateProductionTimelineChart(productionData);
         }
+
         private void UpdateProductionTimelineChart(Dictionary<string, object> productionData)
         {
-            // Временно оставляем пустым, можно реализовать позже
+            if (!productionData.ContainsKey("timelineData")) return;
+
+            var timelineData = productionData["timelineData"] as List<Dictionary<string, object>>;
+            if (timelineData == null || !timelineData.Any())
+            {
+                _productionTimeline.Plot.Clear();
+                _productionTimeline.Plot.Title("Временная линия производства");
+                _productionTimeline.Refresh();
+                return;
+            }
+
             _productionTimeline.Plot.Clear();
+
+            var yPositions = new List<double>();
+            var orderLabels = new List<string>();
+
+            for (int i = 0; i < timelineData.Count; i++)
+            {
+                var item = timelineData[i];
+                var orderNumber = item["orderNumber"].ToString();
+                var productName = item.ContainsKey("productName") ? item["productName"].ToString() : "";
+
+                yPositions.Add(i);
+                orderLabels.Add($"{orderNumber} - {productName}");
+
+                if (item.ContainsKey("productionDate") && item["productionDate"] != null)
+                {
+                    var productionDate = DateTime.FromOADate(Convert.ToDouble(item["productionDate"]));
+
+                    // Производство (фиолетовое)
+                    if (item.ContainsKey("debuggingDate") && item["debuggingDate"] != null)
+                    {
+                        var debuggingDate = DateTime.FromOADate(Convert.ToDouble(item["debuggingDate"]));
+                        var rect1 = _productionTimeline.Plot.Add.Rectangle(
+                            productionDate.ToOADate(), i - 0.3,
+                            debuggingDate.ToOADate() - productionDate.ToOADate(), 0.6);
+                        rect1.FillColor = ScottPlot.Color.FromHex("#9575CD");
+                        rect1.LineColor = ScottPlot.Color.FromHex("#9575CD");
+                    }
+
+                    // Отладка (зелёное)
+                    if (item.ContainsKey("debuggingDate") && item["debuggingDate"] != null &&
+                        item.ContainsKey("acceptanceDate") && item["acceptanceDate"] != null)
+                    {
+                        var debuggingDate = DateTime.FromOADate(Convert.ToDouble(item["debuggingDate"]));
+                        var acceptanceDate = DateTime.FromOADate(Convert.ToDouble(item["acceptanceDate"]));
+                        var rect2 = _productionTimeline.Plot.Add.Rectangle(
+                            debuggingDate.ToOADate(), i - 0.3,
+                            acceptanceDate.ToOADate() - debuggingDate.ToOADate(), 0.6);
+                        rect2.FillColor = ScottPlot.Color.FromHex("#4CAF9D");
+                        rect2.LineColor = ScottPlot.Color.FromHex("#4CAF9D");
+                    }
+
+                    // Приемка/Упаковка (жёлтое)
+                    if (item.ContainsKey("acceptanceDate") && item["acceptanceDate"] != null &&
+                        item.ContainsKey("packagingDate") && item["packagingDate"] != null)
+                    {
+                        var acceptanceDate = DateTime.FromOADate(Convert.ToDouble(item["acceptanceDate"]));
+                        var packagingDate = DateTime.FromOADate(Convert.ToDouble(item["packagingDate"]));
+                        var rect3 = _productionTimeline.Plot.Add.Rectangle(
+                            acceptanceDate.ToOADate(), i - 0.3,
+                            packagingDate.ToOADate() - acceptanceDate.ToOADate(), 0.6);
+                        rect3.FillColor = ScottPlot.Color.FromHex("#FFB74D");
+                        rect3.LineColor = ScottPlot.Color.FromHex("#FFB74D");
+                    }
+                }
+            }
+
+            // Создаем невидимые маркеры для легенды
+            var productionMarker = _productionTimeline.Plot.Add.Marker(double.NaN, double.NaN);
+            productionMarker.MarkerStyle.FillColor = ScottPlot.Color.FromHex("#9575CD");
+            productionMarker.MarkerStyle.LineColor = ScottPlot.Color.FromHex("#9575CD");
+            productionMarker.MarkerStyle.Shape = MarkerShape.FilledSquare;
+            productionMarker.MarkerStyle.Size = 15;
+            productionMarker.LegendText = "Производство";
+
+            var debuggingMarker = _productionTimeline.Plot.Add.Marker(double.NaN, double.NaN);
+            debuggingMarker.MarkerStyle.FillColor = ScottPlot.Color.FromHex("#4CAF9D");
+            debuggingMarker.MarkerStyle.LineColor = ScottPlot.Color.FromHex("#4CAF9D");
+            debuggingMarker.MarkerStyle.Shape = MarkerShape.FilledSquare;
+            debuggingMarker.MarkerStyle.Size = 15;
+            debuggingMarker.LegendText = "Отладка";
+
+            var packagingMarker = _productionTimeline.Plot.Add.Marker(double.NaN, double.NaN);
+            packagingMarker.MarkerStyle.FillColor = ScottPlot.Color.FromHex("#FFB74D");
+            packagingMarker.MarkerStyle.LineColor = ScottPlot.Color.FromHex("#FFB74D");
+            packagingMarker.MarkerStyle.Shape = MarkerShape.FilledSquare;
+            packagingMarker.MarkerStyle.Size = 15;
+            packagingMarker.LegendText = "Приемка/Упаковка";
+
+            // Настройка осей
+            _productionTimeline.Plot.Axes.Left.SetTicks(yPositions.ToArray(), orderLabels.ToArray());
+            _productionTimeline.Plot.Axes.Left.TickLabelStyle.FontSize = 10f;
+
+            // Настройки внешнего вида
             _productionTimeline.Plot.Title("Временная линия производства");
+            _productionTimeline.Plot.XLabel("Время");
+            _productionTimeline.Plot.YLabel("Заказы");
+            _productionTimeline.Plot.ShowLegend();
+
+            // Инвертируем ось Y
+            _productionTimeline.Plot.Axes.Left.Max = -0.5;
+            _productionTimeline.Plot.Axes.Left.Min = yPositions.Count - 0.5;
+
+            _productionTimeline.Plot.Axes.AutoScale();
             _productionTimeline.Refresh();
         }
+
+
         private void UpdateProductionStagesChart(List<Dictionary<string, object>> stats)
         {
             _productionStagesPlot.Plot.Clear();
@@ -344,6 +449,7 @@ namespace ManufactPlanner.ViewModels
             _productionStagesPlot.Plot.YLabel("Количество изделий");
 
             _productionStagesPlot.Refresh();
+            _productionStagesPlot.Plot.Axes.AutoScale();
         }
         private async System.Threading.Tasks.Task RefreshAnalyticsDataAsync()
         {
@@ -452,7 +558,8 @@ namespace ManufactPlanner.ViewModels
 
             TopEmployeesList.Clear();
 
-            foreach (var emp in employeeData)
+            // Берем топ-10 сотрудников для лучшей читаемости графика
+            foreach (var emp in employeeData.Take(10))
             {
                 var loadPercent = Convert.ToInt32(emp["loadPercent"]);
                 var loadBarWidth = Math.Max(0, Math.Min(320, loadPercent * 320 / 100));
@@ -520,6 +627,7 @@ namespace ManufactPlanner.ViewModels
             _tasksProgressPlot.Plot.ShowLegend();
 
             _tasksProgressPlot.Refresh();
+            _tasksProgressPlot.Plot.Axes.AutoScale();
         }
 
         private void UpdateTasksStatusPieChart(Dictionary<string, object> data)
@@ -605,48 +713,61 @@ namespace ManufactPlanner.ViewModels
                 }
 
                 _tasksStatusPiePlot.Refresh();
+                _tasksStatusPiePlot.Plot.Axes.AutoScale();
             }
         }
 
         private void UpdateEmployeeLoadChart()
         {
-            Console.WriteLine($"UpdateTasksProgressChart called. _tasksProgressPlot is null: {_tasksProgressPlot == null}");
+            Console.WriteLine($"UpdateEmployeeLoadChart called. _employeeLoadPlot is null: {_employeeLoadPlot == null}");
 
-            if (_tasksProgressPlot == null)
+            if (_employeeLoadPlot == null)
             {
-                Console.WriteLine("TasksProgressChart is null, returning");
+                Console.WriteLine("EmployeeLoadChart is null, returning");
                 return;
             }
-
 
             _employeeLoadPlot.Plot.Clear();
 
             if (!TopEmployeesList.Any()) return;
 
-            var names = TopEmployeesList.Select(e => e.EmployeeName).Reverse().ToArray();
-            var loads = TopEmployeesList.Select(e => (double)e.LoadPercent).Reverse().ToArray();
+            // Берём данные в том же порядке, что и в исходном списке
+            var names = TopEmployeesList.Select(e => e.EmployeeName).ToArray();
+            var loads = TopEmployeesList.Select(e => (double)e.LoadPercent).ToArray();
             var positions = Enumerable.Range(0, names.Length).Select(i => (double)i).ToArray();
 
             // Создаем горизонтальные полосы
-            var bars = _employeeLoadPlot.Plot.Add.Bars(loads, positions);
+            var bars = _employeeLoadPlot.Plot.Add.Bars(positions, loads);
             bars.Horizontal = true; // Делаем горизонтальными
 
             // Настраиваем цвета для каждого бара
             for (int i = 0; i < bars.Bars.Count; i++)
             {
-                bars.Bars[i].FillColor = ScottPlot.Color.FromHex("#00ACC1");
+                var bar = bars.Bars[i];
+                bar.FillColor = ScottPlot.Color.FromHex("#00ACC1");
+
+                // Добавляем текст с процентами на конце каждого бара
+                var label = _employeeLoadPlot.Plot.Add.Text($"{loads[i]}%", loads[i] + 2, i);
+                label.LabelStyle.FontSize = 12;
+                label.LabelStyle.ForeColor = ScottPlot.Color.FromHex("#000000");
+                label.LabelStyle.Alignment = Alignment.MiddleLeft;
             }
 
             // Настройка осей
             _employeeLoadPlot.Plot.Axes.Left.SetTicks(positions, names);
             _employeeLoadPlot.Plot.Axes.Bottom.Min = 0;
-            _employeeLoadPlot.Plot.Axes.Bottom.Max = 100;
+            _employeeLoadPlot.Plot.Axes.Bottom.Max = 110; // Увеличиваем максимум для размещения текста
 
             // Заголовки
             _employeeLoadPlot.Plot.Title("Загрузка сотрудников");
             _employeeLoadPlot.Plot.YLabel("Сотрудники");
             _employeeLoadPlot.Plot.XLabel("Загрузка (%)");
 
+            // Добавляем сетку для лучшей читаемости
+            _employeeLoadPlot.Plot.Grid.MajorLineColor = ScottPlot.Color.FromHex("#E0E0E0");
+            _employeeLoadPlot.Plot.Grid.MinorLineColor = ScottPlot.Color.FromHex("#F0F0F0");
+
+            _employeeLoadPlot.Plot.Axes.AutoScale();
             _employeeLoadPlot.Refresh();
         }
 

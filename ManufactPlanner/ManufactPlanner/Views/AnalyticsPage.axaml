@@ -22,11 +22,11 @@
 		<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="20,20,20,0">
 			<TextBlock Text="Аналитика" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}"/>
 
-			<!-- Фильтры и настройки отчетов -->
-			<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="15">
-				<DatePicker Width="300" SelectedDate="{Binding StartDate}"/>
-				<DatePicker Width="300" SelectedDate="{Binding EndDate}"/>
-				<ComboBox Width="300" SelectedIndex="{Binding SelectedReportType}">
+			<!-- Фильтры и настройки отчетов - адаптивная панель -->
+			<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+				<DatePicker MinWidth="200" MaxWidth="200" SelectedDate="{Binding StartDate}"/>
+				<DatePicker MinWidth="200" MaxWidth="200" SelectedDate="{Binding EndDate}"/>
+				<ComboBox MinWidth="150" MaxWidth="250" SelectedIndex="{Binding SelectedReportType}">
 					<ComboBoxItem>Выполнение задач</ComboBoxItem>
 					<ComboBoxItem>Загрузка сотрудников</ComboBoxItem>
 					<ComboBoxItem>Производство</ComboBoxItem>
@@ -37,73 +37,86 @@
 			</StackPanel>
 		</Grid>
 
-		<!-- Основное содержимое - графики и данные -->
+		<!-- Основное содержимое - гибкая компоновка -->
 		<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-			<Grid Margin="20,20,20,20" MinWidth="1160">
-				<!-- Grid для задач -->
-				<Grid ColumnDefinitions="3*,2*" RowDefinitions="400,300" IsVisible="{Binding ShowTaskChart}">
-					<!-- График выполнения задач по времени -->
-					<Border Grid.Row="0" Grid.Column="0" Margin="0,0,15,15" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
-							>
-						<Grid RowDefinitions="Auto,*">
-							<TextBlock Grid.Row="0" Text="Выполнение задач по времени" FontSize="16" FontWeight="Medium"
-									   Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,10"/>
-							<sp:AvaPlot Grid.Row="1" x:Name="TasksProgressPlot" Margin="20,0,20,20"/>
-						</Grid>
-					</Border>
+			<StackPanel Margin="20" Spacing="20">
+				<!-- Контейнер для задач -->
+				<StackPanel Spacing="20" IsVisible="{Binding ShowTaskChart}">
+					<!-- Верхний ряд: График и круговая диаграмма -->
+					<Grid ColumnDefinitions="*,*" MinHeight="400">
+						<!-- График выполнения задач по времени -->
+						<Border Grid.Column="0" Margin="0,0,10,0" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+								MinWidth="400">
+							<Grid RowDefinitions="Auto,*">
+								<TextBlock Grid.Row="0" Text="Выполнение задач по времени" FontSize="16" FontWeight="Medium"
+										   Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,10"/>
+								<sp:AvaPlot Grid.Row="1" x:Name="TasksProgressPlot" Margin="20,0,20,20"/>
+							</Grid>
+						</Border>
 
-					<!-- Круговая диаграмма статусов с легендой -->
-					<Border Grid.Row="0" Grid.Column="1" Margin="15,0,0,15" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
-							>
-						<Grid RowDefinitions="Auto,2*,Auto">
-							<TextBlock Grid.Row="0" Text="Распределение по статусам" FontSize="16" FontWeight="Medium"
-									   Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,10"/>
-							<sp:AvaPlot Grid.Row="1" x:Name="StatusPieChart" Margin="20,0,20,10"/>
+						<!-- Круговая диаграмма статусов с легендой -->
+						<Border Grid.Column="1" Margin="10,0,0,0" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+								MinWidth="300">
+							<Grid RowDefinitions="Auto,2*,Auto">
+								<TextBlock Grid.Row="0" Text="Распределение по статусам" FontSize="16" FontWeight="Medium"
+										   Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,10"/>
+								<sp:AvaPlot Grid.Row="1" x:Name="StatusPieChart" Margin="20,0,20,10"/>
 
-							<!-- Легенда для диаграммы статусов -->
-							<Border Grid.Row="2" Background="{DynamicResource BackgroundBrush}" CornerRadius="4" Margin="20,0,20,20" Padding="15">
-								<StackPanel>
-									<TextBlock Text="Легенда:" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,10"/>
-									<Grid ColumnDefinitions="*,*">
-										<StackPanel Grid.Column="0" Spacing="8">
-											<StackPanel Orientation="Horizontal" Spacing="10">
-												<Ellipse Width="12" Height="12" Fill="{DynamicResource SuccessBrush}"/>
-												<TextBlock Text="Выполнено" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+								<!-- Легенда для диаграммы статусов -->
+								<Border Grid.Row="2" Background="{DynamicResource BackgroundBrush}" CornerRadius="4"
+										Margin="20,0,20,20" Padding="15">
+									<StackPanel>
+										<TextBlock Text="Легенда:" FontSize="14" FontWeight="Medium"
+												   Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,10"/>
+										<Grid ColumnDefinitions="*,*">
+											<StackPanel Grid.Column="0" Spacing="8">
+												<StackPanel Orientation="Horizontal" Spacing="10">
+													<Ellipse Width="12" Height="12" Fill="{DynamicResource SuccessBrush}"/>
+													<TextBlock Text="Выполнено" FontSize="12"
+															   Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+												</StackPanel>
+												<StackPanel Orientation="Horizontal" Spacing="10">
+													<Ellipse Width="12" Height="12" Fill="{DynamicResource PrimaryBrush}"/>
+													<TextBlock Text="В процессе" FontSize="12"
+															   Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+												</StackPanel>
+												<StackPanel Orientation="Horizontal" Spacing="10">
+													<Ellipse Width="12" Height="12" Fill="{DynamicResource WarningBrush}"/>
+													<TextBlock Text="В очереди" FontSize="12"
+															   Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+												</StackPanel>
 											</StackPanel>
-											<StackPanel Orientation="Horizontal" Spacing="10">
-												<Ellipse Width="12" Height="12" Fill="{DynamicResource PrimaryBrush}"/>
-												<TextBlock Text="В процессе" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+											<StackPanel Grid.Column="1" Spacing="8">
+												<StackPanel Orientation="Horizontal" Spacing="10">
+													<Ellipse Width="12" Height="12" Fill="{DynamicResource ErrorBrush}"/>
+													<TextBlock Text="Просрочено" FontSize="12"
+															   Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+												</StackPanel>
+												<StackPanel Orientation="Horizontal" Spacing="10">
+													<Ellipse Width="12" Height="12" Fill="{DynamicResource SecondaryBrush}"/>
+													<TextBlock Text="Отменено" FontSize="12"
+															   Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+												</StackPanel>
 											</StackPanel>
-											<StackPanel Orientation="Horizontal" Spacing="10">
-												<Ellipse Width="12" Height="12" Fill="{DynamicResource WarningBrush}"/>
-												<TextBlock Text="В очереди" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
-											</StackPanel>
-										</StackPanel>
-										<StackPanel Grid.Column="1" Spacing="8">
-											<StackPanel Orientation="Horizontal" Spacing="10">
-												<Ellipse Width="12" Height="12" Fill="{DynamicResource ErrorBrush}"/>
-												<TextBlock Text="Просрочено" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
-											</StackPanel>
-											<StackPanel Orientation="Horizontal" Spacing="10">
-												<Ellipse Width="12" Height="12" Fill="{DynamicResource SecondaryBrush}"/>
-												<TextBlock Text="Отменено" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
-											</StackPanel>
-										</StackPanel>
-									</Grid>
-								</StackPanel>
-							</Border>
-						</Grid>
-					</Border>
+										</Grid>
+									</StackPanel>
+								</Border>
+							</Grid>
+						</Border>
+					</Grid>
 
-					<!-- Ключевые метрики для задач -->
-					<Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,15,0,0" RowDefinitions="Auto,*">
+					<!-- Нижний ряд: Ключевые метрики -->
+					<Grid RowDefinitions="Auto,*">
 						<TextBlock Grid.Row="0" Text="Ключевые метрики" FontSize="16" FontWeight="Medium"
 								   Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,10"/>
-						<Grid Grid.Row="1" ColumnDefinitions="*,*,*,*">
-							<Border Grid.Column="0" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
-									 Padding="15" Margin="0,0,15,0">
+
+						<!-- Адаптивные карточки метрик -->
+						<UniformGrid Grid.Row="1" Columns="4" MinWidth="280" Margin="0,0,0,0">
+							<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+									Padding="15" Margin="0,0,5,0">
 								<StackPanel>
-									<TextBlock Text="Среднее время выполнения задачи" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
+									<TextBlock Text="Среднее время выполнения задачи" FontSize="12"
+											   Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"/>
 									<TextBlock Text="{Binding AvgTaskDuration, StringFormat='{}{0:F1} дня'}" FontSize="18"
 											   Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Medium" Margin="0,5,0,0"/>
 									<Grid Margin="0,5,0,0">
@@ -115,10 +128,11 @@
 								</StackPanel>
 							</Border>
 
-							<Border Grid.Column="1" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
-									 Padding="15" Margin="15,0">
+							<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+									Padding="15" Margin="5,0">
 								<StackPanel>
-									<TextBlock Text="Процент выполненных в срок" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
+									<TextBlock Text="Процент выполненных в срок" FontSize="12"
+											   Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"/>
 									<TextBlock Text="{Binding OnTimeCompletionRate, StringFormat='{}{0}%'}" FontSize="18"
 											   Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Medium" Margin="0,5,0,0"/>
 									<Grid Margin="0,5,0,0">
@@ -130,154 +144,170 @@
 								</StackPanel>
 							</Border>
 
-							<Border Grid.Column="2" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
-									 Padding="15" Margin="15,0">
+							<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+									Padding="15" Margin="5,0">
 								<StackPanel>
-									<TextBlock Text="Общее количество задач" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
+									<TextBlock Text="Общее количество задач" FontSize="12"
+											   Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"/>
 									<TextBlock Text="{Binding TotalTasksCount}" FontSize="18" FontWeight="Medium"
 											   Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,5,0,0"/>
 								</StackPanel>
 							</Border>
 
-							<Border Grid.Column="3" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
-									 Padding="15" Margin="15,0,0,0">
+							<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+									Padding="15" Margin="5,0,0,0">
 								<StackPanel>
-									<TextBlock Text="Просроченных задач" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
+									<TextBlock Text="Просроченных задач" FontSize="12"
+											   Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"/>
 									<TextBlock Text="{Binding OverdueTasksCount}" FontSize="18" FontWeight="Medium"
 											   Foreground="{DynamicResource ErrorBrush}" Margin="0,5,0,0"/>
 								</StackPanel>
 							</Border>
-						</Grid>
+						</UniformGrid>
 					</Grid>
-				</Grid>
+				</StackPanel>
 
-				<!-- Grid для сотрудников -->
-				<Grid ColumnDefinitions="3*,2*" RowDefinitions="400,300" IsVisible="{Binding ShowEmployeeChart}">
-					<!-- График загрузки сотрудников -->
-					<Border Grid.Row="0" Grid.Column="0" Margin="0,0,15,15" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
-							>
-						<Grid RowDefinitions="Auto,*">
-							<TextBlock Grid.Row="0" Text="Загрузка сотрудников" FontSize="16" FontWeight="Medium"
-									   Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,10"/>
-							<sp:AvaPlot Grid.Row="1" x:Name="EmployeeLoadChart" Margin="20,0,20,20"/>
-						</Grid>
-					</Border>
+				<!-- Контейнер для сотрудников -->
+				<StackPanel Spacing="20" IsVisible="{Binding ShowEmployeeChart}">
+					<!-- Верхний ряд: График загрузки и список топ сотрудников -->
+					<Grid ColumnDefinitions="*,*" MinHeight="400">
+						<!-- График загрузки сотрудников -->
+						<Border Grid.Column="0" Margin="0,0,10,0" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+								MinWidth="400" Height="400">
+							<Grid RowDefinitions="Auto,*">
+								<TextBlock Grid.Row="0" Text="Загрузка сотрудников" FontSize="16" FontWeight="Medium"
+										   Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,10"/>
+								<sp:AvaPlot Grid.Row="1" x:Name="EmployeeLoadChart" Margin="20,0,20,20"/>
+							</Grid>
+						</Border>
 
-					<!-- Список топ сотрудников -->
-					<Border Grid.Row="0" Grid.Column="1" Margin="15,0,0,15" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
-							>
-						<Grid RowDefinitions="Auto,*">
-							<TextBlock Grid.Row="0" Text="Топ сотрудников" FontSize="16" FontWeight="Medium"
-									   Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,10"/>
-							<ScrollViewer Grid.Row="1" Margin="20,0,20,20" VerticalScrollBarVisibility="Auto">
-								<ItemsControl ItemsSource="{Binding TopEmployeesList}">
-									<ItemsControl.ItemTemplate>
-										<DataTemplate>
-											<Border Background="{DynamicResource BackgroundBrush}" CornerRadius="4" Padding="10" Margin="0,5">
-												<StackPanel>
-													<TextBlock Text="{Binding EmployeeName}" FontSize="14" FontWeight="Medium"
-															   Foreground="{DynamicResource TextPrimaryBrush}"/>
-													<TextBlock Text="{Binding LoadPercent, StringFormat='Загрузка: {0}%'}"
-															   FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,2"/>
-													<TextBlock Text="{Binding TotalTasks, StringFormat='Всего задач: {0}'}"
-															   FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
-												</StackPanel>
-											</Border>
-										</DataTemplate>
-									</ItemsControl.ItemTemplate>
-								</ItemsControl>
-							</ScrollViewer>
-						</Grid>
-					</Border>
+						<!-- Список топ сотрудников с фиксированной высотой -->
+						<Border Grid.Column="1" Margin="10,0,0,0" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+								MinWidth="300" Height="400">
+							<Grid RowDefinitions="Auto,*">
+								<TextBlock Grid.Row="0" Text="Топ сотрудников" FontSize="16" FontWeight="Medium"
+										   Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,10"/>
+								<ScrollViewer Grid.Row="1" Margin="20,0,20,20" VerticalScrollBarVisibility="Auto">
+									<ItemsControl ItemsSource="{Binding TopEmployeesList}">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<Border Background="{DynamicResource BackgroundBrush}" CornerRadius="4"
+														Padding="10" Margin="0,5">
+													<StackPanel>
+														<TextBlock Text="{Binding EmployeeName}" FontSize="14" FontWeight="Medium"
+																   Foreground="{DynamicResource TextPrimaryBrush}"/>
+														<TextBlock Text="{Binding LoadPercent, StringFormat='Загрузка: {0}%'}"
+																   FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,2"/>
+														<TextBlock Text="{Binding TotalTasks, StringFormat='Всего задач: {0}'}"
+																   FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
+													</StackPanel>
+												</Border>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</ScrollViewer>
+							</Grid>
+						</Border>
+					</Grid>
 
-					<!-- Метрики сотрудников -->
-					<Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,15,0,0" RowDefinitions="Auto,*">
+					<!-- Нижний ряд: Метрики эффективности -->
+					<Grid RowDefinitions="Auto,*">
 						<TextBlock Grid.Row="0" Text="Метрики эффективности" FontSize="16" FontWeight="Medium"
 								   Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,10"/>
-						<Grid Grid.Row="1" ColumnDefinitions="*,*,*">
-							<Border Grid.Column="0" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
-									 Padding="15" Margin="0,0,15,0">
+
+						<!-- Адаптивные карточки -->
+						<UniformGrid Grid.Row="1" Columns="3" MinWidth="210">
+							<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+									Padding="15" Margin="0,0,10,0">
 								<StackPanel>
-									<TextBlock Text="Средняя загрузка" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
+									<TextBlock Text="Средняя загрузка" FontSize="12"
+											   Foreground="{DynamicResource TextSecondaryBrush}"/>
 									<TextBlock Text="{Binding AverageEmployeeLoad, StringFormat='{}{0}%'}" FontSize="18"
 											   Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Medium" Margin="0,5,0,0"/>
 								</StackPanel>
 							</Border>
-							<Border Grid.Column="1" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
-									 Padding="15" Margin="15,0">
+							<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+									Padding="15" Margin="5,0">
 								<StackPanel>
-									<TextBlock Text="Активных сотрудников" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
+									<TextBlock Text="Активных сотрудников" FontSize="12"
+											   Foreground="{DynamicResource TextSecondaryBrush}"/>
 									<TextBlock Text="{Binding ActiveEmployeesCount}" FontSize="18"
 											   Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Medium" Margin="0,5,0,0"/>
 								</StackPanel>
 							</Border>
-							<Border Grid.Column="2" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
-									 Padding="15" Margin="15,0,0,0">
+							<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+									Padding="15" Margin="10,0,0,0">
 								<StackPanel>
-									<TextBlock Text="Эффективность" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
+									<TextBlock Text="Эффективность" FontSize="12"
+											   Foreground="{DynamicResource TextSecondaryBrush}"/>
 									<TextBlock Text="{Binding EmployeeEfficiencyRate, StringFormat='{}{0}%'}" FontSize="18"
 											   Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Medium" Margin="0,5,0,0"/>
 								</StackPanel>
 							</Border>
-						</Grid>
+						</UniformGrid>
 					</Grid>
-				</Grid>
+				</StackPanel>
 
-				<!-- Grid для производства -->
-				<Grid ColumnDefinitions="3*,2*" RowDefinitions="400,300" IsVisible="{Binding ShowProductionChart}">
-					<!-- График этапов производства -->
-					<Border Grid.Row="0" Grid.Column="0" Margin="0,0,15,15" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
-							>
-						<Grid RowDefinitions="Auto,*">
-							<TextBlock Grid.Row="0" Text="Этапы производства" FontSize="16" FontWeight="Medium"
-									   Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,10"/>
-							<sp:AvaPlot Grid.Row="1" x:Name="ProductionStagesPlot" Margin="20,0,20,20"/>
-						</Grid>
-					</Border>
+				<!-- Контейнер для производства -->
+				<StackPanel Spacing="20" IsVisible="{Binding ShowProductionChart}">
+					<!-- Верхний ряд: График и статистика -->
+					<Grid ColumnDefinitions="*,*" MinHeight="400">
+						<!-- График этапов производства -->
+						<Border Grid.Column="0" Margin="0,0,10,0" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+								MinWidth="400">
+							<Grid RowDefinitions="Auto,*">
+								<TextBlock Grid.Row="0" Text="Этапы производства" FontSize="16" FontWeight="Medium"
+										   Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,10"/>
+								<sp:AvaPlot Grid.Row="1" x:Name="ProductionStagesPlot" Margin="20,0,20,20"/>
+							</Grid>
+						</Border>
 
-					<!-- Общая статистика производства -->
-					<Border Grid.Row="0" Grid.Column="1" Margin="15,0,0,15" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
-							>
-						<Grid RowDefinitions="Auto,*">
-							<TextBlock Grid.Row="0" Text="Статистика производства" FontSize="16" FontWeight="Medium"
-									   Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,10"/>
-							<StackPanel Grid.Row="1" Margin="20,0,20,20" Spacing="15">
-								<Border Background="{DynamicResource BackgroundBrush}" CornerRadius="4" Padding="15">
-									<StackPanel>
-										<TextBlock Text="В производстве" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
-										<TextBlock Text="{Binding TotalInProduction}" FontSize="18"
-												   Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Medium" Margin="0,5,0,0"/>
-									</StackPanel>
-								</Border>
-								<Border Background="{DynamicResource BackgroundBrush}" CornerRadius="4" Padding="15">
-									<StackPanel>
-										<TextBlock Text="На отладке" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
-										<TextBlock Text="{Binding TotalDebugging}" FontSize="18"
-												   Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Medium" Margin="0,5,0,0"/>
-									</StackPanel>
-								</Border>
-								<Border Background="{DynamicResource BackgroundBrush}" CornerRadius="4" Padding="15">
-									<StackPanel>
-										<TextBlock Text="Готово к упаковке" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
-										<TextBlock Text="{Binding TotalReadyForPackaging}" FontSize="18"
-												   Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Medium" Margin="0,5,0,0"/>
-									</StackPanel>
-								</Border>
-							</StackPanel>
-						</Grid>
-					</Border>
+						<!-- Общая статистика производства -->
+						<Border Grid.Column="1" Margin="10,0,0,0" Background="{DynamicResource SurfaceBrush}" CornerRadius="8"
+								MinWidth="300">
+							<Grid RowDefinitions="Auto,*">
+								<TextBlock Grid.Row="0" Text="Статистика производства" FontSize="16" FontWeight="Medium"
+										   Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,10"/>
+								<StackPanel Grid.Row="1" Margin="20,0,20,20" Spacing="15">
+									<Border Background="{DynamicResource BackgroundBrush}" CornerRadius="4" Padding="15">
+										<StackPanel>
+											<TextBlock Text="В производстве" FontSize="12"
+													   Foreground="{DynamicResource TextSecondaryBrush}"/>
+											<TextBlock Text="{Binding TotalInProduction}" FontSize="18"
+													   Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Medium" Margin="0,5,0,0"/>
+										</StackPanel>
+									</Border>
+									<Border Background="{DynamicResource BackgroundBrush}" CornerRadius="4" Padding="15">
+										<StackPanel>
+											<TextBlock Text="На отладке" FontSize="12"
+													   Foreground="{DynamicResource TextSecondaryBrush}"/>
+											<TextBlock Text="{Binding TotalDebugging}" FontSize="18"
+													   Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Medium" Margin="0,5,0,0"/>
+										</StackPanel>
+									</Border>
+									<Border Background="{DynamicResource BackgroundBrush}" CornerRadius="4" Padding="15">
+										<StackPanel>
+											<TextBlock Text="Готово к упаковке" FontSize="12"
+													   Foreground="{DynamicResource TextSecondaryBrush}"/>
+											<TextBlock Text="{Binding TotalReadyForPackaging}" FontSize="18"
+													   Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Medium" Margin="0,5,0,0"/>
+										</StackPanel>
+									</Border>
+								</StackPanel>
+							</Grid>
+						</Border>
+					</Grid>
 
-					<!-- Временная линия производства -->
-					<Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,15,0,0" Background="{DynamicResource SurfaceBrush}"
-							CornerRadius="8">
+					<!-- Нижний ряд: Временная линия производства -->
+					<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8" MinHeight="300">
 						<Grid RowDefinitions="Auto,*">
 							<TextBlock Grid.Row="0" Text="Временная линия производства" FontSize="16" FontWeight="Medium"
 									   Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,20,0,10"/>
 							<sp:AvaPlot Grid.Row="1" x:Name="ProductionTimeline" Margin="20,0,20,20"/>
 						</Grid>
 					</Border>
-				</Grid>
-			</Grid>
+				</StackPanel>
+			</StackPanel>
 		</ScrollViewer>
 	</Grid>
 </UserControl>

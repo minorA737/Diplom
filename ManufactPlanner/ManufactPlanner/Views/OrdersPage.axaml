@@ -214,8 +214,11 @@
 					<!-- Пагинация -->
 					<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5" Margin="0,15,0,15">
 						<Button Command="{Binding PreviousPageCommand}" Background="Transparent" BorderThickness="0"
-                                IsEnabled="{Binding CanGoToPreviousPage}">
-							<TextBlock Text="◀ Пред." FontSize="13" Foreground="{Binding CanGoToPreviousPage, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource TextSecondaryBrush},{DynamicResource BorderBrush}'}" VerticalAlignment="Center"/>
+							IsEnabled="{Binding CanGoToPreviousPage}">
+							<TextBlock Text="◀ Пред." FontSize="13"
+									   Foreground="{DynamicResource TextSecondaryBrush}"
+									   Opacity="{Binding CanGoToPreviousPage, Converter={StaticResource BoolToValue}, ConverterParameter='1,0.5'}"
+									   VerticalAlignment="Center"/>
 						</Button>
 
 						<!-- Текущая страница -->
@@ -228,8 +231,11 @@
 						<TextBlock Text="{Binding TotalPages}" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="5,0"/>
 
 						<Button Command="{Binding NextPageCommand}" Background="Transparent" BorderThickness="0"
-                                IsEnabled="{Binding CanGoToNextPage}">
-							<TextBlock Text="След. ▶" FontSize="13" Foreground="{Binding CanGoToNextPage, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource TextSecondaryBrush},{DynamicResource BorderBrush}'}" VerticalAlignment="Center"/>
+								IsEnabled="{Binding CanGoToNextPage}">
+							<TextBlock Text="След. ▶" FontSize="13"
+									   Foreground="{DynamicResource TextSecondaryBrush}"
+									   Opacity="{Binding CanGoToNextPage, Converter={StaticResource BoolToValue}, ConverterParameter='1,0.5'}"
+									   VerticalAlignment="Center"/>
 						</Button>
 					</StackPanel>
 				</Grid>

@@ -1,0 +1,118 @@
+is_global = true
+build_property.AvaloniaNameGeneratorIsEnabled = true
+build_property.AvaloniaNameGeneratorBehavior = InitializeComponent
+build_property.AvaloniaNameGeneratorDefaultFieldModifier = internal
+build_property.AvaloniaNameGeneratorFilterByPath = *
+build_property.AvaloniaNameGeneratorFilterByNamespace = *
+build_property.AvaloniaNameGeneratorViewFileNamingStrategy = NamespaceAndClassName
+build_property.AvaloniaNameGeneratorAttachDevTools = true
+build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = ManufactPlanner
+build_property.ProjectDir = D:\aa_Диплом\ManufactPlanner\ManufactPlanner\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/App.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Assets/Styles/DarkTheme.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Assets/Styles/LightTheme.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Assets/Styles/ThemeResources.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/AnalyticsPage.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/AuthPage.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/CalendarPage.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Controls/EmbeddedDashboardControl.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/DashboardPage.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/DesktopNotificationDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/MessageBoxDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/OrderCreateDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/OrderEditDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/OrderPositionDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/OrderPositionSelectionDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/OrderSelectionDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/ProductionOrderDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/TaskCreateDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/Dialogs/TaskEditDialog.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/DocumentationPage.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/MainWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/NotificationsPage.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/OrderDetailsPage.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/OrdersPage.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/ProductionPage.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/SettingsPage.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/TaskDetailsPage.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/TasksPage.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/UserManagementPage.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/aa_Диплом/ManufactPlanner/ManufactPlanner/Views/UsersPage.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

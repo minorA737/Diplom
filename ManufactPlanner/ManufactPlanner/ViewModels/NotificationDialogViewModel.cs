@@ -79,11 +79,27 @@ namespace ManufactPlanner.ViewModels
                 await _notificationService.MarkNotificationAsReadAsync(_notification.Id);
             }
 
-            // Переходим на страницу уведомлений
-            _mainWindowViewModel.NavigateToNotifications();
-
             // Закрываем диалоговое окно
             _window.Close();
+
+            // Обновляем счетчик уведомлений
+            await _notificationService.UpdateUnreadCountAsync(_mainWindowViewModel.CurrentUserId);
+
+            // Активируем главное окно
+            await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                if (AppWindows.MainWindow != null)
+                {
+                    AppWindows.MainWindow.Show();
+                    AppWindows.MainWindow.Activate();
+                    AppWindows.MainWindow.WindowState = WindowState.Normal;
+                    AppWindows.MainWindow.Topmost = true;
+                    AppWindows.MainWindow.Topmost = false; // Убираем Topmost после активации
+                }
+
+                // Переходим на страницу уведомлений
+                _mainWindowViewModel.NavigateToNotifications();
+            });
         }
     }
 }

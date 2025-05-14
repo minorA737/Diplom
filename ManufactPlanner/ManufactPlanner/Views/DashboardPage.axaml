@@ -4,269 +4,307 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:ManufactPlanner.ViewModels"
              xmlns:converters="using:ManufactPlanner.Converters"
-             mc:Ignorable="d" d:DesignWidth="760" d:DesignHeight="640"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
              x:Class="ManufactPlanner.Views.DashboardPage"
-             x:DataType="vm:DashboardViewModel">
+             x:DataType="vm:DashboardViewModel"
+			 xmlns:sp="clr-namespace:ScottPlot.Avalonia;assembly=ScottPlot.Avalonia">
 
 	<UserControl.Resources>
 		<converters:BoolToValueConverter x:Key="BoolToValue"/>
 		<converters:StatusToBrushConverter x:Key="StatusToBrushConverter"/>
 		<converters:PercentToWidthConverter x:Key="PercentToWidthConverter"/>
 		<converters:SubtractHalfPointConverter x:Key="SubtractHalfPoint"/>
+		<converters:PercentageToWidthConverter x:Key="PercentageToWidth"/>
 	</UserControl.Resources>
 
-	<Grid RowDefinitions="Auto,Auto,*">
-		<!-- Заголовок страницы с информацией о пользователе -->
-		<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="20,20,20,0">
+	<Grid RowDefinitions="Auto,Auto,*" Margin="20">
+		<!-- Заголовок страницы -->
+		<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,15">
 			<StackPanel>
-				<TextBlock Text="Дашборд" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}"/>
-				<TextBlock Text="{Binding UserName}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,5,0,0"/>
-				<TextBlock Text="{Binding UserRole}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7" Margin="0,2,0,0"/>
+				<TextBlock Text="Дашборд" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+				<StackPanel Orientation="Horizontal" Spacing="5" Margin="0,5,0,0">
+					<TextBlock Text="{Binding UserName}" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
+					<TextBlock Text="|" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.5"/>
+					<TextBlock Text="{Binding UserRole}" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"/>
+				</StackPanel>
 			</StackPanel>
 
 			<Button Grid.Column="1" Content="Обновить" Command="{Binding RefreshDataCommand}"
-					Background="{DynamicResource PrimaryBrush}" Foreground="White" CornerRadius="4" Padding="12,6"/>
+					Background="{DynamicResource PrimaryBrush}" Foreground="White" CornerRadius="6"
+					Padding="16,8" MinWidth="100" VerticalAlignment="Center"/>
 		</Grid>
 
 		<!-- Карточки статистики -->
-		<Grid Grid.Row="1" Margin="20,20,20,0" ColumnDefinitions="*,*,*" RowDefinitions="Auto">
-			<!-- Карточка 1: Активные задачи -->
-			<Border Grid.Column="0" Height="120" Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Margin="0,0,10,0"
-                    >
-				<Grid Margin="20,0">
-					<StackPanel VerticalAlignment="Center">
-						<TextBlock Text="Активные задачи" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"/>
-						<TextBlock Text="{Binding ActiveTasksCount}" FontSize="30" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,10,0,0"/>
-						<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10">
-							<Border Width="70" Height="24" Background="{DynamicResource SuccessBrush}" Opacity="0.2" CornerRadius="12">
-								<TextBlock Text="+12%" FontSize="12" Foreground="{DynamicResource SuccessBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-							</Border>
-						</StackPanel>
-					</StackPanel>
-				</Grid>
-			</Border>
+		<Grid Grid.Row="1" RowDefinitions="Auto" Margin="0,0,0,30">
+			<Grid x:Name="WideLayoutGrid">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" MinWidth="200"/>
+					<ColumnDefinition Width="*" MinWidth="200"/>
+					<ColumnDefinition Width="*" MinWidth="200"/>
+				</Grid.ColumnDefinitions>
 
-			<!-- Карточка 2: Активных заказов -->
-			<Border Grid.Column="1" Height="120" Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Margin="10,0"
-                    >
-				<Grid Margin="20,0">
-					<StackPanel VerticalAlignment="Center">
-						<TextBlock Text="Активных заказов" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"/>
-						<TextBlock Text="{Binding ActiveOrdersCount}" FontSize="30" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,10,0,0"/>
-						<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10">
-							<Border Width="70" Height="24" Background="{DynamicResource ErrorBrush}" Opacity="0.2" CornerRadius="12">
-								<TextBlock Text="-3%" FontSize="12" Foreground="{DynamicResource ErrorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-							</Border>
-						</StackPanel>
-					</StackPanel>
-				</Grid>
-			</Border>
+				<!-- Карточка 1: Активные задачи -->
+				<Border Grid.Column="0" Height="120"
+						Background="{DynamicResource SurfaceBrush}" CornerRadius="12"
+						Margin="0,0,10,0">
+					<Grid Margin="15" RowDefinitions="Auto,*,Auto">
+						<TextBlock Grid.Row="0" Text="Активные задачи" FontSize="14"
+								   Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.8"/>
 
-			<!-- Карточка 3: Дедлайнов сегодня -->
-			<Border Grid.Column="2" Height="120" Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Margin="10,0,0,0"
-                   >
-				<Grid Margin="20,0">
-					<StackPanel VerticalAlignment="Center">
-						<TextBlock Text="Дедлайнов сегодня" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"/>
-						<TextBlock Text="{Binding DeadlinesTodayCount}" FontSize="30" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,10,0,0"/>
-						<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10">
-							<Border Width="70" Height="24" Background="{DynamicResource WarningBrush}" Opacity="0.2" CornerRadius="12">
-								<TextBlock Text="Срочно" FontSize="12" Foreground="{DynamicResource WarningBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-							</Border>
-						</StackPanel>
-					</StackPanel>
-				</Grid>
-			</Border>
+						<TextBlock Grid.Row="1" Text="{Binding ActiveTasksCount}" FontSize="32"
+								   FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"
+								   VerticalAlignment="Center"/>
+
+						<Border Grid.Row="2" Height="24" CornerRadius="12" Background="{DynamicResource SuccessBrush}"
+								Opacity="0.15" HorizontalAlignment="Right" Padding="10,0">
+							<TextBlock Text="+12%" FontSize="12" Foreground="{DynamicResource SuccessBrush}"
+									   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Border>
+					</Grid>
+				</Border>
+
+				<!-- Карточка 2: Активных заказов -->
+				<Border Grid.Column="1" Height="120"
+						Background="{DynamicResource SurfaceBrush}" CornerRadius="12"
+						Margin="5,0">
+					<Grid Margin="15" RowDefinitions="Auto,*,Auto">
+						<TextBlock Grid.Row="0" Text="Активных заказов" FontSize="14"
+								   Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.8"/>
+
+						<TextBlock Grid.Row="1" Text="{Binding ActiveOrdersCount}" FontSize="32"
+								   FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"
+								   VerticalAlignment="Center"/>
+
+						<Border Grid.Row="2" Height="24" CornerRadius="12" Background="{DynamicResource ErrorBrush}"
+								Opacity="0.15" HorizontalAlignment="Right" Padding="10,0">
+							<TextBlock Text="-3%" FontSize="12" Foreground="{DynamicResource ErrorBrush}"
+									   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Border>
+					</Grid>
+				</Border>
+
+				<!-- Карточка 3: Дедлайнов сегодня -->
+				<Border Grid.Column="2" Height="120"
+						Background="{DynamicResource SurfaceBrush}" CornerRadius="12"
+						Margin="10,0,0,0">
+					<Grid Margin="15" RowDefinitions="Auto,*,Auto">
+						<TextBlock Grid.Row="0" Text="Дедлайнов сегодня" FontSize="14"
+								   Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.8"/>
+
+						<TextBlock Grid.Row="1" Text="{Binding DeadlinesTodayCount}" FontSize="32"
+								   FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"
+								   VerticalAlignment="Center"/>
+
+						<Border Grid.Row="2" Height="24" CornerRadius="12" Background="{DynamicResource WarningBrush}"
+								Opacity="0.15" HorizontalAlignment="Right" Padding="10,0">
+							<TextBlock Text="Срочно" FontSize="12" Foreground="{DynamicResource WarningBrush}"
+									   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Border>
+					</Grid>
+				</Border>
+			</Grid>
 		</Grid>
 
-		<!-- Нижняя часть: задачи и календарь -->
-		<Grid Grid.Row="2" Margin="20,20,20,20" ColumnDefinitions="3*,1*" RowDefinitions="Auto,*,Auto">
-			<!-- Заголовок раздела задач -->
-			<Grid Grid.Row="0" Grid.Column="0" ColumnDefinitions="*,Auto">
-				<TextBlock Text="Недавние задачи" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="20,0,0,10"/>
-				<Button Grid.Column="1" Command="{Binding ViewTasksCommand}"
-						Content="Все задачи →" Foreground="{DynamicResource PrimaryBrush}" Background="Transparent"/>
+		<!-- Основная область контента -->
+		<Grid Grid.Row="2" ColumnDefinitions="2*,1*">
+			<!-- Раздел со списком задач -->
+			<Grid Grid.Column="0" RowDefinitions="Auto,*" Margin="0,0,15,0">
+				<!-- Заголовок секции задач -->
+				<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,15">
+					<TextBlock Text="Недавние задачи" FontSize="18" FontWeight="Bold"
+							   Foreground="{DynamicResource TextPrimaryBrush}"/>
+					<Button Grid.Column="1" Command="{Binding ViewTasksCommand}"
+							Content="Все задачи →" Foreground="{DynamicResource PrimaryBrush}"
+							Background="Transparent" BorderThickness="0" Padding="10,5"/>
+				</Grid>
+
+				<!-- Список задач -->
+				<Border Grid.Row="1" Background="{DynamicResource SurfaceBrush}" CornerRadius="12">
+					<ScrollViewer VerticalScrollBarVisibility="Auto">
+						<StackPanel Margin="15">
+							<Rectangle Height="1" Fill="{DynamicResource BorderBrush}"
+									   Margin="0,0,0,15" Opacity="0.5"/>
+
+							<ItemsControl ItemsSource="{Binding RecentTasks}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<Border Background="{DynamicResource BackgroundBrush}" CornerRadius="8"
+												Margin="0,0,0,10" Padding="15">
+											<Grid ColumnDefinitions="*,Auto">
+												<StackPanel>
+													<TextBlock Text="{Binding Name}" FontSize="15" FontWeight="Medium"
+															   Foreground="{DynamicResource TextPrimaryBrush}"
+															   TextWrapping="Wrap"/>
+													<TextBlock Text="{Binding Description}" FontSize="13"
+															   Foreground="{DynamicResource TextSecondaryBrush}"
+															   Opacity="0.8" TextWrapping="Wrap" Margin="0,5,0,0"/>
+												</StackPanel>
+
+												<Border Grid.Column="1" Height="28" CornerRadius="14"
+														Background="{Binding Status, Converter={StaticResource StatusToBrushConverter}}"
+														Opacity="0.15" Padding="12,0" Margin="10,0,0,0"
+														VerticalAlignment="Top">
+													<TextBlock Text="{Binding Status}" FontSize="12"
+															   Foreground="{Binding Status, Converter={StaticResource StatusToBrushConverter}}"
+															   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+												</Border>
+											</Grid>
+										</Border>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+
+							<!-- Когда нет задач -->
+							<Border IsVisible="{Binding !RecentTasks.Count}" Padding="40,20">
+								<StackPanel HorizontalAlignment="Center">
+									<TextBlock Text="📋" FontSize="36" HorizontalAlignment="Center" Opacity="0.5"/>
+									<TextBlock Text="Нет активных задач" FontSize="14"
+											   Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"
+											   HorizontalAlignment="Center" Margin="0,10,0,0"/>
+								</StackPanel>
+							</Border>
+						</StackPanel>
+					</ScrollViewer>
+				</Border>
 			</Grid>
 
-			<!-- Список задач -->
-			<Border Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Margin="0,0,15,0"
-                    >
-				<StackPanel>
-					<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="20,40,20,0"/>
-
-					<ItemsControl ItemsSource="{Binding RecentTasks}">
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<Border Height="60" Background="{DynamicResource BackgroundBrush}" Margin="20,10,20,0" CornerRadius="4">
-									<Grid Margin="10,0" ColumnDefinitions="*,Auto">
-										<StackPanel VerticalAlignment="Center">
-											<TextBlock Text="{Binding Name}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}"/>
-											<TextBlock Text="{Binding Description}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"/>
-										</StackPanel>
-
-										<Border Grid.Column="1" Height="24" CornerRadius="12"
-												Background="{Binding Status, Converter={StaticResource StatusToBrushConverter}}" Opacity="0.2"
-												VerticalAlignment="Center" HorizontalAlignment="Right" Padding="10,0">
-											<TextBlock Text="{Binding Status}" FontSize="12"
-													   Foreground="{Binding Status, Converter={StaticResource StatusToBrushConverter}}"
-													   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-										</Border>
-									</Grid>
-								</Border>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
-
-					<!-- Когда нет задач -->
-					<TextBlock Text="Нет активных задач" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"
-							   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,40,0,0"
-							   IsVisible="{Binding !RecentTasks.Count}"/>
-				</StackPanel>
-			</Border>
-
-			<!-- Календарь и график справа -->
-			<StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="3">
-				<!-- Календарь -->
-				<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Margin="0,0,0,15" >
-					<StackPanel Margin="20,20,20,20">
-						<Grid ColumnDefinitions="*,Auto">
-							<TextBlock Text="Календарь" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,10"/>
-							<Button Grid.Column="1" Command="{Binding ViewCalendarCommand}"
-									Content="→" Foreground="{DynamicResource PrimaryBrush}" Background="Transparent" Padding="0"/>
-						</Grid>
-						<TextBlock Text="{Binding CurrentMonthYear}" FontSize="14" FontWeight="Medium" HorizontalAlignment="Center" Margin="0,10,0,10"/>
-
-						<!-- Дни недели -->
-						<Grid ColumnDefinitions="*,*,*,*,*,*,*">
-							<TextBlock Grid.Column="0" Text="Пн" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="1" Text="Вт" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="2" Text="Ср" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="3" Text="Чт" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="4" Text="Пт" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="5" Text="Сб" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7" HorizontalAlignment="Center"/>
-							<TextBlock Grid.Column="6" Text="Вс" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7" HorizontalAlignment="Center"/>
-						</Grid>
-
-						<!-- Вместо двух жестко закодированных недель используем ItemsControl для динамической генерации дней календаря -->
-						<ItemsControl ItemsSource="{Binding CalendarItems}">
-							<ItemsControl.ItemsPanel>
-								<ItemsPanelTemplate>
-									<UniformGrid Columns="7" Rows="6" Margin="0,10,0,0"/>
-								</ItemsPanelTemplate>
-							</ItemsControl.ItemsPanel>
-							<ItemsControl.ItemTemplate>
-								<DataTemplate>
-									<Border Width="24" Height="24" CornerRadius="12"
-											Background="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush} 0.2,Transparent'}"
-											Margin="2">
-										<Grid>
-											<TextBlock Text="{Binding Day}" FontSize="12"
-													  Foreground="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush},{DynamicResource TextPrimaryBrush}'}"
-													  FontWeight="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='Bold,Normal'}"
-													  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-											<!-- Индикатор событий -->
-											<Ellipse Width="4" Height="4" Fill="{DynamicResource PrimaryBrush}" VerticalAlignment="Bottom" Margin="0,0,0,2"
-													 IsVisible="{Binding HasEvents}"/>
-										</Grid>
-									</Border>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
-					</StackPanel>
-				</Border>
-
-				<!-- График выполнения задач -->
-				<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8" >
-					<StackPanel Margin="20,20,20,20">
-						<TextBlock Text="Выполнение задач" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,10"/>
-
-						<!-- Фон графика -->
-						<Border Width="190" Height="130" Background="{DynamicResource BackgroundBrush}" CornerRadius="4" Margin="0,10,0,0">
-							<Grid>
-								<!-- Оси координат и сетка -->
-								<Line StartPoint="0,130" EndPoint="190,130" Stroke="{DynamicResource BorderBrush}" StrokeThickness="1"/>
-								<Line StartPoint="0,0" EndPoint="0,130" Stroke="{DynamicResource BorderBrush}" StrokeThickness="1"/>
-
-								<!-- Горизонтальные линии сетки -->
-								<Line StartPoint="0,32.5" EndPoint="190,32.5" Stroke="{DynamicResource BorderBrush}" StrokeThickness="0.5"/>
-								<Line StartPoint="0,65" EndPoint="190,65" Stroke="{DynamicResource BorderBrush}" StrokeThickness="0.5"/>
-								<Line StartPoint="0,97.5" EndPoint="190,97.5" Stroke="{DynamicResource BorderBrush}" StrokeThickness="0.5"/>
-
-								<!-- Вертикальные линии сетки -->
-								<Line StartPoint="38,0" EndPoint="38,130" Stroke="{DynamicResource BorderBrush}" StrokeThickness="0.5"/>
-								<Line StartPoint="76,0" EndPoint="76,130" Stroke="{DynamicResource BorderBrush}" StrokeThickness="0.5"/>
-								<Line StartPoint="114,0" EndPoint="114,130" Stroke="{DynamicResource BorderBrush}" StrokeThickness="0.5"/>
-								<Line StartPoint="152,0" EndPoint="152,130" Stroke="{DynamicResource BorderBrush}" StrokeThickness="0.5"/>
-
-								<!-- Данные графика (линия) -->
-								<Polyline Points="{Binding TaskCompletionGraphPointsString}"
-                                          Stroke="{DynamicResource PrimaryBrush}" StrokeThickness="2" Fill="Transparent"/>
-
-								<!-- Точки данных -->
-								<ItemsControl ItemsSource="{Binding TaskCompletionGraphPoints}">
-									<ItemsControl.ItemsPanel>
-										<ItemsPanelTemplate>
-											<Canvas/>
-										</ItemsPanelTemplate>
-									</ItemsControl.ItemsPanel>
-									<ItemsControl.ItemTemplate>
-										<DataTemplate>
-											<Ellipse Width="6" Height="6" Fill="{DynamicResource PrimaryBrush}"
-												Canvas.Left="{Binding X, Converter={StaticResource SubtractHalfPoint}, ConverterParameter=3}"
-												Canvas.Top="{Binding Y, Converter={StaticResource SubtractHalfPoint}, ConverterParameter=3}"/>
-										</DataTemplate>
-									</ItemsControl.ItemTemplate>
-								</ItemsControl>
-
-								<!-- Подписи осей -->
-								<TextBlock Text="0" FontSize="8" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"
-										   Canvas.Left="2" Canvas.Bottom="2" Margin="2,0,0,2"/>
-								<TextBlock Text="6 мес" FontSize="8" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"
-										   Canvas.Right="2" Canvas.Bottom="2" HorizontalAlignment="Right" Margin="0,0,2,2"/>
+			<!-- Правая панель с календарем и графиками -->
+			<ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+				<StackPanel Spacing="15">
+					<!-- Календарь -->
+					<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="12" MinHeight="200">
+						<StackPanel Margin="15">
+							<Grid ColumnDefinitions="*,Auto" Margin="0,0,0,15">
+								<TextBlock Text="Календарь" FontSize="16" FontWeight="Bold"
+										   Foreground="{DynamicResource TextPrimaryBrush}"/>
+								<Button Grid.Column="1" Command="{Binding ViewCalendarCommand}"
+										Content="→" Foreground="{DynamicResource PrimaryBrush}"
+										Background="Transparent" BorderThickness="0" Padding="8"/>
 							</Grid>
-						</Border>
 
-						<!-- Легенда графика -->
-						<StackPanel Orientation="Horizontal" Margin="0,10,0,0" HorizontalAlignment="Center" Spacing="10">
-							<StackPanel Orientation="Horizontal" Spacing="5">
-								<Border Width="12" Height="4" Background="{DynamicResource PrimaryBrush}" VerticalAlignment="Center"/>
-								<TextBlock Text="Выполнено" FontSize="10" Foreground="{DynamicResource TextSecondaryBrush}"/>
-							</StackPanel>
+							<TextBlock Text="{Binding CurrentMonthYear}" FontSize="15" FontWeight="Medium"
+									   HorizontalAlignment="Center" Margin="0,0,0,15"/>
+
+							<!-- Дни недели -->
+							<Grid Margin="0,0,0,10">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+								</Grid.ColumnDefinitions>
+
+								<TextBlock Grid.Column="0" Text="Пн" FontSize="12"
+										   Foreground="{DynamicResource TextSecondaryBrush}"
+										   HorizontalAlignment="Center"/>
+								<TextBlock Grid.Column="1" Text="Вт" FontSize="12"
+										   Foreground="{DynamicResource TextSecondaryBrush}"
+										   HorizontalAlignment="Center"/>
+								<TextBlock Grid.Column="2" Text="Ср" FontSize="12"
+										   Foreground="{DynamicResource TextSecondaryBrush}"
+										   HorizontalAlignment="Center"/>
+								<TextBlock Grid.Column="3" Text="Чт" FontSize="12"
+										   Foreground="{DynamicResource TextSecondaryBrush}"
+										   HorizontalAlignment="Center"/>
+								<TextBlock Grid.Column="4" Text="Пт" FontSize="12"
+										   Foreground="{DynamicResource TextSecondaryBrush}"
+										   HorizontalAlignment="Center"/>
+								<TextBlock Grid.Column="5" Text="Сб" FontSize="12"
+										   Foreground="{DynamicResource TextSecondaryBrush}"
+										   HorizontalAlignment="Center"/>
+								<TextBlock Grid.Column="6" Text="Вс" FontSize="12"
+										   Foreground="{DynamicResource TextSecondaryBrush}"
+										   HorizontalAlignment="Center"/>
+							</Grid>
+
+							<!-- Дни календаря -->
+							<ItemsControl ItemsSource="{Binding CalendarItems}">
+								<ItemsControl.ItemsPanel>
+									<ItemsPanelTemplate>
+										<UniformGrid Columns="7" MinWidth="200"/>
+									</ItemsPanelTemplate>
+								</ItemsControl.ItemsPanel>
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<Border Height="32" CornerRadius="16" Margin="2"
+												Background="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush} 0.15,Transparent'}">
+											<Grid>
+												<TextBlock Text="{Binding Day}" FontSize="13"
+														  Foreground="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource PrimaryBrush},{DynamicResource TextPrimaryBrush}'}"
+														  FontWeight="{Binding IsToday, Converter={StaticResource BoolToValue}, ConverterParameter='Bold,Normal'}"
+														  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+												<!-- Индикатор событий -->
+												<Ellipse Width="6" Height="6" Fill="{DynamicResource PrimaryBrush}"
+														 VerticalAlignment="Bottom" Margin="0,0,0,3"
+														 IsVisible="{Binding HasEvents}" HorizontalAlignment="Center"/>
+											</Grid>
+										</Border>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
 						</StackPanel>
-					</StackPanel>
-				</Border>
+					</Border>
 
-				<!-- Статистика по статусам задач -->
-				<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Margin="0,15,0,0">
-					<StackPanel Margin="20,20,20,20">
-						<TextBlock Text="Статистика по статусам" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,10"/>
+					<!-- График выполнения задач с легендой снизу -->
+					<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="12" MinHeight="250">
+						<Grid RowDefinitions="Auto,*,Auto">
+							<TextBlock Grid.Row="0" Text="Выполнение задач" FontSize="14" FontWeight="Bold"
+									   Foreground="{DynamicResource TextPrimaryBrush}" Margin="15,15,0,10"/>
+							<sp:AvaPlot Grid.Row="1" x:Name="TaskCompletionPlot"
+										MinHeight="180" Margin="10,0,10,10"/>
+							<!-- Легенда снизу -->
+							<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,15">
+								<StackPanel Orientation="Horizontal" Margin="0,5">
+									<Border Width="16" Height="3" Background="#00ACC1" VerticalAlignment="Center"/>
+									<TextBlock Text="Выполненные" FontSize="12" Margin="8,0" VerticalAlignment="Center"/>
+								</StackPanel>
+								<StackPanel Orientation="Horizontal" Margin="20,5,0,5">
+									<Border Width="16" Height="3" Background="#9575CD" VerticalAlignment="Center"/>
+									<TextBlock Text="Запланированные" FontSize="12" Margin="8,0" VerticalAlignment="Center"/>
+								</StackPanel>
+							</StackPanel>
+						</Grid>
+					</Border>
 
-						<ItemsControl ItemsSource="{Binding TasksByStatus}">
-							<ItemsControl.ItemTemplate>
-								<DataTemplate>
-									<StackPanel Margin="0,8,0,0">
-										<Grid ColumnDefinitions="*,Auto">
-											<TextBlock Text="{Binding Status}" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}"/>
-											<TextBlock Grid.Column="1" Text="{Binding Count}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
-										</Grid>
-										<Grid Height="6" Margin="0,3,0,0">
-											<Border Background="{DynamicResource BorderBrush}" Height="6" CornerRadius="3"/>
-											<Border Background="{Binding ColorHex}" Height="6" CornerRadius="3"
-													Width="{Binding Percentage, Converter={StaticResource PercentToWidthConverter}, ConverterParameter=170}"
-													HorizontalAlignment="Left"/>
-										</Grid>
+					<!-- График статусов задач с легендой снизу -->
+					<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="12" MinHeight="280">
+						<Grid RowDefinitions="Auto,*,Auto">
+							<TextBlock Grid.Row="0" Text="Статистика по статусам" FontSize="14" FontWeight="Bold"
+									   Foreground="{DynamicResource TextPrimaryBrush}" Margin="15,15,0,10"/>
+							<sp:AvaPlot Grid.Row="1" x:Name="TaskStatusPieChart"
+										MinHeight="180" Margin="10,0,10,10"/>
+							<!-- Легенда статусов снизу -->
+							<StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,15">
+								<WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+									<StackPanel Orientation="Horizontal" Margin="10,5">
+										<Ellipse Width="10" Height="10" Fill="#00ACC1" VerticalAlignment="Center"/>
+										<TextBlock Text="Выполнено" FontSize="11" Margin="8,0" VerticalAlignment="Center"/>
 									</StackPanel>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
-
-						<!-- Когда нет статистики -->
-						<TextBlock Text="Нет данных" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Opacity="0.7"
-								   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0"
-								   IsVisible="{Binding !TasksByStatus.Count}"/>
-					</StackPanel>
-				</Border>
-			</StackPanel>
+									<StackPanel Orientation="Horizontal" Margin="10,5">
+										<Ellipse Width="10" Height="10" Fill="#4CAF9D" VerticalAlignment="Center"/>
+										<TextBlock Text="В процессе" FontSize="11" Margin="8,0" VerticalAlignment="Center"/>
+									</StackPanel>
+									<StackPanel Orientation="Horizontal" Margin="10,5">
+										<Ellipse Width="10" Height="10" Fill="#FFB74D" VerticalAlignment="Center"/>
+										<TextBlock Text="В очереди" FontSize="11" Margin="8,0" VerticalAlignment="Center"/>
+									</StackPanel>
+									<StackPanel Orientation="Horizontal" Margin="10,5">
+										<Ellipse Width="10" Height="10" Fill="#FF7043" VerticalAlignment="Center"/>
+										<TextBlock Text="Просрочено" FontSize="11" Margin="8,0" VerticalAlignment="Center"/>
+									</StackPanel>
+									<StackPanel Orientation="Horizontal" Margin="10,5">
+										<Ellipse Width="10" Height="10" Fill="#9575CD" VerticalAlignment="Center"/>
+										<TextBlock Text="Отменено" FontSize="11" Margin="8,0" VerticalAlignment="Center"/>
+									</StackPanel>
+								</WrapPanel>
+							</StackPanel>
+						</Grid>
+					</Border>
+				</StackPanel>
+			</ScrollViewer>
 		</Grid>
 	</Grid>
 </UserControl>

@@ -17,211 +17,261 @@
 	<Grid RowDefinitions="Auto,Auto,*">
 		<!-- Навигационная цепочка -->
 		<StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20,20,20,0" Spacing="5">
-			<Button Content="Задачи" Background="Transparent" BorderThickness="0" Foreground="#666" Command="{Binding NavigateToTasksCommand}"/>
-			<TextBlock Text=">" Foreground="#666" VerticalAlignment="Center"/>
-			<TextBlock Text="{Binding TaskName}" Foreground="#333" FontWeight="Medium" VerticalAlignment="Center"/>
+			<Button Content="Задачи" Background="Transparent" BorderThickness="0" Foreground="{DynamicResource TextSecondaryBrush}" Command="{Binding NavigateToTasksCommand}"/>
+			<TextBlock Text=">" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+			<TextBlock Text="{Binding TaskName}" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Medium" VerticalAlignment="Center"/>
 		</StackPanel>
 
 		<!-- Информация о задаче -->
-		<Border Grid.Row="1" Margin="20,15,20,0" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
+		<Border Grid.Row="1" Margin="20,15,20,0" Background="{DynamicResource SurfaceBrush}" CornerRadius="8">
 			<Grid Margin="20">
 				<!-- Заголовок и кнопки действий -->
 				<Grid ColumnDefinitions="*,Auto">
-					<StackPanel>
-						<TextBlock Text="{Binding TaskName}" FontSize="20" FontWeight="SemiBold" Foreground="#333"/>
+					<!-- Заголовок - растягивается -->
+					<StackPanel Grid.Column="0">
+						<TextBlock Text="{Binding TaskName}" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap"/>
 						<StackPanel Orientation="Horizontal" Spacing="10" Margin="0,5,0,0">
-							<TextBlock Text="{Binding TaskId}" FontSize="13" Foreground="#666"/>
-							<TextBlock Text="•" FontSize="13" Foreground="#666"/>
-							<TextBlock Text="{Binding CreatedDate}" FontSize="13" Foreground="#666"/>
+							<TextBlock Text="{Binding TaskId}" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"/>
+							<TextBlock Text="•" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"/>
+							<TextBlock Text="{Binding CreatedDate}" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"/>
 						</StackPanel>
 					</StackPanel>
 
-					<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+					<!-- Кнопки - фиксированная ширина -->
+					<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" MinWidth="250">
 						<Button Width="120" Height="32"
-					IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsAdministratorOrManager}"
-						 CornerRadius="16" Background="#00ACC1" Command="{Binding EditTaskCommand}">
-							<TextBlock Text="Редактировать" FontSize="12" Foreground="White"/>
+							IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsAdministratorOrManager}"
+							CornerRadius="16" Background="{DynamicResource PrimaryBrush}" Command="{Binding EditTaskCommand}">
+							<TextBlock Text="Редактировать" FontSize="12" Foreground="{DynamicResource SurfaceBrush}"/>
 						</Button>
 						<Button Width="90" Height="32"
-					IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsAdministratorOrManager}"
-						 CornerRadius="16" Background="#F44336" Command="{Binding DeleteTaskCommand}">
-							<TextBlock Text="Удалить" FontSize="12" Foreground="White"/>
+							IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsAdministratorOrManager}"
+							CornerRadius="16" Background="{DynamicResource ErrorBrush}" Command="{Binding DeleteTaskCommand}">
+							<TextBlock Text="Удалить" FontSize="12" Foreground="{DynamicResource SurfaceBrush}"/>
 						</Button>
 					</StackPanel>
 				</Grid>
 
-				<!-- Статусы задачи -->
-				<StackPanel Orientation="Horizontal" Spacing="10" Margin="0,60,0,0">
-					<Border Width="100" Height="25" CornerRadius="12.5" Background="{Binding StatusColor}" Opacity="0.2">
-						<TextBlock Text="{Binding Status}" FontSize="12" Foreground="{Binding StatusColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-					</Border>
+				<!-- Статусы задачи - горизонтальный скролл при необходимости -->
+				<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"
+			  Margin="0,60,0,0">
+					<StackPanel Orientation="Horizontal" Spacing="10">
+						<Border MinWidth="80" Height="25" CornerRadius="12.5" Background="{Binding StatusColor}" Opacity="0.2" Padding="10,0">
+							<TextBlock Text="{Binding Status}" FontSize="12" Foreground="{Binding StatusColor}"
+									   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Border>
 
-					<Border Width="120" Height="25" CornerRadius="12.5" Background="{Binding PriorityColor}" Opacity="0.2">
-						<TextBlock Text="{Binding Priority}" FontSize="12" Foreground="{Binding PriorityColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-					</Border>
+						<Border MinWidth="80" Height="25" CornerRadius="12.5" Background="{Binding PriorityColor}" Opacity="0.2" Padding="10,0">
+							<TextBlock Text="{Binding Priority}" FontSize="12" Foreground="{Binding PriorityColor}"
+									   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Border>
 
-					<Border Width="115" Height="25" CornerRadius="12.5" Background="#9575CD" Opacity="0.2">
-						<TextBlock Text="{Binding Deadline}" FontSize="12" Foreground="#9575CD" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-					</Border>
-				</StackPanel>
+						<Border MinWidth="80" Height="25" CornerRadius="12.5" Background="{DynamicResource SecondaryBrush}" Opacity="0.2" Padding="10,0">
+							<TextBlock Text="{Binding Deadline}" FontSize="12" Foreground="{DynamicResource SecondaryBrush}"
+									   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</Border>
+					</StackPanel>
+				</ScrollViewer>
 			</Grid>
 		</Border>
 
 		<!-- Вкладки и основное содержимое -->
-		<Grid Grid.Row="2" Margin="20,20,20,20" ColumnDefinitions="3*,1*" RowDefinitions="Auto,*">
-			<!-- Вкладки -->
-			<TabControl Grid.Column="0" Grid.RowSpan="2" SelectedIndex="{Binding SelectedTabIndex}" Background="White" CornerRadius="8" >
+		<!-- Используем адаптивные колонки: на маленьких экранах боковая панель будет уже -->
+		<Grid Grid.Row="2" Margin="20,20,20,20" ColumnDefinitions="*,250">
+			<!-- Основной контент с вкладками -->
+			<TabControl Grid.Column="0" SelectedIndex="{Binding SelectedTabIndex}" Background="{DynamicResource SurfaceBrush}" CornerRadius="8">
 				<!-- Вкладка Описание -->
 				<TabItem Header="Описание">
-					<StackPanel Margin="20">
-						<TextBlock Text="Описание" FontSize="16" FontWeight="Medium" Foreground="#333"/>
-						<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,15"/>
-						<TextBlock Text="{Binding Description}" FontSize="14" Foreground="#333" TextWrapping="Wrap"/>
+					<ScrollViewer VerticalScrollBarVisibility="Auto">
+						<StackPanel Margin="20">
+							<TextBlock Text="Описание" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}"/>
+							<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="0,10,0,15"/>
+							<TextBlock Text="{Binding Description}" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap"/>
 
-						<TextBlock Text="Детали задачи" FontSize="16" FontWeight="Medium" Foreground="#333" Margin="0,30,0,0"/>
-						<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,15"/>
+							<TextBlock Text="Детали задачи" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,30,0,0"/>
+							<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="0,10,0,15"/>
 
-						<Grid ColumnDefinitions="90,*" RowDefinitions="Auto,Auto,Auto,Auto" Margin="0,0,0,20">
-							<TextBlock Grid.Row="0" Grid.Column="0" Text="Исполнитель:" FontSize="13" Foreground="#666" Margin="0,0,0,10"/>
-							<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Assignee}" FontSize="13" Foreground="#333" Margin="0,0,0,10"/>
+							<!-- Адаптивная таблица деталей -->
+							<Grid RowDefinitions="Auto,Auto,Auto,Auto" Margin="0,0,0,20">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="Auto" MinWidth="90"/>
+									<ColumnDefinition Width="*"/>
+								</Grid.ColumnDefinitions>
 
-							<TextBlock Grid.Row="1" Grid.Column="0" Text="Заказ/Позиция:" FontSize="13" Foreground="#666" Margin="0,0,0,10"/>
-							<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding OrderPosition}" FontSize="13" Foreground="#333" Margin="0,0,0,10"/>
+								<TextBlock Grid.Row="0" Grid.Column="0" Text="Исполнитель:" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
+										   Margin="0,0,10,10" VerticalAlignment="Top"/>
+								<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Assignee}" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}"
+										   Margin="0,0,0,10" TextWrapping="Wrap"/>
 
-							<TextBlock Grid.Row="2" Grid.Column="0" Text="Статус этапа:" FontSize="13" Foreground="#666" Margin="0,0,0,10"/>
-							<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding StageStatus}" FontSize="13" Foreground="#333" Margin="0,0,0,10"/>
+								<TextBlock Grid.Row="1" Grid.Column="0" Text="Заказ/Позиция:" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
+										   Margin="0,0,10,10" VerticalAlignment="Top"/>
+								<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding OrderPosition}" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}"
+										   Margin="0,0,0,10" TextWrapping="Wrap"/>
 
-							<TextBlock Grid.Row="3" Grid.Column="0" Text="Примечания:" FontSize="13" Foreground="#666" Margin="0,0,0,10"/>
-							<TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Notes}" FontSize="13" Foreground="#333" Margin="0,0,0,10" TextWrapping="Wrap"/>
-						</Grid>
-					</StackPanel>
+								<TextBlock Grid.Row="2" Grid.Column="0" Text="Статус этапа:" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
+										   Margin="0,0,10,10" VerticalAlignment="Top"/>
+								<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding StageStatus}" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}"
+										   Margin="0,0,0,10" TextWrapping="Wrap"/>
+
+								<TextBlock Grid.Row="3" Grid.Column="0" Text="Примечания:" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
+										   Margin="0,0,10,10" VerticalAlignment="Top"/>
+								<TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Notes}" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}"
+										   Margin="0,0,0,10" TextWrapping="Wrap"/>
+							</Grid>
+						</StackPanel>
+					</ScrollViewer>
 				</TabItem>
 
 				<!-- Вкладка Комментарии -->
 				<TabItem Header="Комментарии">
-					<StackPanel Margin="20">
-						<TextBlock Text="Комментарии" FontSize="16" FontWeight="Medium" Foreground="#333"/>
-						<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,15"/>
+					<Grid RowDefinitions="*,Auto">
+						<ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+							<StackPanel Margin="20">
+								<TextBlock Text="Комментарии" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}"/>
+								<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="0,10,0,15"/>
 
-						<!-- Список комментариев -->
-						<ItemsControl ItemsSource="{Binding Comments}" Margin="0,0,0,20">
-							<ItemsControl.ItemTemplate>
-								<DataTemplate>
-									<Border Background="#F9FAFB" CornerRadius="8" Margin="0,0,0,15" Padding="15">
-										<Grid RowDefinitions="Auto,*">
-											<Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto">
-												<!-- Аватар пользователя -->
-												<Border Grid.Column="0" Width="32" Height="32" CornerRadius="16" Background="#9575CD" Margin="0,0,10,0">
-													<TextBlock Text="{Binding UserInitials}" FontSize="14" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-												</Border>
+								<!-- Список комментариев -->
+								<ItemsControl ItemsSource="{Binding Comments}" Margin="0,0,0,20">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Border Background="{DynamicResource BackgroundBrush}" CornerRadius="8" Margin="0,0,0,15" Padding="15">
+												<Grid RowDefinitions="Auto,*">
+													<Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto">
+														<!-- Аватар пользователя -->
+														<Border Grid.Column="0" Width="32" Height="32" CornerRadius="16"
+																Background="{DynamicResource SecondaryBrush}" Margin="0,0,10,0">
+															<TextBlock Text="{Binding UserInitials}" FontSize="14" Foreground="{DynamicResource SurfaceBrush}"
+																	   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+														</Border>
 
-												<!-- Информация о комментарии -->
-												<StackPanel Grid.Column="1">
-													<TextBlock Text="{Binding Author}" FontSize="13" FontWeight="Medium" Foreground="#333"/>
-													<TextBlock Text="{Binding CreatedDate}" FontSize="11" Foreground="#666"/>
-												</StackPanel>
-											</Grid>
+														<!-- Информация о комментарии -->
+														<StackPanel Grid.Column="1">
+															<TextBlock Text="{Binding Author}" FontSize="13" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}"/>
+															<TextBlock Text="{Binding CreatedDate}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"/>
+														</StackPanel>
+													</Grid>
 
-											<!-- Текст комментария -->
-											<TextBlock Grid.Row="1" Text="{Binding Text}" FontSize="13" Foreground="#333" TextWrapping="Wrap" Margin="0,10,0,0"/>
-										</Grid>
-									</Border>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
+													<!-- Текст комментария -->
+													<TextBlock Grid.Row="1" Text="{Binding Text}" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}"
+															   TextWrapping="Wrap" Margin="0,10,0,0"/>
+												</Grid>
+											</Border>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
 
-						<!-- Если комментариев нет -->
-						<TextBlock Text="Нет комментариев" FontSize="14" Foreground="#666" HorizontalAlignment="Center"
-                           Margin="0,20,0,0" IsVisible="{Binding !Comments.Count}"/>
+								<!-- Если комментариев нет -->
+								<TextBlock Text="Нет комментариев" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center"
+										   Margin="0,20,0,0" IsVisible="{Binding !Comments.Count}"/>
+							</StackPanel>
+						</ScrollViewer>
 
-						<!-- Добавление нового комментария -->
-						<Grid RowDefinitions="Auto,Auto" Margin="0,15,0,0">
-							<TextBlock Grid.Row="0" Text="Добавить комментарий" FontSize="14" FontWeight="Medium" Foreground="#333" Margin="0,0,0,10"/>
-							<Grid Grid.Row="1" ColumnDefinitions="*,Auto">
-								<TextBox Grid.Column="0" Text="{Binding NewComment}" Watermark="Введите комментарий..." Height="60"
-                                 AcceptsReturn="True" TextWrapping="Wrap" Margin="0,0,10,0"/>
-								<Button Grid.Column="1" Content="Отправить" Width="100" Height="36" CornerRadius="4" Background="#00ACC1"
-                                Foreground="White" VerticalAlignment="Bottom" Command="{Binding AddCommentCommand}"/>
+						<!-- Добавление нового комментария - фиксированная панель снизу -->
+						<Border Grid.Row="1" Background="{DynamicResource SurfaceBrush}" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource BorderBrush}" Padding="20,15">
+							<Grid RowDefinitions="Auto,Auto">
+								<TextBlock Grid.Row="0" Text="Добавить комментарий" FontSize="14" FontWeight="Medium"
+										   Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,10"/>
+								<Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+									<TextBox Grid.Column="0" Text="{Binding NewComment}" Watermark="Введите комментарий..."
+											 Height="60" AcceptsReturn="True" TextWrapping="Wrap" Margin="0,0,10,0"/>
+									<Button Grid.Column="1" Content="Отправить" Width="100" Height="36" CornerRadius="4"
+											Background="{DynamicResource PrimaryBrush}" Foreground="{DynamicResource SurfaceBrush}" VerticalAlignment="Bottom"
+											Command="{Binding AddCommentCommand}"/>
+								</Grid>
 							</Grid>
-						</Grid>
-					</StackPanel>
+						</Border>
+					</Grid>
 				</TabItem>
 
 				<!-- Вкладка Вложения -->
 				<TabItem Header="Вложения">
 					<StackPanel Margin="20">
-						<TextBlock Text="Вложения" FontSize="16" FontWeight="Medium" Foreground="#333"/>
-						<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,15"/>
+						<TextBlock Text="Вложения" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}"/>
+						<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="0,10,0,15"/>
 
-						<!-- Список вложений -->
-						<DataGrid ItemsSource="{Binding Attachments}" IsReadOnly="True" AutoGenerateColumns="False"
-                          VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
-                          Background="Transparent" BorderThickness="0" Margin="0,0,0,15">
-							<DataGrid.Columns>
-								<DataGridTextColumn Header="Имя файла" Binding="{Binding FileName}" Width="*"/>
-								<DataGridTextColumn Header="Тип" Binding="{Binding FileType}" Width="80"/>
-								<DataGridTextColumn Header="Размер" Binding="{Binding FileSize}" Width="80"/>
-								<DataGridTextColumn Header="Загрузил" Binding="{Binding UploadedBy}" Width="150"/>
-								<DataGridTextColumn Header="Дата" Binding="{Binding UploadedDate}" Width="120"/>
-
-							</DataGrid.Columns>
-						</DataGrid>
+						<!-- Список вложений с горизонтальным скроллом -->
+						<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+							<DataGrid ItemsSource="{Binding Attachments}" IsReadOnly="True" AutoGenerateColumns="False"
+									  Background="Transparent" BorderThickness="0" Margin="0,0,0,15"
+									  MinWidth="600">
+								<DataGrid.Columns>
+									<DataGridTextColumn Header="Имя файла" Binding="{Binding FileName}" Width="*" MinWidth="200"/>
+									<DataGridTextColumn Header="Тип" Binding="{Binding FileType}" Width="80"/>
+									<DataGridTextColumn Header="Размер" Binding="{Binding FileSize}" Width="80"/>
+									<DataGridTextColumn Header="Загрузил" Binding="{Binding UploadedBy}" Width="150"/>
+									<DataGridTextColumn Header="Дата" Binding="{Binding UploadedDate}" Width="120"/>
+								</DataGrid.Columns>
+							</DataGrid>
+						</ScrollViewer>
 
 						<!-- Если вложений нет -->
-						<TextBlock Text="Нет вложений" FontSize="14" Foreground="#666" HorizontalAlignment="Center"
-                           Margin="0,20,0,0" IsVisible="{Binding !Attachments.Count}"/>
-
-						<!-- Здесь можно добавить кнопку для загрузки вложений в будущем -->
+						<TextBlock Text="Нет вложений" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center"
+								   Margin="0,20,0,0" IsVisible="{Binding !Attachments.Count}"/>
 					</StackPanel>
 				</TabItem>
 			</TabControl>
 
-			<!-- Боковая информация -->
-			<StackPanel Grid.Column="1" Grid.RowSpan="2" Spacing="15" Margin="15,0,0,0">
-				<!-- Информация о заказе -->
-				<Border Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
-					<StackPanel Margin="15">
-						<TextBlock Text="Информация о заказе" FontSize="16" FontWeight="Medium" Foreground="#333"/>
-						<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,15"/>
+			<!-- Боковая информация - адаптивная ширина -->
+			<ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+				<StackPanel Spacing="15" Margin="15,0,0,0">
+					<!-- Информация о заказе -->
+					<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8">
+						<StackPanel Margin="15">
+							<TextBlock Text="Информация о заказе" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}"/>
+							<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="0,10,0,15"/>
 
-						<Grid ColumnDefinitions="70,*" RowDefinitions="Auto,Auto,Auto" Margin="10">
-							<TextBlock Grid.Row="0" Grid.Column="0" Text="Заказчик:" FontSize="13" Foreground="#666"/>
-							<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Customer}" FontSize="13" Foreground="#333"/>
+							<Grid RowDefinitions="Auto,Auto,Auto" Margin="10">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="Auto" MinWidth="70"/>
+									<ColumnDefinition Width="*"/>
+								</Grid.ColumnDefinitions>
 
-							<TextBlock Grid.Row="1" Grid.Column="0" Text="Срок:" FontSize="13" Foreground="#666"/>
-							<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding OrderDeadline}" FontSize="13" Foreground="#333"/>
+								<TextBlock Grid.Row="0" Grid.Column="0" Text="Заказчик:" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
+										   VerticalAlignment="Top" Margin="0,0,5,5"/>
+								<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Customer}" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}"
+										   TextWrapping="Wrap" Margin="0,0,0,5"/>
 
-							<TextBlock Grid.Row="2" Grid.Column="0" Text="Статус:" FontSize="13" Foreground="#666"/>
-							<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding OrderStatus}" FontSize="13" Foreground="#333"/>
-						</Grid>
-					</StackPanel>
-				</Border>
+								<TextBlock Grid.Row="1" Grid.Column="0" Text="Срок:" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
+										   VerticalAlignment="Top" Margin="0,0,5,5"/>
+								<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding OrderDeadline}" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}"
+										   TextWrapping="Wrap" Margin="0,0,0,5"/>
 
-				<!-- Связанные задачи -->
-				<Border Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
-					<StackPanel Margin="15">
-						<TextBlock Text="Связанные задачи" FontSize="16" FontWeight="Medium" Foreground="#333"/>
-						<Rectangle Height="1" Fill="#E0E0E0" Margin="0,10,0,15"/>
+								<TextBlock Grid.Row="2" Grid.Column="0" Text="Статус:" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"
+										   VerticalAlignment="Top" Margin="0,0,5,0"/>
+								<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding OrderStatus}" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}"
+										   TextWrapping="Wrap"/>
+							</Grid>
+						</StackPanel>
+					</Border>
 
-						<ItemsControl ItemsSource="{Binding RelatedTasks}">
-							<ItemsControl.ItemTemplate>
-								<DataTemplate>
-									<StackPanel Margin="0,0,0,15">
-										<TextBlock Text="{Binding Name}" FontSize="13" Foreground="#333"/>
-										<Border Width="55" Height="16" CornerRadius="8" Background="{Binding StatusColor}" Opacity="0.2" HorizontalAlignment="Left" Margin="0,5,0,0">
-											<TextBlock Text="{Binding Status}" FontSize="10" Foreground="{Binding StatusColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-										</Border>
-									</StackPanel>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
+					<!-- Связанные задачи -->
+					<Border Background="{DynamicResource SurfaceBrush}" CornerRadius="8">
+						<StackPanel Margin="15">
+							<TextBlock Text="Связанные задачи" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}"/>
+							<Rectangle Height="1" Fill="{DynamicResource BorderBrush}" Margin="0,10,0,15"/>
 
-						<!-- Если связанных задач нет -->
-						<TextBlock Text="Нет связанных задач" FontSize="13" Foreground="#666" HorizontalAlignment="Center"
-                           Margin="0,10,0,0" IsVisible="{Binding !RelatedTasks.Count}"/>
-					</StackPanel>
-				</Border>
-			</StackPanel>
+							<ItemsControl ItemsSource="{Binding RelatedTasks}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Margin="0,0,0,15">
+											<TextBlock Text="{Binding Name}" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap"/>
+											<Border Height="16" CornerRadius="8" Background="{Binding StatusColor}" Opacity="0.2"
+													HorizontalAlignment="Left" Margin="0,5,0,0" Padding="8,0">
+												<TextBlock Text="{Binding Status}" FontSize="10" Foreground="{Binding StatusColor}"
+														   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+											</Border>
+										</StackPanel>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+
+							<!-- Если связанных задач нет -->
+							<TextBlock Text="Нет связанных задач" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center"
+									   Margin="0,10,0,0" IsVisible="{Binding !RelatedTasks.Count}"/>
+						</StackPanel>
+					</Border>
+				</StackPanel>
+			</ScrollViewer>
 		</Grid>
 
 		<!-- Индикатор загрузки -->

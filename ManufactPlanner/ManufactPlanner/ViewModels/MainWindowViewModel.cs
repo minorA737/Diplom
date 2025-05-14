@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using ManufactPlanner.Models;
 using ManufactPlanner.Services;
@@ -150,18 +151,34 @@ namespace ManufactPlanner.ViewModels
         }
 
         public MainWindowViewModel _mainViewModel;
+        private TrayService _trayService;
+        public TrayService TrayService => _trayService;
+        public bool _forceClose = false;
         public MainWindowViewModel()
         {
             _themeService = ThemeService.Instance;
             _notificationService = NotificationService.Instance;
+
             // Подписка на изменение темы
             _themeService.ThemeChanged.Subscribe(isLight =>
             {
                 // При необходимости можно обновить UI при изменении темы
             });
+
             _mainViewModel = this;
             // Инициализация базы данных
             DbContext = new PostgresContext();
+
+            // Инициализируем TrayService только если это возможно
+            try
+            {
+                _trayService = new TrayService(this);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Не удалось инициализировать TrayService: {ex.Message}");
+                _trayService = null;
+            }
 
             // Начинаем с неаутентифицированного состояния
             IsAuthenticated = false;
@@ -170,13 +187,110 @@ namespace ManufactPlanner.ViewModels
             CurrentUserName = string.Empty;
             UnreadNotificationsCount = 0;
 
-
             // Команда для переключения видимости панели уведомлений
             ToggleNotificationsPanel = ReactiveCommand.Create(() =>
             {
                 // Вместо переключения панели переходим на страницу уведомлений
                 NavigateToNotifications();
             });
+        }
+
+        // Обновляем метод HideToTray
+        public void HideToTray()
+        {
+            if (Avalonia.Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop &&
+                desktop.MainWindow != null)
+            {
+                if (_trayService != null)
+                {
+                    desktop.MainWindow.Hide();
+                    _trayService.ShowInTray();
+                }
+                else
+                {
+                    // Если TrayService недоступен, минимизируем окно
+                    desktop.MainWindow.WindowState = WindowState.Minimized;
+
+                    // Показываем уведомление альтернативным способом
+                    NotificationWindowService.ShowNotification(
+                        "ManufactPlanner",
+                        "Приложение работает в фоновом режиме");
+                }
+            }
+        }
+
+        // Обновляем метод RestoreFromTray
+        // Обновляем метод RestoreFromTray
+        public void RestoreFromTray()
+        {
+            Debug.WriteLine("Восстанавливаем приложение из трея...");
+
+            if (Avalonia.Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop &&
+                desktop.MainWindow != null)
+            {
+                try
+                {
+                    var mainWindow = desktop.MainWindow;
+
+                    Debug.WriteLine($"Состояние окна перед восстановлением - Visible: {mainWindow.IsVisible}, WindowState: {mainWindow.WindowState}");
+
+                    // Показываем окно
+                    mainWindow.Show();
+
+                    // Восстанавливаем нормальное состояние окна
+                    mainWindow.WindowState = WindowState.Normal;
+
+                    // Активируем окно (выводим на передний план)
+                    mainWindow.Activate();
+
+                    // Убеждаемся, что окно видимо и сфокусировано
+                    mainWindow.Topmost = true;
+
+                    // Небольшая задержка, затем убираем Topmost
+                    System.Threading.Tasks.Task.Delay(200).ContinueWith(_ =>
+                    {
+                        Dispatcher.UIThread.InvokeAsync(() =>
+                        {
+                            if (mainWindow.IsVisible)
+                            {
+                                mainWindow.Topmost = false;
+                            }
+                        });
+                    });
+
+                    // Если есть TrayService, скрываем из трея
+                    _trayService?.HideFromTray();
+
+                    Debug.WriteLine("Приложение успешно восстановлено из трея");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Ошибка при восстановлении из трея: {ex.Message}");
+                }
+            }
+            else
+            {
+                Debug.WriteLine("Не удалось получить MainWindow для восстановления");
+            }
+        }
+
+        // Обновляем метод ForceExit
+        public void ForceExit()
+        {
+            _forceClose = true;
+
+            // Останавливаем сервис уведомлений
+            _notificationService.Stop();
+            _notificationService.Dispose();
+
+            // Закрываем трэй если доступен
+            _trayService?.Dispose();
+
+            // Выходим из приложения
+            if (Avalonia.Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                desktop.Shutdown();
+            }
         }
         public async System.Threading.Tasks.Task LoadAndApplyUserSettingsAsync(Guid userId)
         {
@@ -230,6 +344,18 @@ namespace ManufactPlanner.ViewModels
         {
             CurrentMenuItem = "notifications"; // Можно использовать существующий пункт меню или создать новый
             CurrentView = new Views.NotificationsPage(this, DbContext);
+        }
+        public void NavigateToNotificationManagement()
+        {
+            // Проверяем права администратора (только администраторы могут управлять всеми уведомлениями)
+            if (!IsAdministrator)
+            {
+                // Можно добавить уведомление о недостаточных правах
+                return;
+            }
+
+            CurrentMenuItem = "notification-management";
+            CurrentView = new Views.NotificationManagementPage(this, DbContext);
         }
         // Метод для доступа к сервису тем из ViewModel
         public void ToggleTheme()
@@ -367,7 +493,7 @@ namespace ManufactPlanner.ViewModels
             credentialService.ClearCredentials();
             UserRoles.Clear();
             _roleService.ClearCache(CurrentUserId);
-
+            _trayService.HideFromTray();
             // Переходим обратно на страницу авторизации
             CurrentView = new AuthPage(this, DbContext);
         }
