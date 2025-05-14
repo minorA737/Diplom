@@ -3,12 +3,24 @@
   "WorkspaceRootPath": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\notificationmanagementpage.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\notificationmanagementpage.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\taskdetailspage.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\taskdetailspage.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\viewmodels\\notificationmanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\viewmodels\\notificationmanagementviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\dialogs\\taskcreatedialog.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\dialogs\\taskcreatedialog.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\dialogs\\taskeditdialog.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\dialogs\\taskeditdialog.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\dialogs\\ordereditdialog.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\dialogs\\ordereditdialog.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\views\\dialogs\\ordercreatedialog.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\views\\dialogs\\ordercreatedialog.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -31,27 +43,62 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "NotificationManagementPage.axaml",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\NotificationManagementPage.axaml",
-              "RelativeDocumentMoniker": "ManufactPlanner\\Views\\NotificationManagementPage.axaml",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\NotificationManagementPage.axaml",
-              "RelativeToolTip": "ManufactPlanner\\Views\\NotificationManagementPage.axaml",
+              "Title": "TaskDetailsPage.axaml",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\TaskDetailsPage.axaml",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Views\\TaskDetailsPage.axaml",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\TaskDetailsPage.axaml",
+              "RelativeToolTip": "ManufactPlanner\\Views\\TaskDetailsPage.axaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-05-14T21:13:46.735Z",
+              "WhenOpened": "2025-05-14T22:05:50.932Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "NotificationManagementViewModel.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\NotificationManagementViewModel.cs",
-              "RelativeDocumentMoniker": "ManufactPlanner\\ViewModels\\NotificationManagementViewModel.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\NotificationManagementViewModel.cs",
-              "RelativeToolTip": "ManufactPlanner\\ViewModels\\NotificationManagementViewModel.cs",
-              "ViewState": "AQIAAH0BAAAAAAAAAAAIwJUBAAARAAAA",
+              "DocumentIndex": 3,
+              "Title": "OrderEditDialog.axaml.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\Dialogs\\OrderEditDialog.axaml.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Views\\Dialogs\\OrderEditDialog.axaml.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\Dialogs\\OrderEditDialog.axaml.cs",
+              "RelativeToolTip": "ManufactPlanner\\Views\\Dialogs\\OrderEditDialog.axaml.cs",
+              "ViewState": "AQIAAAEAAAAAAAAAAAAAAAEAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-14T20:51:36.993Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-14T22:03:02.315Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "OrderCreateDialog.axaml.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\Dialogs\\OrderCreateDialog.axaml.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Views\\Dialogs\\OrderCreateDialog.axaml.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\Dialogs\\OrderCreateDialog.axaml.cs",
+              "RelativeToolTip": "ManufactPlanner\\Views\\Dialogs\\OrderCreateDialog.axaml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-14T21:50:24.379Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "TaskEditDialog.axaml.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\Dialogs\\TaskEditDialog.axaml.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Views\\Dialogs\\TaskEditDialog.axaml.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\Dialogs\\TaskEditDialog.axaml.cs",
+              "RelativeToolTip": "ManufactPlanner\\Views\\Dialogs\\TaskEditDialog.axaml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-14T21:42:32.964Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TaskCreateDialog.axaml.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\Dialogs\\TaskCreateDialog.axaml.cs",
+              "RelativeDocumentMoniker": "ManufactPlanner\\Views\\Dialogs\\TaskCreateDialog.axaml.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Views\\Dialogs\\TaskCreateDialog.axaml.cs",
+              "RelativeToolTip": "ManufactPlanner\\Views\\Dialogs\\TaskCreateDialog.axaml.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAMwBUAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-14T21:42:16.051Z"
             }
           ]
         }

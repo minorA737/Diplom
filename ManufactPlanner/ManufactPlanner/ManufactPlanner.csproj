@@ -1,12 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+
+		<ApplicationIcon>Assets\logo.ico</ApplicationIcon>
+
+		<!-- Метаданные приложения -->
+		<AssemblyTitle>ManufactPlanner</AssemblyTitle>
+		<AssemblyDescription>Система автоматизации планирования разработки изделий</AssemblyDescription>
+		<AssemblyCompany>Ваша компания</AssemblyCompany>
+		<AssemblyProduct>ManufactPlanner</AssemblyProduct>
+		<AssemblyCopyright>Copyright © 2025</AssemblyCopyright>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>1.0.0.0</FileVersion>
+	</PropertyGroup>
 
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />

@@ -6,3 +6,9 @@ D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\ManufactPl
 D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\ManufactPlanner.AssemblyInfo.cs
 D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\ManufactPlanner.csproj.CoreCompileInputs.cache
 D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\ManufactPlanner.sourcelink.json
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\Avalonia\ManufactPlanner.dll
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\Avalonia\ManufactPlanner.pdb
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\refint\Avalonia\ManufactPlanner.dll
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\ManufactPlanner.dll
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\refint\ManufactPlanner.dll
+D:\aa_Диплом\ManufactPlanner\ManufactPlanner\obj\Release\net8.0\ManufactPlanner.pdb

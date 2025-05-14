@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Avalonia.ReactiveUI;
+using Avalonia.ReactiveUI;  // Эта строка нужна для AttachDevTools()
 using ManufactPlanner.Models;
 using ManufactPlanner.ViewModels;
 using ReactiveUI;

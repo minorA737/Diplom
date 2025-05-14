@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Avalonia.ReactiveUI;
+using Avalonia.ReactiveUI;  // Эта строка нужна для AttachDevTools()
 using ManufactPlanner.Models;
 using ManufactPlanner.ViewModels;
 using ReactiveUI;
@@ -17,14 +17,20 @@ namespace ManufactPlanner.Views.Dialogs
         {
             InitializeComponent();
 
+#if DEBUG
             this.AttachDevTools();
+#endif
+
         }
 
         public TaskEditDialog(PostgresContext dbContext, Guid currentUserId, Task taskToEdit)
         {
             InitializeComponent();
 
+#if DEBUG
             this.AttachDevTools();
+#endif
+
 
             // Устанавливаем ViewModel
             DataContext = new TaskEditDialogViewModel(dbContext, currentUserId, taskToEdit);

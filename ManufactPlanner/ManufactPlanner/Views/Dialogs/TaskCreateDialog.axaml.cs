@@ -17,7 +17,9 @@ namespace ManufactPlanner.Views.Dialogs
         public TaskCreateDialog(PostgresContext dbContext, Guid currentUserId)
         {
             InitializeComponent();
+#if DEBUG
             this.AttachDevTools();
+#endif
 
             // Устанавливаем ViewModel
             DataContext = new TaskCreateDialogViewModel(dbContext, currentUserId);

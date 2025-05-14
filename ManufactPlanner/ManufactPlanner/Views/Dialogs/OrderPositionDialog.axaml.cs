@@ -2,8 +2,12 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using ManufactPlanner.ViewModels.Dialogs;
+using Avalonia.ReactiveUI;  // Эта строка нужна для AttachDevTools()
 using ManufactPlanner.Models;
+using ManufactPlanner.ViewModels;
+using ManufactPlanner.ViewModels.Dialogs;
+using ReactiveUI;
+using System;
 using System.Threading.Tasks;
 
 namespace ManufactPlanner.Views.Dialogs
