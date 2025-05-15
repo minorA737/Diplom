@@ -18,6 +18,7 @@ using System.Reactive.Subjects;
 using System.Runtime.InteropServices;
 using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
+using Avalonia.Controls;
 
 namespace ManufactPlanner.Services
 {
@@ -48,7 +49,7 @@ namespace ManufactPlanner.Services
         private readonly HashSet<string> _processedNotificationIds = new HashSet<string>();
 
         private System.Threading.Timer _cleanupTimer;
-        private NotificationService()
+        public NotificationService()
         {
             // Инициализируем строку подключения из PostgresContext
             _connectionString = "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=123";
@@ -138,7 +139,7 @@ namespace ManufactPlanner.Services
         }
 
         // Метод для создания триггеров и функций в базе данных
-        private async System.Threading.Tasks.Task CreateNotificationTriggersAsync()
+        public async System.Threading.Tasks.Task CreateNotificationTriggersAsync()
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {
@@ -419,7 +420,7 @@ namespace ManufactPlanner.Services
         }
 
         // Метод для мониторинга изменений в базе данных
-        private async System.Threading.Tasks.Task MonitorDatabaseChangesAsync(CancellationToken token)
+        public async System.Threading.Tasks.Task MonitorDatabaseChangesAsync(CancellationToken token)
         {
             try
             {
@@ -469,7 +470,7 @@ namespace ManufactPlanner.Services
 
         // В методе OnDatabaseNotification в классе NotificationService добавим проверку и использование наших сервисов:
 
-        private void OnDatabaseNotification(object sender, NpgsqlNotificationEventArgs e)
+        public void OnDatabaseNotification(object sender, NpgsqlNotificationEventArgs e)
         {
             try
             {
@@ -557,13 +558,14 @@ namespace ManufactPlanner.Services
                 // Отправляем уведомление через поток
                 _newNotifications.OnNext(notification);
 
-                // Показываем десктопное уведомление только если текущий пользователь является целевым
-                if (ShouldShowDesktopNotification() &&
-                    _mainViewModel != null &&
-                    _mainViewModel.CurrentUserId != Guid.Empty &&
-                    (targetUserId == null || targetUserId == _mainViewModel.CurrentUserId))
+                // Показываем десктопное уведомление
+                if (_mainViewModel != null)
                 {
+                    // Всегда вызываем метод показа уведомления
                     ShowDesktopNotification(notification);
+
+                    // Обновляем счетчик непрочитанных уведомлений
+                    UpdateUnreadNotificationsCount();
                 }
 
                 // Обновляем счетчик непрочитанных уведомлений в UI только для текущего пользователя
@@ -579,24 +581,31 @@ namespace ManufactPlanner.Services
         }
 
         // Добавляем новые методы для проверки настроек и отправки email
-        private bool ShouldShowDesktopNotification()
+        public bool ShouldShowDesktopNotification()
         {
             try
             {
-                if (_mainViewModel == null || _mainViewModel.CurrentUserId == Guid.Empty)
-                    return false; // По умолчанию не показываем, если нет текущего пользователя
+                // Если нет главной модели представления - не показываем
+                if (_mainViewModel == null)
+                {
+                    Debug.WriteLine("MainViewModel is null - не показываем уведомление");
+                    return false;
+                }
 
-                // Проверяем настройку в MainViewModel (которая кэширует настройку из БД)
-                return _mainViewModel.NotifyDesktopEnabled;
+                // Всегда показываем уведомления если включена настройка
+                bool shouldShow = _mainViewModel.NotifyDesktopEnabled;
+                Debug.WriteLine($"Настройка показа уведомлений: {shouldShow}");
+
+                return shouldShow;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Ошибка при проверке настройки уведомлений: {ex.Message}");
-                return false; // В случае ошибки не показываем уведомления
+                return true; // По умолчанию показываем уведомления
             }
         }
 
-        private async void SendEmailNotificationAsync(NotificationViewModel notification)
+        public async void SendEmailNotificationAsync(NotificationViewModel notification)
         {
             if (_mainViewModel == null || _mainViewModel.CurrentUserId == Guid.Empty)
                 return;
@@ -646,22 +655,34 @@ namespace ManufactPlanner.Services
         }
 
         // Метод для отображения уведомления на рабочем столе
-        private void ShowDesktopNotification(NotificationViewModel notification)
+        public void ShowDesktopNotification(NotificationViewModel notification)
         {
             try
             {
-                // Показываем уведомление через трэй если окно скрыто
-                if (_mainViewModel?.MainWindow?.IsVisible == false)
-                {
-                    _mainViewModel?.TrayService?.ShowTrayNotification(
-                        notification.Title,
-                        notification.Message);
-                }
+                Debug.WriteLine($"Показываем десктопное уведомление: {notification.Title}");
 
-                // Показываем диалог уведомления если окно видимо
+                // Всегда показываем диалоговое окно
                 Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    NotificationDialogService.ShowNotificationDialog(notification, _mainViewModel, this);
+                    // Если главное окно скрыто или свернуто, показываем уведомление
+                    bool shouldShowDialog = true;
+
+                    if (_mainViewModel?.MainWindow != null)
+                    {
+                        var isMinimized = _mainViewModel.MainWindow.WindowState == WindowState.Minimized;
+                        var isVisible = _mainViewModel.MainWindow.IsVisible;
+
+                        Debug.WriteLine($"Состояние окна - Visible: {isVisible}, State: {_mainViewModel.MainWindow.WindowState}");
+
+                        // Показываем диалог если окно свернуто, скрыто, или всегда (по настройке)
+                        shouldShowDialog = !isVisible || isMinimized || _mainViewModel.NotifyDesktopEnabled;
+                    }
+
+                    if (shouldShowDialog)
+                    {
+                        Debug.WriteLine("Показываем диалог уведомления");
+                        NotificationDialogService.ShowNotificationDialog(notification, _mainViewModel, this);
+                    }
                 });
             }
             catch (Exception ex)
@@ -671,7 +692,7 @@ namespace ManufactPlanner.Services
         }
 
         // Метод для проверки приближающихся дедлайнов
-        private async System.Threading.Tasks.Task CheckDeadlinesAsync(CancellationToken token)
+        public async System.Threading.Tasks.Task CheckDeadlinesAsync(CancellationToken token)
         {
             while (!token.IsCancellationRequested)
             {
@@ -820,7 +841,7 @@ namespace ManufactPlanner.Services
         }
 
         // Метод для обновления счетчика непрочитанных уведомлений в UI
-        private async void UpdateUnreadNotificationsCount()
+        public async void UpdateUnreadNotificationsCount()
         {
             try
             {
@@ -944,7 +965,7 @@ namespace ManufactPlanner.Services
         }
 
         // Вспомогательный метод для извлечения ID задачи из ссылки
-        private int ExtractTaskIdFromLink(string link)
+        public int ExtractTaskIdFromLink(string link)
         {
             if (string.IsNullOrEmpty(link))
                 return 0;

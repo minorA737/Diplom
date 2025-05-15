@@ -8,11 +8,14 @@
         xmlns:vm="using:ManufactPlanner.ViewModels"
         Title="Уведомление"
         Width="350" Height="180"
-        WindowStartupLocation="CenterScreen"
-        CanResize="False"
-        SystemDecorations="BorderOnly"
-        Background="{DynamicResource BackgroundBrush}"
-        Topmost="True">
+        WindowStartupLocation="Manual"
+        Position="10000,10000"
+	
+		CanResize="False"
+		SystemDecorations="BorderOnly"
+		Background="{DynamicResource BackgroundBrush}"
+		Topmost="True"
+        Opened="OnWindowOpened"> 
 
 	<Grid RowDefinitions="Auto,*,Auto">
 		<!-- Заголовок -->

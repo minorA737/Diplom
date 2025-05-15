@@ -3,32 +3,48 @@
   "WorkspaceRootPath": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\trayservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\trayservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\viewmodels\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\viewmodels\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\emailservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\emailservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\services\\inotificationdialogservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\services\\inotificationdialogservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\notificationdialogservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\notificationdialogservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\services\\notificationdialogservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\services\\notificationdialogservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\notificationwindowservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\notificationwindowservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\services\\notificationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\services\\notificationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\themeservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\themeservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\app.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\app.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\usercredentialservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\usercredentialservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\viewmodels\\notificationdialogviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\viewmodels\\notificationdialogviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\dashboardviewmodeltests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\dashboardviewmodeltests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\mainwindowviewmodeltests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\mainwindowviewmodeltests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\authviewmodeltests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\authviewmodeltests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\dataexportservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\dataexportservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\analyticsservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\analyticsservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,7 +54,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -50,87 +66,145 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "NotificationDialogViewModel.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\NotificationDialogViewModel.cs",
-              "RelativeDocumentMoniker": "ManufactPlanner\\ViewModels\\NotificationDialogViewModel.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\NotificationDialogViewModel.cs",
-              "RelativeToolTip": "ManufactPlanner\\ViewModels\\NotificationDialogViewModel.cs",
-              "ViewState": "AQIAADQAAAAAAAAAAIA2wEQAAAAXAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T07:08:16.211Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "App.axaml.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\App.axaml.cs",
-              "RelativeDocumentMoniker": "ManufactPlanner\\App.axaml.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\App.axaml.cs",
-              "RelativeToolTip": "ManufactPlanner\\App.axaml.cs",
-              "ViewState": "AQIAABsAAAAAAAAAAAAYwCYAAABHAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T07:03:19.106Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "NotificationService.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Services\\NotificationService.cs",
-              "RelativeDocumentMoniker": "ManufactPlanner\\Services\\NotificationService.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Services\\NotificationService.cs",
-              "RelativeToolTip": "ManufactPlanner\\Services\\NotificationService.cs",
-              "ViewState": "AQIAAIICAAAAAAAAAAAqwJ4CAAAJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T07:02:30.673Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "NotificationDialogService.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Services\\NotificationDialogService.cs",
-              "RelativeDocumentMoniker": "ManufactPlanner\\Services\\NotificationDialogService.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Services\\NotificationDialogService.cs",
-              "RelativeToolTip": "ManufactPlanner\\Services\\NotificationDialogService.cs",
-              "ViewState": "AQIAACUAAAAAAAAAAAAuwEIAAAABAAAA",
+              "Title": "NotificationWindowServiceTests.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\NotificationWindowServiceTests.cs",
+              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\NotificationWindowServiceTests.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\NotificationWindowServiceTests.cs",
+              "RelativeToolTip": "UnitTestProjectManufactPlanner\\NotificationWindowServiceTests.cs",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAmwB0AAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T07:01:55.137Z"
+              "WhenOpened": "2025-05-15T09:20:44.529Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "INotificationDialogService.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Services\\INotificationDialogService.cs",
-              "RelativeDocumentMoniker": "ManufactPlanner\\Services\\INotificationDialogService.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Services\\INotificationDialogService.cs",
-              "RelativeToolTip": "ManufactPlanner\\Services\\INotificationDialogService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Title": "NotificationDialogServiceTests.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\NotificationDialogServiceTests.cs",
+              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\NotificationDialogServiceTests.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\NotificationDialogServiceTests.cs",
+              "RelativeToolTip": "UnitTestProjectManufactPlanner\\NotificationDialogServiceTests.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T07:01:23.197Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "MainWindowViewModel.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\MainWindowViewModel.cs",
-              "RelativeDocumentMoniker": "ManufactPlanner\\ViewModels\\MainWindowViewModel.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ViewModels\\MainWindowViewModel.cs",
-              "RelativeToolTip": "ManufactPlanner\\ViewModels\\MainWindowViewModel.cs",
-              "ViewState": "AQIAAJMAAAAAAAAAAAAuwJsAAAAoAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T07:00:24.282Z"
+              "WhenOpened": "2025-05-15T09:20:22.946Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Program.cs",
-              "RelativeDocumentMoniker": "ManufactPlanner\\Program.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\Program.cs",
-              "RelativeToolTip": "ManufactPlanner\\Program.cs",
-              "ViewState": "AQIAAF4AAAAAAAAAAAAkwHEAAAAdAAAA",
+              "Title": "TrayServiceTests.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\TrayServiceTests.cs",
+              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\TrayServiceTests.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\TrayServiceTests.cs",
+              "RelativeToolTip": "UnitTestProjectManufactPlanner\\TrayServiceTests.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAXAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T06:59:48.202Z",
+              "WhenOpened": "2025-05-15T09:15:02.176Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ThemeServiceTests.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\ThemeServiceTests.cs",
+              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\ThemeServiceTests.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\ThemeServiceTests.cs",
+              "RelativeToolTip": "UnitTestProjectManufactPlanner\\ThemeServiceTests.cs",
+              "ViewState": "AQIAACoAAAAAAAAAAAAwwDgAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-15T09:14:40.38Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UserCredentialServiceTests.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\UserCredentialServiceTests.cs",
+              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\UserCredentialServiceTests.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\UserCredentialServiceTests.cs",
+              "RelativeToolTip": "UnitTestProjectManufactPlanner\\UserCredentialServiceTests.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-15T09:13:43.936Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EmailServiceTests.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\EmailServiceTests.cs",
+              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\EmailServiceTests.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\EmailServiceTests.cs",
+              "RelativeToolTip": "UnitTestProjectManufactPlanner\\EmailServiceTests.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-15T09:13:18.892Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "DashboardViewModelTests.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\DashboardViewModelTests.cs",
+              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\DashboardViewModelTests.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\DashboardViewModelTests.cs",
+              "RelativeToolTip": "UnitTestProjectManufactPlanner\\DashboardViewModelTests.cs",
+              "ViewState": "AQIAADYAAAAAAAAAAAAqwEQAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-15T09:10:25.727Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "MainWindowViewModelTests.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\MainWindowViewModelTests.cs",
+              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\MainWindowViewModelTests.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\MainWindowViewModelTests.cs",
+              "RelativeToolTip": "UnitTestProjectManufactPlanner\\MainWindowViewModelTests.cs",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAtwCIAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-15T09:09:47.822Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AuthViewModelTests.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\AuthViewModelTests.cs",
+              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\AuthViewModelTests.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\AuthViewModelTests.cs",
+              "RelativeToolTip": "UnitTestProjectManufactPlanner\\AuthViewModelTests.cs",
+              "ViewState": "AQIAAGIAAAAAAAAAAAAAAG0AAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-15T09:08:18.587Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "DataExportServiceTests.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\DataExportServiceTests.cs",
+              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\DataExportServiceTests.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\DataExportServiceTests.cs",
+              "RelativeToolTip": "UnitTestProjectManufactPlanner\\DataExportServiceTests.cs",
+              "ViewState": "AQIAAFgAAAAAAAAAAAAAAGwAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-15T09:04:51.039Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "AnalyticsServiceTests.cs",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\AnalyticsServiceTests.cs",
+              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\AnalyticsServiceTests.cs",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\AnalyticsServiceTests.cs",
+              "RelativeToolTip": "UnitTestProjectManufactPlanner\\AnalyticsServiceTests.cs",
+              "ViewState": "AQIAAD8AAAAAAAAAAAAQwFQAAAAUAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-15T09:03:07.319Z",
               "EditorCaption": ""
             }
           ]

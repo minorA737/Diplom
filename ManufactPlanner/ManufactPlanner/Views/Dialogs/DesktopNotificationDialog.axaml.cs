@@ -29,5 +29,19 @@ namespace ManufactPlanner.Views
         {
             AvaloniaXamlLoader.Load(this);
         }
+        private void OnWindowOpened(object sender, EventArgs e)
+        {
+            var screen = Screens.Primary;  // Получаем основной экран
+            if (screen != null)
+            {
+                var workingArea = screen.WorkingArea;
+                int margin = 100;  // Отступ от краёв
+
+                this.Position = new PixelPoint(
+                    (int)(workingArea.Right - this.Width - margin),   // X: правый край - ширина окна - отступ
+                    (int)(workingArea.Bottom - this.Height - margin)   // Y: нижний край - высота окна - отступ
+                );
+            }
+        }
     }
 }
