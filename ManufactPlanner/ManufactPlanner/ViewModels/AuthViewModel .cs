@@ -6,6 +6,10 @@ using ReactiveUI;
 using ManufactPlanner.Models;
 using ManufactPlanner.Services;
 using System.Threading.Tasks;
+using System.IO;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace ManufactPlanner.ViewModels
 {
@@ -22,7 +26,70 @@ namespace ManufactPlanner.ViewModels
         private bool _hasError = false;
         private bool _isLoading = false;
         private bool _isAutoLogin = false;
+        // Настройки БД
+        private bool _isDbSettingsOpen = false;
+        private string _databaseHost = "localhost";
+        private int _databasePort = 5432;
+        private string _databaseName = "postgres";
+        private string _databaseUsername = "postgres";
+        private string _databasePassword = "";
+        private bool _isConnectionValid = false;
+        private string _connectionStatus = "Не проверено";
 
+        public bool IsDbSettingsOpen
+        {
+            get => _isDbSettingsOpen;
+            set => this.RaiseAndSetIfChanged(ref _isDbSettingsOpen, value);
+        }
+
+        public string DatabaseHost
+        {
+            get => _databaseHost;
+            set => this.RaiseAndSetIfChanged(ref _databaseHost, value);
+        }
+
+        public int DatabasePort
+        {
+            get => _databasePort;
+            set => this.RaiseAndSetIfChanged(ref _databasePort, value);
+        }
+
+        public string DatabaseName
+        {
+            get => _databaseName;
+            set => this.RaiseAndSetIfChanged(ref _databaseName, value);
+        }
+
+        public string DatabaseUsername
+        {
+            get => _databaseUsername;
+            set => this.RaiseAndSetIfChanged(ref _databaseUsername, value);
+        }
+
+        public string DatabasePassword
+        {
+            get => _databasePassword;
+            set => this.RaiseAndSetIfChanged(ref _databasePassword, value);
+        }
+
+        public bool IsConnectionValid
+        {
+            get => _isConnectionValid;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _isConnectionValid, value);
+                ConnectionStatus = value ? "Подключение успешно" : "Ошибка подключения";
+            }
+        }
+
+        public string ConnectionStatus
+        {
+            get => _connectionStatus;
+            set => this.RaiseAndSetIfChanged(ref _connectionStatus, value);
+        }
+
+        public ReactiveCommand<Unit, Unit> TestConnectionCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveDbSettingsCommand { get; }
         public string Username
         {
             get => _username;
@@ -85,9 +152,104 @@ namespace ManufactPlanner.ViewModels
             LoginCommand = ReactiveCommand.Create(Login);
 
             // Загружаем сохраненные учетные данные при создании ViewModel
+            TestConnectionCommand = ReactiveCommand.CreateFromTask(TestDatabaseConnection);
+            SaveDbSettingsCommand = ReactiveCommand.CreateFromTask(SaveDatabaseSettings);
+
+            // Загружаем настройки БД при создании ViewModel
+            LoadDatabaseSettings();
             LoadSavedCredentialsAsync();
         }
+        private void LoadDatabaseSettings()
+        {
+            try
+            {
+                var settingsPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "ManufactPlanner",
+                    "database-settings.json"
+                );
 
+                if (File.Exists(settingsPath))
+                {
+                    var settingsText = File.ReadAllText(settingsPath);
+                    var settings = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(settingsText);
+
+                    DatabaseHost = settings.ContainsKey("Host") ? settings["Host"].ToString() : "localhost";
+                    DatabasePort = settings.ContainsKey("Port") ? int.Parse(settings["Port"].ToString()) : 5432;
+                    DatabaseName = settings.ContainsKey("Database") ? settings["Database"].ToString() : "postgres";
+                    DatabaseUsername = settings.ContainsKey("Username") ? settings["Username"].ToString() : "postgres";
+                    DatabasePassword = settings.ContainsKey("Password") ? settings["Password"].ToString() : "";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка загрузки настроек БД: {ex.Message}");
+            }
+        }
+
+        private async System.Threading.Tasks.Task TestDatabaseConnection()
+        {
+            try
+            {
+                ConnectionStatus = "Проверка подключения...";
+                var connectionString = $"Host={DatabaseHost};Port={DatabasePort};Database={DatabaseName};Username={DatabaseUsername};Password={DatabasePassword}";
+
+                using var connection = new Npgsql.NpgsqlConnection(connectionString);
+                await connection.OpenAsync();
+                connection.Close();
+
+                IsConnectionValid = true;
+            }
+            catch (Exception ex)
+            {
+                IsConnectionValid = false;
+                ConnectionStatus = $"Ошибка: {ex.Message}";
+            }
+        }
+
+        private async System.Threading.Tasks.Task SaveDatabaseSettings()
+        {
+            try
+            {
+                var settingsPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "ManufactPlanner"
+                );
+
+                if (!Directory.Exists(settingsPath))
+                    Directory.CreateDirectory(settingsPath);
+
+                var settings = new Dictionary<string, object>
+                {
+                    {"Host", DatabaseHost},
+                    {"Port", DatabasePort},
+                    {"Database", DatabaseName},
+                    {"Username", DatabaseUsername},
+                    {"Password", DatabasePassword}
+                };
+
+                await File.WriteAllTextAsync(
+                    Path.Combine(settingsPath, "database-settings.json"),
+                    System.Text.Json.JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true })
+                );
+
+                // Создаем новый контекст с новыми настройками
+                var optionsBuilder = new DbContextOptionsBuilder<PostgresContext>();
+                var connectionString = $"Host={DatabaseHost};Port={DatabasePort};Database={DatabaseName};Username={DatabaseUsername};Password={DatabasePassword}";
+                optionsBuilder.UseNpgsql(connectionString);
+
+                // Обновляем контекст в MainWindowViewModel 
+                _mainWindowViewModel.DbContext?.Dispose();
+                _mainWindowViewModel.DbContext = new PostgresContext(optionsBuilder.Options);
+
+                ConnectionStatus = "Настройки сохранены";
+                IsDbSettingsOpen = false; // Закрываем окно после сохранения
+            }
+            catch (Exception ex)
+            {
+                ConnectionStatus = $"Ошибка сохранения: {ex.Message}";
+            }
+        }
         private async void LoadSavedCredentialsAsync()
         {
             try

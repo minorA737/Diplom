@@ -374,6 +374,7 @@ namespace ManufactPlanner.ViewModels
             // Инициализируем и запускаем сервис уведомлений после успешной авторизации
             if (CurrentUserId != Guid.Empty)
             {
+
                 _notificationService.Initialize(DbContext, this).ConfigureAwait(false);
                 _notificationService.Start();
 

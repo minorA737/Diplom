@@ -7,7 +7,12 @@
             x:DataType="vm:AuthViewModel"
             xmlns:vm="using:ManufactPlanner.ViewModels"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch">
+            VerticalAlignment="Stretch"
+			 xmlns:converters="using:ManufactPlanner.Converters">
+
+	<UserControl.Resources>
+		<converters:BoolToValueConverter x:Key="BoolToValue"/>
+	</UserControl.Resources>
 	<!-- Стили для анимаций -->
 	<UserControl.Styles>
 		<Style Selector="Border.loginCard">
@@ -55,12 +60,65 @@
 
 	<!-- Основной фон -->
 	<Grid Background="{DynamicResource BackgroundBrush}"
-          HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
+		  HorizontalAlignment="Stretch"
+		  VerticalAlignment="Stretch">
+
+		<!-- Кнопка настроек БД в левом верхнем углу -->
+		<ToggleButton Width="40" Height="40"
+					  HorizontalAlignment="Left" VerticalAlignment="Top"
+					  Margin="20,20,0,0"
+					  Background="{DynamicResource SurfaceBrush}"
+					  CornerRadius="20"
+					  IsChecked="{Binding IsDbSettingsOpen, Mode=TwoWay}">
+			<TextBlock Text="⚙️" FontSize="18"/>
+		</ToggleButton>
+
+		<!-- Выпадающее окно настроек БД -->
+		<Border Width="340" Background="{DynamicResource SurfaceBrush}"
+				BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
+				CornerRadius="8" Margin="20,70,0,0"
+				HorizontalAlignment="Left" VerticalAlignment="Top"
+				IsVisible="{Binding IsDbSettingsOpen}">
+			<StackPanel Margin="20" Spacing="15">
+				<TextBlock Text="Настройки подключения к БД" FontSize="16" FontWeight="SemiBold"/>
+
+				<StackPanel Spacing="10">
+					<TextBlock Text="Хост:" FontSize="12"/>
+					<TextBox Text="{Binding DatabaseHost}" Height="36"/>
+
+					<TextBlock Text="Порт:" FontSize="12"/>
+					<NumericUpDown Value="{Binding DatabasePort}" Height="36" Minimum="1" Maximum="65535"/>
+
+					<TextBlock Text="База данных:" FontSize="12"/>
+					<TextBox Text="{Binding DatabaseName}" Height="36"/>
+
+					<TextBlock Text="Имя пользователя:" FontSize="12"/>
+					<TextBox Text="{Binding DatabaseUsername}" Height="36"/>
+
+					<TextBlock Text="Пароль:" FontSize="12"/>
+					<TextBox Text="{Binding DatabasePassword}" PasswordChar="•" Height="36"/>
+				</StackPanel>
+
+				<!-- Индикатор статуса -->
+				<StackPanel Orientation="Horizontal" Spacing="10">
+					<Ellipse Width="12" Height="12"
+							 Fill="{Binding IsConnectionValid, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource SuccessColor},{DynamicResource ErrorColor}'}"/>
+					<TextBlock Text="{Binding ConnectionStatus}" FontSize="12"/>
+				</StackPanel>
+
+				<!-- Кнопки -->
+				<StackPanel Orientation="Horizontal" Spacing="10">
+					<Button Content="Тест" Width="80" Height="32"
+							Background="{DynamicResource SuccessColor}"
+							Foreground="White" CornerRadius="16"
+							Command="{Binding TestConnectionCommand}"/>
+					<Button Content="Сохранить" Width="80" Height="32"
+							Background="{DynamicResource PrimaryBrush}"
+							Foreground="White" CornerRadius="16"
+							Command="{Binding SaveDbSettingsCommand}"/>
+				</StackPanel>
+			</StackPanel>
+		</Border>
 
 		<!-- Карточка авторизации -->
 		<Border Classes="loginCard"

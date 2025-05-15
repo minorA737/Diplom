@@ -371,23 +371,42 @@ namespace ManufactPlanner.ViewModels
             {
                 var connectionString = $"Host={DatabaseHost};Port={DatabasePort};Database={DatabaseName};Username={DatabaseUsername};Password={DatabasePassword}";
 
-                using var context = new PostgresContext(
-                    new DbContextOptionsBuilder<PostgresContext>()
-                        .UseNpgsql(connectionString)
-                        .Options
-                );
+                // Тестируем подключение
+                using var connection = new Npgsql.NpgsqlConnection(connectionString);
+                await connection.OpenAsync();
+                connection.Close();
 
-                // Простой тест подключения
-                await context.Database.CanConnectAsync();
-
+                // Если дошли до этого места без исключений, подключение успешное
                 IsConnectionValid = true;
                 StatusMessage = "Подключение к базе данных успешно установлено";
                 IsStatusSuccess = true;
             }
+            catch (Npgsql.NpgsqlException ex)
+            {
+                // Специфическая обработка ошибок PostgreSQL
+                IsConnectionValid = false;
+                StatusMessage = $"Ошибка подключения к PostgreSQL: {ex.Message}";
+                IsStatusSuccess = false;
+            }
+            catch (TimeoutException ex)
+            {
+                // Обработка timeout
+                IsConnectionValid = false;
+                StatusMessage = "Ошибка: Превышено время ожидания подключения";
+                IsStatusSuccess = false;
+            }
+            catch (System.Net.Sockets.SocketException ex)
+            {
+                // Обработка сетевых ошибок
+                IsConnectionValid = false;
+                StatusMessage = $"Ошибка сети: Не удается подключиться к серверу по адресу {DatabaseHost}:{DatabasePort}";
+                IsStatusSuccess = false;
+            }
             catch (Exception ex)
             {
+                // Общая обработка всех остальных ошибок
                 IsConnectionValid = false;
-                StatusMessage = $"Ошибка подключения к БД: {ex.Message}";
+                StatusMessage = $"РCошибка подключения: {ex.Message}";
                 IsStatusSuccess = false;
             }
         }
