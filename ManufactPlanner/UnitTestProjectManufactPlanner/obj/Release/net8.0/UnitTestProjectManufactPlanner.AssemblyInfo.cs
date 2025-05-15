@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UnitTestProjectManufactPlanner")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+251d4d2871b0a31fbb98f0b6baf9ec12d4b8f1e4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+68cf700e74bab0fad167fb282b61c0cd73138998")]
 [assembly: System.Reflection.AssemblyProductAttribute("UnitTestProjectManufactPlanner")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UnitTestProjectManufactPlanner")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
