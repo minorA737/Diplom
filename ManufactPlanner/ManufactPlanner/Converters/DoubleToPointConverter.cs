@@ -1,4 +1,4 @@
-﻿// Converters/DoubleToPointConverter.cs
+﻿
 using Avalonia;
 using Avalonia.Data.Converters;
 using System;
@@ -10,14 +10,27 @@ namespace ManufactPlanner.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is int timePosition && parameter is string coords)
+            if (value is int position && parameter is string paramStr)
             {
-                string[] parts = coords.Split(',');
+                string[] parts = paramStr.Split(',');
                 if (parts.Length == 2)
                 {
-                    double x = parts[0] == "X" ? timePosition : double.Parse(parts[0]);
-                    double y = parts[1] == "Y" ? timePosition : double.Parse(parts[1]);
-                    return new Point(x, y);
+                    string xStr = parts[0];
+                    string yStr = parts[1];
+
+                    if (double.TryParse(xStr, out double x))
+                    {
+                        if (yStr == "Y")
+                        {
+                            // X фиксированный, Y берем из значения
+                            return new Point(x, position);
+                        }
+                        else if (double.TryParse(yStr, out double y))
+                        {
+                            // Обе координаты заданы
+                            return new Point(x, y);
+                        }
+                    }
                 }
             }
 

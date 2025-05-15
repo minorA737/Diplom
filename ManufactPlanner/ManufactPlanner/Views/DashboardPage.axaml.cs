@@ -19,6 +19,7 @@ public partial class DashboardPage : UserControl
         if (DataContext is DashboardViewModel vm)
         {
             vm.PropertyChanged += OnViewModelPropertyChanged;
+            // Обновляем графики после инициализации
             UpdatePlots(vm);
         }
     }
@@ -101,7 +102,7 @@ public partial class DashboardPage : UserControl
 
             if (values.Length > 0)
             {
-                // Создаем pie chart с одним аргументом
+                // Создаем pie chart
                 var pie = TaskStatusPieChart.Plot.Add.Pie(values);
 
                 // Применяем цвета к слайсам
@@ -112,6 +113,9 @@ public partial class DashboardPage : UserControl
 
                 // Скрываем легенду на диаграмме
                 TaskStatusPieChart.Plot.Legend.IsVisible = false;
+
+                // Убираем заголовок с диаграммы
+                TaskStatusPieChart.Plot.Title("");
             }
         }
 

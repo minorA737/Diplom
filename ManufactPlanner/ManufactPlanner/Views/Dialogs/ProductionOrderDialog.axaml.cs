@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using ManufactPlanner.ViewModels.Dialogs;
 using ManufactPlanner.Models;
+using System.Threading.Tasks;
 
 namespace ManufactPlanner.Views.Dialogs
 {
@@ -27,5 +28,6 @@ namespace ManufactPlanner.Views.Dialogs
         {
             AvaloniaXamlLoader.Load(this);
         }
+
     }
 }

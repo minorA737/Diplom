@@ -24,8 +24,8 @@
 
 			<!-- Фильтры и настройки отчетов - адаптивная панель -->
 			<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
-				<DatePicker MinWidth="200" MaxWidth="200" SelectedDate="{Binding StartDate}"/>
-				<DatePicker MinWidth="200" MaxWidth="200" SelectedDate="{Binding EndDate}"/>
+				<DatePicker MinWidth="200" SelectedDate="{Binding StartDate}"/>
+				<DatePicker MinWidth="200" SelectedDate="{Binding EndDate}"/>
 				<ComboBox MinWidth="150" MaxWidth="250" SelectedIndex="{Binding SelectedReportType}">
 					<ComboBoxItem>Выполнение задач</ComboBoxItem>
 					<ComboBoxItem>Загрузка сотрудников</ComboBoxItem>

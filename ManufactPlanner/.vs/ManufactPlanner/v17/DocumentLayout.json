@@ -3,48 +3,8 @@
   "WorkspaceRootPath": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\trayservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\trayservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\emailservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\emailservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\notificationdialogservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\notificationdialogservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\notificationwindowservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\notificationwindowservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\themeservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\themeservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\usercredentialservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\usercredentialservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\dashboardviewmodeltests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\dashboardviewmodeltests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\mainwindowviewmodeltests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\mainwindowviewmodeltests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\authviewmodeltests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\authviewmodeltests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\dataexportservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\dataexportservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\unittestprojectmanufactplanner\\analyticsservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A1B57CAF-BBFC-4303-BA33-FDB445F8EF24}|UnitTestProjectManufactPlanner\\UnitTestProjectManufactPlanner.csproj|solutionrelative:unittestprojectmanufactplanner\\analyticsservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|d:\\aa_\u0434\u0438\u043F\u043B\u043E\u043C\\manufactplanner\\manufactplanner\\manufactplanner.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{8578CA94-5364-4126-B005-9B9B9EED0754}|ManufactPlanner\\ManufactPlanner.csproj|solutionrelative:manufactplanner\\manufactplanner.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -66,145 +26,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "NotificationWindowServiceTests.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\NotificationWindowServiceTests.cs",
-              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\NotificationWindowServiceTests.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\NotificationWindowServiceTests.cs",
-              "RelativeToolTip": "UnitTestProjectManufactPlanner\\NotificationWindowServiceTests.cs",
-              "ViewState": "AQIAAAwAAAAAAAAAAAAmwB0AAAAJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T09:20:44.529Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "NotificationDialogServiceTests.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\NotificationDialogServiceTests.cs",
-              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\NotificationDialogServiceTests.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\NotificationDialogServiceTests.cs",
-              "RelativeToolTip": "UnitTestProjectManufactPlanner\\NotificationDialogServiceTests.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAIAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T09:20:22.946Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "TrayServiceTests.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\TrayServiceTests.cs",
-              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\TrayServiceTests.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\TrayServiceTests.cs",
-              "RelativeToolTip": "UnitTestProjectManufactPlanner\\TrayServiceTests.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAXAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T09:15:02.176Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "ThemeServiceTests.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\ThemeServiceTests.cs",
-              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\ThemeServiceTests.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\ThemeServiceTests.cs",
-              "RelativeToolTip": "UnitTestProjectManufactPlanner\\ThemeServiceTests.cs",
-              "ViewState": "AQIAACoAAAAAAAAAAAAwwDgAAAABAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T09:14:40.38Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "UserCredentialServiceTests.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\UserCredentialServiceTests.cs",
-              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\UserCredentialServiceTests.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\UserCredentialServiceTests.cs",
-              "RelativeToolTip": "UnitTestProjectManufactPlanner\\UserCredentialServiceTests.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T09:13:43.936Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "EmailServiceTests.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\EmailServiceTests.cs",
-              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\EmailServiceTests.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\EmailServiceTests.cs",
-              "RelativeToolTip": "UnitTestProjectManufactPlanner\\EmailServiceTests.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T09:13:18.892Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "DashboardViewModelTests.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\DashboardViewModelTests.cs",
-              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\DashboardViewModelTests.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\DashboardViewModelTests.cs",
-              "RelativeToolTip": "UnitTestProjectManufactPlanner\\DashboardViewModelTests.cs",
-              "ViewState": "AQIAADYAAAAAAAAAAAAqwEQAAAAJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T09:10:25.727Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "MainWindowViewModelTests.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\MainWindowViewModelTests.cs",
-              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\MainWindowViewModelTests.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\MainWindowViewModelTests.cs",
-              "RelativeToolTip": "UnitTestProjectManufactPlanner\\MainWindowViewModelTests.cs",
-              "ViewState": "AQIAAA8AAAAAAAAAAAAtwCIAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T09:09:47.822Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "AuthViewModelTests.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\AuthViewModelTests.cs",
-              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\AuthViewModelTests.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\AuthViewModelTests.cs",
-              "RelativeToolTip": "UnitTestProjectManufactPlanner\\AuthViewModelTests.cs",
-              "ViewState": "AQIAAGIAAAAAAAAAAAAAAG0AAAABAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T09:08:18.587Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "DataExportServiceTests.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\DataExportServiceTests.cs",
-              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\DataExportServiceTests.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\DataExportServiceTests.cs",
-              "RelativeToolTip": "UnitTestProjectManufactPlanner\\DataExportServiceTests.cs",
-              "ViewState": "AQIAAFgAAAAAAAAAAAAAAGwAAAABAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T09:04:51.039Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "AnalyticsServiceTests.cs",
-              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\AnalyticsServiceTests.cs",
-              "RelativeDocumentMoniker": "UnitTestProjectManufactPlanner\\AnalyticsServiceTests.cs",
-              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\UnitTestProjectManufactPlanner\\AnalyticsServiceTests.cs",
-              "RelativeToolTip": "UnitTestProjectManufactPlanner\\AnalyticsServiceTests.cs",
-              "ViewState": "AQIAAD8AAAAAAAAAAAAQwFQAAAAUAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T09:03:07.319Z",
+              "Title": "ManufactPlanner",
+              "DocumentMoniker": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ManufactPlanner.csproj",
+              "RelativeDocumentMoniker": "ManufactPlanner\\ManufactPlanner.csproj",
+              "ToolTip": "D:\\aa_\u0414\u0438\u043F\u043B\u043E\u043C\\ManufactPlanner\\ManufactPlanner\\ManufactPlanner.csproj",
+              "RelativeToolTip": "ManufactPlanner\\ManufactPlanner.csproj",
+              "ViewState": "AQIAAEUAAAAAAAAAAAAAAE8AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-05-15T15:11:22.088Z",
               "EditorCaption": ""
             }
           ]

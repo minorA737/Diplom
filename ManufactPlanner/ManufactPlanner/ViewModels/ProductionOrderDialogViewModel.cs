@@ -376,9 +376,9 @@ namespace ManufactPlanner.ViewModels.Dialogs
                 StatusMessage = "Заказ-наряд успешно создан";
                 _dialogResult = true;
 
-                // Закрытие диалога через некоторое время
+                // Закрытие диалога с положительным результатом
                 await System.Threading.Tasks.Task.Delay(1000);
-                _dialogWindow?.Close();
+                _dialogWindow?.Close(true); // Передаем true как результат
             }
             catch (Exception ex)
             {
@@ -447,11 +447,10 @@ namespace ManufactPlanner.ViewModels.Dialogs
             return true;
         }
 
-        // Отмена диалога
         private void Cancel()
         {
             _dialogResult = false;
-            _dialogWindow?.Close();
+            _dialogWindow?.Close(false); // Передаем false как результат
         }
     }
 

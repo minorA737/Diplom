@@ -19,7 +19,7 @@
 
 			<!-- Кнопки действий -->
 			<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
-				<Button Content="Отметить все как прочитанные" Width="220" Height="36"
+				<Button Content="Отметить все как прочитанные" Width="240" Height="36"
                         CornerRadius="4" Background="{DynamicResource PrimaryBrush}" Foreground="{DynamicResource SurfaceBrush}"
                         Command="{Binding MarkAllAsReadCommand}"/>
 				<Button Content="⟳" Width="36" Height="36"

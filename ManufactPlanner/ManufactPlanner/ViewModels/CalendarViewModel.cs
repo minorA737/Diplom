@@ -281,6 +281,12 @@ namespace ManufactPlanner.ViewModels
             get => _selectedDayEvents;
             set => this.RaiseAndSetIfChanged(ref _selectedDayEvents, value);
         }
+        private double _currentTimePositionExact;
+        public double CurrentTimePositionExact
+        {
+            get => _currentTimePositionExact;
+            set => this.RaiseAndSetIfChanged(ref _currentTimePositionExact, value);
+        }
 
         // Команды для работы с выбранным днем
         public ICommand SelectDayCommand { get; }
@@ -1431,25 +1437,41 @@ namespace ManufactPlanner.ViewModels
         {
             var now = DateTime.Now;
 
-            // Рассчитываем положение на основе текущего времени
-            // Предполагаем, что 8:00 = 0px, 18:00 = 500px (приблизительно)
-            var startTime = new TimeSpan(8, 0, 0);
-            var endTime = new TimeSpan(18, 0, 0);
-            var totalMinutes = (endTime - startTime).TotalMinutes;
-            var currentMinutes = (now.TimeOfDay - startTime).TotalMinutes;
+            // Начальное время: 8:00, каждый час занимает примерно 60 пикселей
+            var startHour = 8;
+            var currentHour = now.Hour;
+            var currentMinute = now.Minute;
 
-            // Проверяем, что текущее время в рабочие часы
-            if (currentMinutes < 0)
+            // Проверяем, находится ли время в рабочих часах
+            if (currentHour < startHour)
             {
-                currentMinutes = 0;
+                CurrentTimePosition = 0;
+                CurrentTimePositionExact = 0;
             }
-            else if (currentMinutes > totalMinutes)
+            else if (currentHour >= 18)
             {
-                currentMinutes = totalMinutes;
+                CurrentTimePosition = 600; // 10 часов * 60 пикселей
+                CurrentTimePositionExact = 600;
+            }
+            else
+            {
+                // Рассчитываем точную позицию:
+                // Каждый час = 60 пикселей, плюс отступ 10 для первого часа
+                double hoursFromStart = currentHour - startHour;
+                double minutesAsHours = currentMinute / 60.0;
+                double totalHours = hoursFromStart + minutesAsHours;
+
+                // 10 пикселей отступ сверху + 42 пикселя между часами
+                CurrentTimePositionExact = 10 + (totalHours * 42);
+                CurrentTimePosition = (int)CurrentTimePositionExact;
             }
 
-            // Рассчитываем позицию (масштабируем минуты на высоту)
-            CurrentTimePosition = (int)(currentMinutes * 500 / totalMinutes);
+            // Убеждаемся, что сегодня действительно сегодня
+            var today = DateTime.Now.Date;
+            var startOfWeek = _currentDate.Date.AddDays(-(int)_currentDate.DayOfWeek + 1);
+            if (startOfWeek.DayOfWeek == DayOfWeek.Sunday) startOfWeek = startOfWeek.AddDays(-6);
+
+            IsToday = today >= startOfWeek && today <= startOfWeek.AddDays(6);
         }
 
         // Не забудьте освободить ресурсы при закрытии окна

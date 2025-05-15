@@ -13,7 +13,6 @@
 		<converters:StringEqualsValueConverter x:Key="StringEqualsValue"/>
 		<converters:MarginConverter x:Key="MarginConverter"/>
 	</UserControl.Resources>
-
 	<UserControl.Styles>
 		<!-- Стили для ComboBox -->
 		<Style Selector="ComboBox">
@@ -29,17 +28,17 @@
 			<Setter Property="VerticalContentAlignment" Value="Center"/>
 		</Style>
 	</UserControl.Styles>
-
+	
 	<Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
 		<!-- Заголовок страницы и поиск -->
 		<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="20,20,20,0">
-			<TextBlock Grid.Column="0" Text="Производство" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+			<TextBlock Grid.Column="0" Text="Производство" FontSize="20" FontWeight="SemiBold" Foreground="#333333"/>
 
 			<!-- Поле поиска -->
-			<Border Grid.Column="1" Width="200" Height="36" CornerRadius="18" Background="{DynamicResource BackgroundBrush}"
-                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Margin="0,0,0,0">
+			<Border Grid.Column="1" Width="200" Height="36" CornerRadius="18" Background="White"
+                    BorderBrush="#E0E0E0" BorderThickness="1" Margin="0,0,0,0">
 				<Grid ColumnDefinitions="Auto,*">
-					<TextBlock Grid.Column="0" Text="🔍" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="12,0,5,0"
+					<TextBlock Grid.Column="0" Text="🔍" FontSize="14" Foreground="#9E9E9E" Margin="12,0,5,0"
                                VerticalAlignment="Center" HorizontalAlignment="Center"/>
 					<TextBox Grid.Column="1" Text="{Binding SearchText}" Watermark="Поиск..."
                              BorderThickness="0" Background="Transparent"
@@ -53,17 +52,18 @@
 			</Border>
 		</Grid>
 
-		<!-- Карточки статистики - улучшенная версия -->
-		<Grid Grid.Row="1" Margin="20,20,20,0" ColumnDefinitions="*,*,*" RowDefinitions="Auto" MinWidth="600">
+		<!-- Карточки статистики -->
+		<Grid Grid.Row="1" Margin="20,20,20,0" ColumnDefinitions="*,*,*" MinWidth="600">
 			<!-- Карточка 1: В производстве -->
-			<Border Grid.Column="0" Height="120" Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Margin="0,0,10,0" MinWidth="180">
+			<Border Grid.Column="0" Height="120" Background="White" CornerRadius="8" Margin="0,0,10,0"
+                    BoxShadow="0 2 3 #10000000" MinWidth="180">
 				<Grid Margin="20,0">
 					<StackPanel VerticalAlignment="Center">
-						<TextBlock Text="В производстве" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
-						<TextBlock Text="{Binding InProductionCount}" FontSize="30" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,10,0,0"/>
+						<TextBlock Text="В производстве" FontSize="14" Foreground="#9E9E9E"/>
+						<TextBlock Text="{Binding InProductionCount}" FontSize="30" FontWeight="Medium" Foreground="#333333" Margin="0,10,0,0"/>
 						<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10">
-							<Border Width="70" Height="24" Background="{DynamicResource SecondaryBrush}" Opacity="0.2" CornerRadius="12">
-								<TextBlock Text="+3" FontSize="12" Foreground="{DynamicResource SecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							<Border Width="70" Height="24" Background="#9575CD" Opacity="0.2" CornerRadius="12">
+								<TextBlock Text="+3" FontSize="12" Foreground="#9575CD" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</Border>
 						</StackPanel>
 					</StackPanel>
@@ -71,14 +71,15 @@
 			</Border>
 
 			<!-- Карточка 2: На отладке -->
-			<Border Grid.Column="1" Height="120" Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Margin="10,0" MinWidth="180">
+			<Border Grid.Column="1" Height="120" Background="White" CornerRadius="8" Margin="10,0"
+                    BoxShadow="0 2 3 #10000000" MinWidth="180">
 				<Grid Margin="20,0">
 					<StackPanel VerticalAlignment="Center">
-						<TextBlock Text="На отладке" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
-						<TextBlock Text="{Binding DebuggingCount}" FontSize="30" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,10,0,0"/>
+						<TextBlock Text="На отладке" FontSize="14" Foreground="#9E9E9E"/>
+						<TextBlock Text="{Binding DebuggingCount}" FontSize="30" FontWeight="Medium" Foreground="#333333" Margin="0,10,0,0"/>
 						<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10">
-							<Border Width="70" Height="24" Background="{DynamicResource SuccessBrush}" Opacity="0.2" CornerRadius="12">
-								<TextBlock Text="+1" FontSize="12" Foreground="{DynamicResource SuccessBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							<Border Width="70" Height="24" Background="#4CAF9D" Opacity="0.2" CornerRadius="12">
+								<TextBlock Text="+1" FontSize="12" Foreground="#4CAF9D" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</Border>
 						</StackPanel>
 					</StackPanel>
@@ -86,14 +87,15 @@
 			</Border>
 
 			<!-- Карточка 3: Готово к упаковке -->
-			<Border Grid.Column="2" Height="120" Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Margin="10,0,0,0" MinWidth="180">
+			<Border Grid.Column="2" Height="120" Background="White" CornerRadius="8" Margin="10,0,0,0"
+                    BoxShadow="0 2 3 #10000000" MinWidth="180">
 				<Grid Margin="20,0">
 					<StackPanel VerticalAlignment="Center">
-						<TextBlock Text="Готово к упаковке" FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
-						<TextBlock Text="{Binding ReadyForPackagingCount}" FontSize="30" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,10,0,0"/>
+						<TextBlock Text="Готово к упаковке" FontSize="14" Foreground="#9E9E9E"/>
+						<TextBlock Text="{Binding ReadyForPackagingCount}" FontSize="30" FontWeight="Medium" Foreground="#333333" Margin="0,10,0,0"/>
 						<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10">
-							<Border Width="70" Height="24" Background="{DynamicResource WarningBrush}" Opacity="0.2" CornerRadius="12">
-								<TextBlock Text="Срочно" FontSize="12" Foreground="{DynamicResource WarningBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+							<Border Width="70" Height="24" Background="#FFB74D" Opacity="0.2" CornerRadius="12">
+								<TextBlock Text="Срочно" FontSize="12" Foreground="#FFB74D" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</Border>
 						</StackPanel>
 					</StackPanel>
@@ -101,110 +103,112 @@
 			</Border>
 		</Grid>
 
-		<!-- Панель фильтров - адаптивная версия -->
-		<Border Grid.Row="2" MinHeight="50" Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Margin="20,20,20,0">
-			<Grid>
-				<!-- Для больших экранов - горизонтальное размещение -->
-				<StackPanel x:Name="HorizontalFilters" Orientation="Horizontal" Margin="20,10" Spacing="15" HorizontalAlignment="Center">
+		<!-- Панель фильтров -->
+		<Border Grid.Row="2" MinHeight="50" Background="White" CornerRadius="8" Margin="20,20,20,0"
+                BoxShadow="0 2 3 #10000000">
+			<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
+				<StackPanel Orientation="Horizontal" Margin="20,10" Spacing="15" HorizontalAlignment="Center">
 					<!-- Фильтр статуса -->
-					<ComboBox Width="120" ItemsSource="{Binding Statuses}"
-							  SelectedItem="{Binding SelectedStatus}"
-							  PlaceholderText="Статус">
-						<ToolTip.Tip>
-							<TextBlock Text="Фильтр по статусу производства"/>
-						</ToolTip.Tip>
+					<ComboBox Width="120"
+                              ItemsSource="{Binding Statuses}"
+                              SelectedItem="{Binding SelectedStatus}"
+                              MinWidth="100"
+                              PlaceholderText="Выберите статус">
+						<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding}" />
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
 					</ComboBox>
 
 					<!-- Фильтр мастера -->
-					<ComboBox Width="130" ItemsSource="{Binding Masters}"
-							  SelectedItem="{Binding SelectedMaster}"
-							  PlaceholderText="Все мастера">
-						<ToolTip.Tip>
-							<TextBlock Text="Фильтр по мастеру"/>
-						</ToolTip.Tip>
+					<ComboBox Width="130"
+                              ItemsSource="{Binding Masters}"
+                              SelectedItem="{Binding SelectedMaster}"
+                              MinWidth="100"
+                              PlaceholderText="Выберите мастера">
+						<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding}" />
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
 					</ComboBox>
 
 					<!-- Фильтр периода -->
-					<ComboBox Width="130" ItemsSource="{Binding Periods}"
-							  SelectedItem="{Binding SelectedPeriod}"
-							  PlaceholderText="Период">
-						<ToolTip.Tip>
-							<TextBlock Text="Фильтр по периоду производства"/>
-						</ToolTip.Tip>
+					<ComboBox Width="130"
+                              ItemsSource="{Binding Periods}"
+                              SelectedItem="{Binding SelectedPeriod}"
+                              MinWidth="100"
+                              PlaceholderText="Выберите период">
+						<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding}" />
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
 					</ComboBox>
 
 					<!-- Кнопка обновления -->
-					<Button Width="30" Height="30" CornerRadius="15" Background="{DynamicResource PrimaryBrush}"
+					<Button Width="30" Height="30" CornerRadius="15" Background="#00ACC1"
 							Command="{Binding RefreshCommand}">
-						<TextBlock Text="⟳" FontSize="14" Foreground="{DynamicResource SurfaceBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Text="⟳" FontSize="14" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						<ToolTip.Tip>
 							<TextBlock Text="Обновить данные"/>
 						</ToolTip.Tip>
 					</Button>
 
 					<!-- Кнопка создания производственного задания -->
-					<Button Width="180" Height="36" Background="{DynamicResource PrimaryBrush}" CornerRadius="18"
+					<Button Width="180" Height="36" Background="#00ACC1" CornerRadius="18"
 							Command="{Binding CreateProductionOrderCommand}">
-						<TextBlock Text="+ Создать заказ-наряд" FontSize="12" Foreground="{DynamicResource SurfaceBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Text="+ Создать заказ-наряд" FontSize="12" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						<ToolTip.Tip>
 							<TextBlock Text="Создать новый заказ-наряд на производство"/>
 						</ToolTip.Tip>
 					</Button>
 				</StackPanel>
-
-				<!-- Для маленьких экранов - можно также добавить ScrollViewer для прокрутки -->
-				<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden"
-							  IsVisible="{Binding #HorizontalFilters.IsVisible, FallbackValue=True}">
-					<Border HorizontalAlignment="Center">
-						<StackPanel Orientation="Horizontal" Margin="20,10" Spacing="15">
-							<!-- Дублируем элементы для прокрутки на очень маленьких экранах -->
-						</StackPanel>
-					</Border>
-				</ScrollViewer>
-			</Grid>
+			</ScrollViewer>
 		</Border>
 
 		<!-- Таблица производственных заданий -->
-		<Border Grid.Row="3" Margin="20,20,20,0" Background="{DynamicResource SurfaceBrush}" CornerRadius="8">
+		<Border Grid.Row="3" Margin="20,20,20,0" Background="White" CornerRadius="8" BoxShadow="0 2 3 #10000000">
 			<Grid RowDefinitions="Auto,*">
-				<!-- Индикатор загрузки -->
 				<ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoading}"
-						   VerticalAlignment="Center" HorizontalAlignment="Center"
-						   Width="200" Height="10"/>
+                             Opacity="0.8"
+                             VerticalAlignment="Center" HorizontalAlignment="Center"
+                             Width="200" Height="10" Margin="0,10"/>
 
 				<!-- Заголовок таблицы -->
-				<Grid Grid.Row="0" Background="{DynamicResource BackgroundBrush}" Height="40">
+				<Grid Grid.Row="0" Background="#F8F9FA" Height="40" IsVisible="{Binding !IsLoading}">
 					<!-- Пропорциональные колонки для адаптивности -->
 					<Grid ColumnDefinitions="20*,35*,20*,15*,15*,25*" Margin="20,0,20,0">
-						<TextBlock Grid.Column="0" Text="№ заказ-наряда" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium" VerticalAlignment="Center"/>
-						<TextBlock Grid.Column="1" Text="Наименование" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium" VerticalAlignment="Center"/>
-						<TextBlock Grid.Column="2" Text="Мастер" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium" VerticalAlignment="Center"/>
-						<TextBlock Grid.Column="3" Text="Дата начала" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium" VerticalAlignment="Center"/>
-						<TextBlock Grid.Column="4" Text="Дата окончания" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium" VerticalAlignment="Center"/>
-						<TextBlock Grid.Column="5" Text="Статус" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium" VerticalAlignment="Center"/>
+						<TextBlock Grid.Column="0" Text="№ заказ-наряда" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
+						<TextBlock Grid.Column="1" Text="Наименование" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
+						<TextBlock Grid.Column="2" Text="Мастер" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
+						<TextBlock Grid.Column="3" Text="Дата начала" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
+						<TextBlock Grid.Column="4" Text="Дата окончания" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
+						<TextBlock Grid.Column="5" Text="Статус" FontSize="12" Foreground="#666" FontWeight="Medium" VerticalAlignment="Center"/>
 					</Grid>
 				</Grid>
 
 				<!-- Линия разделителя -->
-				<Rectangle Grid.Row="0" Height="1" Fill="{DynamicResource BorderBrush}" VerticalAlignment="Bottom" IsHitTestVisible="False"/>
+				<Rectangle Grid.Row="0" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom" IsHitTestVisible="False"/>
 
 				<!-- Список производственных заданий -->
-				<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+				<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" IsVisible="{Binding !IsLoading}">
 					<Grid>
 						<ItemsControl ItemsSource="{Binding ProductionItems}">
 							<ItemsControl.ItemTemplate>
 								<DataTemplate>
-									<Grid Height="60" Background="{Binding IsAlternate, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource SurfaceBrush},{DynamicResource BackgroundBrush}'}">
+									<Grid Height="60" Background="{Binding IsAlternate, Converter={StaticResource BoolToValue}, ConverterParameter='#F9FAFB,White'}">
 										<!-- Используем те же пропорции колонок, что и в заголовке -->
 										<Grid ColumnDefinitions="20*,35*,20*,15*,15*,25*" Margin="20,8,20,8">
-											<TextBlock Grid.Column="0" Text="{Binding OrderNumber}" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+											<TextBlock Grid.Column="0" Text="{Binding OrderNumber}" FontSize="13" Foreground="#333" VerticalAlignment="Center"/>
 											<StackPanel Grid.Column="1" VerticalAlignment="Center">
-												<TextBlock Text="{Binding Name}" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap"/>
-												<TextBlock Text="{Binding OrderReference}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"/>
+												<TextBlock Text="{Binding Name}" FontSize="13" Foreground="#333" TextWrapping="Wrap" MaxLines="2"/>
+												<TextBlock Text="{Binding OrderReference}" FontSize="11" Foreground="#666"/>
 											</StackPanel>
-											<TextBlock Grid.Column="2" Text="{Binding Master}" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center" TextWrapping="Wrap"/>
-											<TextBlock Grid.Column="3" Text="{Binding StartDate}" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
-											<TextBlock Grid.Column="4" Text="{Binding EndDate}" FontSize="12" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+											<TextBlock Grid.Column="2" Text="{Binding Master}" FontSize="12" Foreground="#333" VerticalAlignment="Center" TextWrapping="Wrap"/>
+											<TextBlock Grid.Column="3" Text="{Binding StartDate}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
+											<TextBlock Grid.Column="4" Text="{Binding EndDate}" FontSize="12" Foreground="#333" VerticalAlignment="Center"/>
 
 											<!-- Статус производства -->
 											<StackPanel Grid.Column="5" Orientation="Horizontal" VerticalAlignment="Center">
@@ -212,17 +216,18 @@
 													<TextBlock Text="{Binding Status}" FontSize="12" Foreground="{Binding StatusColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 												</Border>
 
-												<!-- Прогресс выполнения - адаптивный размер -->
-												<Grid Width="60" MinWidth="40" MaxWidth="80" Height="4" Margin="10,0,0,0" VerticalAlignment="Center">
-													<Border Background="{DynamicResource BorderBrush}" Height="4" CornerRadius="2"/>
+												<!-- Проценты левее от прогресс-бара -->
+												<TextBlock Text="{Binding Progress}" FontSize="12" Foreground="#666" Margin="10,0,5,0" VerticalAlignment="Center"/>
+
+												<!-- Прогресс выполнения -->
+												<Grid Width="60" Height="4" Margin="0,0,0,0" VerticalAlignment="Center">
+													<Border Background="#E0E0E0" Height="4" CornerRadius="2"/>
 													<Border Background="{Binding StatusColor}" Width="{Binding ProgressWidth}" Height="4" HorizontalAlignment="Left" CornerRadius="2"/>
 												</Grid>
-
-												<TextBlock Text="{Binding Progress}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="5,0,0,0" VerticalAlignment="Center"/>
 											</StackPanel>
 
 											<!-- Линия разделителя -->
-											<Rectangle Grid.ColumnSpan="6" Height="1" Fill="{DynamicResource BorderBrush}" VerticalAlignment="Bottom"/>
+											<Rectangle Grid.ColumnSpan="6" Height="1" Fill="#E0E0E0" VerticalAlignment="Bottom"/>
 										</Grid>
 									</Grid>
 								</DataTemplate>
@@ -230,10 +235,15 @@
 						</ItemsControl>
 
 						<!-- Сообщение, если нет данных -->
-						<TextBlock Text="Нет производственных заданий для отображения"
-								 IsVisible="{Binding ProductionItems.Count, Converter={StaticResource IsGreaterThan}, ConverterParameter='0 Invert=true'}"
-								 FontSize="16" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"
-								 HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    IsVisible="{Binding ProductionItems.Count, Converter={StaticResource IsGreaterThan}, ConverterParameter='0 Invert=true'}">
+							<TextBlock Text="Нет производственных заданий для отображения"
+                                       FontSize="16" Foreground="#9E9E9E" FontWeight="Medium"
+                                       HorizontalAlignment="Center"/>
+							<TextBlock Text="Попробуйте изменить фильтры или создать новый заказ-наряд"
+                                       FontSize="14" Foreground="#C0C0C0"
+                                       HorizontalAlignment="Center" Margin="0,5,0,0"/>
+						</StackPanel>
 					</Grid>
 				</ScrollViewer>
 			</Grid>
@@ -241,29 +251,29 @@
 
 		<!-- Пагинация -->
 		<StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center"
-                   Margin="0,20,0,20">
+                    Margin="0,20,0,20">
 			<Button Command="{Binding PreviousPageCommand}" Background="Transparent" BorderThickness="0"
-                   IsEnabled="{Binding CanGoToPreviousPage}">
+                    IsEnabled="{Binding CanGoToPreviousPage}">
 				<TextBlock Text="◀ Пред." FontSize="13"
-                          Foreground="{Binding CanGoToPreviousPage, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource TextSecondaryBrush},#CCC'}"
-                          VerticalAlignment="Center"/>
+                           Foreground="{Binding CanGoToPreviousPage, Converter={StaticResource BoolToValue}, ConverterParameter='#666,#CCC'}"
+                           VerticalAlignment="Center"/>
 			</Button>
 
 			<!-- Текущая страница -->
-			<Border Width="30" Height="30" CornerRadius="15" Background="{DynamicResource PrimaryBrush}" VerticalAlignment="Center" Margin="15,0">
-				<TextBlock Text="{Binding CurrentPage}" FontSize="13" Foreground="{DynamicResource SurfaceBrush}"
-                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			<Border Width="30" Height="30" CornerRadius="15" Background="#00ACC1" VerticalAlignment="Center" Margin="15,0">
+				<TextBlock Text="{Binding CurrentPage}" FontSize="13" Foreground="White"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
 			</Border>
 
 			<!-- Индикатор количества страниц -->
-			<TextBlock Text="из" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="5,0"/>
-			<TextBlock Text="{Binding TotalPages}" FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="5,0"/>
+			<TextBlock Text="из" FontSize="13" Foreground="#666" VerticalAlignment="Center" Margin="5,0"/>
+			<TextBlock Text="{Binding TotalPages}" FontSize="13" Foreground="#666" VerticalAlignment="Center" Margin="5,0"/>
 
 			<Button Command="{Binding NextPageCommand}" Background="Transparent" BorderThickness="0"
-                   IsEnabled="{Binding CanGoToNextPage}" Margin="15,0,0,0">
+                    IsEnabled="{Binding CanGoToNextPage}" Margin="15,0,0,0">
 				<TextBlock Text="След. ▶" FontSize="13"
-                          Foreground="{Binding CanGoToNextPage, Converter={StaticResource BoolToValue}, ConverterParameter='{DynamicResource TextSecondaryBrush},#CCC'}"
-                          VerticalAlignment="Center"/>
+                           Foreground="{Binding CanGoToNextPage, Converter={StaticResource BoolToValue}, ConverterParameter='#666,#CCC'}"
+                           VerticalAlignment="Center"/>
 			</Button>
 		</StackPanel>
 	</Grid>

@@ -24,11 +24,11 @@
 		</StackPanel>
 
 		<!-- Кнопка добавления позиции -->
-		<Button DockPanel.Dock="Bottom" Height="36"
+		<Button DockPanel.Dock="Bottom" Height="36" MinWidth="130"
 				IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsAdministratorOrManager}"
 				CornerRadius="18" Background="{DynamicResource PrimaryBrush}"
 				HorizontalAlignment="Right" Margin="20,0,20,20" Command="{Binding AddPositionCommand}">
-			<TextBlock Text="+ Добавить позицию" FontSize="12" Foreground="{DynamicResource SurfaceBrush}"/>
+			<TextBlock Text="+ Добавить позицию" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" Foreground="{DynamicResource SurfaceBrush}"/>
 			<ToolTip.Tip>
 				<TextBlock Text="Добавить новую позицию в заказ"/>
 			</ToolTip.Tip>
@@ -64,18 +64,18 @@
 							</StackPanel>
 
 							<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
-								<Button MinWidth="110" Height="36"
+								<Button MinWidth="130" Height="36"
 										IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsAdministratorOrManager}"
 										CornerRadius="18" Background="{DynamicResource PrimaryBrush}" Command="{Binding EditOrderCommand}">
-									<TextBlock Text="Редактировать" FontSize="12" Foreground="{DynamicResource SurfaceBrush}"/>
+									<TextBlock Text="Редактировать" FontSize="12" Foreground="{DynamicResource SurfaceBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 									<ToolTip.Tip>
 										<TextBlock Text="Редактировать информацию о заказе"/>
 									</ToolTip.Tip>
 								</Button>
-								<Button MinWidth="110" Height="36"
+								<Button MinWidth="150" Height="36" 
 										IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsAdministratorOrManager}"
 										CornerRadius="18" Background="{DynamicResource ErrorBrush}" Command="{Binding DeleteOrderCommand}">
-									<TextBlock Text="Удалить" FontSize="12" Foreground="{DynamicResource SurfaceBrush}"/>
+									<TextBlock  Text="Удалить" FontSize="12" Foreground="{DynamicResource SurfaceBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 									<ToolTip.Tip>
 										<TextBlock Text="Удалить заказ"/>
 									</ToolTip.Tip>
@@ -194,22 +194,22 @@
 
 													<!-- Меню действий -->
 													<StackPanel Grid.Column="6" Orientation="Horizontal" Spacing="5" Margin="5,0" VerticalAlignment="Center">
-														<Button Width="24" Height="24"
+														<Button Width="30" Height="30"
 																IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsAdministratorOrManager}"
 																CornerRadius="12" Background="#F1F3F4"
 																Command="{Binding $parent[ItemsControl].((vm:OrderDetailsViewModel)DataContext).EditPositionCommand}"
 																CommandParameter="{Binding Id}">
-															<TextBlock Text="✎" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+															<TextBlock Text="✎" FontSize="10" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 															<ToolTip.Tip>
 																<TextBlock Text="Редактировать позицию"/>
 															</ToolTip.Tip>
 														</Button>
-														<Button Width="24" Height="24"
+														<Button Width="30" Height="30"
 																IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).IsAdministratorOrManager}"
 																CornerRadius="12" Background="{DynamicResource ErrorBrush}" Opacity="0.2"
 																Command="{Binding $parent[ItemsControl].((vm:OrderDetailsViewModel)DataContext).DeletePositionCommand}"
 																CommandParameter="{Binding Id}">
-															<TextBlock Text="✕" FontSize="12" Foreground="{DynamicResource ErrorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+															<TextBlock Text="✕" FontSize="10" Foreground="{DynamicResource ErrorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 															<ToolTip.Tip>
 																<TextBlock Text="Удалить позицию"/>
 															</ToolTip.Tip>

@@ -344,8 +344,8 @@
 
 						<!-- Текущее время -->
 						<Line Grid.ColumnSpan="8"
-							StartPoint="{Binding CurrentTimePosition, Converter={StaticResource DoubleToPointConverter}, ConverterParameter='50,Y'}"
-							EndPoint="{Binding CurrentTimePosition, Converter={StaticResource DoubleToPointConverter}, ConverterParameter='770,Y'}"
+							StartPoint="{Binding CurrentTimePositionExact, Converter={StaticResource DoubleToPointConverter}, ConverterParameter='50,Y'}"
+							EndPoint="{Binding CurrentTimePositionExact, Converter={StaticResource DoubleToPointConverter}, ConverterParameter='770,Y'}"
 							Stroke="{DynamicResource PrimaryBrush}"
 							StrokeThickness="2"
 							StrokeDashArray="4,2"
@@ -355,7 +355,7 @@
 							Height="8"
 							Fill="{DynamicResource PrimaryBrush}"
 							HorizontalAlignment="Left"
-							Margin="{Binding CurrentTimePosition, Converter={StaticResource TimePositionToMarginConverter}}"
+							Margin="{Binding CurrentTimePositionExact, Converter={StaticResource TimePositionToMarginConverter}}"
 							IsVisible="{Binding IsToday}"/>
 
 					</Grid>

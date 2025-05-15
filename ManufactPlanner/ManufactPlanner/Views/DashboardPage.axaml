@@ -280,24 +280,24 @@
 							<StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,15">
 								<WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
 									<StackPanel Orientation="Horizontal" Margin="10,5">
-										<Ellipse Width="10" Height="10" Fill="#00ACC1" VerticalAlignment="Center"/>
+										<Ellipse Width="10" Height="10" Fill="#4CAF9D" VerticalAlignment="Center"/>
 										<TextBlock Text="Выполнено" FontSize="11" Margin="8,0" VerticalAlignment="Center"/>
 									</StackPanel>
 									<StackPanel Orientation="Horizontal" Margin="10,5">
-										<Ellipse Width="10" Height="10" Fill="#4CAF9D" VerticalAlignment="Center"/>
+										<Ellipse Width="10" Height="10" Fill="#00ACC1" VerticalAlignment="Center"/>
 										<TextBlock Text="В процессе" FontSize="11" Margin="8,0" VerticalAlignment="Center"/>
 									</StackPanel>
 									<StackPanel Orientation="Horizontal" Margin="10,5">
-										<Ellipse Width="10" Height="10" Fill="#FFB74D" VerticalAlignment="Center"/>
+										<Ellipse Width="10" Height="10" Fill="#9575CD" VerticalAlignment="Center"/>
 										<TextBlock Text="В очереди" FontSize="11" Margin="8,0" VerticalAlignment="Center"/>
+									</StackPanel>
+									<StackPanel Orientation="Horizontal" Margin="10,5">
+										<Ellipse Width="10" Height="10" Fill="#FFB74D" VerticalAlignment="Center"/>
+										<TextBlock Text="Ждем производство" FontSize="11" Margin="8,0" VerticalAlignment="Center"/>
 									</StackPanel>
 									<StackPanel Orientation="Horizontal" Margin="10,5">
 										<Ellipse Width="10" Height="10" Fill="#FF7043" VerticalAlignment="Center"/>
 										<TextBlock Text="Просрочено" FontSize="11" Margin="8,0" VerticalAlignment="Center"/>
-									</StackPanel>
-									<StackPanel Orientation="Horizontal" Margin="10,5">
-										<Ellipse Width="10" Height="10" Fill="#9575CD" VerticalAlignment="Center"/>
-										<TextBlock Text="Отменено" FontSize="11" Margin="8,0" VerticalAlignment="Center"/>
 									</StackPanel>
 								</WrapPanel>
 							</StackPanel>

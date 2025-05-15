@@ -12,6 +12,8 @@ using System.Reactive;
 using ManufactPlanner.ViewModels.Dialogs;
 using ManufactPlanner.Views.Dialogs;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia;
 
 namespace ManufactPlanner.ViewModels
 {
@@ -24,18 +26,18 @@ namespace ManufactPlanner.ViewModels
         private int _inProductionCount;
         private int _debuggingCount;
         private int _readyForPackagingCount;
-        private ObservableCollection<ProductionItemViewModel> _productionItems;
+        private ObservableCollection<ProductionItemViewModel> _productionItems = new();
         private bool _isLoading = true;
         private string _searchText = string.Empty;
 
         // Фильтры
-        private ObservableCollection<string> _statuses = new ObservableCollection<string>();
-        private ObservableCollection<string> _masters = new ObservableCollection<string>();
-        private ObservableCollection<string> _periods = new ObservableCollection<string>();
+        private ObservableCollection<string> _statuses = new();
+        private ObservableCollection<string> _masters = new();
+        private ObservableCollection<string> _periods = new();
 
-        private string _selectedStatus;
-        private string _selectedMaster;
-        private string _selectedPeriod;
+        private string _selectedStatus = "Все статусы";
+        private string _selectedMaster = "Все мастера";
+        private string _selectedPeriod = "Все периоды";
 
         // Пагинация
         private int _currentPage = 1;
@@ -80,7 +82,7 @@ namespace ManufactPlanner.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref _searchText, value);
                 // При изменении текста поиска - обновляем список
-                RefreshProductionItems();
+                _ = RefreshProductionItemsAsync();
             }
         }
 
@@ -109,7 +111,7 @@ namespace ManufactPlanner.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _selectedStatus, value);
-                RefreshProductionItems();
+                _ = RefreshProductionItemsAsync();
             }
         }
 
@@ -119,7 +121,7 @@ namespace ManufactPlanner.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _selectedMaster, value);
-                RefreshProductionItems();
+                _ = RefreshProductionItemsAsync();
             }
         }
 
@@ -129,7 +131,7 @@ namespace ManufactPlanner.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _selectedPeriod, value);
-                RefreshProductionItems();
+                _ = RefreshProductionItemsAsync();
             }
         }
 
@@ -151,118 +153,184 @@ namespace ManufactPlanner.ViewModels
         #endregion
 
         // Команды
-        public ICommand RefreshCommand { get; }
-        public ICommand NextPageCommand { get; }
-        public ICommand PreviousPageCommand { get; }
-        public ICommand ViewProductionDetailsCommand { get; }
+        public ICommand RefreshCommand { get; private set; }
+        public ICommand NextPageCommand { get; private set; }
+        public ICommand PreviousPageCommand { get; private set; }
+        public ICommand ViewProductionDetailsCommand { get; private set; }
+        public ICommand CreateProductionOrderCommand { get; private set; }
 
-        public ICommand CreateProductionOrderCommand { get; }
-
-        public ProductionViewModel(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext, Window parentWindow)
+        public ProductionViewModel(MainWindowViewModel mainWindowViewModel, PostgresContext dbContext)
         {
             _mainWindowViewModel = mainWindowViewModel;
             _dbContext = dbContext;
 
-            // Инициализация команд
-            RefreshCommand = ReactiveCommand.Create(RefreshProductionItems);
+            // Инициализация команд (должна быть первой)
+            InitializeCommands();
 
-            NextPageCommand = ReactiveCommand.Create(() =>
+            // Инициализация коллекций с пустыми значениями
+            ProductionItems = new ObservableCollection<ProductionItemViewModel>();
+            InitializeEmptyCollections();
+
+            // Запускаем асинхронную инициализацию
+            _ = InitializeAsync();
+        }
+
+        private void InitializeCommands()
+        {
+            RefreshCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                await RefreshProductionItemsAsync();
+            });
+
+            CreateProductionOrderCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                await CreateProductionOrder();
+            });
+
+            NextPageCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 if (CanGoToNextPage)
                 {
                     CurrentPage++;
                     this.RaisePropertyChanged(nameof(CanGoToNextPage));
                     this.RaisePropertyChanged(nameof(CanGoToPreviousPage));
-                    LoadProductionData();
+                    await LoadProductionDataAsync();
                 }
             });
 
-            PreviousPageCommand = ReactiveCommand.Create(() =>
+            PreviousPageCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 if (CanGoToPreviousPage)
                 {
                     CurrentPage--;
                     this.RaisePropertyChanged(nameof(CanGoToNextPage));
                     this.RaisePropertyChanged(nameof(CanGoToPreviousPage));
-                    LoadProductionData();
+                    await LoadProductionDataAsync();
                 }
             });
 
             ViewProductionDetailsCommand = ReactiveCommand.Create<int>((productionId) =>
             {
-                // Тут можно реализовать переход на детальную информацию
+                // Реализация перехода на детальную информацию
                 // _mainWindowViewModel.NavigateToProductionDetails(productionId);
             });
-            
-            CreateProductionOrderCommand = ReactiveCommand.CreateFromTask(async () => {
-                // Создаем и показываем диалог
-                var dialog = new ProductionOrderDialog(_dbContext);
-                await dialog.ShowDialog(parentWindow); // Предполагаем, что в MainWindowViewModel есть свойство MainWindow
-
-                // Проверяем результат диалога
-                var dialogViewModel = dialog.DataContext as ProductionOrderDialogViewModel;
-                if (dialogViewModel != null && dialogViewModel.DialogResult)
-                {
-                    // Обновляем список производственных заданий
-                    RefreshProductionItems();
-                }
-            });
-            // Инициализация фильтров
-            InitializeFiltersAsync();
-
-            // Загрузка данных из БД
-            LoadProductionData();
         }
 
-        private async void InitializeFiltersAsync()
+        private void InitializeEmptyCollections()
+        {
+            // Инициализируем пустые коллекции, чтобы избежать проблем с привязкой
+            Statuses = new ObservableCollection<string> { "Все статусы" };
+            Masters = new ObservableCollection<string> { "Все мастера" };
+            Periods = new ObservableCollection<string> { "Все периоды" };
+        }
+
+        private async System.Threading.Tasks.Task InitializeAsync()
+        {
+            try
+            {
+                await InitializeFiltersAsync();
+                await LoadProductionDataAsync();
+            }
+            catch (Exception ex)
+            {
+                // Обработка ошибок инициализации
+                Console.WriteLine($"Ошибка инициализации: {ex.Message}");
+                IsLoading = false;
+            }
+        }
+
+        private async System.Threading.Tasks.Task InitializeFiltersAsync()
         {
             try
             {
                 // Инициализация фильтров статусов производства
-                Statuses = new ObservableCollection<string>
+                await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    "Все статусы",
-                    "Подготовка",
-                    "Изготовление",
-                    "Отладка",
-                    "Завершено"
-                };
+                    Statuses.Clear();
+                    Statuses.Add("Все статусы");
+                    Statuses.Add("Подготовка");
+                    Statuses.Add("Изготовление");
+                    Statuses.Add("Отладка");
+                    Statuses.Add("Завершено");
 
-                // Периоды
-                Periods = new ObservableCollection<string>
-                {
-                    "Все периоды",
-                    "Текущая неделя",
-                    "Следующая неделя",
-                    "Текущий месяц",
-                    "Просроченные"
-                };
+                    // Периоды
+                    Periods.Clear();
+                    Periods.Add("Все периоды");
+                    Periods.Add("Текущая неделя");
+                    Periods.Add("Следующая неделя");
+                    Periods.Add("Текущий месяц");
+                    Periods.Add("Просроченные");
+                });
 
                 // Загрузка списка мастеров из базы данных
                 var mastersFromDb = await _dbContext.ProductionDetails
-                    .Where(p => p.MasterName != null)
+                    .Where(p => !string.IsNullOrEmpty(p.MasterName))
                     .Select(p => p.MasterName)
                     .Distinct()
                     .ToListAsync();
 
-                // Добавляем пункт "Все мастера" в начало списка
-                Masters = new ObservableCollection<string>(new[] { "Все мастера" }.Concat(mastersFromDb));
+                // Обновляем UI thread
+                await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    Masters.Clear();
+                    Masters.Add("Все мастера");
+                    foreach (var master in mastersFromDb)
+                    {
+                        Masters.Add(master);
+                    }
+                });
 
                 // Устанавливаем значения по умолчанию
                 SelectedStatus = "Все статусы";
                 SelectedMaster = "Все мастера";
                 SelectedPeriod = "Все периоды";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // В случае ошибки инициализируем базовые значения
-                Statuses = new ObservableCollection<string> { "Все статусы" };
-                Masters = new ObservableCollection<string> { "Все мастера" };
-                Periods = new ObservableCollection<string> { "Все периоды" };
+                // В случае ошибки просто оставляем значения по умолчанию
+                Console.WriteLine($"Ошибка при загрузке фильтров: {ex.Message}");
             }
         }
 
-        private async void LoadProductionData()
+        private async System.Threading.Tasks.Task CreateProductionOrder()
+        {
+            try
+            {
+                var mainWindow = GetMainWindow();
+                if (mainWindow == null)
+                {
+                    Console.WriteLine("Не удалось получить главное окно приложения");
+                    return;
+                }
+
+                // Создаем диалог создания заказ-наряда
+                var dialog = new ProductionOrderDialog(_dbContext);
+
+                // Показываем диалог и ждем его закрытия
+                bool? result = await dialog.ShowDialog<bool?>(mainWindow);
+
+                // Если диалог был закрыт с положительным результатом, обновляем данные
+                if (result == true)
+                {
+                    await RefreshProductionItemsAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при создании заказ-наряда: {ex.Message}");
+            }
+        }
+
+        private Window GetMainWindow()
+        {
+            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                return desktop.MainWindow;
+            }
+            return null;
+        }
+
+        private async System.Threading.Tasks.Task LoadProductionDataAsync()
         {
             IsLoading = true;
 
@@ -284,68 +352,15 @@ namespace ManufactPlanner.ViewModels
                     .ThenInclude(op => op.Order)
                     .AsQueryable();
 
-                // Применяем фильтры, если они выбраны
-                if (!string.IsNullOrEmpty(SearchText))
-                {
-                    query = query.Where(p =>
-                        p.OrderNumber.Contains(SearchText) ||
-                        p.MasterName.Contains(SearchText) ||
-                        p.OrderPosition.ProductName.Contains(SearchText));
-                }
-
-                if (!string.IsNullOrEmpty(SelectedMaster) && SelectedMaster != "Все мастера")
-                {
-                    query = query.Where(p => p.MasterName == SelectedMaster);
-                }
-
-                if (!string.IsNullOrEmpty(SelectedStatus) && SelectedStatus != "Все статусы")
-                {
-                    // Определяем условия фильтрации в зависимости от статуса
-                    query = SelectedStatus switch
-                    {
-                        "Подготовка" => query.Where(p => p.ProductionDate == null),
-                        "Изготовление" => query.Where(p => p.ProductionDate != null && p.DebuggingDate == null),
-                        "Отладка" => query.Where(p => p.DebuggingDate != null && p.AcceptanceDate == null),
-                        "Завершено" => query.Where(p => p.AcceptanceDate != null),
-                        _ => query
-                    };
-                }
-
-                if (!string.IsNullOrEmpty(SelectedPeriod) && SelectedPeriod != "Все периоды")
-                {
-                    var today = DateOnly.FromDateTime(DateTime.Today);
-                    var endOfWeek = DateOnly.FromDateTime(DateTime.Today.AddDays(7 - (int)DateTime.Today.DayOfWeek));
-                    var startOfNextWeek = endOfWeek.AddDays(1);
-                    var endOfNextWeek = startOfNextWeek.AddDays(6);
-                    var endOfMonth = DateOnly.FromDateTime(new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month)));
-
-                    query = SelectedPeriod switch
-                    {
-                        "Текущая неделя" => query.Where(p =>
-                            (p.ProductionDate >= today && p.ProductionDate <= endOfWeek) ||
-                            (p.DebuggingDate >= today && p.DebuggingDate <= endOfWeek) ||
-                            (p.AcceptanceDate >= today && p.AcceptanceDate <= endOfWeek)),
-                        "Следующая неделя" => query.Where(p =>
-                            (p.ProductionDate >= startOfNextWeek && p.ProductionDate <= endOfNextWeek) ||
-                            (p.DebuggingDate >= startOfNextWeek && p.DebuggingDate <= endOfNextWeek) ||
-                            (p.AcceptanceDate >= startOfNextWeek && p.AcceptanceDate <= endOfNextWeek)),
-                        "Текущий месяц" => query.Where(p =>
-                            (p.ProductionDate >= today && p.ProductionDate <= endOfMonth) ||
-                            (p.DebuggingDate >= today && p.DebuggingDate <= endOfMonth) ||
-                            (p.AcceptanceDate >= today && p.AcceptanceDate <= endOfMonth)),
-                        "Просроченные" => query.Where(p =>
-                            (p.ProductionDate < today && p.DebuggingDate == null) ||
-                            (p.DebuggingDate < today && p.AcceptanceDate == null)),
-                        _ => query
-                    };
-                }
+                // Применяем фильтры
+                query = ApplyFilters(query);
 
                 // Подсчитываем общее количество элементов для пагинации
                 var totalCount = await query.CountAsync();
-                TotalPages = (int)Math.Ceiling(totalCount / (double)_pageSize);
+                TotalPages = Math.Max(1, (int)Math.Ceiling(totalCount / (double)_pageSize));
 
                 // Проверяем текущую страницу
-                if (CurrentPage > TotalPages && TotalPages > 0)
+                if (CurrentPage > TotalPages)
                 {
                     CurrentPage = TotalPages;
                 }
@@ -356,8 +371,9 @@ namespace ManufactPlanner.ViewModels
 
                 // Применяем пагинацию
                 var pagedItems = await query
-                    .OrderByDescending(p => p.ProductionDate)
-                    .Skip((CurrentPage - 1) * _pageSize)
+                    .OrderByDescending(p => p.ProductionDate ?? DateOnly.MinValue)
+                    .ThenByDescending(p => p.Id)
+                    .Skip(Math.Max(0, (CurrentPage - 1) * _pageSize))
                     .Take(_pageSize)
                     .ToListAsync();
 
@@ -376,7 +392,7 @@ namespace ManufactPlanner.ViewModels
                         Id = p.Id,
                         OrderNumber = p.OrderNumber ?? "№ не указан",
                         Name = p.OrderPosition?.ProductName ?? "Не указано",
-                        OrderReference = p.OrderPosition?.Order?.OrderNumber + " поз. " + p.OrderPosition?.PositionNumber,
+                        OrderReference = (p.OrderPosition?.Order?.OrderNumber ?? "№ не указан") + " поз. " + (p.OrderPosition?.PositionNumber ?? ""),
                         Master = p.MasterName ?? "Не назначен",
                         StartDate = p.ProductionDate?.ToString("dd.MM.yyyy") ?? "Не начато",
                         EndDate = p.PackagingDate?.ToString("dd.MM.yyyy") ?? p.AcceptanceDate?.ToString("dd.MM.yyyy") ?? "Не завершено",
@@ -388,8 +404,15 @@ namespace ManufactPlanner.ViewModels
                     };
                 }).ToList();
 
-                // Обновляем коллекцию
-                ProductionItems = new ObservableCollection<ProductionItemViewModel>(productionViewModels);
+                // Обновляем коллекцию в UI потоке
+                await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    ProductionItems.Clear();
+                    foreach (var item in productionViewModels)
+                    {
+                        ProductionItems.Add(item);
+                    }
+                });
 
                 // Обновляем свойства пагинации
                 this.RaisePropertyChanged(nameof(CanGoToNextPage));
@@ -398,10 +421,12 @@ namespace ManufactPlanner.ViewModels
             catch (Exception ex)
             {
                 // В случае ошибки показываем пустой список
-                ProductionItems = new ObservableCollection<ProductionItemViewModel>();
+                await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    ProductionItems.Clear();
+                });
 
-                // Тут можно добавить логирование ошибки
-                // Console.WriteLine($"Ошибка при загрузке данных производства: {ex.Message}");
+                Console.WriteLine($"Ошибка при загрузке данных производства: {ex.Message}");
             }
             finally
             {
@@ -409,11 +434,74 @@ namespace ManufactPlanner.ViewModels
             }
         }
 
-        private void RefreshProductionItems()
+        private IQueryable<ProductionDetail> ApplyFilters(IQueryable<ProductionDetail> query)
+        {
+            // Применяем фильтр поиска
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                query = query.Where(p =>
+                    (p.OrderNumber != null && p.OrderNumber.Contains(SearchText)) ||
+                    (p.MasterName != null && p.MasterName.Contains(SearchText)) ||
+                    (p.OrderPosition != null && p.OrderPosition.ProductName != null && p.OrderPosition.ProductName.Contains(SearchText)));
+            }
+
+            // Применяем фильтр мастера
+            if (!string.IsNullOrEmpty(SelectedMaster) && SelectedMaster != "Все мастера")
+            {
+                query = query.Where(p => p.MasterName == SelectedMaster);
+            }
+
+            // Применяем фильтр статуса
+            if (!string.IsNullOrEmpty(SelectedStatus) && SelectedStatus != "Все статусы")
+            {
+                query = SelectedStatus switch
+                {
+                    "Подготовка" => query.Where(p => p.ProductionDate == null),
+                    "Изготовление" => query.Where(p => p.ProductionDate != null && p.DebuggingDate == null),
+                    "Отладка" => query.Where(p => p.DebuggingDate != null && p.AcceptanceDate == null),
+                    "Завершено" => query.Where(p => p.AcceptanceDate != null),
+                    _ => query
+                };
+            }
+
+            // Применяем фильтр периода
+            if (!string.IsNullOrEmpty(SelectedPeriod) && SelectedPeriod != "Все периоды")
+            {
+                var today = DateOnly.FromDateTime(DateTime.Today);
+                var endOfWeek = DateOnly.FromDateTime(DateTime.Today.AddDays(7 - (int)DateTime.Today.DayOfWeek));
+                var startOfNextWeek = endOfWeek.AddDays(1);
+                var endOfNextWeek = startOfNextWeek.AddDays(6);
+                var endOfMonth = DateOnly.FromDateTime(new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month)));
+
+                query = SelectedPeriod switch
+                {
+                    "Текущая неделя" => query.Where(p =>
+                        (p.ProductionDate >= today && p.ProductionDate <= endOfWeek) ||
+                        (p.DebuggingDate >= today && p.DebuggingDate <= endOfWeek) ||
+                        (p.AcceptanceDate >= today && p.AcceptanceDate <= endOfWeek)),
+                    "Следующая неделя" => query.Where(p =>
+                        (p.ProductionDate >= startOfNextWeek && p.ProductionDate <= endOfNextWeek) ||
+                        (p.DebuggingDate >= startOfNextWeek && p.DebuggingDate <= endOfNextWeek) ||
+                        (p.AcceptanceDate >= startOfNextWeek && p.AcceptanceDate <= endOfNextWeek)),
+                    "Текущий месяц" => query.Where(p =>
+                        (p.ProductionDate >= today && p.ProductionDate <= endOfMonth) ||
+                        (p.DebuggingDate >= today && p.DebuggingDate <= endOfMonth) ||
+                        (p.AcceptanceDate >= today && p.AcceptanceDate <= endOfMonth)),
+                    "Просроченные" => query.Where(p =>
+                        (p.ProductionDate < today && p.DebuggingDate == null) ||
+                        (p.DebuggingDate < today && p.AcceptanceDate == null)),
+                    _ => query
+                };
+            }
+
+            return query;
+        }
+
+        private async System.Threading.Tasks.Task RefreshProductionItemsAsync()
         {
             // Сбрасываем на первую страницу при обновлении списка
             CurrentPage = 1;
-            LoadProductionData();
+            await LoadProductionDataAsync();
         }
 
         // Вспомогательные методы для вычисления статуса и прогресса
@@ -463,15 +551,15 @@ namespace ManufactPlanner.ViewModels
     public class ProductionItemViewModel : ViewModelBase
     {
         public int Id { get; set; }
-        public string OrderNumber { get; set; }
-        public string Name { get; set; }
-        public string OrderReference { get; set; }
-        public string Master { get; set; }
-        public string StartDate { get; set; }
-        public string EndDate { get; set; }
-        public string Status { get; set; }
-        public string StatusColor { get; set; }
-        public string Progress { get; set; }
+        public string OrderNumber { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string OrderReference { get; set; } = string.Empty;
+        public string Master { get; set; } = string.Empty;
+        public string StartDate { get; set; } = string.Empty;
+        public string EndDate { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public string StatusColor { get; set; } = string.Empty;
+        public string Progress { get; set; } = string.Empty;
         public int ProgressWidth { get; set; }
         public bool IsAlternate { get; set; }
     }

@@ -208,7 +208,7 @@ namespace ManufactPlanner.ViewModels
             ViewAttachmentCommand = ReactiveCommand.Create<int>(ViewAttachment);
             DeleteTaskCommand = ReactiveCommand.CreateFromTask(DeleteTaskAsync);
             // Загружаем данные асинхронно
-            LoadTaskDetailsAsync(taskId);
+            _ = LoadTaskDetailsAsync(taskId);
         }
         private async System.Threading.Tasks.Task DeleteTaskAsync()
         {
@@ -252,7 +252,7 @@ namespace ManufactPlanner.ViewModels
                 IsLoading = false;
             }
         }
-        private async void LoadTaskDetailsAsync(int taskId)
+        private async System.Threading.Tasks.Task LoadTaskDetailsAsync(int taskId)
         {
             IsLoading = true;
 
@@ -589,6 +589,9 @@ namespace ManufactPlanner.ViewModels
                     return;
                 }
 
+                // Временно устанавливаем IsLoading в false перед показом диалога
+                IsLoading = false;
+
                 // Используем TaskEditDialog для редактирования задачи
                 System.Diagnostics.Debug.WriteLine("Вызываем TaskEditDialog.ShowDialog");
                 var updatedTask = await TaskEditDialog.ShowDialog(parentWindow, _dbContext, _currentUserId, task);
@@ -598,7 +601,7 @@ namespace ManufactPlanner.ViewModels
                 {
                     // Обновляем данные на странице
                     System.Diagnostics.Debug.WriteLine("Обновляем данные на странице");
-                    LoadTaskDetailsAsync(TaskDbId);
+                    await LoadTaskDetailsAsync(TaskDbId); // Добавляем await для корректной работы
                 }
             }
             catch (Exception ex)
@@ -609,7 +612,7 @@ namespace ManufactPlanner.ViewModels
             }
             finally
             {
-                IsLoading = false;
+                // В finally блоке только обрабатываем случай ошибки
                 System.Diagnostics.Debug.WriteLine("Конец метода EditTaskAsync");
             }
         }

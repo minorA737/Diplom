@@ -108,11 +108,11 @@
 
 				<!-- Кнопки -->
 				<StackPanel Orientation="Horizontal" Spacing="10">
-					<Button Content="Тест" Width="80" Height="32"
+					<Button Content="Тест" Width="70" Height="32"
 							Background="{DynamicResource SuccessColor}"
 							Foreground="White" CornerRadius="16"
 							Command="{Binding TestConnectionCommand}"/>
-					<Button Content="Сохранить" Width="80" Height="32"
+					<Button Content="Сохранить" Width="90" Height="32"
 							Background="{DynamicResource PrimaryBrush}"
 							Foreground="White" CornerRadius="16"
 							Command="{Binding SaveDbSettingsCommand}"/>

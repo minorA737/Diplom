@@ -199,7 +199,9 @@ namespace ManufactPlanner.ViewModels
             ShowStatisticsCommand = ReactiveCommand.CreateFromTask(ShowStatisticsAsync);
             PreviousPageCommand = ReactiveCommand.CreateFromTask(GoPreviousPage, this.WhenAnyValue(x => x.CanGoPrevious));
             NextPageCommand = ReactiveCommand.CreateFromTask(GoNextPage, this.WhenAnyValue(x => x.CanGoNext));
-
+            // Инициализация фильтров
+            InitializeFilters();
+            LoadNotificationTypes();
             // Инициализация фильтров
             InitializeFilters();
 
@@ -443,17 +445,55 @@ namespace ManufactPlanner.ViewModels
 
         private void InitializeFilters()
         {
-            // Инициализация типов уведомлений для фильтра
-            var notificationTypes = new[]
-            {
-            "Все типы",
-            "Назначение задачи",
-            "Изменение статуса",
-            "Новый комментарий",
-            "Приближение дедлайна"
-        };
+            // Статусы прочтения
+            NotificationStatuses.Clear();
+            NotificationStatuses.Add("Все");
+            NotificationStatuses.Add("Прочитанные");
+            NotificationStatuses.Add("Непрочитанные");
 
-            // В реальном приложении эти данные могут храниться в ресурсах или конфигурации
+            // Устанавливаем значения по умолчанию
+            SelectedReadStatus = "Все";
+            SelectedNotificationType = "Все типы";
+        }
+        private async System.Threading.Tasks.Task LoadNotificationTypes()
+        {
+            try
+            {
+                // Получаем уникальные типы уведомлений из базы
+                var types = await _dbContext.Notifications
+                    .Where(n => n.NotificationType != null)
+                    .Select(n => n.NotificationType)
+                    .Distinct()
+                    .ToListAsync();
+
+                // Очищаем и добавляем типы
+                NotificationTypes.Clear();
+                NotificationTypes.Add("Все типы");
+
+                // Преобразуем в display типы и получаем уникальные
+                var uniqueDisplayTypes = types
+                    .Select(type => GetDisplayType(type))
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToList();
+
+                foreach (var displayType in uniqueDisplayTypes)
+                {
+                    NotificationTypes.Add(displayType);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка при загрузке типов уведомлений: {ex.Message}");
+
+                // Добавляем стандартные типы как fallback
+                NotificationTypes.Clear();
+                NotificationTypes.Add("Все типы");
+                NotificationTypes.Add("Назначение задачи");
+                NotificationTypes.Add("Изменение статуса");
+                NotificationTypes.Add("Новый комментарий");
+                NotificationTypes.Add("Приближение дедлайна");
+            }
         }
 
         private int ExtractTaskIdFromLink(string link)

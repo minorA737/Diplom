@@ -113,24 +113,24 @@
 
 											<!-- Меню действий - центрированные кнопки -->
 											<StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-												<Button Width="25" Height="25" CornerRadius="12" Background="{DynamicResource BackgroundBrush}"
+												<Button Width="30" Height="30" CornerRadius="12" Background="{DynamicResource BackgroundBrush}"
 													Command="{Binding $parent[ItemsControl].((vm:DocumentationViewModel)DataContext).DownloadCommand}"
 													CommandParameter="{Binding Id}"
 													ToolTip.Tip="Скачать документ">
-													<TextBlock Text="↓" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+													<TextBlock Text="↓" FontSize="10" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 												</Button>
-												<Button Width="25" Height="25" CornerRadius="12" Background="{DynamicResource BackgroundBrush}"
+												<Button Width="30" Height="30" CornerRadius="12" Background="{DynamicResource BackgroundBrush}"
 													Command="{Binding $parent[ItemsControl].((vm:DocumentationViewModel)DataContext).ViewCommand}"
 													CommandParameter="{Binding Id}"
 													ToolTip.Tip="Просмотреть документ">
-													<TextBlock Text="👁" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+													<TextBlock Text="👁" FontSize="10" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 												</Button>
-												<Button Width="25" Height="25" CornerRadius="12" Background="{DynamicResource BackgroundBrush}"
+												<Button Width="30" Height="30" CornerRadius="12" Background="{DynamicResource BackgroundBrush}"
 													Command="{Binding $parent[ItemsControl].((vm:DocumentationViewModel)DataContext).DeleteDocumentCommand}"
 													CommandParameter="{Binding Id}"
 													ToolTip.Tip="Удалить документ"
 													IsVisible="{Binding $parent[ItemsControl].((vm:DocumentationViewModel)DataContext).CanDeleteDocuments}">
-													<TextBlock Text="🗑" FontSize="12" Foreground="{DynamicResource ErrorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+													<TextBlock Text="🗑" FontSize="10" Foreground="{DynamicResource ErrorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 												</Button>
 											</StackPanel>
 										</Grid>

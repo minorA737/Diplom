@@ -50,7 +50,7 @@
 								Foreground="{DynamicResource TextPrimaryBrush}"/>
 						</Grid>
 
-						<Button Content="Применить настройки автозапуска" Width="250"
+						<Button Content="Применить настройки автозапуска" Width="270"
 								Height="36" Background="{DynamicResource PrimaryBrush}"
 								Foreground="{DynamicResource SurfaceBrush}"
 								HorizontalAlignment="Left" CornerRadius="18"
@@ -108,16 +108,16 @@
 						</Grid>
 
 						<StackPanel Orientation="Horizontal" Spacing="10" Margin="0,10,0,0">
-							<Button Content="Тестировать подключение" Width="180" Height="36"
+							<Button Content="Тестировать подключение" Width="210" Height="36"
 									Background="{DynamicResource SuccessColor}" Foreground="{DynamicResource SurfaceBrush}"
 									HorizontalAlignment="Left" CornerRadius="18"
 									Command="{Binding TestConnectionCommand}"/>
 
-							<Button Content="Сохранить настройки" Width="150" Height="36"
+							<Button Content="Сохранить настройки" Width="210" Height="36"
 									Background="{DynamicResource PrimaryBrush}" Foreground="{DynamicResource SurfaceBrush}"
 									HorizontalAlignment="Left" CornerRadius="18"
 									Command="{Binding SaveConnectionSettingsCommand}"/>
-							<Button Content="Сбросить к умолчанию" Width="150" Height="36"
+							<Button Content="Сбросить к умолчанию" Width="180" Height="36"
 									Background="{DynamicResource WarningColor}" Foreground="{DynamicResource SurfaceBrush}"
 									HorizontalAlignment="Left" CornerRadius="18" Margin="10,0,0,0"
 									Command="{Binding ResetToDefaultCommand}"/>
@@ -159,7 +159,7 @@
                                      Width="250" Height="36" HorizontalAlignment="Left" Margin="0,15,0,0"/>
 						</Grid>
 
-						<Button Content="Сохранить изменения" Width="200" Height="36"
+						<Button Content="Сохранить изменения" Width="190" Height="36"
                                 Background="{DynamicResource PrimaryBrush}" Foreground="{DynamicResource SurfaceBrush}"
                                 HorizontalAlignment="Left" CornerRadius="18"
                                 Command="{Binding SaveProfileCommand}"/>
@@ -194,7 +194,7 @@
                                      Width="250" Height="36" HorizontalAlignment="Left" Margin="0,15,0,0"/>
 						</Grid>
 
-						<Button Content="Изменить пароль" Width="200" Height="36"
+						<Button Content="Изменить пароль" Width="180" Height="36"
                                 Background="{DynamicResource PrimaryBrush}" Foreground="{DynamicResource SurfaceBrush}"
                                 HorizontalAlignment="Left" CornerRadius="18"
                                 Command="{Binding ChangePasswordCommand}"/>
@@ -223,12 +223,12 @@
 							<CheckBox Content="Уведомления на рабочий стол" IsChecked="{Binding NotifyDesktop}"
                                       Foreground="{DynamicResource TextPrimaryBrush}"/>
 						</StackPanel>
-						<Button Content="Отправить тестовое письмо" Width="200" Height="36"
+						<Button Content="Отправить тестовое письмо" Width="220" Height="36"
 								Background="{DynamicResource SuccessColor}" Foreground="{DynamicResource SurfaceBrush}"
 								HorizontalAlignment="Left" CornerRadius="18" Margin="0,10,0,0"
 								Command="{Binding SendTestEmailCommand}"
 								IsEnabled="{Binding NotifyEmail}"/>
-						<Button Content="Сохранить настройки" Width="200" Height="36"
+						<Button Content="Сохранить настройки" Width="180" Height="36"
                                 Background="{DynamicResource PrimaryBrush}" Foreground="{DynamicResource SurfaceBrush}"
                                 HorizontalAlignment="Left" CornerRadius="18" Margin="0,15,0,0"
                                 Command="{Binding SaveNotificationSettingsCommand}"/>
@@ -256,7 +256,7 @@
 							</StackPanel>
 						</Grid>
 
-						<Button Content="Применить" Width="200" Height="36"
+						<Button Content="Применить" Width="130" Height="36"
                                 Background="{DynamicResource PrimaryBrush}" Foreground="{DynamicResource SurfaceBrush}"
                                 HorizontalAlignment="Left" CornerRadius="18"
                                 Command="{Binding ApplyInterfaceSettingsCommand}"/>
